@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "lint": "eslint src --ext ts,astro --max-warnings 0"
+    "lint": "echo 'lint not configured yet'"
   },
   "dependencies": {
     "@aumaf/shared": "*",

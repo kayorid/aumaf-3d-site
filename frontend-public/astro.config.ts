@@ -14,7 +14,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@aumaf/shared': new URL('../packages/shared/src/index.ts', import.meta.url).pathname,
+        '@aumaf/shared': '../packages/shared/src/index.ts',
       },
     },
   },
