@@ -55,7 +55,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^4.3.6",
+    "zod": "^3.23.8",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
@@ -76,7 +76,7 @@
     "autoprefixer": "^10.5.0",
     "eslint": "^8.57.1",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-react-refresh": "^0.4.20",
     "jsdom": "^29.1.0",
     "msw": "^2.13.6",
     "playwright": "^1.58.2",

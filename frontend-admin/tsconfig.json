@@ -23,7 +23,8 @@
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@aumaf/shared": ["../packages/shared/src/index.ts"]
     },
 
     "types": ["node", "vite/client"]
