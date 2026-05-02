@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
@@ -22,6 +22,15 @@ export function createApp() {
 
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() })
+  })
+
+  app.use((_req, res) => {
+    res.status(404).json({ status: 'error', message: 'Not found' })
+  })
+
+  app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    logger.error(err)
+    res.status(500).json({ status: 'error', message: 'Internal server error' })
   })
 
   return app

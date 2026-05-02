@@ -9,7 +9,7 @@ async function main() {
   const server = createServer(app)
 
   createTerminus(server, {
-    signal: 'SIGINT',
+    signals: ['SIGINT', 'SIGTERM'],
     healthChecks: { '/health': async () => {} },
     onSignal: async () => {
       logger.info('Server shutting down...')
