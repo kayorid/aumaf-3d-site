@@ -37,8 +37,6 @@ playwright-report/
 test-results/
 storybook-static/
 
-# Prisma
-prisma/migrations/
 
 # Turbo
 .turbo/

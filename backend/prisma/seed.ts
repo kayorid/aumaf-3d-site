@@ -4,7 +4,11 @@ import bcrypt from 'bcrypt'
 const prisma = new PrismaClient()
 
 async function main() {
-  const hashedPassword = await bcrypt.hash('Admin@12345', 12)
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD ?? 'Admin@12345'
+  if (!process.env.SEED_ADMIN_PASSWORD) {
+    console.warn('⚠️  SEED_ADMIN_PASSWORD não definida — usando senha padrão insegura. Não use em produção.')
+  }
+  const hashedPassword = await bcrypt.hash(seedPassword, 12)
 
   await prisma.user.upsert({
     where: { email: 'admin@aumaf3d.com.br' },
