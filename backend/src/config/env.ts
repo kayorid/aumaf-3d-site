@@ -22,7 +22,7 @@ const envSchema = z.object({
   LOG_FORMAT: z.enum(['text', 'json']).default('text'),
   AI_PROVIDER: z.enum(['openai', 'anthropic', 'gemini']).optional(),
   AI_API_KEY: z.string().optional(),
-  BOTYO_WEBHOOK_URL: z.string().url().optional(),
+  BOTYO_WEBHOOK_URL: z.string().url().or(z.literal('')).optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
