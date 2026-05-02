@@ -17,7 +17,7 @@ export const CreatePostSchema = z.object({
 })
 export type CreatePostInput = z.infer<typeof CreatePostSchema>
 
-export const UpdatePostSchema = CreatePostSchema.partial()
+export const UpdatePostSchema = CreatePostSchema.partial().strict()
 export type UpdatePostInput = z.infer<typeof UpdatePostSchema>
 
 export const GeneratePostSchema = z.object({

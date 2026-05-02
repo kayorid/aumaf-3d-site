@@ -3,9 +3,17 @@ import helmet from 'helmet'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import hpp from 'hpp'
+import rateLimit from 'express-rate-limit'
 import { pinoHttp } from 'pino-http'
 import { env } from './config/env'
 import { logger } from './config/logger'
+
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+})
 
 export function createApp() {
   const app = express()
@@ -16,6 +24,7 @@ export function createApp() {
     credentials: true,
   }))
   app.use(hpp())
+  app.use(globalLimiter)
   app.use(cookieParser())
   app.use(express.json({ limit: '5mb' }))
   app.use(pinoHttp({ logger }))
