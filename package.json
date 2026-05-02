@@ -1,0 +1,27 @@
+{
+  "name": "aumaf-3d-site",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend-public",
+    "frontend-admin",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:db\" \"npm run dev:backend\" \"npm run dev:public\" \"npm run dev:admin\"",
+    "dev:db": "docker compose up -d",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:public": "npm run dev --workspace=frontend-public",
+    "dev:admin": "npm run dev --workspace=frontend-admin",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "npm run test:e2e --workspace=frontend-admin"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "turbo": "^2.9.6"
+  }
+}
