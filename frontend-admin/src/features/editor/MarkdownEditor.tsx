@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import { Textarea } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { markdownToHtml, htmlToMarkdown } from './markdown-editor/converters'
+import { markdownToHtml, htmlToMarkdown, preprocessHtmlForTiptap } from './markdown-editor/converters'
 import { HtmlBlock } from './blocks/HtmlBlockExtension'
 import { BLOCK_TEMPLATES, type BlockTemplate } from './blocks/block-templates'
 
@@ -68,11 +68,11 @@ export function MarkdownEditor({
       TableCell,
       HtmlBlock,
     ],
-    content: markdownToHtml(value),
+    content: preprocessHtmlForTiptap(markdownToHtml(value)),
     editorProps: {
       attributes: {
         class:
-          'prose-invert prose-sm focus:outline-none px-4 py-3 max-w-none tiptap-body',
+          'focus:outline-none',
         style: `min-height: ${minHeight};`,
         spellcheck: 'true',
       },
@@ -87,7 +87,7 @@ export function MarkdownEditor({
     (md: string) => {
       if (!editor) return
       isUpdatingRef.current = true
-      editor.commands.setContent(markdownToHtml(md), { emitUpdate: false })
+      editor.commands.setContent(preprocessHtmlForTiptap(markdownToHtml(md)), { emitUpdate: false })
       isUpdatingRef.current = false
     },
     [editor],
@@ -131,7 +131,9 @@ export function MarkdownEditor({
       {mode === 'visual' ? (
         <>
           <Toolbar editor={editor} onRequestUploadImage={onRequestUploadImage} />
-          <EditorContent editor={editor} />
+          <div className="prose-aumaf-editor">
+            <EditorContent editor={editor} />
+          </div>
         </>
       ) : (
         <Textarea

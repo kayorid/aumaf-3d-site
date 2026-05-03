@@ -5,13 +5,17 @@ import { HtmlBlockView } from './HtmlBlockView'
 /**
  * Tiptap extension para blocos HTML do design system (glass-panel, grids, etc.).
  *
- * No modo Visual, cada bloco é renderizado como preview real com opção de editar via modal.
- * Ao salvar, serializa de volta como HTML literal — preservado no Markdown e no público.
+ * Fluxo de dados:
+ * 1. markdownToHtml: preserva os blocos do DS como HTML raw
+ * 2. preprocessHtmlForTiptap: converte para <div data-html-block data-content="...">
+ * 3. HtmlBlock.parseHTML: detecta [data-html-block] e extrai o HTML original de data-content
+ * 4. NodeView (HtmlBlockView): renderiza preview visual + form de edição estruturado
+ * 5. renderHTML: emite wrapper que htmlToMarkdown converte de volta para HTML literal
  */
 export const HtmlBlock = Node.create({
   name: 'htmlBlock',
   group: 'block',
-  atom: true, // edita apenas via NodeView (não pelo cursor de texto)
+  atom: true,
 
   addAttributes() {
     return {
@@ -21,43 +25,69 @@ export const HtmlBlock = Node.create({
 
   parseHTML() {
     return [
-      // glass-panel é a classe-chave do DS nos blocos ricos
+      // Detecta o wrapper gerado pelo preprocessHtmlForTiptap (prioridade máxima)
       {
-        tag: 'div[class*="glass-panel"]',
-        getAttrs: (el) => ({ html: (el as HTMLElement).outerHTML }),
+        tag: 'div[data-html-block]',
+        getAttrs: (node) => {
+          const el = node as HTMLElement
+          // data-content pode ter aspas escapadas (&quot;) — decodificar
+          const raw = el.getAttribute('data-content') ?? el.innerHTML ?? ''
+          const html = raw.replace(/&quot;/g, '"')
+          return { html }
+        },
+        priority: 100,
+      },
+      // Fallback: divs do DS que chegarem sem pré-processamento (ex: copiar/colar)
+      {
+        tag: 'div',
+        getAttrs: (node) => {
+          const el = node as HTMLElement
+          const cls = el.className || ''
+          if (
+            cls.includes('glass-panel') ||
+            (cls.includes('space-y') && cls.includes('my')) ||
+            cls.includes('space-y-3') ||
+            cls.includes('space-y-4')
+          ) {
+            return { html: el.outerHTML }
+          }
+          return false
+        },
         priority: 80,
       },
       {
-        tag: 'blockquote[class*="glass-panel"]',
-        getAttrs: (el) => ({ html: (el as HTMLElement).outerHTML }),
+        tag: 'blockquote',
+        getAttrs: (node) => {
+          const el = node as HTMLElement
+          if (el.className.includes('glass-panel')) {
+            return { html: el.outerHTML }
+          }
+          return false
+        },
         priority: 80,
       },
       {
-        tag: 'figure[class*="glass-panel"]',
-        getAttrs: (el) => ({ html: (el as HTMLElement).outerHTML }),
+        tag: 'figure',
+        getAttrs: (node) => {
+          const el = node as HTMLElement
+          if (el.className.includes('glass-panel')) {
+            return { html: el.outerHTML }
+          }
+          return false
+        },
         priority: 80,
-      },
-      // grids ricos (materiais, specs)
-      {
-        tag: 'div[class*="grid"][class*="gap"]',
-        getAttrs: (el) => ({ html: (el as HTMLElement).outerHTML }),
-        priority: 70,
-      },
-      {
-        tag: 'div[class*="space-y"]',
-        getAttrs: (el) => ({ html: (el as HTMLElement).outerHTML }),
-        priority: 70,
       },
     ]
   },
 
   renderHTML({ node }) {
-    // Emite um <div data-html-block> cujo innerHTML é o HTML original.
-    // O htmlToMarkdown detecta esse atributo e lê innerHTML para preservar o HTML.
-    // Usamos innerHTML via DOMParser side (NodeView); aqui emitimos o HTML como filho de texto.
+    // Emite wrapper com data-content para que htmlToMarkdown possa extrair o HTML original
     return [
       'div',
-      mergeAttributes({ 'data-html-block': 'true', 'data-content': node.attrs.html }),
+      mergeAttributes({
+        'data-html-block': 'true',
+        'data-content': (node.attrs.html as string).replace(/"/g, '&quot;'),
+      }),
     ]
   },
 
