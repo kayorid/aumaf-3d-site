@@ -11,10 +11,12 @@
     "lint": "echo 'lint not configured yet'"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.5",
     "@astrojs/sitemap": "^3.0.0",
     "@astrojs/tailwind": "^6.0.0",
     "@aumaf/shared": "*",
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "marked": "^18.0.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

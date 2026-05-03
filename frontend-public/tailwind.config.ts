@@ -26,7 +26,6 @@ const config: Config = {
     { pattern: /^(grid|grid-cols|sm:grid-cols|md:grid-cols|gap)-/ },
     { pattern: /^(p|m|px|py|pt|pb|pl|pr|mt|mb|mx|my|gap)-/ },
     { pattern: /^(w|h|max-w|min-h|aspect)-/ },
-    { pattern: /^(text|bg|border)-\[(.*)\]$/ },
     { pattern: /^rounded-(sm|md|lg|xl|full|none)$/ },
     { pattern: /^(uppercase|tracking|leading|font|italic|not-italic|relative|absolute|inset|top|left|right|bottom|flex|inline-flex|items|justify|space|overflow)/ },
     'border-l-2',

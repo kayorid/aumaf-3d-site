@@ -1,93 +1,73 @@
 ---
+export const prerender = true
+
 import Base from '../../layouts/Base.astro'
 import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
 import Breadcrumb from '../../components/Breadcrumb.astro'
 import { COMPANY } from '../../lib/company'
 import { blogPostingSchema } from '../../lib/schemas'
+import { fetchPublicPosts, fetchPublicPost } from '../../lib/api'
+import { renderPostContent, formatPostDateLong } from '../../lib/render-post'
 
-export function getStaticPaths() {
-  return [
-    {
-      params: { slug: 'formula-sae-usp-sao-carlos' },
-      props: {
-        title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',
-        cat: 'Parceria',
-        date: '2024-06-26',
-        dateDisplay: '26 jun 2024',
-        time: '1 min',
-        author: 'Equipe AUMAF 3D',
-        excerpt: 'Peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos — um case de parceria entre indústria e academia.',
-        image: '/images/SAE-formula.avif',
-        content: [
-          { type: 'paragraph', text: 'A AUMAF 3D firmou parceria com a equipe de Engenharia Mecânica da USP São Carlos para fornecimento de componentes de alta performance para o carro da Fórmula SAE 2024. O desafio: fabricar peças estruturais e aerodinâmicas com tolerância mínima, peso reduzido e prazo de entrega agressivo.' },
-          { type: 'heading', text: 'O Desafio Técnico' },
-          { type: 'paragraph', text: 'Peças para competições automotivas estudantis precisam atender requisitos rigorosos de peso, resistência mecânica e tolerância dimensional. A equipe necessitava de suportes de suspensão, guias de cabo e elementos aerodinâmicos que fossem simultaneamente leves e resistentes — combinação que torna a impressão 3D industrial a escolha natural.' },
-          { type: 'specs', items: [
-            { label: 'Parceiro', value: 'USP São Carlos — Eng. Mecânica' },
-            { label: 'Evento', value: 'Fórmula SAE Brasil 2024' },
-            { label: 'Materiais', value: 'Nylon PA + PET-G CF15' },
-            { label: 'Aplicação', value: 'Estrutural + Aerodinâmica' },
-            { label: 'Tolerância', value: '±0.05mm' },
-            { label: 'Prazo', value: '5 dias úteis' },
-          ] },
-          { type: 'heading', text: 'Solução: Nylon PA e PET-G CF15' },
-          { type: 'paragraph', text: 'Para os suportes de suspensão e guias de cabo, utilizamos Nylon PA — material com alta resistência ao impacto e baixo coeficiente de atrito, ideal para componentes móveis. Para elementos aerodinâmicos, o PET-G CF15 (PETG reforçado com 15% de fibra de carbono picada) entregou a rigidez necessária com densidade significativamente inferior ao alumínio usinado.' },
-          { type: 'paragraph', text: 'O processo de manufatura utilizou nossas impressoras FDM de nível industrial com câmara aquecida, garantindo cristalização adequada do Nylon PA e adesão de camadas otimizada no PET-G CF15. Cada peça passou por controle dimensional com paquímetro digital antes de ser liberada.' },
-          { type: 'heading', text: 'Resultado' },
-          { type: 'paragraph', text: 'As peças foram entregues dentro do prazo e aprovadas pela equipe técnica da USP São Carlos sem necessidade de retrabalho. O carro foi preparado e competiu na Fórmula SAE Brasil 2024, com os componentes AUMAF 3D contribuindo para uma montagem mais ágil e redução de peso total do veículo.' },
-          { type: 'quote', text: 'A AUMAF 3D entregou dentro do prazo e com acabamento surpreendente. As peças encaixaram perfeitamente no primeiro teste de montagem.', author: 'Equipe Fórmula SAE USP São Carlos' },
-        ],
-      },
-    },
-    {
-      params: { slug: 'construtora-arabe-edificio-mais-alto' },
-      props: {
-        title: 'Construtora árabe lança edifício impresso mais alto do mundo',
-        cat: 'Inovação',
-        date: '2023-10-07',
-        dateDisplay: '7 out 2023',
-        time: '2 min',
-        author: 'Equipe AUMAF 3D',
-        excerpt: 'Uma construtora dos Emirados Árabes Unidos utilizou impressão 3D de concreto para erguer o edifício impresso mais alto do mundo, com 9 andares e 17 metros de altura.',
-        image: COMPANY.ogImageDefault,
-        content: [
-          { type: 'paragraph', text: 'A manufatura aditiva em construção civil atingiu um novo patamar quando uma construtora dos Emirados Árabes Unidos concluiu o edifício impresso em 3D mais alto do mundo: 9 andares, 17 metros de altura, construído em Dubai com tecnologia de impressão robótica de concreto.' },
-          { type: 'heading', text: 'Impressão 3D em escala arquitetônica' },
-          { type: 'paragraph', text: 'O projeto utilizou uma impressora robótica de pórtico capaz de depositar concreto especial em camadas precisas, seguindo modelos CAD diretamente sem necessidade de formas tradicionais. O resultado é uma redução de 60% no uso de materiais de construção e 80% na mão de obra em relação ao método convencional.' },
-          { type: 'paragraph', text: 'Para a AUMAF 3D, este avanço confirma a direção que a manufatura aditiva está tomando: da prototipagem para a produção final, de peças pequenas para estruturas arquitetônicas. Os princípios são os mesmos — deposição de material camada a camada — mas a escala e as implicações para o setor de construção civil são transformadoras.' },
-        ],
-      },
-    },
-  ]
+export async function getStaticPaths() {
+  const { data: posts } = await fetchPublicPosts({ pageSize: 100 })
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
 }
 
-const { title, cat, date, dateDisplay, time, author, excerpt, content, image } = Astro.props
+const { post } = Astro.props
+if (!post) {
+  return Astro.redirect('/404')
+}
+
+// Hot path: re-fetch para garantir conteúdo atual em ISR (caso de re-render on-demand)
+// Em build estático, post já vem do getStaticPaths.
+const fresh = post
 
 const url = new URL(Astro.url.pathname, Astro.site).toString()
-const ogImg = image && image.startsWith('http') ? image : `${COMPANY.url}${image ?? COMPANY.ogImageDefault}`
+const ogImg = fresh.coverImageUrl
+  ? (fresh.coverImageUrl.startsWith('http') ? fresh.coverImageUrl : `${COMPANY.url}${fresh.coverImageUrl}`)
+  : COMPANY.ogImageDefault
+
+const author = fresh.author?.name ?? 'Equipe AUMAF 3D'
+const sectionName = fresh.category?.name ?? 'Blog'
+const dateDisplay = formatPostDateLong(fresh.publishedAt)
+const dateIso = fresh.publishedAt.split('T')[0]
 
 const schemas = [
   blogPostingSchema({
     url,
-    headline: title,
-    description: excerpt,
+    headline: fresh.title,
+    description: fresh.excerpt ?? fresh.metaDescription ?? '',
     image: ogImg,
-    datePublished: date,
+    datePublished: dateIso,
     authorName: author,
-    section: cat,
+    section: sectionName,
   }),
 ]
+
+const renderedHtml = renderPostContent(fresh.content)
+
+// Posts relacionados (mesma categoria, exceto o atual)
+const { data: allPosts } = await fetchPublicPosts({ pageSize: 50 })
+const related = allPosts
+  .filter((p) => p.slug !== fresh.slug && (fresh.category ? p.category?.slug === fresh.category.slug : true))
+  .slice(0, 2)
+const relatedFallback = allPosts.filter((p) => p.slug !== fresh.slug).slice(0, 2)
+const relatedFinal = related.length >= 2 ? related : relatedFallback
 ---
 
 <Base
-  title={title}
-  description={excerpt}
+  title={fresh.metaTitle ?? `${fresh.title} — AUMAF 3D`}
+  description={fresh.metaDescription ?? fresh.excerpt ?? ''}
   ogImage={ogImg}
   ogType="article"
-  preloadImage={image}
-  article={{ datePublished: date, author, section: cat }}
-  breadcrumb={[{ name: 'Blog', url: '/blog' }, { name: title, url: Astro.url.pathname }]}
+  preloadImage={fresh.coverImageUrl ?? undefined}
+  article={{ datePublished: dateIso, author, section: sectionName }}
+  breadcrumb={[{ name: 'Blog', url: '/blog' }, { name: fresh.title, url: Astro.url.pathname }]}
   schemas={schemas}
 >
   <Navbar currentPath="/blog" />
@@ -96,20 +76,28 @@ const schemas = [
   <section class="bg-background pt-28 pb-16 relative overflow-hidden" aria-labelledby="post-title">
     <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 relative z-10">
-      <Breadcrumb items={[{ name: 'Blog', url: '/blog' }, { name: cat }]} compact />
+      <Breadcrumb items={[{ name: 'Blog', url: '/blog' }, { name: sectionName }]} compact />
 
-      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest mb-6 block w-fit">{cat}</span>
+      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest mb-6 block w-fit">{sectionName}</span>
 
       <h1 id="post-title" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
-        {title}
+        {fresh.title}
       </h1>
+
+      {fresh.excerpt && (
+        <p class="text-body-lg text-tertiary leading-relaxed mb-8 max-w-2xl">{fresh.excerpt}</p>
+      )}
 
       <div class="flex flex-wrap items-center gap-4 text-code-data text-on-surface-variant">
         <span><span class="sr-only">Autor: </span>{author}</span>
         <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
-        <time datetime={date}>{dateDisplay}</time>
-        <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
-        <span><span class="sr-only">Tempo de leitura: </span>{time} leitura</span>
+        <time datetime={dateIso}>{dateDisplay}</time>
+        {fresh.readingTimeMin && (
+          <>
+            <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
+            <span><span class="sr-only">Tempo de leitura: </span>{fresh.readingTimeMin} min leitura</span>
+          </>
+        )}
       </div>
     </div>
   </section>
@@ -118,10 +106,10 @@ const schemas = [
   <div class="bg-background pb-16">
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
       <div class="relative rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/8 aspect-[16/9]">
-        {image && image.endsWith('.avif') || image && image.endsWith('.webp') ? (
+        {fresh.coverImageUrl ? (
           <img
-            src={image}
-            alt={`Imagem de capa: ${title}`}
+            src={fresh.coverImageUrl}
+            alt={`Imagem de capa: ${fresh.title}`}
             width="1280"
             height="720"
             loading="eager"
@@ -143,7 +131,7 @@ const schemas = [
           </>
         )}
         <div class="absolute bottom-4 left-4">
-          <span class="pill-active">{cat}</span>
+          <span class="pill-active">{sectionName}</span>
         </div>
         <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/40 text-[10px] tracking-widest">AUMAF 3D · {dateDisplay}</div>
       </div>
@@ -153,50 +141,17 @@ const schemas = [
   <!-- Conteúdo do Post -->
   <article class="bg-background pb-section">
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
-      <div class="prose-aumaf">
-        {content.map((block) => (
-          <>
-            {block.type === 'paragraph' && (
-              <p class="text-body-lg text-tertiary leading-relaxed mb-6">{block.text}</p>
-            )}
-            {block.type === 'heading' && (
-              <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/12">{block.text}</h2>
-            )}
-            {block.type === 'quote' && (
-              <blockquote class="glass-panel border-l-2 border-primary-container p-6 my-8 rounded-sm">
-                <p class="text-body-lg text-on-surface italic leading-relaxed mb-3">"{block.text}"</p>
-                <footer>
-                  <cite class="text-label-caps text-primary-container uppercase tracking-[0.15em] not-italic">— {block.author}</cite>
-                </footer>
-              </blockquote>
-            )}
-            {block.type === 'specs' && (
-              <figure class="glass-panel rounded-sm p-6 my-8 border border-primary-container/15 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent" aria-hidden="true"></div>
-                <figcaption class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Dados do Projeto</figcaption>
-                <dl class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {block.items?.map((item: { label: string; value: string }) => (
-                    <div class="border-b border-white/12 pb-3">
-                      <dt class="text-label-caps text-on-surface-variant uppercase tracking-widest text-[10px] mb-0.5">{item.label}</dt>
-                      <dd class="text-body-md text-on-surface font-medium">{item.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </figure>
-            )}
-          </>
-        ))}
-      </div>
+      <div class="prose-aumaf" set:html={renderedHtml}></div>
 
       <!-- Share + categoria -->
       <div class="mt-16 pt-8 border-t border-white/12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-2">
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Categoria:</span>
-          <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest">{cat}</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest">{sectionName}</span>
         </div>
         <div class="flex items-center gap-2" role="group" aria-label="Compartilhar este artigo">
           <a
-            href={`https://wa.me/?text=${encodeURIComponent(title + ' — ' + url)}`}
+            href={`https://wa.me/?text=${encodeURIComponent(fresh.title + ' — ' + url)}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Compartilhar no WhatsApp (abre em nova aba)"
@@ -216,7 +171,7 @@ const schemas = [
             </svg>
           </a>
           <a
-            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`}
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(fresh.title)}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Compartilhar no X / Twitter (abre em nova aba)"
@@ -259,41 +214,50 @@ const schemas = [
   </section>
 
   <!-- Mais Posts -->
-  <section class="bg-background py-section" aria-labelledby="more-posts">
-    <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
-      <h2 id="more-posts" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Mais do Blog</h2>
-      <ul role="list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {[
-          { cat: 'Guia Técnico', title: 'FDM, SLA ou SLS? O guia definitivo', dateDisplay: 'Mai 2026', date: '2026-05-01', time: '8 min', href: '/blog/fdm-vs-sla-vs-sls' },
-          { cat: 'Materiais', title: 'Guia Completo de Materiais para Impressão 3D', dateDisplay: 'Mai 2026', date: '2026-05-01', time: '6 min', href: '/blog/guia-materiais-impressao-3d' },
-        ].map((post) => (
-          <li>
-            <article>
-              <a href={post.href} class="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
-                <div class="relative aspect-[5/3] rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
-                  <div class="absolute inset-0 bg-tech-grid opacity-30" aria-hidden="true"></div>
-                  <div class="absolute top-3 left-3">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/60 text-primary-container text-[10px] uppercase tracking-widest">{post.cat}</span>
+  {relatedFinal.length > 0 && (
+    <section class="bg-background py-section" aria-labelledby="more-posts">
+      <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
+        <h2 id="more-posts" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Mais do Blog</h2>
+        <ul role="list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {relatedFinal.map((rp) => (
+            <li>
+              <article>
+                <a href={`/blog/${rp.slug}`} class="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
+                  <div class="relative aspect-[5/3] rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
+                    {rp.coverImageUrl ? (
+                      <img src={rp.coverImageUrl} alt={`Capa: ${rp.title}`} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover" />
+                    ) : (
+                      <div class="absolute inset-0 bg-tech-grid opacity-30" aria-hidden="true"></div>
+                    )}
+                    {rp.category && (
+                      <div class="absolute top-3 left-3">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/60 text-primary-container text-[10px] uppercase tracking-widest">{rp.category.name}</span>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <h3 class="text-body-md font-medium text-on-surface group-hover:text-white transition-colors leading-snug mb-2">{post.title}</h3>
-                <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
-                  <time datetime={post.date}>{post.dateDisplay}</time>
-                  <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
-                  <span>{post.time} leitura</span>
-                </div>
-              </a>
-            </article>
-          </li>
-        ))}
-      </ul>
-      <div class="mt-8 text-center">
-        <a href="/blog" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
-          Ver todos os posts <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform" aria-hidden="true">arrow_forward</span>
-        </a>
+                  <h3 class="text-body-md font-medium text-on-surface group-hover:text-white transition-colors leading-snug mb-2">{rp.title}</h3>
+                  <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+                    <time datetime={rp.publishedAt}>{formatPostDateLong(rp.publishedAt)}</time>
+                    {rp.readingTimeMin && (
+                      <>
+                        <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
+                        <span>{rp.readingTimeMin} min leitura</span>
+                      </>
+                    )}
+                  </div>
+                </a>
+              </article>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-8 text-center">
+          <a href="/blog" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+            Ver todos os posts <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <Footer />
 </Base>
