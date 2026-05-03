@@ -1,31 +1,18 @@
 ---
-export const prerender = true
-
 import Base from '../../layouts/Base.astro'
 import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
 import Breadcrumb from '../../components/Breadcrumb.astro'
 import { COMPANY } from '../../lib/company'
 import { blogPostingSchema } from '../../lib/schemas'
-import { fetchPublicPosts } from '../../lib/api'
+import { fetchPublicPost, fetchPublicPosts } from '../../lib/api'
 import { renderPostContent, formatPostDateLong } from '../../lib/render-post'
 
-export async function getStaticPaths() {
-  const { data: posts } = await fetchPublicPosts({ pageSize: 100 })
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }))
-}
+const slug = Astro.params.slug
+if (!slug) return Astro.redirect('/404')
 
-const { post } = Astro.props
-if (!post) {
-  return Astro.redirect('/404')
-}
-
-// Hot path: re-fetch para garantir conteúdo atual em ISR (caso de re-render on-demand)
-// Em build estático, post já vem do getStaticPaths.
-const fresh = post
+const fresh = await fetchPublicPost(slug)
+if (!fresh) return Astro.redirect('/404')
 
 const url = new URL(Astro.url.pathname, Astro.site).toString()
 const ogImg = fresh.coverImageUrl
@@ -51,13 +38,11 @@ const schemas = [
 
 const renderedHtml = renderPostContent(fresh.content)
 
-// Posts relacionados (mesma categoria, exceto o atual)
 const { data: allPosts } = await fetchPublicPosts({ pageSize: 50 })
 const related = allPosts
   .filter((p) => p.slug !== fresh.slug && (fresh.category ? p.category?.slug === fresh.category.slug : true))
   .slice(0, 2)
-const relatedFallback = allPosts.filter((p) => p.slug !== fresh.slug).slice(0, 2)
-const relatedFinal = related.length >= 2 ? related : relatedFallback
+const relatedFinal = related.length >= 2 ? related : allPosts.filter((p) => p.slug !== fresh.slug).slice(0, 2)
 ---
 
 <Base
@@ -138,7 +123,7 @@ const relatedFinal = related.length >= 2 ? related : relatedFallback
     </div>
   </div>
 
-  <!-- Conteúdo do Post -->
+  <!-- Conteudo do Post -->
   <article class="bg-background pb-section">
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
       <div class="prose-aumaf" set:html={renderedHtml}></div>
@@ -151,7 +136,7 @@ const relatedFinal = related.length >= 2 ? related : relatedFallback
         </div>
         <div class="flex items-center gap-2" role="group" aria-label="Compartilhar este artigo">
           <a
-            href={`https://wa.me/?text=${encodeURIComponent(fresh.title + ' — ' + url)}`}
+            href={`https://wa.me/?text=${encodeURIComponent(fresh.title + ' - ' + url)}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Compartilhar no WhatsApp (abre em nova aba)"
@@ -195,7 +180,7 @@ const relatedFinal = related.length >= 2 ? related : relatedFallback
     </div>
   </article>
 
-  <!-- CTA Próximo Projeto -->
+  <!-- CTA Proximo Projeto -->
   <section class="bg-surface-low border-t border-white/8 py-16" aria-labelledby="cta-post">
     <h2 id="cta-post" class="sr-only">Iniciar projeto</h2>
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
@@ -206,7 +191,7 @@ const relatedFinal = related.length >= 2 ? related : relatedFallback
           <p class="text-headline-md font-bold uppercase text-white">Inicie seu projeto hoje.</p>
         </div>
         <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300 flex-shrink-0">
-          Solicitar orçamento
+          Solicitar orcamento
           <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
         </a>
       </div>
@@ -273,7 +258,7 @@ const relatedFinal = related.length >= 2 ? related : relatedFallback
         setTimeout(() => { feedback.textContent = '' }, 2000)
       }
     } catch {
-      if (feedback) feedback.textContent = 'Não foi possível copiar — copie manualmente da barra de endereço.'
+      if (feedback) feedback.textContent = 'Nao foi possivel copiar.'
     }
   })
 </script>

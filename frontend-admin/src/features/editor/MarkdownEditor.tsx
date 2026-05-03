@@ -15,11 +15,13 @@ import { TableCell } from '@tiptap/extension-table-cell'
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Highlighter,
   Heading2, Heading3, List, ListOrdered, ListChecks,
-  Code, Quote, Link2, Image as ImageIcon, Minus, Code2,
+  Code, Quote, Link2, Image as ImageIcon, Minus, Code2, LayoutTemplate, ChevronDown,
 } from 'lucide-react'
 import { Textarea } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { markdownToHtml, htmlToMarkdown } from './markdown-editor/converters'
+import { HtmlBlock } from './blocks/HtmlBlockExtension'
+import { BLOCK_TEMPLATES, type BlockTemplate } from './blocks/block-templates'
 
 export type EditorMode = 'visual' | 'code'
 
@@ -64,6 +66,7 @@ export function MarkdownEditor({
       TableRow,
       TableHeader,
       TableCell,
+      HtmlBlock,
     ],
     content: markdownToHtml(value),
     editorProps: {
@@ -177,6 +180,7 @@ function Toolbar({
   onRequestUploadImage?: () => Promise<string | null>
 }) {
   if (!editor) return null
+  const [blockMenuOpen, setBlockMenuOpen] = useState(false)
 
   const handleLink = () => {
     const previous = editor.getAttributes('link').href ?? ''
@@ -313,6 +317,39 @@ function Toolbar({
       <ToolBtn onClick={() => editor.chain().focus().setHorizontalRule().run()} label="Linha">
         <Minus className="size-4" />
       </ToolBtn>
+      <Divider />
+      {/* Menu de inserção de blocos ricos do design system */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setBlockMenuOpen((v) => !v)}
+          title="Inserir bloco"
+          aria-label="Inserir bloco"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-text-secondary hover:text-text-primary hover:bg-surface-200 transition-colors"
+        >
+          <LayoutTemplate className="size-3.5" />
+          Bloco
+          <ChevronDown className="size-3" />
+        </button>
+        {blockMenuOpen && (
+          <div className="absolute right-0 top-full mt-1 z-50 bg-surface-low border border-white/15 rounded-sm shadow-lg min-w-[200px] py-1">
+            {BLOCK_TEMPLATES.map((tpl: BlockTemplate) => (
+              <button
+                key={tpl.id}
+                type="button"
+                onClick={() => {
+                  editor.chain().focus().insertContent({ type: 'htmlBlock', attrs: { html: tpl.html } }).run()
+                  setBlockMenuOpen(false)
+                }}
+                className="w-full text-left px-3 py-2 text-[12px] text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors flex items-center gap-2"
+              >
+                <span className="text-primary-container">{tpl.icon}</span>
+                {tpl.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
