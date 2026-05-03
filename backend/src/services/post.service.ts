@@ -2,7 +2,16 @@ import { prisma } from '../lib/prisma'
 import { slugify } from '../lib/slug'
 import { httpErrors } from '../lib/http-error'
 import { logger } from '../config/logger'
+import { enqueuePostPublishWarmup } from '../workers/post-publish.worker'
 import type { CreatePostInput, UpdatePostInput, PostListQuery, PostDto } from '@aumaf/shared'
+
+async function safeEnqueueWarmup(postId: string, slug: string): Promise<void> {
+  try {
+    await enqueuePostPublishWarmup(postId, slug)
+  } catch (err) {
+    logger.error({ err, postId, slug }, 'Failed to enqueue post-publish warmup — post saved anyway')
+  }
+}
 
 function toDto(post: Awaited<ReturnType<typeof prisma.post.findUnique>>): PostDto {
   if (!post) throw httpErrors.notFound('Post não encontrado')
@@ -123,6 +132,9 @@ export async function createPost(input: CreatePostInput, authorId: string) {
 
   const post = await prisma.post.create({ data })
   logger.info({ postId: post.id, slug: post.slug, status: post.status }, 'Post created')
+  if (post.status === 'PUBLISHED') {
+    await safeEnqueueWarmup(post.id, post.slug)
+  }
   return toDto(post)
 }
 
@@ -156,6 +168,10 @@ export async function updatePost(id: string, patch: UpdatePostInput) {
     },
   })
   logger.info({ postId: id }, 'Post updated')
+  const wasNotPublished = existing.status !== 'PUBLISHED'
+  if (updated.status === 'PUBLISHED' && (wasNotPublished || patch.slug)) {
+    await safeEnqueueWarmup(updated.id, updated.slug)
+  }
   return toDto(updated)
 }
 
@@ -170,6 +186,7 @@ export async function publishPost(id: string) {
     data: { status: 'PUBLISHED', publishedAt: new Date() },
   })
   logger.info({ postId: id }, 'Post published')
+  await safeEnqueueWarmup(post.id, post.slug)
   return toDto(post)
 }
 

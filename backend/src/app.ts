@@ -17,7 +17,7 @@ import { aiRoutes } from './routes/ai.routes'
 import { metricsRoutes } from './routes/metrics.routes'
 import { publicRoutes } from './routes/public.routes'
 import { settingsRoutes } from './routes/settings.routes'
-import { prisma } from './lib/prisma'
+import { healthRoutes } from './routes/health.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -44,20 +44,10 @@ export function createApp() {
   app.use(express.json({ limit: '5mb' }))
   app.use(pinoHttp({ logger }))
 
-  app.get('/api/health', async (_req, res) => {
-    let dbOk = false
-    try {
-      await prisma.$queryRaw`SELECT 1`
-      dbOk = true
-    } catch (err) {
-      logger.error({ err }, 'Healthcheck DB failed')
-    }
-    res.json({
-      status: dbOk ? 'ok' : 'degraded',
-      timestamp: new Date().toISOString(),
-      checks: { database: dbOk },
-    })
-  })
+  // Health endpoints (sem auth, antes das rotas de domínio).
+  // Mantém /api/health legado como alias do novo /health agregado.
+  app.use('/health', healthRoutes)
+  app.use('/api/health', healthRoutes)
 
   app.use('/api/v1/public', publicRoutes)
   app.use('/api/v1/auth', authRoutes)

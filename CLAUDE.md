@@ -82,11 +82,18 @@ aumaf-3d-site/
 
 ## Checkpoints do Projeto
 
-| Quinzena | Entrega |
-|---|---|
-| Q1 (sem 1–2) | Site público navegável + design aprovado + infra ativa |
-| Q2 (sem 3–4) | Blog funcional + backoffice + IA gerando posts |
-| Q3 (sem 5–6) | Deploy produção + QA + handover |
+| Quinzena | Entrega | Status |
+|---|---|---|
+| Q1 (sem 1–2) | Site público navegável + design aprovado + infra ativa | ✅ Concluído |
+| Q2 (sem 3–4) | Blog funcional + backoffice + IA gerando posts | ✅ Concluído |
+| Q3 (sem 5–6) | BullMQ + Storybook + QA + handover; deploy + Botyo separados | 🟡 Foundation entregue; deploy/Botyo aguardam |
+
+## Q3 Foundation (entregue em `feat/q3-foundation`)
+
+- **BullMQ + workers**: `lead-notification` (email ao admin) e `post-publish-cache` (warm-up SSR Astro). Health endpoint `/health` agrega DB/Redis/queues.
+- **Storybook tematizado**: stories para todos os primitivos UI (`Button`, `Badge`, `Card`, `Input`, `Label`, `Select`, `KpiCard`), `BlockPreview` com 4 templates, página `Foundation/Tokens` com cores/tipografia/radii/shadows ao vivo.
+- **Cobertura de testes**: 36 Jest backend + 35 Vitest admin + Playwright E2E (smoke + posts + leads + wysiwyg).
+- **Ops**: `scripts/smoke-test.sh`, runbooks `local-development.md` e `operational-handover.md`.
 
 ## Integrações Previstas
 - **Botyo** — WhatsApp chatbot + captação de leads

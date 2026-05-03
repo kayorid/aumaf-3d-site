@@ -48,6 +48,19 @@ const envSchema = z.object({
 
   // Botyo (futuro)
   BOTYO_WEBHOOK_URL: z.string().url().or(z.literal('')).optional(),
+
+  // Email (notificação de leads ao admin)
+  ADMIN_NOTIFICATION_EMAIL: z.string().email().optional(),
+  EMAIL_FROM: z.string().default('AUMAF 3D <noreply@aumaf-3d.com.br>'),
+  EMAIL_TRANSPORT: z.enum(['console', 'smtp', 'stub']).default('console'),
+  EMAIL_SMTP_HOST: z.string().optional(),
+  EMAIL_SMTP_PORT: z.coerce.number().default(587),
+  EMAIL_SMTP_USER: z.string().optional(),
+  EMAIL_SMTP_PASS: z.string().optional(),
+  EMAIL_SMTP_SECURE: z.coerce.boolean().default(false),
+
+  // Cache warm-up
+  PUBLIC_BLOG_BASE_URL: z.string().url().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)

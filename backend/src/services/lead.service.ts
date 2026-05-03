@@ -1,6 +1,7 @@
 import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
 import { maskEmail, maskPhone } from '../lib/mask'
+import { enqueueLeadNotification } from '../workers/lead-notification.worker'
 import type { CreateLeadInput, LeadDto, LeadMaskedDto } from '@aumaf/shared'
 
 function toDto(lead: Awaited<ReturnType<typeof prisma.lead.findUnique>>): LeadDto {
@@ -38,6 +39,13 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
     },
   })
   logger.info({ leadId: lead.id, source: lead.source }, 'Lead created')
+
+  try {
+    await enqueueLeadNotification(lead.id)
+  } catch (err) {
+    logger.error({ err, leadId: lead.id }, 'Failed to enqueue lead notification — lead persisted anyway')
+  }
+
   return toDto(lead)
 }
 
