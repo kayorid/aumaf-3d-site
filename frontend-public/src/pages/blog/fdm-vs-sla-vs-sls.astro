@@ -1,0 +1,289 @@
+---
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+
+const title = 'FDM, SLA ou SLS? O Guia Definitivo para Escolher o Processo Certo'
+const cat = 'Guia Técnico'
+const date = 'Mai 2026'
+const time = '8 min'
+const author = 'Equipe AUMAF 3D'
+const excerpt = 'Entenda as diferenças reais entre FDM, SLA e SLS — custo, precisão, materiais e acabamento — e descubra qual processo é o certo para o seu projeto de impressão 3D industrial.'
+---
+
+<Base title={`${title} — AUMAF 3D`} description={excerpt}>
+  <Navbar currentPath="/blog" />
+
+  <!-- Hero do Post -->
+  <section class="bg-background pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+    <div class="max-w-3xl mx-auto px-edge relative z-10">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-code-data text-on-surface-variant mb-8">
+        <a href="/blog" class="hover:text-primary-container transition-colors">Blog</a>
+        <span class="text-white/20">/</span>
+        <span class="text-primary-container">{cat}</span>
+      </nav>
+
+      <!-- Category badge -->
+      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-6 block w-fit">{cat}</span>
+
+      <!-- Title -->
+      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        {title}
+      </h1>
+
+      <!-- Excerpt -->
+      <p class="text-body-lg text-tertiary leading-relaxed mb-8 max-w-2xl">{excerpt}</p>
+
+      <!-- Meta -->
+      <div class="flex items-center gap-4 text-code-data text-on-surface-variant">
+        <span>{author}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{date}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{time} leitura</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cover -->
+  <div class="bg-background pb-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="relative h-64 md:h-80 rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/5">
+        <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+          <svg viewBox="0 0 160 160" fill="none" class="w-48 h-48">
+            <polygon points="80,8 148,44 148,116 80,152 12,116 12,44" stroke="#61c54f" stroke-width="1.5" fill="none"/>
+            <polygon points="80,28 128,56 128,104 80,132 32,104 32,56" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+            <circle cx="80" cy="80" r="24" stroke="#61c54f" stroke-width="1" fill="none"/>
+            <circle cx="80" cy="80" r="4" fill="#61c54f"/>
+          </svg>
+        </div>
+        <div class="absolute bottom-4 left-4">
+          <span class="pill-active">{cat}</span>
+        </div>
+        <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest">AUMAF 3D // {date}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <article class="bg-background pb-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="prose-aumaf">
+
+        <!-- Introdução -->
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Escolher o processo errado de impressão 3D pode custar caro — não apenas no orçamento da peça, mas em retrabalho, atrasos de projeto e frustração com resultados que não atendem à funcionalidade esperada. FDM, SLA e SLS são tecnologias radicalmente diferentes, cada uma com uma proposta de valor específica para aplicações industriais.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Este guia parte do que vemos na prática diária da AUMAF 3D: engenheiros chegam com projetos para os quais já definiram o processo antes de avaliar os requisitos reais da peça. O resultado frequente é uma peça tecnicamente viável, mas longe do ótimo. Vamos mudar isso.
+        </p>
+
+        <!-- Tabela comparativa -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Comparativo: FDM × SLA × SLS</h2>
+
+        <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 my-8">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <table class="w-full text-body-md">
+            <thead>
+              <tr class="bg-primary-container/10 border-b border-white/10">
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest">Critério</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest">FDM</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest">SLA</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest">SLS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-white/5">
+                <td class="px-4 py-3 text-on-surface-variant">Custo por peça</td>
+                <td class="px-4 py-3 text-on-surface">Baixo</td>
+                <td class="px-4 py-3 text-on-surface">Médio</td>
+                <td class="px-4 py-3 text-on-surface">Alto</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="px-4 py-3 text-on-surface-variant">Precisão dimensional</td>
+                <td class="px-4 py-3 text-on-surface">±0.1–0.3mm</td>
+                <td class="px-4 py-3 text-on-surface">±0.025–0.05mm</td>
+                <td class="px-4 py-3 text-on-surface">±0.1–0.2mm</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="px-4 py-3 text-on-surface-variant">Acabamento superficial</td>
+                <td class="px-4 py-3 text-on-surface">Linhas visíveis</td>
+                <td class="px-4 py-3 text-on-surface">Liso, 25μm</td>
+                <td class="px-4 py-3 text-on-surface">Granulado fino</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="px-4 py-3 text-on-surface-variant">Suporte necessário</td>
+                <td class="px-4 py-3 text-on-surface">Sim (remoção manual)</td>
+                <td class="px-4 py-3 text-on-surface">Sim (remoção manual)</td>
+                <td class="px-4 py-3 text-on-surface">Não (pó sustenta)</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="px-4 py-3 text-on-surface-variant">Gama de materiais</td>
+                <td class="px-4 py-3 text-on-surface">Muito ampla</td>
+                <td class="px-4 py-3 text-on-surface">Resinas variadas</td>
+                <td class="px-4 py-3 text-on-surface">Nylon, PA, TPU</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="px-4 py-3 text-on-surface-variant">Geometria complexa</td>
+                <td class="px-4 py-3 text-on-surface">Limitada por suporte</td>
+                <td class="px-4 py-3 text-on-surface">Boa com suportes finos</td>
+                <td class="px-4 py-3 text-on-surface">Excelente</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 text-on-surface-variant">Velocidade (série)</td>
+                <td class="px-4 py-3 text-on-surface">Boa</td>
+                <td class="px-4 py-3 text-on-surface">Lenta</td>
+                <td class="px-4 py-3 text-on-surface">Excelente</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FDM -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">FDM — Fused Deposition Modeling</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          O FDM é o processo mais difundido na impressão 3D industrial por uma razão simples: versatilidade de materiais a custo acessível. Um bico aquecido deposita filamento termoplástico em camadas, construindo a peça por acúmulo de material. A chave do FDM industrial está na câmara aquecida e no controle preciso de temperatura, que permitem processar materiais técnicos de alto desempenho.
+        </p>
+
+        <h3 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-8 mb-4">Materiais disponíveis na AUMAF 3D (FDM)</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 my-6">
+          {[
+            { mat: 'PA CF15', desc: 'Nylon + 15% carbono, rigidez extrema, peso reduzido' },
+            { mat: 'ABS', desc: 'Resistência mecânica, temperatura até 80°C' },
+            { mat: 'PC', desc: 'Policarbonato, transparência, resistência a 120°C' },
+            { mat: 'TPU', desc: 'Flexível, absorção de impacto, grips e juntas' },
+            { mat: 'PEEK', desc: 'Alta performance, biocompatível, 250°C+' },
+            { mat: '316L', desc: 'Metal via FDM (BASF Ultrafuse), sinterização posterior' },
+          ].map(item => (
+            <div class="glass-panel rounded-sm p-3 border border-white/8">
+              <span class="text-label-caps text-primary-container uppercase tracking-widest block text-[10px] mb-1">{item.mat}</span>
+              <span class="text-body-md text-tertiary text-sm leading-snug">{item.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4"><strong class="text-on-surface">Quando usar FDM:</strong> peças funcionais com requisitos mecânicos, protótipos que serão testados sob carga, componentes em materiais técnicos (PA, PEEK, PC), produção de pequenas séries onde o custo de material é fator determinante.</p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6"><strong class="text-on-surface">Limitações do FDM:</strong> o acabamento superficial apresenta linhas de camada visíveis que podem exigir pós-processamento. A anisotropia entre eixos XY e Z é mais pronunciada do que no SLS. Geometrias com grandes volantos requerem estruturas de suporte que geram marcas na superfície de contato.</p>
+
+        <!-- SLA -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">SLA — Stereolithography</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          No SLA, um laser UV cura resina fotopolimérica líquida camada a camada com precisão de até 25 micrômetros. O resultado é um acabamento superficial incomparável no mundo da impressão 3D: superfícies completamente lisas que rivalizam com peças injetadas, sem pós-processamento extensivo.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4"><strong class="text-on-surface">Quando usar SLA:</strong> modelos de apresentação e marketing, jigs e fixtures de inspeção dimensional, padrões de fundição, componentes ópticos e peças que precisam de detalhamento fino (roscas M2, recursos sub-milimétricos).</p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6"><strong class="text-on-surface">Limitações do SLA:</strong> resinas fotopoliméricas são menos resistentes termicamente e mecanicamente do que termoplásticos de engenharia. A degradação UV ao longo do tempo é um fator real em aplicações externas. O custo de resina por cm³ é significativamente maior que o filamento FDM equivalente.</p>
+
+        <!-- SLS -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">SLS — Selective Laser Sintering</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          O SLS sinteriza pó de poliamida (Nylon PA12 ou variantes) com um laser CO₂. O diferencial mais importante: <strong class="text-on-surface">não há necessidade de estruturas de suporte</strong> — o pó não sinterizado sustenta a peça durante o processo. Isso libera a geometria completamente, permitindo canais internos, estruturas em lattice e encaixes impossíveis por outros métodos.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4"><strong class="text-on-surface">Quando usar SLS:</strong> peças com geometria complexa interna (dutos, canais de resfriamento), produção de médias séries onde o custo fixo é diluído, componentes em Nylon PA12 que precisam de isotropia mecânica, montagens com articulações impressas já integradas.</p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6"><strong class="text-on-surface">Custo-benefício em séries:</strong> o SLS tem custo de setup mais alto, mas permite empilhar dezenas de peças dentro do volume de build — reduzindo o custo unitário em séries acima de 20–30 peças. Para lotes maiores, o SLS frequentemente supera o FDM em custo por peça.</p>
+
+        <!-- Fluxograma de decisão -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Como Decidir em 3 Perguntas</h2>
+
+        <div class="glass-panel rounded-sm p-6 my-8 border border-primary-container/15 space-y-4 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <div class="flex gap-4 items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-container/20 border border-primary-container/50 flex items-center justify-center text-primary-container text-label-caps font-bold">1</span>
+            <div>
+              <p class="text-on-surface font-medium mb-1">O acabamento superficial é crítico para a funcionalidade ou apresentação?</p>
+              <p class="text-tertiary text-body-md">→ <strong class="text-primary-container">Sim:</strong> considere SLA. → <strong class="text-on-surface">Não:</strong> passe para a próxima pergunta.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-container/20 border border-primary-container/50 flex items-center justify-center text-primary-container text-label-caps font-bold">2</span>
+            <div>
+              <p class="text-on-surface font-medium mb-1">A peça tem geometria interna complexa (canais, cavidades) ou será produzida em série acima de 20 unidades?</p>
+              <p class="text-tertiary text-body-md">→ <strong class="text-primary-container">Sim:</strong> SLS é provavelmente o mais adequado. → <strong class="text-on-surface">Não:</strong> passe para a próxima pergunta.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-container/20 border border-primary-container/50 flex items-center justify-center text-primary-container text-label-caps font-bold">3</span>
+            <div>
+              <p class="text-on-surface font-medium mb-1">O material é fator determinante (PEEK, PC, metal, flexível, reforçado com fibra)?</p>
+              <p class="text-tertiary text-body-md">→ <strong class="text-primary-container">Sim:</strong> FDM industrial com câmara aquecida é o único processo que atende. → <strong class="text-on-surface">Não:</strong> FDM é a escolha padrão por custo e velocidade.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tags / Share -->
+      <div class="mt-16 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Categoria:</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{cat}</span>
+        </div>
+        <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-2 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+          <span class="material-symbols-outlined text-base">share</span>
+          Compartilhar
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="bg-surface-low border-t border-white/5 py-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-primary-container/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+        <div>
+          <p class="text-label-caps text-primary-container uppercase tracking-[0.2em] mb-2">Ainda em dúvida?</p>
+          <p class="text-headline-md font-bold uppercase text-white">Fale com nossa equipe técnica.</p>
+          <p class="text-body-md text-tertiary mt-2">Analisamos seu projeto e indicamos o processo ideal sem custo.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+            WhatsApp
+            <span class="material-symbols-outlined text-base">chat</span>
+          </a>
+          <a href="/contato" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+            Solicitar Orçamento
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mais Posts -->
+  <section class="bg-background py-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Mais do Blog</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[
+          { cat: 'Materiais', title: 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação', date: 'Mai 2026', time: '6 min', href: '/blog/guia-materiais-impressao-3d' },
+          { cat: 'Engenharia', title: 'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original', date: 'Mai 2026', time: '7 min', href: '/blog/engenharia-reversa-passo-a-passo' },
+        ].map(post => (
+          <a href={post.href} class="group block">
+            <div class="relative h-40 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
+              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/50 text-primary-container text-[10px] uppercase tracking-widest">{post.cat}</span>
+              </div>
+            </div>
+            <h3 class="text-body-md font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-2">{post.title}</h3>
+            <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+              <span>{post.date}</span>
+              <span class="w-px h-3 bg-white/20"></span>
+              <span>{post.time} leitura</span>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/blog" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+          Ver todos os posts <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>

@@ -1,0 +1,306 @@
+---
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+
+const title = 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista'
+const cat = 'Case Study'
+const date = 'Jun 2024'
+const time = '5 min'
+const author = 'Equipe AUMAF 3D'
+const excerpt = 'Como a AUMAF 3D entregou 7 componentes críticos para o carro da Fórmula SAE USP São Carlos em 5 dias úteis — com tolerância ±0.05mm e aprovação no primeiro lote sem retrabalho.'
+---
+
+<Base title={`${title} — AUMAF 3D`} description={excerpt}>
+  <Navbar currentPath="/blog" />
+
+  <!-- Hero do Post -->
+  <section class="bg-background pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+    <div class="max-w-3xl mx-auto px-edge relative z-10">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-code-data text-on-surface-variant mb-8">
+        <a href="/blog" class="hover:text-primary-container transition-colors">Blog</a>
+        <span class="text-white/20">/</span>
+        <span class="text-primary-container">{cat}</span>
+      </nav>
+
+      <!-- Badges -->
+      <div class="flex flex-wrap gap-2 mb-6">
+        <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{cat}</span>
+        <span class="inline-flex items-center px-3 py-1 rounded-full border border-white/20 text-on-surface-variant text-label-caps uppercase tracking-widest">Parceria Universitária</span>
+      </div>
+
+      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        {title}
+      </h1>
+
+      <p class="text-body-lg text-tertiary leading-relaxed mb-8 max-w-2xl">{excerpt}</p>
+
+      <div class="flex items-center gap-4 text-code-data text-on-surface-variant">
+        <span>{author}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{date}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{time} leitura</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cover -->
+  <div class="bg-background pb-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="relative h-64 md:h-80 rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/5">
+        <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+          <svg viewBox="0 0 160 160" fill="none" class="w-48 h-48">
+            <polygon points="80,8 148,44 148,116 80,152 12,116 12,44" stroke="#61c54f" stroke-width="1.5" fill="none"/>
+            <polygon points="80,28 128,56 128,104 80,132 32,104 32,56" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+            <circle cx="80" cy="80" r="24" stroke="#61c54f" stroke-width="1" fill="none"/>
+            <circle cx="80" cy="80" r="4" fill="#61c54f"/>
+          </svg>
+        </div>
+        <div class="absolute bottom-4 left-4">
+          <span class="pill-active">{cat}</span>
+        </div>
+        <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest">AUMAF 3D // {date}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <article class="bg-background pb-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="prose-aumaf">
+
+        <!-- Contexto -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-4 mb-5 pb-3 border-b border-white/8">O Que é Fórmula SAE</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A Fórmula SAE é a principal competição de engenharia automotiva para estudantes universitários no mundo. Equipes projetam, constroem e competem com um carro de formula de corrida desde o zero, sendo avaliadas em quesitos de performance dinâmica, design de engenharia, análise de negócios e eficiência de custo. A USP São Carlos, reconhecida como uma das melhores escolas de engenharia do Brasil, participa regularmente com times de Engenharia Mecânica e Elétrica.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A exigência técnica da competição é real: os juízes são engenheiros da indústria automotiva. Peças que falham na pista eliminam a equipe. Peças fora de tolerância reprovam na inspeção técnica. Não há margem para componentes medianos.
+        </p>
+
+        <!-- O Desafio -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">O Desafio</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A equipe Fórmula SAE USP São Carlos chegou até a AUMAF 3D com um briefing direto e exigente: 7 componentes impressos em 3D, prazo de 5 dias úteis, tolerância dimensional de ±0.05mm nas interfaces críticas e peso minimizado em todas as peças.
+        </p>
+
+        <!-- Specs do projeto -->
+        <div class="glass-panel rounded-sm p-6 my-8 border border-primary-container/15 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Dados do Projeto</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {[
+              { label: 'Parceiro', value: 'USP São Carlos — Eng. Mecânica' },
+              { label: 'Evento', value: 'Fórmula SAE Brasil 2024' },
+              { label: 'Componentes', value: '7 peças distintas' },
+              { label: 'Tolerância crítica', value: '±0.05mm' },
+              { label: 'Prazo', value: '5 dias úteis' },
+              { label: 'Resultado', value: 'Aprovação 1º lote' },
+            ].map(item => (
+              <div class="border-b border-white/8 pb-3">
+                <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block text-[10px] mb-0.5">{item.label}</span>
+                <span class="text-body-md text-on-surface font-medium">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Diagnóstico -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Diagnóstico Técnico por Peça</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Antes de iniciar a produção, cada componente foi avaliado individualmente para identificar a criticidade dimensional, o regime de carga esperado e o material mais adequado. Não existe "receita universal" em peças para motorsport.
+        </p>
+
+        <div class="space-y-3 my-6">
+          {[
+            {
+              peca: 'Suportes de Suspensão (×2)',
+              criticidade: 'Alta — carga dinâmica sob impacto',
+              analise: 'Peças submetidas a forças de compressão e cisalhamento durante curvas e frenagem. Requisito: resistência ao impacto elevada e tolerância dimensional nas interfaces com a geometria do chassi. Material selecionado: Nylon PA para absorção de impacto sem fratura frágil.',
+            },
+            {
+              peca: 'Guias de Cabo (×3)',
+              criticidade: 'Média — tolerância dimensional crítica',
+              analise: 'Componentes de roteamento do sistema elétrico. Geometria com canais de passagem de cabo com diâmetro controlado — variação de ±0.1mm inviabiliza a montagem. Processo: FDM com câmara aquecida para controle de contração do PA.',
+            },
+            {
+              peca: 'Defletores Aerodinâmicos (×2)',
+              criticidade: 'Média — relação rigidez/peso',
+              analise: 'Peças de área superficial grande e geometria curvada. Carga aerodinâmica gera flexão — rigidez específica (módulo/densidade) é o parâmetro de seleção. PET-G CF15 (PETG com 15% de fibra de carbono) entrega a relação ideal.',
+            },
+          ].map(item => (
+            <div class="glass-panel rounded-sm p-5 border border-white/8">
+              <div class="flex items-start justify-between gap-4 mb-2">
+                <h3 class="text-body-lg font-bold text-white">{item.peca}</h3>
+                <span class="text-code-data text-primary-container text-[10px] flex-shrink-0">{item.criticidade}</span>
+              </div>
+              <p class="text-body-md text-tertiary leading-relaxed">{item.analise}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Solução -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Solução por Material e Processo</h2>
+
+        <div class="grid sm:grid-cols-2 gap-4 my-6">
+          <div class="glass-panel rounded-sm p-5 border border-primary-container/20 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+            <span class="text-label-caps text-primary-container uppercase tracking-widest block text-[10px] mb-2">Suportes estruturais + Guias</span>
+            <h3 class="text-body-lg font-bold text-white mb-2">Nylon PA</h3>
+            <p class="text-body-md text-tertiary leading-relaxed">Alta resistência ao impacto, baixo coeficiente de atrito nas superfícies de deslizamento dos cabos, e comportamento dúctil que evita falha catastrófica sob carga de impacto. FDM com câmara aquecida a 60°C e perfil de temperatura calibrado para cristalização correta do PA.</p>
+          </div>
+          <div class="glass-panel rounded-sm p-5 border border-primary-container/20 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+            <span class="text-label-caps text-primary-container uppercase tracking-widest block text-[10px] mb-2">Defletores aerodinâmicos</span>
+            <h3 class="text-body-lg font-bold text-white mb-2">PET-G CF15</h3>
+            <p class="text-body-md text-tertiary leading-relaxed">PETG reforçado com 15% de fibra de carbono picada. Módulo de flexão ~30% superior ao PETG puro com densidade significativamente menor que alumínio usinado. Resultado: peças mais leves que a alternativa metálica, com rigidez adequada para o regime de carga aerodinâmica.</p>
+          </div>
+        </div>
+
+        <!-- Tabela de specs completa -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Especificações por Componente</h2>
+        <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 my-6">
+          <table class="w-full text-body-md">
+            <thead>
+              <tr class="bg-primary-container/10 border-b border-white/10">
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Peça</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Material</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Processo</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Tolerância</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Prazo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { peca: 'Suporte suspensão ×2', mat: 'Nylon PA', proc: 'FDM câmara aq.', tol: '±0.05mm', prazo: 'Dia 2' },
+                { peca: 'Guias de cabo ×3', mat: 'Nylon PA', proc: 'FDM câmara aq.', tol: '±0.05mm', prazo: 'Dia 3' },
+                { peca: 'Defletor aero ×2', mat: 'PET-G CF15', proc: 'FDM industrial', tol: '±0.1mm', prazo: 'Dia 4' },
+              ].map((row, i) => (
+                <tr class={i < 2 ? 'border-b border-white/5' : ''}>
+                  <td class="px-4 py-3 text-on-surface">{row.peca}</td>
+                  <td class="px-4 py-3 text-primary-container font-medium">{row.mat}</td>
+                  <td class="px-4 py-3 text-on-surface-variant">{row.proc}</td>
+                  <td class="px-4 py-3 text-on-surface">{row.tol}</td>
+                  <td class="px-4 py-3 text-on-surface-variant">{row.prazo}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Resultado -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Resultado</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Todas as 7 peças foram entregues no quinto dia útil, dentro das tolerâncias especificadas, aprovadas pela equipe técnica da USP São Carlos sem necessidade de retrabalho em nenhum componente. A montagem do carro prosseguiu no cronograma planejado pela equipe.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          O carro competiu na Fórmula SAE Brasil 2024 com todos os componentes AUMAF 3D instalados. Nenhuma falha de componente impresso foi registrada durante os eventos dinâmicos da competição.
+        </p>
+
+        <!-- Quote -->
+        <blockquote class="glass-panel border-l-2 border-primary-container p-6 my-8 rounded-sm relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <p class="text-headline-md font-light text-on-surface italic leading-relaxed mb-4">"A AUMAF 3D entregou dentro do prazo e com acabamento surpreendente. As peças encaixaram perfeitamente no primeiro teste de montagem."</p>
+          <cite class="text-label-caps text-primary-container uppercase tracking-[0.15em] not-italic">— Equipe Fórmula SAE USP São Carlos</cite>
+        </blockquote>
+
+        <!-- Aprendizados -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">O Que Aprendemos: DfAM em Motorsport Estudantil</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+          Design for Additive Manufacturing (DfAM) é a prática de projetar peças que exploram as vantagens únicas da impressão 3D — em vez de simplesmente replicar peças projetadas para usinagem ou injeção. No contexto da Fórmula SAE, isso significou:
+        </p>
+        <div class="space-y-3 my-6">
+          {[
+            { titulo: 'Orientação de impressão como parâmetro de projeto', texto: 'Os suportes de suspensão foram orientados para que as camadas FDM ficassem perpendiculares à direção de carga principal, maximizando a resistência no eixo mais solicitado.' },
+            { titulo: 'Integração de funções em peça única', texto: 'Duas das guias de cabo foram redesenhadas para integrar funcionalidades que originalmente seriam 3 componentes distintos — reduzindo peso total e eliminando interfaces de montagem.' },
+            { titulo: 'Infill calibrado por função', texto: 'Defletores aerodinâmicos usaram infill em gyroid a 25% — estrutura interna que maximiza rigidez à flexão por unidade de massa, diferente do infill retilíneo padrão.' },
+          ].map(item => (
+            <div class="flex gap-4 items-start">
+              <span class="flex-shrink-0 w-2 h-2 rounded-full bg-primary-container mt-2"></span>
+              <div>
+                <p class="text-on-surface font-medium mb-1">{item.titulo}</p>
+                <p class="text-body-md text-tertiary leading-relaxed">{item.texto}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      <!-- Tags / Share -->
+      <div class="mt-16 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Categoria:</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{cat}</span>
+        </div>
+        <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-2 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+          <span class="material-symbols-outlined text-base">share</span>
+          Compartilhar
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="bg-surface-low border-t border-white/5 py-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-primary-container/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+        <div>
+          <p class="text-label-caps text-primary-container uppercase tracking-[0.2em] mb-2">Tem um projeto desafiador?</p>
+          <p class="text-headline-md font-bold uppercase text-white">Fale com a nossa equipe.</p>
+          <p class="text-body-md text-tertiary mt-2">Prazo agressivo e tolerância rigorosa são o nosso padrão de trabalho.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+            WhatsApp
+            <span class="material-symbols-outlined text-base">chat</span>
+          </a>
+          <a href="/contato" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+            Solicitar Orçamento
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mais Posts -->
+  <section class="bg-background py-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Mais do Blog</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[
+          { cat: 'Guia Técnico', title: 'FDM, SLA ou SLS? O Guia Definitivo para Escolher o Processo Certo', date: 'Mai 2026', time: '8 min', href: '/blog/fdm-vs-sla-vs-sls' },
+          { cat: 'Materiais', title: 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação', date: 'Mai 2026', time: '6 min', href: '/blog/guia-materiais-impressao-3d' },
+        ].map(post => (
+          <a href={post.href} class="group block">
+            <div class="relative h-40 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
+              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/50 text-primary-container text-[10px] uppercase tracking-widest">{post.cat}</span>
+              </div>
+            </div>
+            <h3 class="text-body-md font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-2">{post.title}</h3>
+            <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+              <span>{post.date}</span>
+              <span class="w-px h-3 bg-white/20"></span>
+              <span>{post.time} leitura</span>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/blog" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+          Ver todos os posts <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>

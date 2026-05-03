@@ -1,0 +1,355 @@
+---
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+
+const title = 'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original'
+const cat = 'Engenharia'
+const date = 'Mai 2026'
+const time = '7 min'
+const author = 'Equipe AUMAF 3D'
+const excerpt = 'Do scanner 3D ao controle dimensional final — um guia técnico completo sobre o processo de engenharia reversa para replicar peças descontinuadas, sem documentação técnica, usando impressão 3D industrial.'
+---
+
+<Base title={`${title} — AUMAF 3D`} description={excerpt}>
+  <Navbar currentPath="/blog" />
+
+  <!-- Hero do Post -->
+  <section class="bg-background pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+    <div class="max-w-3xl mx-auto px-edge relative z-10">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-code-data text-on-surface-variant mb-8">
+        <a href="/blog" class="hover:text-primary-container transition-colors">Blog</a>
+        <span class="text-white/20">/</span>
+        <span class="text-primary-container">{cat}</span>
+      </nav>
+
+      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-6 block w-fit">{cat}</span>
+
+      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        {title}
+      </h1>
+
+      <p class="text-body-lg text-tertiary leading-relaxed mb-8 max-w-2xl">{excerpt}</p>
+
+      <div class="flex items-center gap-4 text-code-data text-on-surface-variant">
+        <span>{author}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{date}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{time} leitura</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cover -->
+  <div class="bg-background pb-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="relative h-64 md:h-80 rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/5">
+        <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+          <svg viewBox="0 0 160 160" fill="none" class="w-48 h-48">
+            <polygon points="80,8 148,44 148,116 80,152 12,116 12,44" stroke="#61c54f" stroke-width="1.5" fill="none"/>
+            <polygon points="80,28 128,56 128,104 80,132 32,104 32,56" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+            <circle cx="80" cy="80" r="24" stroke="#61c54f" stroke-width="1" fill="none"/>
+            <circle cx="80" cy="80" r="4" fill="#61c54f"/>
+          </svg>
+        </div>
+        <div class="absolute bottom-4 left-4">
+          <span class="pill-active">{cat}</span>
+        </div>
+        <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest">AUMAF 3D // {date}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <article class="bg-background pb-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="prose-aumaf">
+
+        <!-- Intro -->
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Toda fábrica tem uma gaveta com peças que ninguém sabe de onde vieram. O fornecedor original faliu. O equipamento foi importado sem documentação técnica. A peça foi fabricada internamente décadas atrás e os desenhos foram perdidos. Ou simplesmente foi descontinuada pelo fabricante, e o estoque de reposição acabou.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Nesses cenários, a engenharia reversa é o caminho. Com scanner 3D, CAD paramétrico e impressão 3D industrial, é possível replicar com precisão uma peça funcional — frequentemente melhorando propriedades em relação ao original — sem nenhum desenho técnico de partida.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Este guia descreve o processo completo que utilizamos na AUMAF 3D, passo a passo, com critérios técnicos em cada etapa.
+        </p>
+
+        <!-- Passo 1 -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">
+          <span class="text-primary-container">01 —</span> Avaliação da Peça Original
+        </h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+          A avaliação inicial determina a viabilidade e o escopo do trabalho. Quatro questões definem a estratégia:
+        </p>
+        <div class="space-y-3 my-6">
+          {[
+            { q: 'Estado físico da peça', a: 'A peça está íntegra ou danificada? Deformações, corrosão, desgaste superficial ou fratura comprometem a digitalização e exigem tratamento especial antes do scan — ou inferência dimensional a partir de features não danificadas.' },
+            { q: 'Funcionalidade crítica', a: 'Qual a função da peça no sistema? Interface de montagem, transferência de carga, vedação, guia cinemático? A função crítica define quais dimensões têm tolerância apertada e quais são nominais.' },
+            { q: 'Tolerâncias necessárias', a: 'Identificamos as interfaces dimensionais críticas — furos de montagem, faces de assentamento, pinos de alinhamento. São as dimensões que precisarão de verificação independente do scanner.' },
+            { q: 'Identificação do material original', a: 'Teste de chama, dureza Shore, aparência da fratura, comportamento ao desgaste, densidade. A identificação correta do material original orienta a seleção do equivalente imprimível.' },
+          ].map(item => (
+            <div class="glass-panel rounded-sm p-5 border border-white/8">
+              <h3 class="text-body-md font-bold text-white mb-2">{item.q}</h3>
+              <p class="text-body-md text-tertiary leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Passo 2 -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">
+          <span class="text-primary-container">02 —</span> Digitalização 3D
+        </h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A digitalização converte a peça física em uma nuvem de pontos ou malha 3D. A escolha da tecnologia de scan impacta diretamente a precisão do modelo gerado.
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-4 my-6">
+          {[
+            {
+              tech: 'Luz Estruturada',
+              prec: '±0.02–0.05mm',
+              uso: 'Peças estáticas, detalhamento fino, geometria orgânica complexa. Padrão na AUMAF 3D.',
+              ideal: true,
+            },
+            {
+              tech: 'Scanner de Contato (CMM)',
+              prec: '±0.005mm',
+              uso: 'Medição de tolerâncias críticas em features específicas. Complementa o scan de luz estruturada.',
+              ideal: false,
+            },
+            {
+              tech: 'Fotogrametria',
+              prec: '±0.1–0.5mm',
+              uso: 'Peças grandes, geometria simples, orçamento limitado. Não adequado para tolerâncias apertadas.',
+              ideal: false,
+            },
+          ].map(item => (
+            <div class={`glass-panel rounded-sm p-4 border ${item.ideal ? 'border-primary-container/40' : 'border-white/8'}`}>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <h3 class="text-body-md font-bold text-white">{item.tech}</h3>
+                {item.ideal && <span class="pill-green text-[9px]">Padrão</span>}
+              </div>
+              <p class="text-code-data text-primary-container mb-2">{item.prec}</p>
+              <p class="text-body-md text-tertiary text-sm leading-snug">{item.uso}</p>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Nosso scanner de luz estruturada opera com precisão de <strong class="text-on-surface">±0.02mm</strong> em peças de até 300mm na maior dimensão. Para peças maiores, realizamos scans sobrepostos com alinhamento por targets fiduciais, mantendo a precisão global abaixo de ±0.05mm.
+        </p>
+
+        <!-- Passo 3 -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">
+          <span class="text-primary-container">03 —</span> Processamento da Nuvem de Pontos
+        </h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+          A nuvem de pontos bruta do scanner raramente está pronta para impressão. O processamento passa por etapas sequenciais:
+        </p>
+        <div class="space-y-2 my-6">
+          {[
+            { step: 'Limpeza e filtragem', desc: 'Remoção de ruído, pontos outliers e artefatos de scan. Superfícies reflexivas (metais polidos) frequentemente precisam de tratamento especial ou aplicação de spray matte temporário antes do scan.' },
+            { step: 'Meshing', desc: 'Conversão da nuvem em malha triangulada (STL/OBJ). Parâmetros de resolução da malha são calibrados para o nível de detalhamento necessário — malha densa demais gera arquivos não tratáveis, malha esparsa demais perde features.' },
+            { step: 'Reconstrução paramétrica em CAD', desc: 'O passo mais crítico: a malha é usada como referência para reconstrução de um modelo CAD paramétrico nativo (Fusion 360 ou SolidWorks). Features geométricas são identificadas — planos, cilindros, esferas, chanfros — e modeladas com dimensões nominais limpas. O resultado é um modelo editável, não apenas uma malha.' },
+            { step: 'DfAM', desc: 'Com o modelo paramétrico em mãos, aplicamos princípios de Design for Additive Manufacturing: remoção de restrições de usinagem (ângulos de saída desnecessários, espessuras mínimas de molde), adição de suportes autoportantes, otimização de orientação de impressão.' },
+          ].map((item, i) => (
+            <div class="flex gap-4 items-start">
+              <span class="flex-shrink-0 w-7 h-7 rounded-sm bg-primary-container/10 border border-primary-container/30 flex items-center justify-center text-primary-container text-code-data font-bold text-[11px]">{String(i+1).padStart(2,'0')}</span>
+              <div>
+                <p class="text-on-surface font-medium mb-1">{item.step}</p>
+                <p class="text-body-md text-tertiary leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Passo 4 -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">
+          <span class="text-primary-container">04 —</span> Seleção de Material e Processo
+        </h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A seleção do material para a réplica não é um mapeamento direto — é uma análise de equivalência funcional. O objetivo não é usar o mesmo material, mas sim um material que atenda aos mesmos requisitos funcionais na aplicação.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+          Fatores considerados na seleção:
+        </p>
+        <div class="grid sm:grid-cols-2 gap-3 my-6">
+          {[
+            { fator: 'Temperatura de serviço', desc: 'A peça fica próxima de fonte de calor? Qual a temperatura máxima esperada? Define o piso de temperatura de serviço do material.' },
+            { fator: 'Regime de carga', desc: 'Carga estática, dinâmica, impacto ou fadiga? Determina se a resistência à tração, ao impacto ou ao desgaste é prioritária.' },
+            { fator: 'Ambiente químico', desc: 'Contato com óleos, solventes, ácidos, UV? Determina resistência química e estabilidade dimensional em longo prazo.' },
+            { fator: 'Dilatação térmica', desc: 'Interfaces de encaixe com metais têm dilatação diferencial. O material impresso deve ter CTE (coeficiente de expansão térmica) compatível com o do componente acoplado.' },
+          ].map(item => (
+            <div class="glass-panel rounded-sm p-4 border border-white/8">
+              <h3 class="text-body-md font-bold text-white mb-2">{item.fator}</h3>
+              <p class="text-body-md text-tertiary text-sm leading-snug">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Passo 5 -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">
+          <span class="text-primary-container">05 —</span> Impressão e Controle Dimensional
+        </h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A First Article Inspection (FAI) é o protocolo de controle dimensional aplicado à primeira peça de cada lote. Não liberamos peças de engenharia reversa sem FAI documentado.
+        </p>
+        <div class="glass-panel rounded-sm p-6 my-6 border border-primary-container/15 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Protocolo FAI — AUMAF 3D</span>
+          <div class="space-y-3">
+            {[
+              { item: 'Paquímetro digital (±0.01mm)', uso: 'Dimensões lineares, diâmetros externos, profundidades' },
+              { item: 'Micrômetro (±0.001mm)', uso: 'Interfaces críticas de tolerância apertada' },
+              { item: 'Comparação scan vs. CAD', uso: 'Mapa de desvios colorimétrico para identificar desvios geométricos globais' },
+              { item: 'CMM (quando necessário)', uso: 'Tolerâncias GD&T em peças de alta precisão — disponível sob contratação' },
+            ].map(row => (
+              <div class="flex gap-4 border-b border-white/5 pb-3">
+                <span class="text-primary-container text-body-md font-medium flex-shrink-0 w-52">{row.item}</span>
+                <span class="text-tertiary text-body-md">{row.uso}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Passo 6 -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">
+          <span class="text-primary-container">06 —</span> Validação Funcional
+        </h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Controle dimensional aprovado não é suficiente — a peça precisa ser validada no contexto de uso real. A validação funcional segue uma sequência:
+        </p>
+        <div class="space-y-3 my-6">
+          {[
+            'Teste de montagem: encaixe nos componentes adjacentes sem força excessiva nem folga perceptível.',
+            'Teste sob carga estática: aplicação da carga de serviço esperada por tempo mínimo de 24h — observação de deformação permanente ou fluência.',
+            'Ajustes finos: se a primeira peça aprovada dimensionalmente apresentar interferência na montagem, o modelo CAD é ajustado no offset necessário (tipicamente 0.05–0.1mm nos diâmetros de encaixe) e nova FAI é realizada.',
+          ].map((item, i) => (
+            <div class="flex gap-4 items-start">
+              <span class="flex-shrink-0 text-primary-container text-code-data font-bold">{String(i+1).padStart(2,'0')}</span>
+              <p class="text-body-md text-tertiary leading-relaxed">{item}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Caso real -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Caso Real: Peça Descontinuada em PA12</h2>
+        <div class="glass-panel rounded-sm p-6 my-8 border border-primary-container/15 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <p class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Caso Anônimo — Indústria de Automação</p>
+          <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+            Um cliente industrial nos trouxe um guia de correia de uma linha de automação, fabricado originalmente em ABS injetado por um fornecedor descontinuado. A peça estava fraturada e o cliente mantinha estoque de 2 unidades sobressalentes — suficientes para alguns meses de produção.
+          </p>
+          <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+            Após avaliação, identificamos que o ABS original apresentava limitações para a aplicação: temperatura de operação próxima de 75°C (limite do ABS) e desgaste superficial acelerado pelo contato repetitivo com a correia.
+          </p>
+          <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+            Solução: replicar em <strong class="text-on-surface">PA12 via FDM</strong>. O Nylon PA12 tem temperatura de serviço de 100°C (25°C de margem adicional), resistência ao desgaste significativamente superior ao ABS, e baixo coeficiente de atrito com a correia — reduzindo o desgaste progressivo.
+          </p>
+          <p class="text-body-lg text-on-surface leading-relaxed font-medium">
+            Resultado: a réplica em PA12 superou o desempenho do original em ABS — vida útil estimada 2× maior, com eliminação do risco de fratura frágil a temperatura elevada.
+          </p>
+        </div>
+
+        <!-- Quando NÃO usar -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Quando a Engenharia Reversa NÃO é a Solução</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-4">
+          A engenharia reversa tem limitações importantes que devem ser avaliadas antes de iniciar o processo:
+        </p>
+        <div class="space-y-3 my-6">
+          {[
+            { titulo: 'Peças com propriedades dependentes de processo de fabricação específico', desc: 'Engrenagens metálicas temperadas, molas de aço, peças forjadas — as propriedades mecânicas são resultado do processo de manufatura, não apenas da geometria. Um substituto em polímero não replicará a resistência à fadiga de um aço forjado.' },
+            { titulo: 'Geometrias com tolerâncias abaixo de ±0.02mm', desc: 'Abaixo desse limiar, o processo FDM não oferece repetibilidade adequada sem pós-usinagem. Para tolerâncias muito apertadas, considere a engenharia reversa para geração do modelo CAD + usinagem CNC da peça final.' },
+            { titulo: 'Peças de segurança crítica sem documentação de qualificação', desc: 'Componentes que, em caso de falha, colocam vidas em risco (ex: sistemas de freio, estruturas de aeronave) requerem qualificação formal que vai além do escopo de uma réplica por engenharia reversa.' },
+          ].map(item => (
+            <div class="flex gap-4 items-start">
+              <span class="flex-shrink-0 w-2 h-2 rounded-full bg-white/30 mt-2"></span>
+              <div>
+                <p class="text-on-surface font-medium mb-1">{item.titulo}</p>
+                <p class="text-body-md text-tertiary leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      <!-- Tags / Share -->
+      <div class="mt-16 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Categoria:</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{cat}</span>
+        </div>
+        <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-2 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+          <span class="material-symbols-outlined text-base">share</span>
+          Compartilhar
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="bg-surface-low border-t border-white/5 py-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-primary-container/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+        <div>
+          <p class="text-label-caps text-primary-container uppercase tracking-[0.2em] mb-2">Tem uma peça para replicar?</p>
+          <p class="text-headline-md font-bold uppercase text-white">Envie fotos e dimensões.</p>
+          <p class="text-body-md text-tertiary mt-2">Analisamos o caso e retornamos com viabilidade em até 24h.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+            WhatsApp
+            <span class="material-symbols-outlined text-base">chat</span>
+          </a>
+          <a href="/contato" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+            Solicitar Avaliação
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mais Posts -->
+  <section class="bg-background py-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Mais do Blog</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[
+          { cat: 'Guia Técnico', title: 'FDM, SLA ou SLS? O Guia Definitivo para Escolher o Processo Certo', date: 'Mai 2026', time: '8 min', href: '/blog/fdm-vs-sla-vs-sls' },
+          { cat: 'Materiais', title: 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação', date: 'Mai 2026', time: '6 min', href: '/blog/guia-materiais-impressao-3d' },
+        ].map(post => (
+          <a href={post.href} class="group block">
+            <div class="relative h-40 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
+              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/50 text-primary-container text-[10px] uppercase tracking-widest">{post.cat}</span>
+              </div>
+            </div>
+            <h3 class="text-body-md font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-2">{post.title}</h3>
+            <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+              <span>{post.date}</span>
+              <span class="w-px h-3 bg-white/20"></span>
+              <span>{post.time} leitura</span>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/blog" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+          Ver todos os posts <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>

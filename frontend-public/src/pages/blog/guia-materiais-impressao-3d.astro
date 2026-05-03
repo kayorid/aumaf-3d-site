@@ -1,0 +1,362 @@
+---
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+
+const title = 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação'
+const cat = 'Materiais'
+const date = 'Mai 2026'
+const time = '6 min'
+const author = 'Equipe AUMAF 3D'
+const excerpt = 'Da seleção de termoplásticos padrão a materiais de alta performance como PEEK e metal via FDM — um guia técnico completo para engenheiros que precisam tomar a decisão certa de material.'
+---
+
+<Base title={`${title} — AUMAF 3D`} description={excerpt}>
+  <Navbar currentPath="/blog" />
+
+  <!-- Hero do Post -->
+  <section class="bg-background pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+    <div class="max-w-3xl mx-auto px-edge relative z-10">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-code-data text-on-surface-variant mb-8">
+        <a href="/blog" class="hover:text-primary-container transition-colors">Blog</a>
+        <span class="text-white/20">/</span>
+        <span class="text-primary-container">{cat}</span>
+      </nav>
+
+      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-6 block w-fit">{cat}</span>
+
+      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        {title}
+      </h1>
+
+      <p class="text-body-lg text-tertiary leading-relaxed mb-8 max-w-2xl">{excerpt}</p>
+
+      <div class="flex items-center gap-4 text-code-data text-on-surface-variant">
+        <span>{author}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{date}</span>
+        <span class="w-px h-3 bg-white/20"></span>
+        <span>{time} leitura</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cover -->
+  <div class="bg-background pb-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="relative h-64 md:h-80 rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/5">
+        <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+          <svg viewBox="0 0 160 160" fill="none" class="w-48 h-48">
+            <polygon points="80,8 148,44 148,116 80,152 12,116 12,44" stroke="#61c54f" stroke-width="1.5" fill="none"/>
+            <polygon points="80,28 128,56 128,104 80,132 32,104 32,56" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+            <circle cx="80" cy="80" r="24" stroke="#61c54f" stroke-width="1" fill="none"/>
+            <circle cx="80" cy="80" r="4" fill="#61c54f"/>
+          </svg>
+        </div>
+        <div class="absolute bottom-4 left-4">
+          <span class="pill-active">{cat}</span>
+        </div>
+        <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest">AUMAF 3D // {date}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <article class="bg-background pb-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="prose-aumaf">
+
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Quando engenheiros pensam em impressão 3D industrial, o primeiro questionamento costuma ser sobre o processo (FDM, SLA, SLS). Mas a decisão de material é frequentemente mais determinante para o sucesso da peça do que a tecnologia de impressão em si. Um PEEK processado corretamente supera um ABS de qualquer fornecedor em temperatura e biocompatibilidade — independente do equipamento usado.
+        </p>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Este guia cobre o portfólio de materiais disponíveis na AUMAF 3D, organizados por categoria, com especificações técnicas relevantes e orientação de aplicação para cada um.
+        </p>
+
+        <!-- Grid de categorias -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Categorias do Portfólio</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 my-6">
+          {[
+            { name: 'Termoplásticos Padrão', desc: 'ABS, PET-G, Nylon PA12, PC', anchor: '#termoplasticos' },
+            { name: 'Alta Performance', desc: 'PA CF15, PEEK, Tritan HT', anchor: '#alta-performance' },
+            { name: 'Flexíveis', desc: 'TPU 95A, Flex 85A', anchor: '#flexiveis' },
+            { name: 'Metal via FDM', desc: 'BASF Ultrafuse 316L', anchor: '#metal' },
+            { name: 'Resinas SLA', desc: 'Standard, Tough, Flexible', anchor: '#resinas' },
+            { name: 'Pós SLS', desc: 'PA12, PA12 GB, TPU', anchor: '#pos-sls' },
+          ].map(cat_item => (
+            <a href={cat_item.anchor} class="glass-panel rounded-sm p-4 border border-white/8 hover:border-primary-container/40 transition-all group">
+              <span class="text-label-caps text-primary-container uppercase tracking-widest block text-[10px] mb-1 group-hover:text-primary-container">{cat_item.name}</span>
+              <span class="text-body-md text-tertiary text-sm leading-snug">{cat_item.desc}</span>
+            </a>
+          ))}
+        </div>
+
+        <!-- Termoplásticos Padrão -->
+        <h2 id="termoplasticos" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Termoplásticos Padrão</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Os termoplásticos padrão cobrem a grande maioria das aplicações de prototipagem funcional e produção de peças de uso geral. São materiais bem documentados, com comportamento previsível e custo acessível.
+        </p>
+
+        <div class="space-y-4 my-6">
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">ABS — Acrilonitrila Butadieno Estireno</h3>
+              <span class="pill flex-shrink-0">Versátil</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">Temperatura de serviço até 80°C, boa resistência mecânica e ao impacto, usinável e colável com acetona. Ideal para peças funcionais de uso geral, suportes, gabinetes, maquetes funcionais. Requer câmara fechada para reduzir warping em peças grandes.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Temp. serviço: 80°C</span>
+              <span class="text-on-surface-variant">Resistência impacto: média</span>
+              <span class="text-on-surface-variant">Pós-proc.: acetona, lixa</span>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">PET-G — Polietileno Tereftalato Glicol</h3>
+              <span class="pill flex-shrink-0">Popular</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">Excelente equilíbrio entre facilidade de impressão, translucidez e adesão entre camadas. Temperatura de serviço até 75°C, baixa contração — resistência ao warping superior ao ABS. Indicado para peças que precisam ser visualizadas internamente, recipientes, componentes com encaixes precisos.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Temp. serviço: 75°C</span>
+              <span class="text-on-surface-variant">Translucidez: alta</span>
+              <span class="text-on-surface-variant">Warping: muito baixo</span>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">Nylon PA12 — Poliamida 12</h3>
+              <span class="pill flex-shrink-0">Engenharia</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">Alta resistência ao impacto e à abrasão, baixo coeficiente de atrito — propriedades que tornam o PA12 o material de referência para componentes mecânicos com movimento relativo: engrenagens, guias, buchas, trilhos. Absorção de umidade requer armazenamento adequado do filamento.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Resistência abrasão: excelente</span>
+              <span class="text-on-surface-variant">Coef. atrito: baixo</span>
+              <span class="text-on-surface-variant">Temp. serviço: 100°C</span>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">PC — Policarbonato</h3>
+              <span class="pill flex-shrink-0">Alta Temp.</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">O termoplástico de maior resistência térmica da linha padrão — temperatura de serviço até 120°C. Transparência óptica que permite versões translúcidas para peças ópticas e de iluminação. Alta rigidez e resistência ao impacto. Exige temperatura de impressão acima de 270°C e câmara aquecida.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Temp. serviço: 120°C</span>
+              <span class="text-on-surface-variant">Transparência: alta</span>
+              <span class="text-on-surface-variant">Rigidez: muito alta</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alta Performance -->
+        <h2 id="alta-performance" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Alta Performance</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Materiais de alta performance são processados em equipamentos FDM com câmara aquecida acima de 60–70°C e bicos de temperatura ultra-alta (acima de 400°C para PEEK). São a fronteira onde a impressão 3D compete diretamente com usinagem CNC e injeção plástica em propriedades mecânicas.
+        </p>
+
+        <div class="space-y-4 my-6">
+          <div class="glass-panel rounded-sm p-5 border border-primary-container/20 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">PA CF15 — Nylon com 15% Fibra de Carbono</h3>
+              <span class="pill-green flex-shrink-0">Destaque</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">O melhor custo-benefício em rigidez por peso no portfólio FDM. A fibra de carbono picada a 15% aumenta o módulo de elasticidade em ~60% em relação ao PA puro, com redução de 10–15% no peso da peça pela menor densidade do material. Indicado para estruturas aeroespaciais leves, componentes de automação, suportes e brackets estruturais.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Módulo: +60% vs PA puro</span>
+              <span class="text-on-surface-variant">Densidade: 1.10 g/cm³</span>
+              <span class="text-on-surface-variant">Temp. serviço: 110°C</span>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">PEEK — Poliéter Éter Cetona</h3>
+              <span class="pill flex-shrink-0">Aeroespacial</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">O topo da pirâmide dos termoplásticos de engenharia. Temperatura de uso contínuo acima de 250°C, biocompatível (ISO 10993), resistente a ácidos concentrados e hidrocarbonetos. Aplicações: implantes médicos, peças para motores, ambientes de alta temperatura, componentes aeroespaciais submetidos a cargas severas. Processamento exige bico a 400–450°C e câmara a 120°C.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Temp. contínua: 250°C+</span>
+              <span class="text-on-surface-variant">Biocompatível: ISO 10993</span>
+              <span class="text-on-surface-variant">Resistência química: excelente</span>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-body-lg font-bold text-white uppercase tracking-wide">Tritan HT — Alta Transparência Térmica</h3>
+              <span class="pill flex-shrink-0">Óptico</span>
+            </div>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">Copoliéster de alta performance desenvolvido pela Eastman. Transparência óptica excepcional mesmo após esterilização por autoclave a 121°C. Ideal para componentes médicos e laboratoriais que precisam de visibilidade do conteúdo a temperaturas de esterilização padrão. Excelente resistência hidrolítica — não amarela com exposição a água quente.</p>
+            <div class="flex flex-wrap gap-3 text-code-data text-[11px]">
+              <span class="text-primary-container">Temp. autoclave: 121°C</span>
+              <span class="text-on-surface-variant">Transparência: >90%</span>
+              <span class="text-on-surface-variant">BPA Free</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flexíveis -->
+        <h2 id="flexiveis" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Materiais Flexíveis</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          Os elastômeros termoplásticos permitem imprimir peças com comportamento borrachoso — desde grips semi-rígidos até peças com elasticidade máxima. A dureza Shore A é o parâmetro principal para seleção.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-4 my-6">
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <h3 class="text-body-lg font-bold text-white uppercase tracking-wide mb-2">TPU 95A</h3>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">Poliuretano termoplástico de dureza Shore 95A — o mais rígido da linha flexível. Boa resistência ao desgaste, óleo e abrasão. Indicado para juntas, vedações, solas, protetores de queda, peças de transmissão de torque com absorção de vibração.</p>
+            <span class="text-code-data text-primary-container text-[11px]">Shore 95A · Elongação: 500%</span>
+          </div>
+          <div class="glass-panel rounded-sm p-5 border border-white/8">
+            <h3 class="text-body-lg font-bold text-white uppercase tracking-wide mb-2">Flex 85A</h3>
+            <p class="text-body-md text-tertiary leading-relaxed mb-3">Flexibilidade máxima no portfólio FDM. Shore 85A permite deformação elástica significativa sem ruptura. Aplicações: protetores de cabos, borrachas de vedação complexas, modelos médicos de tecidos moles, grips ergonômicos, amortecedores personalizados.</p>
+            <span class="text-code-data text-primary-container text-[11px]">Shore 85A · Elongação: 700%</span>
+          </div>
+        </div>
+
+        <!-- Metal -->
+        <h2 id="metal" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Metal via FDM — BASF Ultrafuse 316L</h2>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          O Ultrafuse 316L da BASF é um filamento FDM composto por aço inoxidável 316L em matriz polimérica. A peça é impressa normalmente em FDM, passando por um processo de debinding (remoção do polímero) e sinterização posterior em forno a temperaturas acima de 1300°C.
+        </p>
+        <div class="glass-panel rounded-sm p-6 my-6 border border-primary-container/15 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Especificações Técnicas — 316L Pós-Sinterização</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {[
+              { label: 'Aço', value: '316L (ISO)' },
+              { label: 'Temperatura sinterização', value: '1300–1380°C' },
+              { label: 'Densidade', value: '>95% do teórico' },
+              { label: 'Resistência à tração', value: '~480 MPa' },
+              { label: 'Dureza', value: '~80 HRB' },
+              { label: 'Conformidade', value: 'ASTM A276' },
+            ].map(item => (
+              <div class="border-b border-white/8 pb-3">
+                <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block text-[10px] mb-0.5">{item.label}</span>
+                <span class="text-body-md text-on-surface font-medium">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+          A grande vantagem do 316L via FDM é a liberdade geométrica impossível por usinagem — canais curvos internos, estruturas em lattice metálicas, peças com geometria orgânica. A contração de sinterização é de aproximadamente 15–20% em cada eixo e deve ser compensada no modelo CAD.
+        </p>
+
+        <!-- Tabela resumo -->
+        <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mt-12 mb-5 pb-3 border-b border-white/8">Tabela Resumo de Seleção</h2>
+        <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 my-8">
+          <table class="w-full text-body-md">
+            <thead>
+              <tr class="bg-primary-container/10 border-b border-white/10">
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Material</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Temp. Serviço</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Resistência</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Custo</th>
+                <th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest text-[10px]">Aplicação Ideal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { mat: 'ABS', temp: '80°C', res: 'Média', custo: '●○○○', app: 'Peças funcionais gerais' },
+                { mat: 'PET-G', temp: '75°C', res: 'Média-Alta', custo: '●○○○', app: 'Peças com encaixes precisos' },
+                { mat: 'Nylon PA12', temp: '100°C', res: 'Alta', custo: '●●○○', app: 'Engrenagens, guias, buchas' },
+                { mat: 'PC', temp: '120°C', res: 'Muito Alta', custo: '●●○○', app: 'Alta temperatura, óptica' },
+                { mat: 'PA CF15', temp: '110°C', res: 'Muito Alta', custo: '●●●○', app: 'Estrutural leve' },
+                { mat: 'PEEK', temp: '250°C+', res: 'Extrema', custo: '●●●●', app: 'Aeroespacial, médico' },
+                { mat: 'TPU 95A', temp: '80°C', res: 'Flex. rígido', custo: '●●○○', app: 'Juntas, vedações' },
+                { mat: '316L', temp: '800°C+', res: 'Metálica', custo: '●●●●', app: 'Metal com geometria livre' },
+              ].map((row, i) => (
+                <tr class={i < 7 ? 'border-b border-white/5' : ''}>
+                  <td class="px-4 py-3 text-primary-container font-medium">{row.mat}</td>
+                  <td class="px-4 py-3 text-on-surface">{row.temp}</td>
+                  <td class="px-4 py-3 text-on-surface-variant">{row.res}</td>
+                  <td class="px-4 py-3 text-on-surface-variant">{row.custo}</td>
+                  <td class="px-4 py-3 text-on-surface-variant text-sm">{row.app}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Tags / Share -->
+      <div class="mt-16 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Categoria:</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{cat}</span>
+        </div>
+        <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-2 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+          <span class="material-symbols-outlined text-base">share</span>
+          Compartilhar
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="bg-surface-low border-t border-white/5 py-16">
+    <div class="max-w-3xl mx-auto px-edge">
+      <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-primary-container/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+        <div>
+          <p class="text-label-caps text-primary-container uppercase tracking-[0.2em] mb-2">Catálogo completo de materiais</p>
+          <p class="text-headline-md font-bold uppercase text-white">Veja todas as opções disponíveis.</p>
+          <p class="text-body-md text-tertiary mt-2">Fichas técnicas, especificações e amostras físicas disponíveis sob consulta.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <a href="/materiais" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+            Ver Catálogo
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </a>
+          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+            WhatsApp
+            <span class="material-symbols-outlined text-base">chat</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mais Posts -->
+  <section class="bg-background py-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Mais do Blog</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[
+          { cat: 'Guia Técnico', title: 'FDM, SLA ou SLS? O Guia Definitivo para Escolher o Processo Certo', date: 'Mai 2026', time: '8 min', href: '/blog/fdm-vs-sla-vs-sls' },
+          { cat: 'Case Study', title: 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista', date: 'Jun 2024', time: '5 min', href: '/blog/formula-sae-case-study-completo' },
+        ].map(post => (
+          <a href={post.href} class="group block">
+            <div class="relative h-40 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
+              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/50 text-primary-container text-[10px] uppercase tracking-widest">{post.cat}</span>
+              </div>
+            </div>
+            <h3 class="text-body-md font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-2">{post.title}</h3>
+            <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+              <span>{post.date}</span>
+              <span class="w-px h-3 bg-white/20"></span>
+              <span>{post.time} leitura</span>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/blog" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+          Ver todos os posts <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
