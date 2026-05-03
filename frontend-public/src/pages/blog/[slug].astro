@@ -7,7 +7,7 @@ import Footer from '../../components/Footer.astro'
 import Breadcrumb from '../../components/Breadcrumb.astro'
 import { COMPANY } from '../../lib/company'
 import { blogPostingSchema } from '../../lib/schemas'
-import { fetchPublicPosts, fetchPublicPost } from '../../lib/api'
+import { fetchPublicPosts } from '../../lib/api'
 import { renderPostContent, formatPostDateLong } from '../../lib/render-post'
 
 export async function getStaticPaths() {

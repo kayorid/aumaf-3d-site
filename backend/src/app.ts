@@ -16,6 +16,7 @@ import { leadRoutes } from './routes/lead.routes'
 import { aiRoutes } from './routes/ai.routes'
 import { metricsRoutes } from './routes/metrics.routes'
 import { publicRoutes } from './routes/public.routes'
+import { settingsRoutes } from './routes/settings.routes'
 import { prisma } from './lib/prisma'
 
 const globalLimiter = rateLimit({
@@ -66,6 +67,7 @@ export function createApp() {
   app.use('/api/v1/leads', leadRoutes)
   app.use('/api/v1/ai', aiRoutes)
   app.use('/api/v1/metrics', metricsRoutes)
+  app.use('/api/v1/settings', settingsRoutes)
 
   app.use((_req, res) => {
     res.status(404).json({ status: 'error', code: 'NOT_FOUND', message: 'Not found' })

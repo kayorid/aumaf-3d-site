@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { z } from 'zod'
-import { CreateLeadSchema } from '@aumaf/shared'
+import { CreateLeadSchema, LeadFilterQuerySchema } from '@aumaf/shared'
 import { requireAuth, requireRole } from '../middlewares/require-auth'
 import * as leadService from '../services/lead.service'
 
@@ -11,11 +10,6 @@ const publicLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { status: 'error', code: 'TOO_MANY_REQUESTS', message: 'Muitas tentativas — aguarde um momento' },
-})
-
-const ListQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(100).default(20),
 })
 
 export const leadRoutes = Router()
@@ -32,9 +26,63 @@ leadRoutes.post('/', publicLimiter, async (req, res, next) => {
 
 leadRoutes.get('/', requireAuth, requireRole('ADMIN', 'MARKETING'), async (req, res, next) => {
   try {
-    const { page, pageSize } = ListQuerySchema.parse(req.query)
-    const result = await leadService.listLeads(page, pageSize)
+    const query = LeadFilterQuerySchema.parse(req.query)
+    const result = await leadService.listLeads(query.page, query.pageSize, {
+      from: query.from,
+      to: query.to,
+      source: query.source,
+      q: query.q,
+    })
     res.json({ status: 'ok', ...result })
+  } catch (err) {
+    next(err)
+  }
+})
+
+leadRoutes.get('/sources', requireAuth, requireRole('ADMIN', 'MARKETING'), async (_req, res, next) => {
+  try {
+    const sources = await leadService.listLeadSources()
+    res.json({ status: 'ok', data: sources })
+  } catch (err) {
+    next(err)
+  }
+})
+
+function escapeCsv(value: string): string {
+  if (/[",\n\r]/.test(value)) {
+    return `"${value.replace(/"/g, '""')}"`
+  }
+  return value
+}
+
+leadRoutes.get('/export.csv', requireAuth, requireRole('ADMIN', 'MARKETING'), async (req, res, next) => {
+  try {
+    // pageSize/page ignorados na export, mas valida tipos dos filtros
+    const query = LeadFilterQuerySchema.parse(req.query)
+    const items = await leadService.listAllLeadsForExport({
+      from: query.from,
+      to: query.to,
+      source: query.source,
+      q: query.q,
+    })
+
+    const header = ['Nome', 'Email', 'Telefone', 'Mensagem', 'Fonte', 'Recebido em']
+    const rows = items.map((l) =>
+      [
+        l.name,
+        l.email,
+        l.phone ?? '',
+        (l.message ?? '').replace(/\r?\n/g, ' '),
+        l.source ?? '',
+        new Date(l.createdAt).toLocaleString('pt-BR'),
+      ].map(escapeCsv).join(','),
+    )
+    const csv = '﻿' + [header.map(escapeCsv).join(','), ...rows].join('\r\n')
+
+    const filename = `aumaf-leads-${new Date().toISOString().slice(0, 10)}.csv`
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+    res.send(csv)
   } catch (err) {
     next(err)
   }

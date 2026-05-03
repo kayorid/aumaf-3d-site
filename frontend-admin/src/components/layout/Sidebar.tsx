@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings } from 'lucide-react'
+import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface NavItem {
@@ -11,11 +11,12 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, number: '01' },
-  { to: '/posts',     label: 'Posts',     icon: FileText,        number: '02' },
-  { to: '/media',     label: 'Mídia',     icon: ImageIcon,       number: '03', disabled: true },
-  { to: '/leads',     label: 'Leads',     icon: Users,           number: '04', disabled: true },
-  { to: '/settings',  label: 'Settings',  icon: Settings,        number: '05', disabled: true },
+  { to: '/dashboard', label: 'Dashboard',  icon: LayoutDashboard, number: '01' },
+  { to: '/posts',     label: 'Posts',      icon: FileText,        number: '02' },
+  { to: '/categories',label: 'Categorias', icon: Tags,            number: '03' },
+  { to: '/leads',     label: 'Leads',      icon: Users,           number: '04' },
+  { to: '/settings',  label: 'Settings',   icon: Settings,        number: '05' },
+  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '06', disabled: true },
 ]
 
 export function Sidebar() {
@@ -63,7 +64,7 @@ export function Sidebar() {
       {/* Footer */}
       <div className="mt-auto px-6 pb-6 pt-6 border-t border-white/8">
         <div className="text-[9px] uppercase tracking-[0.25em] text-on-surface-variant/70 mb-1">
-          v1.0 · Phase 1
+          v1.1 · Phase 2
         </div>
         <div className="text-[10px] text-on-surface-variant/50">
           build by <span className="text-on-surface-variant/80">kayoridolfi.ai</span>

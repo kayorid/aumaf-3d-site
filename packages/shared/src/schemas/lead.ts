@@ -28,3 +28,24 @@ export const LeadMaskedDtoSchema = z.object({
   createdAt: z.string(),
 })
 export type LeadMaskedDto = z.infer<typeof LeadMaskedDtoSchema>
+
+export const LeadFilterQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
+  source: z.string().optional(),
+  q: z.string().optional(),
+})
+export type LeadFilterQuery = z.infer<typeof LeadFilterQuerySchema>
+
+export const LeadListResponseSchema = z.object({
+  data: z.array(LeadDtoSchema),
+  pagination: z.object({
+    page: z.number(),
+    pageSize: z.number(),
+    total: z.number(),
+    totalPages: z.number(),
+  }),
+})
+export type LeadListResponse = z.infer<typeof LeadListResponseSchema>

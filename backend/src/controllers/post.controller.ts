@@ -43,6 +43,19 @@ export async function updateHandler(req: Request, res: Response, next: NextFunct
   }
 }
 
+export async function autoSaveHandler(req: Request, res: Response, next: NextFunction) {
+  try {
+    // Auto-save: aceita os mesmos campos mas força status DRAFT (não publica)
+    // e ignora qualquer mudança em status para não derrubar publicação acidentalmente.
+    const input = UpdatePostSchema.parse(req.body)
+    const { status: _status, ...rest } = input
+    const post = await postService.updatePost(req.params.id, rest)
+    res.json({ status: 'ok', data: post, savedAt: new Date().toISOString() })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export async function deleteHandler(req: Request, res: Response, next: NextFunction) {
   try {
     await postService.deletePost(req.params.id)
