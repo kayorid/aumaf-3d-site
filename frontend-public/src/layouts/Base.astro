@@ -57,5 +57,30 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
   </head>
   <body class="bg-background text-on-surface antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary">
     <slot />
+
+    <!-- FAB: scroll to top -->
+    <button
+      id="fab-top"
+      aria-label="Voltar ao topo"
+      class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary-container text-on-primary flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 glow-effect hover:bg-primary-dim hover:scale-110 active:scale-95"
+      style="box-shadow:0 0 18px rgba(97,197,79,0.55),0 0 45px rgba(97,197,79,0.25);"
+    >
+      <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">arrow_upward</span>
+    </button>
   </body>
 </html>
+
+<script>
+  const fab = document.getElementById('fab-top')
+  window.addEventListener('scroll', () => {
+    if (!fab) return
+    if (window.scrollY > 400) {
+      fab.classList.remove('opacity-0', 'pointer-events-none')
+      fab.classList.add('opacity-100')
+    } else {
+      fab.classList.add('opacity-0', 'pointer-events-none')
+      fab.classList.remove('opacity-100')
+    }
+  }, { passive: true })
+  fab?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+</script>

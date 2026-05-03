@@ -31,7 +31,7 @@ const materials = [
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
-    <div class="max-w-[1440px] mx-auto px-edge relative z-10">
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="max-w-2xl">
         <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Catálogo // Materiais</span>
         <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
@@ -50,28 +50,32 @@ const materials = [
     </div>
   </section>
 
-  <!-- Filter + Grid -->
+  <!-- Filter pills — sticky sincronizado com navbar -->
+  <div
+    id="materiais-filter"
+    class="bg-background/95 border-b border-white/8 sticky z-40"
+    style="top:80px;transition:top 0.4s cubic-bezier(0.4,0,0.2,1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
+  >
+    <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
+      {['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal'].map((cat, i) => (
+        <button
+          data-filter={cat === 'Todos' ? 'all' : cat}
+          class:list={[
+            'mat-filter transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
+            i === 0
+              ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
+              : 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
+          ]}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Grid -->
   <section class="bg-background py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
-
-      <!-- Filter pills -->
-      <div class="flex flex-wrap gap-2 mb-12 border-b border-white/8 pb-8">
-        {['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal'].map((cat, i) => (
-          <button
-            data-filter={cat === 'Todos' ? 'all' : cat}
-            class:list={[
-              'mat-filter transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
-              i === 0
-                ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
-                : 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
-            ]}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      <!-- Materials grid -->
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div id="materials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
         {materials.map(mat => (
           <div
@@ -124,7 +128,7 @@ const materials = [
 
   <!-- Destaque Metal -->
   <section class="bg-surface-low py-section border-y border-white/5">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Destaque // Metal</span>
@@ -169,7 +173,7 @@ const materials = [
 
   <!-- CTA -->
   <section class="bg-background border-t border-primary-container/20 py-section">
-    <div class="max-w-[1440px] mx-auto px-edge text-center">
+    <div class="max-w-[1600px] mx-auto px-edge text-center">
       <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Não sabe qual material usar?</h2>
       <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Nossa equipe técnica indica o material ideal para cada aplicação, temperatura, carga e custo.</p>
       <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
@@ -217,4 +221,15 @@ const materials = [
   }
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
+
+  // Sincronizar top sticky com navbar
+  const navbar = document.getElementById('navbar')
+  const matFilter = document.getElementById('materiais-filter')
+  if (navbar && matFilter) {
+    const sync = () => {
+      matFilter.style.top = navbar.classList.contains('-translate-y-full') ? '0px' : '80px'
+    }
+    new MutationObserver(sync).observe(navbar, { attributes: true, attributeFilter: ['class'] })
+    sync()
+  }
 </script>

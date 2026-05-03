@@ -27,7 +27,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
   <!-- Hero minimalista -->
   <section class="bg-background pt-32 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
-    <div class="max-w-[1440px] mx-auto px-edge relative z-10">
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Projetos // Realizações</span>
@@ -47,7 +47,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
     class="bg-background/95 border-b border-white/8 sticky z-40"
     style="top:80px;transition:top 0.4s cubic-bezier(0.4,0,0.2,1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
-    <div class="max-w-[1440px] mx-auto px-edge py-3 flex flex-wrap gap-2">
+    <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
       {cats.map((cat, i) => (
         <button
           data-filter={cat === 'Todos' ? 'all' : cat}
@@ -66,7 +66,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
 
   <!-- Grid masonry -->
   <section class="bg-background py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter" id="portfolio-grid">
         {projects.map((p, i) => (
           <article

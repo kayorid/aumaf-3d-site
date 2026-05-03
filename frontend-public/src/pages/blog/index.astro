@@ -4,12 +4,12 @@ import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
 
 const posts = [
-  { cat: 'Parceria', title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos', date: '26 jun 2024', time: '1 min', featured: true },
-  { cat: 'Inovação', title: 'Construtora árabe lança edifício impresso mais alto do mundo', date: '7 out 2023', time: '2 min', featured: false },
-  { cat: 'Visita Técnica', title: 'Visita ao Biofabris: impressão 3D na fronteira da bioengenharia', date: '27 abr 2023', time: '2 min', featured: false },
-  { cat: 'Ciência', title: 'Impressão 3D na ciência: aplicações que estão mudando o mundo', date: '25 abr 2023', time: '2 min', featured: false },
-  { cat: 'Materiais', title: 'Quais filamentos podem ser usados na impressão 3D?', date: '17 abr 2023', time: '2 min', featured: false },
-  { cat: 'Cases', title: 'Precisa construir peças para robôs? A AUMAF 3D pode ajudar', date: '10 mar 2023', time: '1 min', featured: false },
+  { cat: 'Parceria', title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos', date: '26 jun 2024', time: '1 min', featured: true, href: '/blog/formula-sae-usp-sao-carlos' },
+  { cat: 'Inovação', title: 'Construtora árabe lança edifício impresso mais alto do mundo', date: '7 out 2023', time: '2 min', featured: false, href: '/blog/construtora-arabe-edificio-mais-alto' },
+  { cat: 'Visita Técnica', title: 'Visita ao Biofabris: impressão 3D na fronteira da bioengenharia', date: '27 abr 2023', time: '2 min', featured: false, href: null },
+  { cat: 'Ciência', title: 'Impressão 3D na ciência: aplicações que estão mudando o mundo', date: '25 abr 2023', time: '2 min', featured: false, href: null },
+  { cat: 'Materiais', title: 'Quais filamentos podem ser usados na impressão 3D?', date: '17 abr 2023', time: '2 min', featured: false, href: null },
+  { cat: 'Cases', title: 'Precisa construir peças para robôs? A AUMAF 3D pode ajudar', date: '10 mar 2023', time: '1 min', featured: false, href: null },
 ]
 ---
 
@@ -17,17 +17,20 @@ const posts = [
   <Navbar currentPath="/blog" />
 
   <!-- Hero -->
-  <section class="bg-background pt-32 pb-20">
-    <div class="max-w-[1440px] mx-auto px-edge">
-      <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Conteúdo // Conhecimento</span>
-      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-4">Blog.</h1>
-      <p class="text-body-lg text-tertiary max-w-xl">O guia de manufatura aditiva por especialistas da AUMAF 3D.</p>
+  <section class="bg-background pt-36 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 55% 50% at 70% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-5">Conteúdo // Conhecimento</span>
+      <h1 class="text-display-xl font-bold uppercase text-white text-glow-white tracking-[-0.04em] leading-none mb-5">Blog.</h1>
+      <p class="text-body-lg text-tertiary max-w-xl leading-relaxed">O guia de manufatura aditiva por especialistas da AUMAF 3D.</p>
     </div>
+    <div class="line-glow-bright absolute bottom-0 left-[5%] right-[5%] pointer-events-none"></div>
   </section>
 
   <!-- Post em destaque -->
-  <section class="bg-background pb-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+  <section class="bg-background pt-14 pb-section">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 relative">
         <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
         <div class="grid grid-cols-1 lg:grid-cols-2">
@@ -70,27 +73,47 @@ const posts = [
 
   <!-- Grid de posts -->
   <section class="bg-surface-low border-t border-white/5 py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-12 border-b border-white/8 pb-8">
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Todos os Posts</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {posts.filter(p => !p.featured).map(post => (
-          <article class="group cursor-pointer">
-            <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-4">
-              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute top-4 left-4">
-                <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{post.cat}</span>
+          post.href ? (
+            <a href={post.href} class="group cursor-pointer block">
+              <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-4">
+                <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute top-4 left-4">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{post.cat}</span>
+                </div>
               </div>
-            </div>
-            <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-3">{post.title}</h3>
-            <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
-              <span>{post.date}</span>
-              <span class="w-px h-3 bg-white/20"></span>
-              <span>{post.time} leitura</span>
-            </div>
-          </article>
+              <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-3">{post.title}</h3>
+              <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+                <span>{post.date}</span>
+                <span class="w-px h-3 bg-white/20"></span>
+                <span>{post.time} leitura</span>
+              </div>
+            </a>
+          ) : (
+            <article class="group cursor-default opacity-60 relative">
+              <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-4">
+                <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+                <div class="absolute top-4 left-4">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{post.cat}</span>
+                </div>
+                <div class="absolute bottom-3 right-3">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-on-surface-variant uppercase tracking-widest">Em breve</span>
+                </div>
+              </div>
+              <h3 class="text-body-lg font-medium text-on-surface-variant leading-snug mb-3">{post.title}</h3>
+              <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+                <span>{post.date}</span>
+                <span class="w-px h-3 bg-white/20"></span>
+                <span>{post.time} leitura</span>
+              </div>
+            </article>
+          )
         ))}
       </div>
 

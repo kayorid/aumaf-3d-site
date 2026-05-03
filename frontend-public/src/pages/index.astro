@@ -11,44 +11,49 @@ import Footer from '../components/Footer.astro'
        HERO — 2 colunas: conteúdo + painel de mídia
        ============================================= -->
   <section class="relative min-h-screen flex items-center overflow-hidden bg-background">
-    <!-- Grid técnico de fundo -->
-    <div class="absolute inset-0 bg-tech-grid pointer-events-none opacity-50"></div>
+    <!-- Textura circuit + grid combinados -->
+    <div class="absolute inset-0 bg-tech-grid pointer-events-none opacity-40"></div>
+    <div class="absolute inset-0 bg-circuit pointer-events-none opacity-60"></div>
 
-    <!-- Glow 1: halo central difuso -->
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(97,197,79,0.08) 0%,transparent 65%);"></div>
+    <!-- Glow 1: halo central difuso (intensificado) -->
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(97,197,79,0.11) 0%,transparent 65%);"></div>
 
-    <!-- Glow 2: halo mais quente no canto superior direito -->
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 40% 40% at 90% 10%,rgba(97,197,79,0.05) 0%,transparent 70%);"></div>
+    <!-- Glow 2: halo quente canto superior direito -->
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 40% 40% at 92% 8%,rgba(97,197,79,0.07) 0%,transparent 70%);"></div>
 
     <!-- Glow 3: reflexo inferior esquerdo -->
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 25% at 5% 95%,rgba(97,197,79,0.04) 0%,transparent 70%);"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 25% at 4% 96%,rgba(97,197,79,0.05) 0%,transparent 70%);"></div>
+
+    <!-- Orb focal brilhante — alinhado ao painel de vídeo -->
+    <div class="absolute hidden lg:block pointer-events-none" style="top:30%;right:8%;width:360px;height:360px;background:radial-gradient(circle,rgba(97,197,79,0.16) 0%,rgba(97,197,79,0.06) 35%,transparent 70%);filter:blur(2px);border-radius:50%;"></div>
 
     <!-- Gradiente esquerdo para legibilidade do texto -->
-    <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(90deg,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.25) 55%,transparent 100%);"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(90deg,rgba(0,0,0,0.78) 0%,rgba(0,0,0,0.25) 55%,transparent 100%);"></div>
 
-    <!-- Elementos geométricos flutuantes decorativos -->
-    <div class="absolute top-24 right-[12%] w-px h-32 bg-gradient-to-b from-transparent via-primary-container/20 to-transparent animate-float-slow hidden lg:block pointer-events-none"></div>
-    <div class="absolute bottom-32 right-[8%] w-16 h-px bg-gradient-to-r from-transparent via-primary-container/15 to-transparent animate-float hidden lg:block pointer-events-none"></div>
-    <div class="absolute top-1/3 left-8 w-1.5 h-1.5 rounded-full bg-primary-container/20 animate-pulse-dot hidden lg:block pointer-events-none"></div>
-    <div class="absolute top-2/3 left-16 w-1 h-1 rounded-full bg-primary-container/15 animate-pulse-dot hidden lg:block pointer-events-none" style="animation-delay:1s;"></div>
+    <!-- Linhas flutuantes decorativas -->
+    <div class="absolute top-24 right-[12%] w-px h-36 bg-gradient-to-b from-transparent via-primary-container/30 to-transparent animate-float-slow hidden lg:block pointer-events-none" style="box-shadow:0 0 4px rgba(97,197,79,0.3);"></div>
+    <div class="absolute bottom-32 right-[8%] w-20 h-px bg-gradient-to-r from-transparent via-primary-container/25 to-transparent animate-float hidden lg:block pointer-events-none" style="box-shadow:0 0 4px rgba(97,197,79,0.2);"></div>
+    <div class="absolute top-1/3 left-8 w-2 h-2 rounded-full bg-primary-container/30 animate-pulse-dot dot-glow hidden lg:block pointer-events-none"></div>
+    <div class="absolute top-2/3 left-16 w-1.5 h-1.5 rounded-full bg-primary-container/20 animate-pulse-dot hidden lg:block pointer-events-none" style="animation-delay:1.2s;box-shadow:0 0 6px rgba(97,197,79,0.4);"></div>
+    <div class="absolute top-1/2 right-[52%] w-1 h-1 rounded-full bg-primary-container/15 animate-pulse-dot hidden lg:block pointer-events-none" style="animation-delay:2.1s;"></div>
 
     <!-- Conteúdo principal -->
-    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-edge pt-28 pb-16 lg:pt-32 lg:pb-20">
+    <div class="relative z-10 w-full max-w-[1600px] mx-auto px-edge pt-28 pb-16 lg:pt-32 lg:pb-20">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[calc(100vh-80px)]">
 
         <!-- Coluna esquerda: texto + CTAs -->
         <div class="flex flex-col justify-center">
           <!-- Status pill -->
           <div class="flex items-center gap-3 mb-8">
-            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect flex-shrink-0"></span>
-            <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">
+            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot dot-glow flex-shrink-0"></span>
+            <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em]">
               Sistema Online // Imprimindo Agora
             </span>
           </div>
 
-          <h1 class="text-display-xl font-bold text-white uppercase leading-none tracking-[-0.04em] mb-6 opacity-0 animate-fade-up" style="animation-delay:100ms;animation-fill-mode:forwards;">
+          <h1 class="text-display-xl font-bold text-white text-glow-white uppercase leading-none tracking-[-0.04em] mb-6 opacity-0 animate-fade-up" style="animation-delay:100ms;animation-fill-mode:forwards;">
             Zero-Error<br/>
-            <span style="background:linear-gradient(135deg,#7ce268,#61c54f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Precision.</span>
+            <span class="text-gradient-glow">Precision.</span>
           </h1>
 
           <p class="text-body-lg text-tertiary max-w-lg leading-relaxed mb-10 opacity-0 animate-fade-up" style="animation-delay:250ms;animation-fill-mode:forwards;">
@@ -75,7 +80,8 @@ import Footer from '../components/Footer.astro'
           </div>
 
           <!-- Métricas rápidas sob os CTAs -->
-          <div class="flex items-center gap-8 mt-12 pt-8 border-t border-white/8 opacity-0 animate-fade-up" style="animation-delay:500ms;animation-fill-mode:forwards;">
+          <div class="flex items-center gap-8 mt-12 pt-8 opacity-0 animate-fade-up relative" style="animation-delay:500ms;animation-fill-mode:forwards;">
+            <div class="line-glow-bright absolute top-0 left-0 right-0"></div>
             {[
               {value:'+500',label:'Projetos'},
               {value:'20+',label:'Materiais'},
@@ -207,7 +213,7 @@ import Footer from '../components/Footer.astro'
        STATS STRIP
        ============================================= -->
   <div class="border-y border-primary-container/15 bg-surface-dim">
-    <div class="max-w-[1440px] mx-auto px-edge py-10">
+    <div class="max-w-[1600px] mx-auto px-edge py-10">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0">
         {[
           {value:'+500',label:'Projetos Entregues',icon:'check_circle'},
@@ -234,11 +240,11 @@ import Footer from '../components/Footer.astro'
        CAPACIDADES — Zigzag com video containers
        ============================================= -->
   <section class="bg-background py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <!-- Header da seção -->
       <div class="mb-20 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">01 // Módulos</span>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">01 // Módulos</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Capacidades Core</h2>
         </div>
         <a href="/servicos" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
@@ -363,10 +369,10 @@ import Footer from '../components/Footer.astro'
        DIFERENCIAIS — Grid de cards
        ============================================= -->
   <section class="bg-surface-low py-section section-glow-top relative overflow-hidden">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">02 // Diferenciais</span>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">02 // Diferenciais</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Por que AUMAF 3D</h2>
         </div>
         <p class="text-body-md text-tertiary max-w-sm leading-relaxed">Precisão industrial, entrega ágil e parceria técnica em cada projeto.</p>
@@ -402,9 +408,9 @@ import Footer from '../components/Footer.astro'
        TECNOLOGIAS DISPONÍVEIS
        ============================================= -->
   <section class="bg-background py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10">
-        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">03 // Sistemas</span>
+        <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">03 // Sistemas</span>
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Tecnologias Disponíveis</h2>
       </div>
 
@@ -517,9 +523,9 @@ import Footer from '../components/Footer.astro'
   <section class="bg-surface-dim py-section section-glow-top section-glow-bottom relative overflow-hidden">
     <!-- Glow atmosférico de fundo -->
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(97,197,79,0.04) 0%,transparent 70%);"></div>
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-16 text-center">
-        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">04 // Setores</span>
+        <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">04 // Setores</span>
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Indústrias que Atendemos</h2>
         <p class="text-body-md text-tertiary mt-4 max-w-lg mx-auto leading-relaxed">Da prototipagem de pesquisa universitária à produção de componentes aeroespaciais.</p>
       </div>
@@ -551,9 +557,9 @@ import Footer from '../components/Footer.astro'
        DEPOIMENTOS — Carousel
        ============================================= -->
   <section class="bg-background py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10">
-        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">05 // Clientes</span>
+        <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">05 // Clientes</span>
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">O que Nossos Parceiros Dizem</h2>
       </div>
 
@@ -616,10 +622,10 @@ import Footer from '../components/Footer.astro'
        BLOG PREVIEW
        ============================================= -->
   <section class="bg-surface-low py-section">
-    <div class="max-w-[1440px] mx-auto px-edge">
+    <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">06 // Conteúdo</span>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">06 // Conteúdo</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Do Nosso Blog</h2>
         </div>
         <a href="/blog" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
@@ -687,20 +693,24 @@ import Footer from '../components/Footer.astro'
   <!-- =============================================
        CTA FINAL
        ============================================= -->
-  <section class="bg-background border-y border-primary-container/15 py-section relative overflow-hidden">
-    <!-- Glow de fundo -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-primary-container/4 rounded-full blur-3xl pointer-events-none"></div>
-    <!-- Grid sutil -->
-    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+  <section class="bg-background border-y border-primary-container/20 py-section relative overflow-hidden">
+    <!-- Textura circuit -->
+    <div class="absolute inset-0 bg-circuit pointer-events-none opacity-50"></div>
+    <!-- Orb focal central -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style="width:700px;height:280px;background:radial-gradient(ellipse,rgba(97,197,79,0.1) 0%,rgba(97,197,79,0.04) 45%,transparent 70%);filter:blur(4px);border-radius:50%;"></div>
+    <!-- Linha brilhante topo -->
+    <div class="line-glow-bright absolute top-0 left-[10%] right-[10%] pointer-events-none"></div>
+    <!-- Linha brilhante base -->
+    <div class="line-glow-bright absolute bottom-0 left-[10%] right-[10%] pointer-events-none"></div>
 
-    <div class="max-w-[1440px] mx-auto px-edge text-center relative z-10">
+    <div class="max-w-[1600px] mx-auto px-edge text-center relative z-10">
       <div class="flex items-center justify-center gap-3 mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
-        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Sistema Disponível</span>
-        <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot dot-glow"></span>
+        <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em]">Sistema Disponível</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot dot-glow"></span>
       </div>
 
-      <h2 class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] mb-5">
+      <h2 class="text-display-lg font-bold uppercase text-white text-glow-white tracking-[-0.03em] mb-5">
         Pronto para Começar<br/>Seu Projeto?
       </h2>
       <p class="text-body-lg text-tertiary max-w-lg mx-auto mb-10 leading-relaxed">
@@ -710,7 +720,7 @@ import Footer from '../components/Footer.astro'
       <div class="flex flex-wrap items-center justify-center gap-4">
         <a
           href="/contato"
-          class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-effect-lg hover:bg-primary-dim transition-all duration-300"
+          class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-intense hover:bg-primary-dim transition-all duration-300"
         >
           <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">upload_file</span>
           Enviar Arquivo e Solicitar Orçamento
