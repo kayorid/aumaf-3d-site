@@ -8,7 +8,7 @@ import Footer from '../components/Footer.astro'
   <Navbar currentPath="/sobre" />
 
   <!-- Hero Institucional assimétrico -->
-  <section class="bg-background min-h-[65vh] flex items-end pt-12 pb-20 relative overflow-hidden">
+  <section class="bg-background min-h-[65vh] flex items-end pt-20 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 70% 10%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 35% 40% at 5% 90%,rgba(97,197,79,0.04) 0%,transparent 65%);"></div>
@@ -115,6 +115,10 @@ import Footer from '../components/Footer.astro'
                 <span class="text-body-md text-on-surface font-medium">{d.value}</span>
               </div>
             ))}
+            <a href="/blog/formula-sae-case-study-completo" class="mt-2 inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group pt-2">
+              Ler Case Completo
+              <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ const materials = [
   <Navbar currentPath="/materiais" />
 
   <!-- Hero -->
-  <section class="bg-background pt-12 pb-20 relative overflow-hidden">
+  <section class="bg-background pt-20 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
@@ -50,12 +50,10 @@ const materials = [
     </div>
   </section>
 
-  <div id="materiais-sentinel" class="h-0"></div>
-
   <!-- Filter pills -->
   <div
     id="materiais-filter"
-    class="bg-background/95 border-b border-white/8 z-40 w-full"
+    class="bg-background/95 border-b border-white/8 sticky top-16 z-40 w-full"
     style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
@@ -75,17 +73,17 @@ const materials = [
     </div>
   </div>
 
-  <div id="materiais-spacer" class="h-0 transition-all duration-200"></div>
-
   <!-- Grid -->
   <section class="bg-background py-section">
     <div class="max-w-[1600px] mx-auto px-edge">
       <div id="materials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
-        {materials.map(mat => (
+        {materials.map((mat, i) => (
           <div
             data-cat={mat.cat}
+            data-animate
             class:list={[
-              'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden',
+              'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden reveal-hidden',
+              `stagger-${(i % 4) + 1}`,
               mat.highlight ? 'border border-primary-container/20' : ''
             ]}
           >
@@ -226,29 +224,13 @@ const materials = [
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 
-  // Filtro sticky-bottom: gruda acima da navbar ao rolar para baixo
-  const matFilter   = document.getElementById('materiais-filter')
-  const matSentinel = document.getElementById('materiais-sentinel')
-  const matSpacer   = document.getElementById('materiais-spacer')
-
-  if (matFilter && matSentinel && matSpacer) {
-    const io = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) {
-        matSpacer.style.height   = matFilter.offsetHeight + 'px'
-        matFilter.style.position = 'fixed'
-        matFilter.style.bottom   = '64px'
-        matFilter.style.top      = 'auto'
-        matFilter.style.left     = '0'
-        matFilter.style.right    = '0'
-      } else {
-        matSpacer.style.height   = '0'
-        matFilter.style.position = ''
-        matFilter.style.bottom   = ''
-        matFilter.style.top      = ''
-        matFilter.style.left     = ''
-        matFilter.style.right    = ''
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('reveal-visible')
+        revealObs.unobserve(e.target)
       }
-    }, { threshold: 0 })
-    io.observe(matSentinel)
-  }
+    })
+  }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' })
+  document.querySelectorAll('[data-animate]').forEach(el => revealObs.observe(el))
 </script>

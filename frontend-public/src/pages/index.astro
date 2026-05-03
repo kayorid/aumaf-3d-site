@@ -38,7 +38,7 @@ import Footer from '../components/Footer.astro'
     <div class="absolute top-1/2 right-[52%] w-1 h-1 rounded-full bg-primary-container/15 animate-pulse-dot hidden lg:block pointer-events-none" style="animation-delay:2.1s;"></div>
 
     <!-- Conteúdo principal -->
-    <div class="relative z-10 w-full max-w-[1600px] mx-auto px-edge pt-12 pb-16 lg:pt-16 lg:pb-20">
+    <div class="relative z-10 w-full max-w-[1600px] mx-auto px-edge pt-20 pb-16 lg:pt-24 lg:pb-20">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[calc(100vh-80px)]">
 
         <!-- Coluna esquerda: texto + CTAs -->
@@ -394,8 +394,8 @@ import Footer from '../components/Footer.astro'
             videoFile:'on-demand.mp4',
             reverse:true,
           },
-        ].map((item) => (
-          <div class:list={['grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-20']}>
+        ].map((item, idx) => (
+          <div data-animate class:list={['grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-20 reveal-hidden', `stagger-${idx + 1}`]}>
             <!-- Texto -->
             <div class:list={item.reverse ? 'lg:order-2' : ''}>
               <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">[{item.num}]</span>
@@ -782,8 +782,8 @@ import Footer from '../components/Footer.astro'
           {slug:'guia-materiais-impressao-3d',    cat:'Materiais',  time:'6 min', title:'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação',       excerpt:'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.'},
           {slug:'formula-sae-case-study-completo',cat:'Case Study', time:'5 min', title:'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',                    excerpt:'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.'},
           {slug:'engenharia-reversa-passo-a-passo',cat:'Engenharia',time:'7 min', title:'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original',        excerpt:'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.'},
-        ].map(p => (
-          <a href={`/blog/${p.slug}`} class="group cursor-pointer block reveal-hidden stagger-{p.slug.slice(-1)}" data-animate>
+        ].map((p, i) => (
+          <a href={`/blog/${p.slug}`} class:list={["group cursor-pointer block reveal-hidden", `stagger-${i+1}`]} data-animate>
             <div class="relative h-48 rounded-sm overflow-hidden mb-5 bg-gradient-to-br from-surface-high to-surface-base border border-white/5 hover:border-primary-container/15 transition-all duration-300">
               <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
               <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">

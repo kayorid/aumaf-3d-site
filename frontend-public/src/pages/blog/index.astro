@@ -17,7 +17,7 @@ const posts = [
   <Navbar currentPath="/blog" />
 
   <!-- Hero -->
-  <section class="bg-background pt-12 pb-16 relative overflow-hidden">
+  <section class="bg-background pt-20 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 55% 50% at 70% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
@@ -85,8 +85,8 @@ const posts = [
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Todos os Posts</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        {posts.filter(p => !p.featured).map(post => (
-          <a href={post.href} class="group cursor-pointer block">
+        {posts.filter(p => !p.featured).map((post, i) => (
+          <a href={post.href} data-animate class:list={["group cursor-pointer block reveal-hidden", `stagger-${(i % 3) + 1}`]}>
             <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-high to-surface-base mb-5 border border-white/5 hover:border-primary-container/15 transition-all duration-300">
               <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
               <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
@@ -116,3 +116,15 @@ const posts = [
 
   <Footer />
 </Base>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('reveal-visible')
+        obs.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' })
+  document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el))
+</script>

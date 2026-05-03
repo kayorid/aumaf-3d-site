@@ -8,7 +8,7 @@ import Footer from '../components/Footer.astro'
   <Navbar currentPath="/contato" />
 
   <!-- Hero dark: headline esquerda + form direita (coffee-tech Contato) -->
-  <section class="min-h-screen bg-background pt-12 pb-20 relative overflow-hidden">
+  <section class="min-h-screen bg-background pt-20 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 50% 60% at 0% 60%,rgba(97,197,79,0.06) 0%,transparent 55%);"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 40% 30% at 100% 10%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
@@ -132,14 +132,28 @@ import Footer from '../components/Footer.astro'
             <!-- Submit -->
             <button
               type="submit"
-              class="w-full inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300"
+              id="submit-btn"
+              class="w-full inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
-              Enviar Projeto
+              <span id="submit-icon" class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
+              <span id="submit-text">Enviar Projeto</span>
             </button>
 
             <p class="text-code-data text-tertiary text-center">Retornamos em até 24 horas úteis.</p>
           </form>
+
+          <!-- Success state -->
+          <div id="form-success" class="hidden text-center py-12">
+            <div class="w-16 h-16 rounded-full bg-primary-container/15 border border-primary-container/30 flex items-center justify-center mx-auto mb-6">
+              <span class="material-symbols-outlined text-primary-container text-3xl" style="font-variation-settings:'FILL' 1;">check_circle</span>
+            </div>
+            <h3 class="text-headline-md font-bold uppercase text-white mb-3">Projeto Recebido!</h3>
+            <p class="text-body-md text-tertiary leading-relaxed max-w-xs mx-auto">Nossa equipe entrará em contato em até 24 horas úteis com orçamento detalhado.</p>
+            <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="mt-8 inline-flex items-center gap-2 border border-[#25D366]/40 text-[#25D366] text-label-caps uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 text-[11px]">
+              Acompanhar pelo WhatsApp
+              <span class="material-symbols-outlined text-sm">open_in_new</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -189,6 +203,27 @@ import Footer from '../components/Footer.astro'
       pill.classList.remove('border-white/20', 'text-on-surface-variant')
       if (hiddenInput) hiddenInput.value = (pill as HTMLButtonElement).dataset.value || ''
     })
+  })
+
+  // Form submission with loading + success states
+  const form = document.getElementById('contact-form') as HTMLFormElement
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement
+  const submitIcon = document.getElementById('submit-icon')
+  const submitText = document.getElementById('submit-text')
+  const successEl = document.getElementById('form-success')
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    if (!submitBtn || !submitIcon || !submitText) return
+
+    submitBtn.disabled = true
+    submitIcon.textContent = 'hourglass_top'
+    submitText.textContent = 'Enviando...'
+
+    await new Promise(r => setTimeout(r, 1200))
+
+    form.style.display = 'none'
+    if (successEl) successEl.classList.remove('hidden')
   })
 
   // File drop zone

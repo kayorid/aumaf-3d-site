@@ -25,7 +25,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
   <Navbar currentPath="/portfolio" />
 
   <!-- Hero minimalista -->
-  <section class="bg-background pt-12 pb-16 relative overflow-hidden">
+  <section class="bg-background pt-20 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -41,13 +41,10 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
     </div>
   </section>
 
-  <!-- Sentinel: referência para fixar filtro acima da navbar bottom ao rolar -->
-  <div id="portfolio-sentinel" class="h-0"></div>
-
   <!-- Filters -->
   <div
     id="portfolio-filter"
-    class="bg-background/95 border-b border-white/8 z-40 w-full"
+    class="bg-background/95 border-b border-white/8 sticky top-16 z-40 w-full"
     style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
@@ -67,9 +64,6 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
     </div>
   </div>
 
-  <!-- Spacer: mantém o espaço no fluxo quando o filtro fica fixed -->
-  <div id="portfolio-spacer" class="h-0 transition-all duration-200"></div>
-
   <!-- Grid masonry -->
   <section class="bg-background py-section">
     <div class="max-w-[1600px] mx-auto px-edge">
@@ -77,7 +71,8 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
         {projects.map((p, i) => (
           <article
             data-cat={p.cat}
-            class="group relative overflow-hidden rounded-sm cursor-pointer"
+            data-animate
+            class:list={["group relative overflow-hidden rounded-sm cursor-pointer reveal-hidden", `stagger-${(i % 3) + 1}`]}
           >
             <!-- Placeholder visual -->
             <div class:list={[
@@ -137,6 +132,16 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
 </Base>
 
 <script>
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('reveal-visible')
+        revealObs.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' })
+  document.querySelectorAll('[data-animate]').forEach(el => revealObs.observe(el))
+
   const filterBtns = document.querySelectorAll<HTMLElement>('[data-filter]')
   const cards = document.querySelectorAll<HTMLElement>('[data-cat]')
 
@@ -176,29 +181,4 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 
-  // Filtro sticky-bottom: gruda acima da navbar ao rolar para baixo
-  const filterBar = document.getElementById('portfolio-filter')
-  const sentinel  = document.getElementById('portfolio-sentinel')
-  const spacer    = document.getElementById('portfolio-spacer')
-
-  if (filterBar && sentinel && spacer) {
-    const io = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) {
-        spacer.style.height = filterBar.offsetHeight + 'px'
-        filterBar.style.position = 'fixed'
-        filterBar.style.bottom   = '64px'
-        filterBar.style.top      = 'auto'
-        filterBar.style.left     = '0'
-        filterBar.style.right    = '0'
-      } else {
-        spacer.style.height      = '0'
-        filterBar.style.position = ''
-        filterBar.style.bottom   = ''
-        filterBar.style.top      = ''
-        filterBar.style.left     = ''
-        filterBar.style.right    = ''
-      }
-    }, { threshold: 0 })
-    io.observe(sentinel)
-  }
 </script>

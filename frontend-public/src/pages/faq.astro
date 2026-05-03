@@ -83,7 +83,7 @@ const faqs = [
   <Navbar currentPath="/faq" />
 
   <!-- Hero (coffee-tech FAQ style) -->
-  <section class="bg-background pt-12 pb-20 relative overflow-hidden">
+  <section class="bg-background pt-20 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
     <div class="max-w-3xl mx-auto px-edge text-center relative z-10">
@@ -98,13 +98,10 @@ const faqs = [
     </div>
   </section>
 
-  <!-- Sentinel para fixar filtro acima da navbar bottom -->
-  <div id="faq-sentinel" class="h-0"></div>
-
   <!-- Filter pills -->
   <div
     id="faq-filter"
-    class="bg-background/95 border-b border-white/8 z-40 w-full"
+    class="bg-background/95 border-b border-white/8 sticky top-16 z-40 w-full"
     style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-4 flex flex-wrap gap-2">
@@ -125,8 +122,6 @@ const faqs = [
       ))}
     </div>
   </div>
-
-  <div id="faq-spacer" class="h-0 transition-all duration-200"></div>
 
   <!-- FAQ Accordions -->
   <section class="bg-background py-section">
@@ -211,32 +206,6 @@ const faqs = [
       })
     })
   })
-
-  // Filtro sticky-bottom
-  const faqFilter  = document.getElementById('faq-filter')
-  const faqSentinel = document.getElementById('faq-sentinel')
-  const faqSpacer  = document.getElementById('faq-spacer')
-
-  if (faqFilter && faqSentinel && faqSpacer) {
-    const io = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) {
-        faqSpacer.style.height   = faqFilter.offsetHeight + 'px'
-        faqFilter.style.position = 'fixed'
-        faqFilter.style.bottom   = '64px'
-        faqFilter.style.top      = 'auto'
-        faqFilter.style.left     = '0'
-        faqFilter.style.right    = '0'
-      } else {
-        faqSpacer.style.height   = '0'
-        faqFilter.style.position = ''
-        faqFilter.style.bottom   = ''
-        faqFilter.style.top      = ''
-        faqFilter.style.left     = ''
-        faqFilter.style.right    = ''
-      }
-    }, { threshold: 0 })
-    io.observe(faqSentinel)
-  }
 
   // Abrir primeiro item por padrão
   document.querySelector('.accordion-item')?.classList.add('open')
