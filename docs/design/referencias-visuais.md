@@ -215,4 +215,45 @@ em maiúsculas. A sensação é de um painel de controle de impressão 3D de alt
 - Gradientes coloridos — apenas gradientes para-transparente (fade)
 - Sombras coloridas que não sejam o verde neon
 - Borders visíveis em cards — apenas `border-white/10` (quase invisível)
-- Fontes além de Space Grotesk e Manrope
+- Fontes além de Space Grotesk (**Manrope foi descartada** — implementação usa Space Grotesk exclusivamente)
+- Cantos arredondados em botões e cards principais — usar `rounded-sm` ou nenhum
+- Inter, Roboto, System UI — genérico demais
+
+---
+
+## Status de Implementação — Q1 (2026-05-02)
+
+> Commit `bb9269e` — build limpo, `astro check` 0 erros.
+
+### Ajustes aplicados na implementação vs. este doc
+
+| Item | Especificado aqui | Implementado |
+|---|---|---|
+| Fonte body | Manrope | **Space Grotesk** (simplificado para fonte única) |
+| Cantos de cards | `rounded-xl` | `rounded-sm` (mais industrial, sharp) |
+| `margin-edge` | 40px | 64px (`px-edge` = `px-16`) |
+| `section-gap` | 160px | `py-section` = `py-20` a `py-24` por seção |
+| Tipografia display | `64px` | `clamp(48px, 6vw, 72px)` (responsivo) |
+
+### Componentes implementados em `global.css`
+- `.glass-panel` ✅ — `rgba(42,42,42,0.4)` + `blur(40px)` + `border rgba(255,255,255,0.08)`
+- `.nav-glass` ✅ — `rgba(0,0,0,0.5)` + `blur(48px)`
+- `.glow-effect` ✅ — `box-shadow: 0 0 15px rgba(97,197,79,0.3)`
+- `.bg-tech-grid` ✅ — SVG grid verde sutil como textura
+- `.pill` / `.pill-green` / `.pill-active` ✅
+- `.input-underline` ✅ — para formulário de contato
+- `.accordion-item/trigger/content` ✅ — FAQ com animação CSS
+- `.text-gradient-green` ✅
+- `.scanline` ✅ — animação HUD
+
+### Páginas entregues
+`/` `/servicos` `/sobre` `/contato` `/faq` `/materiais` `/portfolio` `/blog` `/blog/[slug]`
+
+### Próxima sessão — Refinamento Visual
+Pontos de foco para polish:
+1. Responsividade mobile (375–430px) em todas as páginas
+2. Homepage hero — paralax + HUD widget mais detalhado
+3. Animações de entrada com stagger por item (não só fade-up em bloco)
+4. Carrossel de depoimentos — transição mais fluida
+5. Cards de portfolio/materiais — microinterações mais ricas
+6. Tipografia — revisar escala em viewports intermediárias (768–1024px)

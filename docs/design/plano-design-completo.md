@@ -1,6 +1,33 @@
 # Plano de Design Completo — AUMAF 3D
-> Versão 1.0 | 2026-05-02
+> Versão 1.1 | 2026-05-02 (atualizado pós-Q1)
 > Referência estrutural: coffee-tech.com | Paleta: Cinematic Additive Manufacturing | Conteúdo: site-atual-conteudo.md (melhorado)
+
+## Status de Implementação (Q1 — commit bb9269e)
+
+| Página | Status | Observações |
+|---|---|---|
+| `/` — Homepage | ✅ Implementada | Hero HUD, zigzag [01–04], carrossel depoimentos, CTA final |
+| `/servicos` | ✅ Implementada | Zigzag 4 serviços, fluxo 6 etapas |
+| `/sobre` | ✅ Implementada | MVV [01–03], case Fórmula SAE, localização |
+| `/contato` | ✅ Implementada | Split layout, formulário underline, drop zone |
+| `/faq` | ✅ Implementada | Accordion CSS, filtro por categoria |
+| `/materiais` | ✅ Implementada | 16 materiais, filtro pills, destaque 316L |
+| `/portfolio` | ✅ Implementada | Masonry 12 projetos, filtro, hover overlay |
+| `/blog` | ✅ Implementada | Featured post + grid |
+| `/blog/[slug]` | ✅ Implementada | Template post com specs card e citação |
+| Design tokens | ✅ `tailwind.config.ts` | Paleta, tipografia, animações, grid |
+| CSS utilities | ✅ `global.css` | Glass, glow, pills, accordion, scanline |
+| Navbar | ✅ Implementada | Glassmorphism, scroll hide/show, mobile |
+| Footer | ✅ Implementado | 3 colunas, social, WhatsApp |
+
+### Próxima fase: Refinamento Visual
+- Responsividade mobile detalhada (375–430px)
+- Animações de stagger por elemento
+- Microinterações em cards
+- HUD widget mais elaborado
+- Paralax sutil no hero
+
+---
 
 ---
 
