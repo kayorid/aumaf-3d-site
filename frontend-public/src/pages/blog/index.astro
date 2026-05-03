@@ -6,7 +6,7 @@ import Footer from '../../components/Footer.astro'
 const posts = [
   { cat: 'Guia Técnico', title: 'FDM, SLA ou SLS? O guia definitivo para escolher o processo certo', date: 'Mai 2026', time: '8 min', featured: true, href: '/blog/fdm-vs-sla-vs-sls', excerpt: 'Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, tolerância, materiais e casos de uso reais de cada processo.' },
   { cat: 'Materiais',    title: 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação',        date: 'Mai 2026', time: '6 min', featured: false, href: '/blog/guia-materiais-impressao-3d',      excerpt: 'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.' },
-  { cat: 'Case Study',   title: 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',                   date: 'Mai 2026', time: '5 min', featured: false, href: '/blog/formula-sae-case-study-completo', excerpt: 'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.' },
+  { cat: 'Case Study',   title: 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',                   date: 'Mai 2026', time: '5 min', featured: false, href: '/blog/formula-sae-case-study-completo', image: '/images/SAE-formula.avif', excerpt: 'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.' },
   { cat: 'Engenharia',   title: 'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original',        date: 'Mai 2026', time: '7 min', featured: false, href: '/blog/engenharia-reversa-passo-a-passo',  excerpt: 'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.' },
   { cat: 'Parceria',     title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',                date: 'Jun 2024', time: '1 min', featured: false, href: '/blog/formula-sae-usp-sao-carlos',      excerpt: 'Peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos.' },
   { cat: 'Inovação',     title: 'Construtora árabe lança edifício impresso mais alto do mundo',                            date: 'Out 2023', time: '2 min', featured: false, href: '/blog/construtora-arabe-edificio-mais-alto', excerpt: 'Dubai sedia a estrutura impressa em 3D de maior altitude já registrada — e os materiais utilizados surpreendem.' },
@@ -99,10 +99,15 @@ const posts = [
         {posts.filter(p => !p.featured).map((post, i) => (
           <a href={post.href} class="group cursor-pointer block">
             <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-high to-surface-base mb-5 border border-white/5 hover:border-primary-container/15 transition-all duration-300">
-              <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
-              <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
-                <span class="material-symbols-outlined text-5xl text-primary-container">description</span>
-              </div>
+              {post.image
+                ? <img src={post.image} alt={post.title} class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                : <>
+                    <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
+                      <span class="material-symbols-outlined text-5xl text-primary-container">description</span>
+                    </div>
+                  </>
+              }
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div class="absolute top-4 left-4">
                 <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest text-[10px]">{post.cat}</span>
