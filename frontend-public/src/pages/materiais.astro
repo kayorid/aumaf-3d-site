@@ -27,7 +27,7 @@ const materials = [
   <Navbar currentPath="/materiais" />
 
   <!-- Hero -->
-  <section class="bg-background pt-32 pb-20 relative overflow-hidden">
+  <section class="bg-background pt-12 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
@@ -50,11 +50,13 @@ const materials = [
     </div>
   </section>
 
-  <!-- Filter pills — sticky sincronizado com navbar -->
+  <div id="materiais-sentinel" class="h-0"></div>
+
+  <!-- Filter pills -->
   <div
     id="materiais-filter"
-    class="bg-background/95 border-b border-white/8 sticky z-40"
-    style="top:80px;transition:top 0.4s cubic-bezier(0.4,0,0.2,1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
+    class="bg-background/95 border-b border-white/8 z-40 w-full"
+    style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
       {['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal'].map((cat, i) => (
@@ -72,6 +74,8 @@ const materials = [
       ))}
     </div>
   </div>
+
+  <div id="materiais-spacer" class="h-0 transition-all duration-200"></div>
 
   <!-- Grid -->
   <section class="bg-background py-section">
@@ -222,14 +226,29 @@ const materials = [
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 
-  // Sincronizar top sticky com navbar
-  const navbar = document.getElementById('navbar')
-  const matFilter = document.getElementById('materiais-filter')
-  if (navbar && matFilter) {
-    const sync = () => {
-      matFilter.style.top = navbar.classList.contains('-translate-y-full') ? '0px' : '80px'
-    }
-    new MutationObserver(sync).observe(navbar, { attributes: true, attributeFilter: ['class'] })
-    sync()
+  // Filtro sticky-bottom: gruda acima da navbar ao rolar para baixo
+  const matFilter   = document.getElementById('materiais-filter')
+  const matSentinel = document.getElementById('materiais-sentinel')
+  const matSpacer   = document.getElementById('materiais-spacer')
+
+  if (matFilter && matSentinel && matSpacer) {
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        matSpacer.style.height   = matFilter.offsetHeight + 'px'
+        matFilter.style.position = 'fixed'
+        matFilter.style.bottom   = '64px'
+        matFilter.style.top      = 'auto'
+        matFilter.style.left     = '0'
+        matFilter.style.right    = '0'
+      } else {
+        matSpacer.style.height   = '0'
+        matFilter.style.position = ''
+        matFilter.style.bottom   = ''
+        matFilter.style.top      = ''
+        matFilter.style.left     = ''
+        matFilter.style.right    = ''
+      }
+    }, { threshold: 0 })
+    io.observe(matSentinel)
   }
 </script>

@@ -25,7 +25,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
   <Navbar currentPath="/portfolio" />
 
   <!-- Hero minimalista -->
-  <section class="bg-background pt-32 pb-16 relative overflow-hidden">
+  <section class="bg-background pt-12 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -41,11 +41,14 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
     </div>
   </section>
 
-  <!-- Filters — sticky sincronizado com o navbar -->
+  <!-- Sentinel: referência para fixar filtro acima da navbar bottom ao rolar -->
+  <div id="portfolio-sentinel" class="h-0"></div>
+
+  <!-- Filters -->
   <div
     id="portfolio-filter"
-    class="bg-background/95 border-b border-white/8 sticky z-40"
-    style="top:80px;transition:top 0.4s cubic-bezier(0.4,0,0.2,1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
+    class="bg-background/95 border-b border-white/8 z-40 w-full"
+    style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
       {cats.map((cat, i) => (
@@ -63,6 +66,9 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
       ))}
     </div>
   </div>
+
+  <!-- Spacer: mantém o espaço no fluxo quando o filtro fica fixed -->
+  <div id="portfolio-spacer" class="h-0 transition-all duration-200"></div>
 
   <!-- Grid masonry -->
   <section class="bg-background py-section">
@@ -170,21 +176,29 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 
-  // Sincronizar posição sticky do filtro com visibilidade do navbar
-  const navbar = document.getElementById('navbar')
+  // Filtro sticky-bottom: gruda acima da navbar ao rolar para baixo
   const filterBar = document.getElementById('portfolio-filter')
+  const sentinel  = document.getElementById('portfolio-sentinel')
+  const spacer    = document.getElementById('portfolio-spacer')
 
-  if (navbar && filterBar) {
-    const syncFilterTop = () => {
-      const navbarHidden = navbar.classList.contains('-translate-y-full')
-      filterBar.style.top = navbarHidden ? '0px' : '80px'
-    }
-
-    // Observa mudanças de classe no navbar
-    const navObserver = new MutationObserver(syncFilterTop)
-    navObserver.observe(navbar, { attributes: true, attributeFilter: ['class'] })
-
-    // Estado inicial
-    syncFilterTop()
+  if (filterBar && sentinel && spacer) {
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        spacer.style.height = filterBar.offsetHeight + 'px'
+        filterBar.style.position = 'fixed'
+        filterBar.style.bottom   = '64px'
+        filterBar.style.top      = 'auto'
+        filterBar.style.left     = '0'
+        filterBar.style.right    = '0'
+      } else {
+        spacer.style.height      = '0'
+        filterBar.style.position = ''
+        filterBar.style.bottom   = ''
+        filterBar.style.top      = ''
+        filterBar.style.left     = ''
+        filterBar.style.right    = ''
+      }
+    }, { threshold: 0 })
+    io.observe(sentinel)
   }
 </script>

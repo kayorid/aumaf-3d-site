@@ -5,27 +5,27 @@ export interface Props {
 const { currentPath = '/' } = Astro.props
 
 const links = [
-  { href: '/servicos', label: 'Serviços' },
-  { href: '/portfolio', label: 'Portfolio' },
-  { href: '/materiais', label: 'Materiais' },
-  { href: '/sobre', label: 'Sobre' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/servicos',   label: 'Serviços'  },
+  { href: '/portfolio',  label: 'Portfolio' },
+  { href: '/materiais',  label: 'Materiais' },
+  { href: '/sobre',      label: 'Sobre'     },
+  { href: '/blog',       label: 'Blog'      },
 ]
 ---
 
 <header
   id="navbar"
-  class="fixed top-0 w-full z-50 nav-glass transition-all duration-500"
+  class="fixed bottom-0 w-full z-50 nav-glass border-t border-white/8 transition-all duration-300"
 >
-  <nav class="flex justify-between items-center px-edge h-20 max-w-[1600px] mx-auto">
-    <!-- Logo AUMAF 3D — Pirulen typeface -->
+  <nav class="flex justify-between items-center px-edge h-16 max-w-[1600px] mx-auto">
+    <!-- Logo -->
     <a href="/" class="flex items-center gap-1 group" aria-label="AUMAF 3D — Página Inicial">
       <span
-        class="font-pirulen text-[20px] text-white tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none"
+        class="font-pirulen text-[18px] text-white tracking-[0.06em] leading-none transition-all duration-300 group-hover:text-white/70 select-none"
         style="font-family:'Pirulen',sans-serif;"
       >AUMAF</span>
       <span
-        class="font-pirulen text-[20px] text-primary-container tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none ml-1"
+        class="font-pirulen text-[18px] text-primary-container tracking-[0.06em] leading-none transition-all duration-300 group-hover:opacity-75 select-none ml-1"
         style="font-family:'Pirulen',sans-serif;"
       >3D</span>
     </a>
@@ -52,7 +52,7 @@ const links = [
     <div class="flex items-center gap-3">
       <a
         href="/contato"
-        class="hidden lg:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
+        class="hidden lg:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-2.5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
       >
         Solicitar Orçamento
         <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
@@ -73,24 +73,24 @@ const links = [
   </nav>
 </header>
 
-<!-- Mobile/Tablet Drawer -->
+<!-- Mobile/Tablet Drawer — abre para CIMA a partir da navbar bottom -->
 <div
   id="mobile-menu"
-  class="fixed inset-0 z-40 glass-panel-strong flex-col justify-center items-start px-8 hidden"
+  class="fixed inset-x-0 bottom-16 z-40 glass-panel-strong flex-col-reverse justify-start items-start px-8 pb-6 pt-8 hidden max-h-[80vh] overflow-y-auto border-t border-white/8"
   aria-hidden="true"
 >
-  <div class="mt-20 space-y-1 w-full">
+  <div class="w-full space-y-1">
     {links.map((link, i) => (
       <a
         href={link.href}
         class="block py-5 text-headline-md font-bold uppercase tracking-[-0.02em] text-white/70 hover:text-white border-b border-white/5 transition-colors"
-        style={`animation-delay: ${i * 80}ms`}
+        style={`animation-delay: ${i * 60}ms`}
       >
         <span class="text-primary-container text-label-caps mr-4 font-bold">0{i + 1}</span>
         {link.label}
       </a>
     ))}
-    <div class="pt-8">
+    <div class="pt-6">
       <a
         href="/contato"
         class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
@@ -125,7 +125,6 @@ const links = [
     }
   })
 
-  // Fechar ao clicar em link do drawer
   menu?.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       open = false
@@ -142,17 +141,4 @@ const links = [
       }
     })
   })
-
-  // Hide/show on scroll
-  const navbar = document.getElementById('navbar')
-  let lastScroll = 0
-  window.addEventListener('scroll', () => {
-    const current = window.scrollY
-    if (current > 100 && current > lastScroll && !open) {
-      navbar?.classList.add('-translate-y-full')
-    } else {
-      navbar?.classList.remove('-translate-y-full')
-    }
-    lastScroll = current
-  }, { passive: true })
 </script>
