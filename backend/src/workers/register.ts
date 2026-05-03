@@ -7,5 +7,6 @@
 
 // Each side-effect import wires its worker into the registry.
 import './lead-notification.worker'
+import './post-publish.worker'
 
 export {}
