@@ -1,11 +1,25 @@
 # Q3 Foundation — Status
 
-**Fase atual:** implement (em curso)
-**Última atualização:** 2026-05-03
+**Fase atual:** implement → validate (build + push + PR)
+**Última atualização:** 2026-05-03 16:30
 
 ## Próximo passo concreto
 
-Implementar T1.1 (lib/redis.ts) e seguir cadência de commits granulares por fase.
+Build verde em todos workspaces → push branch `feat/q3-foundation` → abrir PR único agregando 13 commits granulares.
+
+## Entregue
+
+- ✅ BullMQ foundation (redis.ts, queue.ts, workers/index.ts)
+- ✅ Lead notification worker + email service (3 transports)
+- ✅ Post-publish cache warm-up worker
+- ✅ /health endpoint agregado + graceful shutdown
+- ✅ 36 testes Jest backend (queue, workers, email, health)
+- ✅ Storybook tematizado Cinematic + a11y
+- ✅ Stories UI base (7 components) + BlockPreview + Foundation/Tokens
+- ✅ E2E Playwright: posts, leads, wysiwyg
+- ✅ 35 testes Vitest admin (hooks com test-utils, components, parsers existentes)
+- ✅ Smoke test script + 2 runbooks
+- ✅ CLAUDE.md atualizado em 3 níveis (root + backend + admin)
 
 ## Decisões registradas
 

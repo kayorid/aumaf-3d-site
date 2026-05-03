@@ -63,9 +63,11 @@ frontend-admin/src/
 - **Auth** ✅ Phase 1 — login JWT cookie httpOnly, AuthGuard, AdminShell
 - **Dashboard** ✅ Phase 1 — 4 KPIs DB-only + lists
 - **Blog/Posts** ✅ Phase 1 — CRUD + editor Markdown dual-mode + IA multi-provedor
-- **Leads** 🔜 Phase 2 — listagem, filtros, exportação CSV
-- **Integrações** 🔜 Phase 2 — GA4, Clarity, Pixel, GTM
-- **Configurações** 🔜 Phase 2 — textos globais, WhatsApp/Botyo
+- **WYSIWYG** ✅ Phase 2 — block editor inline com BlockPreview fiel ao DS
+- **Leads** ✅ Phase 2 — listagem, filtros, exportação CSV
+- **Integrações** ✅ Phase 2 — GA4, Clarity, Pixel, GTM (settings.routes)
+- **Configurações** ✅ Phase 2 — textos globais, WhatsApp/Botyo
+- **Storybook** ✅ Q3 — `npm run storybook` com tema Cinematic + a11y, Foundation/Tokens, stories de todos os primitivos UI + BlockPreview
 
 ## Padrões técnicos
 
