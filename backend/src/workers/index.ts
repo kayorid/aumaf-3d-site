@@ -57,9 +57,25 @@ export async function shutdownWorkers(timeoutMs = 10_000): Promise<void> {
   await closeRedis()
 }
 
-export async function getQueueStats(name: string) {
+export interface QueueStats {
+  name: string
+  waiting: number
+  active: number
+  completed: number
+  failed: number
+  delayed: number
+}
+
+export async function getQueueStats(name: string): Promise<QueueStats | null> {
   const q = getQueue(name)
   if (!q) return null
   const counts = await q.getJobCounts('waiting', 'active', 'completed', 'failed', 'delayed')
-  return { name, ...counts }
+  return {
+    name,
+    waiting: counts.waiting ?? 0,
+    active: counts.active ?? 0,
+    completed: counts.completed ?? 0,
+    failed: counts.failed ?? 0,
+    delayed: counts.delayed ?? 0,
+  }
 }
