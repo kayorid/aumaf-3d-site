@@ -17,10 +17,11 @@ export function createQueue<DataT = unknown, ResultT = unknown, NameT extends st
   name: string,
   opts: CreateQueueOptions<DataT> = {},
 ): Queue<DataT, ResultT, NameT> {
+  const { defaultJobOptions, ...rest } = opts
   const queue = new Queue<DataT, ResultT, NameT>(name, {
     connection: getRedis(),
-    defaultJobOptions: { ...DEFAULT_JOB_OPTIONS, ...(opts.defaultJobOptions ?? {}) },
-    ...opts,
+    ...rest,
+    defaultJobOptions: { ...DEFAULT_JOB_OPTIONS, ...(defaultJobOptions ?? {}) },
   })
 
   queue.on('error', (err) => {
