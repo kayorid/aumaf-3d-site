@@ -16,55 +16,73 @@ export function Topbar() {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-background/80 backdrop-blur px-6">
-      <div className="lg:hidden font-mono text-xs tracking-[0.3em] text-text-tertiary uppercase">
-        AUMAF 3D
-      </div>
+    <header className="sticky top-0 z-20 nav-glass border-b border-white/10">
+      <div className="flex h-14 items-center justify-between px-6">
+        <div className="lg:hidden flex items-center gap-1">
+          <span className="font-pirulen text-[14px] text-white tracking-[0.06em]">AUMAF</span>
+          <span className="font-pirulen text-[14px] text-primary-container tracking-[0.06em]">3D</span>
+        </div>
 
-      <div className="ml-auto flex items-center gap-3">
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger
-            className={cn(
-              'flex items-center gap-2 rounded-md border border-border bg-surface-100 px-3 py-1.5 text-sm text-text-primary',
-              'hover:bg-surface-200 focus-ring',
-            )}
-          >
-            <div className="flex items-center justify-center size-6 rounded-full bg-primary-500/20 text-primary-400 text-xs font-semibold uppercase">
-              {user?.name?.[0] ?? '?'}
-            </div>
-            <span className="hidden sm:inline">{user?.name ?? '—'}</span>
-            <ChevronDown className="size-3.5 text-text-tertiary" />
-          </DropdownMenu.Trigger>
+        <div className="ml-auto flex items-center gap-4">
+          {/* Status pill mini */}
+          <div className="hidden sm:flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary-container dot-glow animate-pulse-dot" />
+            <span className="text-[9px] uppercase tracking-[0.25em] text-on-surface-variant">
+              Online
+            </span>
+          </div>
 
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              align="end"
-              sideOffset={6}
-              className="min-w-[200px] rounded-md border border-border bg-surface-100 p-1 shadow-xl animate-fade-in z-50"
+          {/* User dropdown */}
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger
+              className={cn(
+                'group flex items-center gap-2.5 pl-2 pr-3 h-9 border border-white/15 rounded-sm',
+                'hover:border-primary-container/40 transition-colors focus-ring',
+              )}
             >
-              <div className="px-3 py-2">
-                <div className="text-sm font-medium text-text-primary">{user?.name}</div>
-                <div className="text-xs text-text-tertiary">{user?.email}</div>
-                <div className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary-500/10 border border-primary-500/30 px-2 py-0.5 text-[10px] uppercase font-mono text-primary-400">
-                  {user?.role}
-                </div>
+              <div className="flex items-center justify-center size-6 rounded-sm bg-primary-container/15 text-primary-container text-[10px] font-bold uppercase">
+                {user?.name?.[0] ?? '?'}
               </div>
-              <DropdownMenu.Separator className="h-px bg-border my-1" />
-              <DropdownMenu.Item
-                disabled
-                className="flex items-center gap-2 rounded-sm px-3 py-2 text-sm text-text-muted cursor-not-allowed"
+              <span className="hidden sm:inline text-[11px] uppercase tracking-[0.15em] text-on-surface font-medium">
+                {user?.name?.split(' ')[0] ?? '—'}
+              </span>
+              <ChevronDown className="size-3 text-on-surface-variant group-hover:text-on-surface transition-colors" />
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content
+                align="end"
+                sideOffset={8}
+                className="min-w-[220px] glass-panel-strong rounded-sm p-1 shadow-glass animate-fade-in z-50"
               >
-                <User className="size-4" /> Perfil (em breve)
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                onSelect={handleLogout}
-                className="flex items-center gap-2 rounded-sm px-3 py-2 text-sm text-text-secondary hover:bg-surface-200 hover:text-text-primary cursor-pointer focus:outline-none"
-              >
-                <LogOut className="size-4" /> Sair
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+                <div className="px-3 py-3 border-b border-white/10 mb-1">
+                  <div className="text-[11px] uppercase tracking-[0.15em] text-on-surface font-bold">
+                    {user?.name}
+                  </div>
+                  <div className="text-[10px] text-on-surface-variant mt-1 truncate">
+                    {user?.email}
+                  </div>
+                  <div className="mt-2 inline-flex items-center gap-1 border border-primary-container/40 px-2 py-0.5 text-[9px] uppercase font-bold tracking-[0.2em] text-primary-container">
+                    {user?.role}
+                  </div>
+                </div>
+                <DropdownMenu.Item
+                  disabled
+                  className="flex items-center gap-2 px-3 py-2 text-[11px] uppercase tracking-[0.15em] text-on-surface-variant/40 cursor-not-allowed"
+                >
+                  <User className="size-3.5" /> Perfil
+                  <span className="ml-auto text-[9px] tracking-[0.2em]">soon</span>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  onSelect={handleLogout}
+                  className="flex items-center gap-2 px-3 py-2 text-[11px] uppercase tracking-[0.15em] text-on-surface-variant hover:bg-white/5 hover:text-on-surface cursor-pointer focus:outline-none focus:bg-white/5"
+                >
+                  <LogOut className="size-3.5" /> Sair
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
+        </div>
       </div>
     </header>
   )

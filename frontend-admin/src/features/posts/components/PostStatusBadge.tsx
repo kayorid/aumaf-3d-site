@@ -1,7 +1,10 @@
 import { Badge } from '@/components/ui/badge'
 import type { PostStatus } from '@aumaf/shared'
 
-const STATUS_CONFIG: Record<PostStatus, { label: string; variant: 'success' | 'warn' | 'info' | 'neutral' }> = {
+const STATUS_CONFIG: Record<
+  PostStatus,
+  { label: string; variant: 'success' | 'warn' | 'info' | 'neutral' }
+> = {
   PUBLISHED: { label: 'Publicado', variant: 'success' },
   DRAFT: { label: 'Rascunho', variant: 'warn' },
   PENDING_REVIEW: { label: 'Em revisão', variant: 'info' },

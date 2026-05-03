@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
+@font-face {
+  font-family: 'Pirulen';
+  src: url('/fonts/pirulen.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,8 +23,8 @@
 
   html, body {
     background-color: theme('colors.background');
-    color: theme('colors.text.primary');
-    font-family: theme('fontFamily.sans');
+    color: theme('colors.on-surface');
+    font-family: 'Space Grotesk', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -25,37 +33,162 @@
     min-height: 100vh;
   }
 
+  :focus-visible {
+    outline: 2px solid #61c54f;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
   ::selection {
-    background-color: theme('colors.primary.500');
-    color: theme('colors.background');
+    background-color: theme('colors.primary.container');
+    color: theme('colors.on-primary');
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 4px;
+    height: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: theme('colors.surface.dim');
   }
   ::-webkit-scrollbar-thumb {
-    background: theme('colors.surface.300');
-    border-radius: 4px;
+    background: theme('colors.surface.highest');
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: theme('colors.surface.400');
+    background: theme('colors.primary.container');
   }
 }
 
 @layer components {
+  /* Glass panels — replica do público */
+  .glass-panel {
+    background: rgba(42, 42, 42, 0.4);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-panel-strong {
+    background: rgba(30, 30, 30, 0.7);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-glass {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(48px);
+    -webkit-backdrop-filter: blur(48px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Glow effects */
+  .glow-effect {
+    box-shadow: 0 0 15px rgba(97, 197, 79, 0.35);
+  }
+  .glow-effect-lg {
+    box-shadow: 0 0 30px rgba(97, 197, 79, 0.4), 0 0 60px rgba(97, 197, 79, 0.15);
+  }
+  .glow-border {
+    border: 1px solid rgba(97, 197, 79, 0.3);
+    box-shadow: 0 0 15px rgba(97, 197, 79, 0.15), inset 0 0 15px rgba(97, 197, 79, 0.05);
+  }
+
+  /* Tech grid background */
+  .bg-tech-grid {
+    background-image:
+      linear-gradient(rgba(124, 226, 104, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 226, 104, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Pill */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] uppercase tracking-[0.2em] whitespace-nowrap border-white/20 text-on-surface-variant;
+  }
+  .pill-green {
+    @apply pill border-primary-container/50 text-primary-container;
+  }
+
+  /* Underline input — campo do site público */
+  .input-underline {
+    @apply w-full bg-transparent border-0 border-b border-white/30 pb-3 pt-2
+           text-on-surface placeholder:text-on-surface-variant placeholder:uppercase
+           placeholder:tracking-widest placeholder:text-xs
+           focus:outline-none focus:border-primary-container
+           transition-colors duration-300;
+  }
+
+  /* Surface card padrão do admin */
   .surface-card {
-    @apply bg-surface-100 border border-border rounded-lg;
+    @apply bg-surface-low border border-white/10 rounded-lg;
   }
-
   .surface-card-hover {
-    @apply transition-colors hover:bg-surface-200 hover:border-border-strong;
+    @apply transition-colors hover:bg-surface-base hover:border-white/20;
   }
 
+  /* Text gradient verde */
+  .text-gradient-green {
+    background: linear-gradient(135deg, #7ce268, #61c54f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Dot glow para status pill */
+  .dot-glow {
+    box-shadow: 0 0 8px rgba(97, 197, 79, 0.6);
+  }
+
+  /* Atmospheric green glow */
+  .atmospheric-glow {
+    background:
+      radial-gradient(ellipse 70% 60% at 30% 30%, rgba(97, 197, 79, 0.10) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 40% at 80% 70%, rgba(97, 197, 79, 0.06) 0%, transparent 70%);
+  }
+
+  /* Focus ring shortcut */
   .focus-ring {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container;
+  }
+}
+
+/* ──────────────────────────────────────────────────
+   Override de autofill do Chrome/Edge/Safari
+   Sem isso, navegador força bg azul claro + texto azul escuro
+   nos campos preenchidos automaticamente, quebrando o tema dark.
+   ────────────────────────────────────────────────── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #e5e2e1; /* on-surface */
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  caret-color: #e5e2e1;
+  transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s;
+}
+
+/* Para inputs com superfície surface-dim/low (Input padrão), preserva fundo escuro */
+.bg-surface-dim:-webkit-autofill,
+.bg-surface-low:-webkit-autofill,
+.bg-surface-100:-webkit-autofill,
+input.bg-surface-dim:-webkit-autofill,
+input.bg-surface-low:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #131313 inset !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
