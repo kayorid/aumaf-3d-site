@@ -10,6 +10,9 @@ import Footer from '../components/Footer.astro'
   <!-- Hero Institucional assimétrico -->
   <section class="bg-background min-h-[65vh] flex items-end pt-32 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 70% 10%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 35% 40% at 5% 90%,rgba(97,197,79,0.04) 0%,transparent 65%);"></div>
+    <div class="absolute bottom-0 inset-x-0 h-16 pointer-events-none" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.6));"></div>
     <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-[0.04]">
       <svg viewBox="0 0 600 800" fill="none" class="w-full h-full">
         <polygon points="300,40 560,180 560,620 300,760 40,620 40,180" stroke="#61c54f" stroke-width="1" fill="none"/>
@@ -65,15 +68,15 @@ import Footer from '../components/Footer.astro'
           highlight: 'Inovação + Qualidade + Transparência',
           reverse: false,
         },
-      ].map(item => (
-        <div class:list={['grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-20']}>
+      ].map((item, i) => (
+        <div data-animate class:list={['grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-20 reveal-hidden', `stagger-${i + 1}`]}>
           <div class:list={item.reverse ? 'lg:order-2' : ''}>
             <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">[{item.num}]</span>
             <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-5">{item.title}</h2>
             <p class="text-body-lg text-tertiary leading-relaxed mb-6">{item.body}</p>
           </div>
           <div class:list={item.reverse ? 'lg:order-1' : ''}>
-            <div class="glass-panel p-10 rounded-sm" style="border:1px solid rgba(97,197,79,0.1);">
+            <div class="glass-panel card-hover-glow p-10 rounded-sm" style="border:1px solid rgba(97,197,79,0.1);">
               <div class="flex items-center justify-center h-32">
                 <p class="text-headline-md font-medium text-primary-container text-center leading-snug">{item.highlight}</p>
               </div>
@@ -85,7 +88,7 @@ import Footer from '../components/Footer.astro'
   </section>
 
   <!-- Case: Fórmula SAE USP -->
-  <section class="bg-surface-low py-section border-y border-white/5">
+  <section class="bg-surface-low py-section border-y border-white/5 section-glow-top">
     <div class="max-w-[1440px] mx-auto px-edge">
       <div class="mb-12">
         <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">Case // Parceria</span>
@@ -177,3 +180,15 @@ import Footer from '../components/Footer.astro'
 
   <Footer />
 </Base>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('reveal-visible')
+        observer.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' })
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el))
+</script>

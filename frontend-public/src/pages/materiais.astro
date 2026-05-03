@@ -29,6 +29,8 @@ const materials = [
   <!-- Hero -->
   <section class="bg-background pt-32 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
     <div class="max-w-[1440px] mx-auto px-edge relative z-10">
       <div class="max-w-2xl">
         <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Catálogo // Materiais</span>
@@ -57,7 +59,12 @@ const materials = [
         {['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal'].map((cat, i) => (
           <button
             data-filter={cat === 'Todos' ? 'all' : cat}
-            class:list={['pill transition-all duration-200 hover:border-primary-container/50 hover:text-primary-container', i === 0 ? 'pill-active' : '']}
+            class:list={[
+              'mat-filter transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
+              i === 0
+                ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
+                : 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
+            ]}
           >
             {cat}
           </button>
@@ -70,7 +77,7 @@ const materials = [
           <div
             data-cat={mat.cat}
             class:list={[
-              'glass-panel p-6 rounded-sm group hover:-translate-y-1 transition-all duration-300 relative overflow-hidden',
+              'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden',
               mat.highlight ? 'border border-primary-container/20' : ''
             ]}
           >
@@ -176,25 +183,38 @@ const materials = [
 </Base>
 
 <script>
-  const filterBtns = document.querySelectorAll('[data-filter]')
-  const cards = document.querySelectorAll('[data-cat]')
+  const filterBtns = document.querySelectorAll<HTMLElement>('.mat-filter')
+  const cards = document.querySelectorAll<HTMLElement>('[data-cat]')
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = (btn as HTMLElement).dataset.filter
+  const ACTIVE   = 'bg-primary-container border-primary-container text-on-primary glow-effect'
+  const INACTIVE = 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
 
-      filterBtns.forEach(b => {
-        b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
-        b.classList.add('border-white/20', 'text-on-surface-variant')
-      })
-      btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
-      btn.classList.remove('border-white/20', 'text-on-surface-variant')
+  function setFilter(btn: HTMLElement) {
+    const filter = btn.dataset.filter ?? 'all'
 
-      cards.forEach(card => {
-        const cat = (card as HTMLElement).dataset.cat
-        const show = filter === 'all' || cat === filter
-        ;(card as HTMLElement).style.display = show ? '' : 'none'
-      })
+    filterBtns.forEach(b => {
+      ACTIVE.split(' ').forEach(c => b.classList.remove(c))
+      INACTIVE.split(' ').forEach(c => b.classList.add(c))
     })
-  })
+    INACTIVE.split(' ').forEach(c => btn.classList.remove(c))
+    ACTIVE.split(' ').forEach(c => btn.classList.add(c))
+
+    cards.forEach(card => {
+      const show = filter === 'all' || card.dataset.cat === filter
+      if (show) {
+        card.style.display = ''
+        card.style.opacity = '0'
+        requestAnimationFrame(() => {
+          card.style.transition = 'opacity 0.3s ease'
+          card.style.opacity = '1'
+        })
+      } else {
+        card.style.opacity = '0'
+        card.style.transition = 'opacity 0.2s ease'
+        setTimeout(() => { card.style.display = 'none' }, 200)
+      }
+    })
+  }
+
+  filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 </script>
