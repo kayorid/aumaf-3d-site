@@ -1,86 +1,144 @@
 ---
 import '../styles/global.css'
+import SEO from '../components/SEO.astro'
 
 export interface Props {
   title: string
   description?: string
   ogImage?: string
+  ogType?: 'website' | 'article'
+  noindex?: boolean
+  /** Schemas extras (FAQPage, BlogPosting, HowTo, ItemList, Service...) */
+  schemas?: object[]
+  /** Itens de breadcrumb (sem 'Home', que é prefixado automaticamente) */
+  breadcrumb?: { name: string; url: string }[]
+  pageType?: 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage' | 'FAQPage'
+  /** Article meta para ogType=article. */
+  article?: {
+    datePublished?: string
+    dateModified?: string
+    author?: string
+    section?: string
+  }
+  /** URL de imagem para preload (LCP). */
+  preloadImage?: string
 }
+
 const {
   title,
-  description = 'Impressão 3D industrial de alta precisão. Peças em metal, carbono e polímeros com tolerância ±0.05mm. São Carlos – SP.',
+  description,
   ogImage,
+  ogType,
+  noindex,
+  schemas,
+  breadcrumb,
+  pageType,
+  article,
+  preloadImage,
 } = Astro.props
-const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 <!doctype html>
 <html lang="pt-BR" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="canonical" href={canonicalURL} />
-    <title>{title} | AUMAF 3D</title>
-    <meta name="description" content={description} />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="author" content="AUMAF 3D" />
+    <meta name="publisher" content="AUMAF 3D" />
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content={`${title} | AUMAF 3D`} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="pt_BR" />
-    <meta property="og:site_name" content="AUMAF 3D" />
+    <!-- PWA + Apple -->
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AUMAF 3D" />
+    <meta name="application-name" content="AUMAF 3D" />
+    <meta name="msapplication-TileColor" content="#000000" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} | AUMAF 3D`} />
-    <meta name="twitter:description" content={description} />
+    <!-- Favicon set -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="mask-icon" href="/favicon.svg" color="#61c54f" />
 
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#000000" />
-
-    <!-- Preload fonte local Pirulen (logo) -->
+    <!-- Preload fonte local Pirulen (logo - LCP candidate) -->
     <link rel="preload" href="/fonts/pirulen.otf" as="font" type="font/otf" crossorigin />
 
-    <!-- Preconnect fonts -->
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    <!-- DNS prefetch + preconnect para fonts -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Material Symbols -->
+    <!-- Material Symbols com display=swap -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
       rel="stylesheet"
+    />
+
+    <SEO
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      ogType={ogType}
+      noindex={noindex}
+      schemas={schemas}
+      breadcrumb={breadcrumb}
+      pageType={pageType}
+      article={article}
     />
   </head>
   <body class="bg-background text-on-surface antialiased selection:bg-primary-container selection:text-on-primary">
-    <slot />
+    <!-- Skip link — visível só no foco -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-surface-high focus:text-primary-container focus:rounded focus:shadow-lg focus:outline-2 focus:outline-primary-container"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <main id="main-content" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
 
     <!-- FAB: scroll to top -->
     <button
       id="fab-top"
-      aria-label="Voltar ao topo"
-      class="fixed bottom-6 right-6 z-[60] w-11 h-11 rounded-full bg-surface-high border border-primary-container/30 text-primary-container flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-primary-container hover:text-on-primary hover:scale-110 active:scale-95"
+      type="button"
+      aria-label="Voltar ao topo da página"
+      class="fixed bottom-6 right-6 z-[60] w-11 h-11 rounded-full bg-surface-high border border-primary-container/30 text-primary-container flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-primary-container hover:text-on-primary hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
       style="box-shadow:0 0 12px rgba(97,197,79,0.3);"
     >
-      <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">arrow_upward</span>
+      <span class="material-symbols-outlined text-lg" aria-hidden="true" style="font-variation-settings:'FILL' 1;">arrow_upward</span>
     </button>
   </body>
 </html>
 
 <script>
-  const fab = document.getElementById('fab-top')
-  window.addEventListener('scroll', () => {
-    if (!fab) return
-    if (window.scrollY > 400) {
-      fab.classList.remove('opacity-0', 'pointer-events-none')
-      fab.classList.add('opacity-100')
-    } else {
-      fab.classList.add('opacity-0', 'pointer-events-none')
-      fab.classList.remove('opacity-100')
-    }
-  }, { passive: true })
-  fab?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+  const fab = document.getElementById('fab-top') as HTMLButtonElement | null
+  if (fab) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (window.scrollY > 400) {
+          fab.classList.remove('opacity-0', 'pointer-events-none')
+          fab.classList.add('opacity-100')
+        } else {
+          fab.classList.add('opacity-0', 'pointer-events-none')
+          fab.classList.remove('opacity-100')
+        }
+      },
+      { passive: true },
+    )
+    fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+  }
 </script>

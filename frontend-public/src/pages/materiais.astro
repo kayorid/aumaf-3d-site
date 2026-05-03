@@ -2,51 +2,68 @@
 import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
+import Breadcrumb from '../components/Breadcrumb.astro'
+import { itemListSchema } from '../lib/schemas'
 
 const materials = [
-  { cat: 'Termoplásticos', name: 'Nylon (PA)', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false },
-  { cat: 'Termoplásticos', name: 'ABS', tempMax: '100°C', flex: 'Rígido', app: 'Protótipos + peças funcionais', highlight: false },
-  { cat: 'Termoplásticos', name: 'Policarbonato (PC)', tempMax: '130°C', flex: 'Rígido', app: 'Alta resistência ao impacto', highlight: false },
-  { cat: 'Termoplásticos', name: 'PET-G', tempMax: '80°C', flex: 'Semi-rígido', app: 'Alimentício seguro', highlight: false },
-  { cat: 'Termoplásticos', name: 'Polipropileno (PP)', tempMax: '100°C', flex: 'Semi-rígido', app: 'Resistência química', highlight: false },
-  { cat: 'Termoplásticos', name: 'TPU', tempMax: '80°C', flex: 'Flexível', app: 'Borracha técnica, solas', highlight: false },
-  { cat: 'Termoplásticos', name: 'PVA', tempMax: '60°C', flex: 'Solúvel', app: 'Suporte solúvel em água', highlight: false },
-  { cat: 'Alta Performance', name: 'PA CF15', tempMax: '180°C', flex: 'Rígido+Leve', app: 'Industrial severo', highlight: true },
-  { cat: 'Alta Performance', name: 'PET-G CF15', tempMax: '80°C', flex: 'Rígido', app: 'Estrutural leve', highlight: false },
-  { cat: 'Alta Performance', name: 'Tritan HT', tempMax: '95°C', flex: 'Rígido', app: 'Transparência + temperatura', highlight: false },
-  { cat: 'Alta Performance', name: 'PC (Policarbonato)', tempMax: '130°C', flex: 'Rígido', app: 'Impacto industrial', highlight: false },
-  { cat: 'Flexíveis', name: 'TPU Shore 95A', tempMax: '80°C', flex: 'Flex. médio', app: 'Juntas, vedações', highlight: false },
-  { cat: 'Flexíveis', name: 'Flex Shore 85A', tempMax: '70°C', flex: 'Alta flex.', app: 'Solas, grips, amortecedores', highlight: false },
-  { cat: 'Resinas', name: 'Resina Standard', tempMax: '60°C', flex: 'Rígido', app: 'Alta resolução SLA', highlight: false },
-  { cat: 'Resinas', name: 'Resina ABS', tempMax: '80°C', flex: 'Rígido', app: 'Mecânica + acabamento', highlight: false },
-  { cat: 'Resinas', name: 'Resina Cerâmica', tempMax: '+400°C', flex: 'Rígido', app: 'Temp. extrema, moldes', highlight: true },
-  { cat: 'Metal', name: 'BASF Ultrafuse 316L', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true },
+  { cat: 'Termoplásticos',   name: 'Nylon (PA)',           tempMax: '120°C',  flex: 'Semi-rígido', app: 'Mecânica geral',                  highlight: false },
+  { cat: 'Termoplásticos',   name: 'ABS',                  tempMax: '100°C',  flex: 'Rígido',      app: 'Protótipos + peças funcionais',   highlight: false },
+  { cat: 'Termoplásticos',   name: 'Policarbonato (PC)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Alta resistência ao impacto',     highlight: false },
+  { cat: 'Termoplásticos',   name: 'PET-G',                tempMax: '80°C',   flex: 'Semi-rígido', app: 'Alimentício seguro',              highlight: false },
+  { cat: 'Termoplásticos',   name: 'Polipropileno (PP)',   tempMax: '100°C',  flex: 'Semi-rígido', app: 'Resistência química',             highlight: false },
+  { cat: 'Termoplásticos',   name: 'TPU',                  tempMax: '80°C',   flex: 'Flexível',    app: 'Borracha técnica, solas',         highlight: false },
+  { cat: 'Termoplásticos',   name: 'PVA',                  tempMax: '60°C',   flex: 'Solúvel',     app: 'Suporte solúvel em água',         highlight: false },
+  { cat: 'Alta Performance', name: 'PA CF15',              tempMax: '180°C',  flex: 'Rígido+Leve', app: 'Industrial severo',               highlight: true },
+  { cat: 'Alta Performance', name: 'PET-G CF15',           tempMax: '80°C',   flex: 'Rígido',      app: 'Estrutural leve',                 highlight: false },
+  { cat: 'Alta Performance', name: 'Tritan HT',            tempMax: '95°C',   flex: 'Rígido',      app: 'Transparência + temperatura',     highlight: false },
+  { cat: 'Alta Performance', name: 'PC (Policarbonato)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Impacto industrial',              highlight: false },
+  { cat: 'Flexíveis',        name: 'TPU Shore 95A',        tempMax: '80°C',   flex: 'Flex. médio', app: 'Juntas, vedações',                highlight: false },
+  { cat: 'Flexíveis',        name: 'Flex Shore 85A',       tempMax: '70°C',   flex: 'Alta flex.',  app: 'Solas, grips, amortecedores',     highlight: false },
+  { cat: 'Resinas',          name: 'Resina Standard',      tempMax: '60°C',   flex: 'Rígido',      app: 'Alta resolução SLA',              highlight: false },
+  { cat: 'Resinas',          name: 'Resina ABS',           tempMax: '80°C',   flex: 'Rígido',      app: 'Mecânica + acabamento',           highlight: false },
+  { cat: 'Resinas',          name: 'Resina Cerâmica',      tempMax: '+400°C', flex: 'Rígido',      app: 'Temp. extrema, moldes',           highlight: true },
+  { cat: 'Metal',            name: 'BASF Ultrafuse 316L',  tempMax: '800°C+', flex: 'Aço Inox',    app: 'Componentes metálicos finais',    highlight: true },
+]
+
+const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal']
+
+const description = 'Catálogo de 17+ materiais para impressão 3D na AUMAF 3D: termoplásticos (PA, ABS, PC, PEEK), alta performance (PA CF15, Tritan), resinas e metal 316L. Especificações técnicas, temperatura, flexibilidade e aplicações.'
+
+const schemas = [
+  itemListSchema(materials.map((m) => ({ name: m.name, description: `${m.cat}. Temperatura máxima: ${m.tempMax}. ${m.flex}. Aplicação: ${m.app}.` }))),
 ]
 ---
 
-<Base title="Materiais" description="Catálogo completo de materiais para impressão 3D: termoplásticos, alta performance, resinas e metal. +20 materiais disponíveis.">
+<Base
+  title="Materiais para Impressão 3D"
+  description={description}
+  pageType="CollectionPage"
+  breadcrumb={[{ name: 'Materiais', url: '/materiais' }]}
+  schemas={schemas}
+>
   <Navbar currentPath="/materiais" />
 
   <!-- Hero -->
-  <section class="bg-background pt-28 pb-20 relative overflow-hidden">
-    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
+  <section class="bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-mat">
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'Materiais' }]} compact />
       <div class="max-w-2xl">
         <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Catálogo // Materiais</span>
-        <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        <h1 id="hero-mat" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
           Materiais de<br/>Primeira Linha.
         </h1>
         <p class="text-body-lg text-tertiary leading-relaxed mb-8">
-          20+ materiais certificados. A variedade nas propriedades dos polímeros e metais torna possível atender desde protótipos de conceito até peças de uso final em ambientes industriais severos.
+          <strong class="text-on-surface">{materials.length} materiais certificados</strong> em estoque na AUMAF 3D – São Carlos, SP. A variedade nas propriedades dos polímeros e metais torna possível atender desde protótipos de conceito até peças de uso final em ambientes industriais severos.
         </p>
-        <div class="flex items-center gap-4 text-code-data text-on-surface-variant">
-          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Termoplásticos</span>
-          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-on-surface"></span> Alta Performance</span>
-          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Resinas</span>
-          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error"></span> Metal</span>
-        </div>
+        <ul role="list" class="flex flex-wrap items-center gap-x-4 gap-y-2 text-code-data text-on-surface-variant">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container" aria-hidden="true"></span> Termoplásticos</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-on-surface" aria-hidden="true"></span> Alta Performance</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary" aria-hidden="true"></span> Resinas</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true"></span> Metal</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -57,110 +74,136 @@ const materials = [
     class="bg-background/95 border-b border-white/8 sticky top-16 z-40 w-full"
     style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
-    <div class="max-w-[1600px] mx-auto px-edge py-3 flex flex-wrap gap-2">
-      {['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal'].map((cat, i) => (
-        <button
-          data-filter={cat === 'Todos' ? 'all' : cat}
-          class:list={[
-            'mat-filter transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
-            i === 0
-              ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
-              : 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
-          ]}
-        >
-          {cat}
-        </button>
-      ))}
+    <div class="max-w-[1600px] mx-auto px-edge py-3">
+      <div class="flex flex-wrap items-center gap-2 mb-2" role="radiogroup" aria-label="Filtrar materiais por categoria">
+        {categories.map((cat, i) => (
+          <button
+            type="button"
+            role="radio"
+            aria-checked={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? '0' : '-1'}
+            data-filter={cat === 'Todos' ? 'all' : cat}
+            class:list={[
+              'mat-filter transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
+              i === 0
+                ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
+                : 'border-white/30 text-on-surface-variant hover:border-primary-container hover:text-primary-container',
+            ]}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+      <p id="mat-count" aria-live="polite" class="text-code-data text-on-surface-variant text-[11px]">
+        Exibindo {materials.length} materiais
+      </p>
     </div>
   </div>
 
   <!-- Grid -->
-  <section class="bg-background py-section">
+  <section class="bg-background py-section" aria-labelledby="mat-list">
+    <h2 id="mat-list" class="sr-only">Lista de materiais</h2>
     <div class="max-w-[1600px] mx-auto px-edge">
-      <div id="materials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
-        {materials.map((mat, i) => (
-          <div
-            data-cat={mat.cat}
-            class:list={[
-              'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden',
-              mat.highlight ? 'border border-primary-container/20' : ''
-            ]}
-          >
-            {mat.highlight && (
-              <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/50 to-transparent"></div>
-            )}
+      <ul role="list" id="materials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+        {materials.map((mat) => (
+          <li>
+            <article
+              data-cat={mat.cat}
+              class:list={[
+                'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden h-full',
+                mat.highlight ? 'border border-primary-container/25' : '',
+              ]}
+              aria-labelledby={`mat-${mat.name.replace(/\s+/g, '-').toLowerCase()}`}
+            >
+              {mat.highlight && (
+                <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/50 to-transparent" aria-hidden="true"></div>
+              )}
 
-            <!-- Category badge -->
-            <div class="flex justify-between items-start mb-4">
-              <span class:list={[
-                'pill text-[10px]',
-                mat.cat === 'Metal' ? 'border-error/50 text-error' :
-                mat.cat === 'Alta Performance' ? 'pill-green' :
-                mat.cat === 'Flexíveis' ? 'border-tertiary/50 text-tertiary' :
-                mat.cat === 'Resinas' ? 'border-on-surface-variant/50 text-on-surface-variant' :
-                'border-white/20 text-on-surface-variant'
-              ]}>{mat.cat}</span>
-              {mat.highlight && <span class="text-label-caps text-primary-container text-[10px]">✦ DESTAQUE</span>}
-            </div>
+              <div class="flex justify-between items-start mb-4">
+                <span class:list={[
+                  'pill text-[10px]',
+                  mat.cat === 'Metal' ? 'border-error/60 text-error' :
+                  mat.cat === 'Alta Performance' ? 'pill-green' :
+                  mat.cat === 'Flexíveis' ? 'border-tertiary/60 text-tertiary' :
+                  mat.cat === 'Resinas' ? 'border-on-surface-variant text-on-surface-variant' :
+                  'border-white/30 text-on-surface-variant',
+                ]}>{mat.cat}</span>
+                {mat.highlight && (
+                  <span class="text-label-caps text-primary-container text-[10px]">
+                    <span aria-hidden="true">✦</span> Destaque
+                  </span>
+                )}
+              </div>
 
-            <!-- Name -->
-            <h3 class="text-headline-md font-bold uppercase text-white mb-4 tracking-[0.02em] group-hover:text-gradient-green transition-all">{mat.name}</h3>
+              <h3 id={`mat-${mat.name.replace(/\s+/g, '-').toLowerCase()}`} class="text-headline-md font-bold uppercase text-white mb-4 tracking-[0.02em] group-hover:text-gradient-green transition-all">
+                {mat.name}
+              </h3>
 
-            <!-- Specs -->
-            <div class="space-y-2 border-t border-white/8 pt-4">
-              <div class="flex justify-between">
-                <span class="text-code-data text-on-surface-variant">Temp. máx.</span>
-                <span class="text-code-data text-on-surface font-medium">{mat.tempMax}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-code-data text-on-surface-variant">Flexibilidade</span>
-                <span class="text-code-data text-on-surface font-medium">{mat.flex}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-code-data text-on-surface-variant">Aplicação</span>
-                <span class="text-code-data text-primary-container font-medium text-right max-w-[60%]">{mat.app}</span>
-              </div>
-            </div>
-          </div>
+              <dl class="space-y-2 border-t border-white/12 pt-4">
+                <div class="flex justify-between">
+                  <dt class="text-code-data text-on-surface-variant">Temp. máx.</dt>
+                  <dd class="text-code-data text-on-surface font-medium">{mat.tempMax}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-code-data text-on-surface-variant">Flexibilidade</dt>
+                  <dd class="text-code-data text-on-surface font-medium">{mat.flex}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-code-data text-on-surface-variant">Aplicação</dt>
+                  <dd class="text-code-data text-primary-container font-medium text-right max-w-[60%]">{mat.app}</dd>
+                </div>
+              </dl>
+            </article>
+          </li>
         ))}
+      </ul>
+
+      <div id="mat-empty" hidden class="mt-12 text-center glass-panel rounded-sm p-12 border border-white/10">
+        <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-4 inline-block" aria-hidden="true">science</span>
+        <p class="text-body-lg text-on-surface mb-2">Nenhum material encontrado nesta categoria</p>
+        <p class="text-body-md text-tertiary mb-6">Trabalhamos sob demanda — consulte se podemos importar ou processar o material que você precisa.</p>
+        <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+          Consultar material específico
+          <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- Destaque Metal -->
-  <section class="bg-surface-low py-section border-y border-white/5">
+  <section class="bg-surface-low py-section border-y border-white/8" aria-labelledby="dest-metal">
     <div class="max-w-[1600px] mx-auto px-edge">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Destaque // Metal</span>
-          <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">BASF Ultrafuse 316L</h2>
+          <h2 id="dest-metal" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">BASF Ultrafuse 316L</h2>
           <p class="text-body-lg text-tertiary leading-relaxed mb-6">
-            Aço inoxidável 316L impresso em camadas. O filamento metálico é depositado em FDM e, após processo de sinterização em forno industrial, atinge as propriedades mecânicas do metal sólido. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas.
+            Aço inoxidável 316L impresso em camadas. O filamento metálico é depositado em FDM e, após processo de sinterização em forno industrial, atinge as propriedades mecânicas do metal sólido. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas — densidade superior a 95% do aço maciço, atendendo norma ASTM 316L.
           </p>
-          <div class="grid grid-cols-2 gap-4 mb-8">
+          <dl class="grid grid-cols-2 gap-4 mb-8">
             {[
-              {label:'Temperatura',value:'800°C+'},
-              {label:'Densidade',value:'>95% do aço'},
-              {label:'Norma',value:'316L ASTM'},
-              {label:'Prazo',value:'15–20 dias'},
-            ].map(d => (
+              { label: 'Temperatura', value: '800°C+' },
+              { label: 'Densidade',   value: '>95% do aço' },
+              { label: 'Norma',       value: '316L ASTM' },
+              { label: 'Prazo',       value: '15–20 dias' },
+            ].map((d) => (
               <div class="glass-panel p-4 rounded-sm">
-                <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-1">{d.label}</span>
-                <span class="text-body-md text-primary-container font-semibold">{d.value}</span>
+                <dt class="text-label-caps text-on-surface-variant uppercase tracking-widest mb-1">{d.label}</dt>
+                <dd class="text-body-md text-primary-container font-semibold">{d.value}</dd>
               </div>
             ))}
-          </div>
+          </dl>
           <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
-            Solicitar Orçamento em Metal
+            Solicitar orçamento de peça em metal 316L
           </a>
         </div>
-        <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/5">
-          <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
-          <div class="absolute inset-0" style="background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 70%);"></div>
+        <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/8">
+          <div class="absolute inset-0 bg-tech-grid opacity-40" aria-hidden="true"></div>
+          <div class="absolute inset-0" aria-hidden="true" style="background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 70%);"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="text-center">
-              <span class="text-[72px] font-black text-white/[0.04] leading-none tracking-tighter block">316L</span>
-              <span class="text-label-caps text-primary-container/50 uppercase tracking-[0.3em] text-[10px]">Aço Inox // Sinterizado</span>
+              <span class="text-[72px] font-black text-white/[0.06] leading-none tracking-tighter block" aria-hidden="true">316L</span>
+              <span class="text-label-caps text-primary-container uppercase tracking-[0.3em] text-[10px]">Aço Inox // Sinterizado</span>
             </div>
           </div>
           <div class="absolute bottom-4 left-4 right-4 text-code-data text-on-surface-variant text-[10px] flex justify-between">
@@ -173,13 +216,13 @@ const materials = [
   </section>
 
   <!-- CTA -->
-  <section class="bg-background border-t border-primary-container/20 py-section">
+  <section class="bg-background border-t border-primary-container/20 py-section" aria-labelledby="cta-mat">
     <div class="max-w-[1600px] mx-auto px-edge text-center">
-      <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Não sabe qual material usar?</h2>
+      <h2 id="cta-mat" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Não sabe qual material usar?</h2>
       <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Nossa equipe técnica indica o material ideal para cada aplicação, temperatura, carga e custo.</p>
       <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
-        Falar com Especialista
-        <span class="material-symbols-outlined text-base">arrow_forward</span>
+        Falar com especialista em materiais
+        <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
       </a>
     </div>
   </section>
@@ -188,39 +231,68 @@ const materials = [
 </Base>
 
 <script>
-  const filterBtns = document.querySelectorAll<HTMLElement>('.mat-filter')
-  const cards = document.querySelectorAll<HTMLElement>('[data-cat]')
+  const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('#materiais-filter [role="radio"]'))
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-cat]'))
+  const counter = document.getElementById('mat-count')
+  const emptyEl = document.getElementById('mat-empty')
 
-  const ACTIVE   = 'bg-primary-container border-primary-container text-on-primary glow-effect'
-  const INACTIVE = 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
+  const ACTIVE = 'bg-primary-container border-primary-container text-on-primary glow-effect'
+  const INACTIVE = 'border-white/30 text-on-surface-variant hover:border-primary-container hover:text-primary-container'
 
-  function setFilter(btn: HTMLElement) {
+  function setFilter(btn: HTMLButtonElement) {
     const filter = btn.dataset.filter ?? 'all'
-
-    filterBtns.forEach(b => {
-      ACTIVE.split(' ').forEach(c => b.classList.remove(c))
-      INACTIVE.split(' ').forEach(c => b.classList.add(c))
+    filterBtns.forEach((b) => {
+      const active = b === btn
+      b.setAttribute('aria-checked', active ? 'true' : 'false')
+      b.tabIndex = active ? 0 : -1
+      ACTIVE.split(' ').forEach((c) => b.classList.toggle(c, active))
+      INACTIVE.split(' ').forEach((c) => b.classList.toggle(c, !active))
     })
-    INACTIVE.split(' ').forEach(c => btn.classList.remove(c))
-    ACTIVE.split(' ').forEach(c => btn.classList.add(c))
 
-    cards.forEach(card => {
+    let visible = 0
+    cards.forEach((card) => {
+      const li = card.parentElement!
       const show = filter === 'all' || card.dataset.cat === filter
       if (show) {
-        card.style.display = ''
+        li.style.display = ''
         card.style.opacity = '0'
         requestAnimationFrame(() => {
           card.style.transition = 'opacity 0.3s ease'
           card.style.opacity = '1'
         })
+        visible++
       } else {
         card.style.opacity = '0'
         card.style.transition = 'opacity 0.2s ease'
-        setTimeout(() => { card.style.display = 'none' }, 200)
+        setTimeout(() => { li.style.display = 'none' }, 200)
       }
     })
+
+    if (counter) {
+      counter.textContent = filter === 'all'
+        ? `Exibindo ${visible} materiais`
+        : `Exibindo ${visible} material${visible === 1 ? '' : 'is'} em ${filter}`
+    }
+    if (emptyEl) {
+      if (visible === 0) emptyEl.removeAttribute('hidden')
+      else emptyEl.setAttribute('hidden', '')
+    }
   }
 
-  filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
-
+  filterBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => { setFilter(btn); btn.focus() })
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        const next = filterBtns[(i + 1) % filterBtns.length]
+        setFilter(next)
+        next.focus()
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const prev = filterBtns[(i - 1 + filterBtns.length) % filterBtns.length]
+        setFilter(prev)
+        prev.focus()
+      }
+    })
+  })
 </script>

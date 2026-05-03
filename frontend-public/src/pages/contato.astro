@@ -2,140 +2,288 @@
 import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
+import Breadcrumb from '../components/Breadcrumb.astro'
+import { COMPANY } from '../lib/company'
+
+const description = 'Solicite orçamento de impressão 3D na AUMAF 3D. Envie seu arquivo .STL, .STEP ou descreva o projeto e receba retorno em até 24 horas. São Carlos – SP.'
+
+const projectTypes = [
+  'Prototipagem',
+  'Peça Funcional',
+  'Metal',
+  'Modelagem 3D',
+  'Engenharia Reversa',
+  'Outro',
+]
+
+const infoCards = [
+  {
+    icon: 'location_on',
+    label: 'Endereço',
+    value: `${COMPANY.address.streetAddress}\n${COMPANY.address.neighborhood}\n${COMPANY.address.addressLocality} – ${COMPANY.address.addressRegion}`,
+  },
+  {
+    icon: 'phone',
+    label: 'WhatsApp',
+    value: COMPANY.contact.phoneDisplay,
+    href: COMPANY.contact.whatsapp,
+    external: true,
+    ariaLabel: `Falar pelo WhatsApp: ${COMPANY.contact.phoneDisplay} (abre em nova aba)`,
+  },
+  {
+    icon: 'mail',
+    label: 'Email',
+    value: COMPANY.contact.email,
+    href: `mailto:${COMPANY.contact.email}`,
+  },
+  {
+    icon: 'schedule',
+    label: 'Horário',
+    value: COMPANY.hours.displayPt,
+  },
+]
 ---
 
-<Base title="Contato" description="Inicie seu projeto com a AUMAF 3D. Envie seu arquivo 3D e receba orçamento em até 24 horas. São Carlos – SP.">
+<Base
+  title="Contato — Solicitar Orçamento"
+  description={description}
+  pageType="ContactPage"
+  breadcrumb={[{ name: 'Contato', url: '/contato' }]}
+>
   <Navbar currentPath="/contato" />
 
-  <!-- Hero dark: headline esquerda + form direita (coffee-tech Contato) -->
-  <section class="min-h-screen bg-background pt-28 pb-20 relative overflow-hidden">
-    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 50% 60% at 0% 60%,rgba(97,197,79,0.06) 0%,transparent 55%);"></div>
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 40% 30% at 100% 10%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
+  <!-- Hero dark: headline esquerda + form direita -->
+  <section class="min-h-screen bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-contato">
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 60% at 0% 60%,rgba(97,197,79,0.06) 0%,transparent 55%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 40% 30% at 100% 10%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'Contato' }]} compact />
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
         <!-- Esquerda: headline + info -->
-        <div class="pt-8">
+        <div class="pt-2">
           <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-6">Iniciar Projeto</span>
-          <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-8">
-            Inicie Seu<br/>Projeto<br/><span class="text-gradient-glow">Agora.</span>
+          <h1 id="hero-contato" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-8">
+            Solicite seu<br/>Orçamento<br/><span class="text-gradient-glow">em 24h.</span>
           </h1>
           <p class="text-body-lg text-tertiary leading-relaxed max-w-sm mb-12">
             Nossa equipe analisa seu arquivo em até 24 horas e retorna com orçamento detalhado, prazo definido e indicação do melhor material para sua aplicação.
           </p>
 
           <!-- Info cards -->
-          <div class="space-y-4">
-            {[
-              {icon:'location_on',label:'Endereço',value:'Alameda Sinlioku Tanaka 202\nParque Tecnológico Damha II\nSão Carlos – SP'},
-              {icon:'phone',label:'WhatsApp',value:'(16) 99286-3412',href:'https://wa.me/5516992863412'},
-              {icon:'mail',label:'Email',value:'comercial@auma3d.com.br',href:'mailto:comercial@auma3d.com.br'},
-              {icon:'schedule',label:'Horário',value:'Segunda – Sexta, 08h–18h'},
-            ].map(info => (
-              <div class="flex items-start gap-4 p-5 glass-panel rounded-sm group hover:border-primary-container/20 transition-all duration-300">
-                <span class="material-symbols-outlined text-primary-container text-xl mt-0.5" style="font-variation-settings:'FILL' 1;">{info.icon}</span>
+          <address class="not-italic space-y-4">
+            {infoCards.map((info) => (
+              <div class="flex items-start gap-4 p-5 glass-panel rounded-sm group hover:border-primary-container/30 transition-all duration-300">
+                <span class="material-symbols-outlined text-primary-container text-xl mt-0.5 flex-shrink-0" aria-hidden="true" style="font-variation-settings:'FILL' 1;">{info.icon}</span>
                 <div>
                   <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-1">{info.label}</span>
-                  {info.href
-                    ? <a href={info.href} class="text-body-md text-on-surface hover:text-primary-container transition-colors" target={info.href.startsWith('https') ? '_blank' : undefined}>{info.value}</a>
-                    : <p class="text-body-md text-on-surface whitespace-pre-line">{info.value}</p>
-                  }
+                  {info.href ? (
+                    <a
+                      href={info.href}
+                      target={info.external ? '_blank' : undefined}
+                      rel={info.external ? 'noopener noreferrer' : undefined}
+                      aria-label={info.ariaLabel ?? undefined}
+                      class="text-body-md text-on-surface hover:text-primary-container transition-colors whitespace-pre-line"
+                    >
+                      {info.value}
+                    </a>
+                  ) : (
+                    <p class="text-body-md text-on-surface whitespace-pre-line">{info.value}</p>
+                  )}
                 </div>
               </div>
             ))}
-          </div>
+          </address>
         </div>
 
         <!-- Direita: form -->
         <div class="glass-panel rounded-sm p-8 md:p-10 border border-white/8">
           <div class="flex items-center gap-3 mb-8 pb-6 border-b border-white/8">
-            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
+            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect" aria-hidden="true"></span>
             <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Formulário de Projeto</span>
           </div>
 
-          <form id="contact-form" class="space-y-8" novalidate>
-            <!-- Nome + Sobrenome -->
-            <div class="grid grid-cols-2 gap-6">
+          <form id="contact-form" class="space-y-8" novalidate aria-describedby="form-help">
+            <p id="form-help" class="sr-only">Campos marcados com asterisco são obrigatórios.</p>
+
+            <!-- Grupo: Dados do Solicitante -->
+            <fieldset class="space-y-6 border-0 p-0 m-0">
+              <legend class="sr-only">Seus dados</legend>
+
+              <!-- Nome + Sobrenome -->
+              <div class="grid grid-cols-2 gap-6">
+                <div>
+                  <label for="nome" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                    Nome <span aria-hidden="true" class="text-primary-container">*</span>
+                    <span class="sr-only">(obrigatório)</span>
+                  </label>
+                  <input
+                    id="nome"
+                    name="nome"
+                    type="text"
+                    required
+                    autocomplete="given-name"
+                    placeholder="João"
+                    aria-describedby="nome-error"
+                    aria-invalid="false"
+                    class="input-underline"
+                  />
+                  <p id="nome-error" role="alert" class="text-error-container text-xs mt-1 hidden"></p>
+                </div>
+                <div>
+                  <label for="sobrenome" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                    Sobrenome <span aria-hidden="true" class="text-primary-container">*</span>
+                    <span class="sr-only">(obrigatório)</span>
+                  </label>
+                  <input
+                    id="sobrenome"
+                    name="sobrenome"
+                    type="text"
+                    required
+                    autocomplete="family-name"
+                    placeholder="Silva"
+                    aria-describedby="sobrenome-error"
+                    aria-invalid="false"
+                    class="input-underline"
+                  />
+                  <p id="sobrenome-error" role="alert" class="text-error-container text-xs mt-1 hidden"></p>
+                </div>
+              </div>
+
+              <!-- Email + Telefone -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="email" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                    Email <span aria-hidden="true" class="text-primary-container">*</span>
+                    <span class="sr-only">(obrigatório)</span>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    inputmode="email"
+                    placeholder="joao@empresa.com"
+                    aria-describedby="email-hint email-error"
+                    aria-invalid="false"
+                    class="input-underline"
+                  />
+                  <p id="email-hint" class="sr-only">Usaremos para retornar com o orçamento.</p>
+                  <p id="email-error" role="alert" class="text-error-container text-xs mt-1 hidden"></p>
+                </div>
+                <div>
+                  <label for="telefone" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                    Telefone / WhatsApp
+                  </label>
+                  <input
+                    id="telefone"
+                    name="telefone"
+                    type="tel"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    placeholder="(16) 99999-9999"
+                    class="input-underline"
+                  />
+                </div>
+              </div>
+
+              <!-- Empresa -->
               <div>
-                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Nome</label>
-                <input type="text" name="nome" required placeholder="João" class="input-underline" />
+                <label for="empresa" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                  Empresa
+                </label>
+                <input
+                  id="empresa"
+                  name="empresa"
+                  type="text"
+                  autocomplete="organization"
+                  placeholder="Nome da empresa (opcional)"
+                  class="input-underline"
+                />
               </div>
+            </fieldset>
+
+            <!-- Grupo: Sobre o Projeto -->
+            <fieldset class="space-y-6 border-0 p-0 m-0">
+              <legend class="sr-only">Sobre o projeto</legend>
+
+              <!-- Tipo de projeto (radiogroup) -->
               <div>
-                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Sobrenome</label>
-                <input type="text" name="sobrenome" required placeholder="Silva" class="input-underline" />
+                <span id="tipo-label" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                  Tipo de Projeto
+                </span>
+                <div class="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="tipo-label" id="subject-pills">
+                  {projectTypes.map((s, i) => (
+                    <button
+                      type="button"
+                      role="radio"
+                      data-value={s}
+                      aria-checked={i === 0 ? 'true' : 'false'}
+                      tabindex={i === 0 ? '0' : '-1'}
+                      class:list={['pill transition-all duration-200 hover:border-primary-container/70 cursor-pointer', i === 0 ? 'pill-active' : '']}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+                <input type="hidden" name="assunto" value={projectTypes[0]} id="assunto-hidden" />
               </div>
-            </div>
 
-            <!-- Email + Telefone -->
-            <div class="grid grid-cols-2 gap-6">
+              <!-- Mensagem -->
               <div>
-                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Email</label>
-                <input type="email" name="email" required placeholder="joao@empresa.com" class="input-underline" />
+                <label for="mensagem" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                  Descreva o Projeto <span aria-hidden="true" class="text-primary-container">*</span>
+                  <span class="sr-only">(obrigatório)</span>
+                </label>
+                <textarea
+                  id="mensagem"
+                  name="mensagem"
+                  rows="4"
+                  required
+                  placeholder="Descreva a peça, material desejado, quantidade e prazo..."
+                  aria-describedby="mensagem-error"
+                  aria-invalid="false"
+                  class="input-underline resize-none w-full"
+                ></textarea>
+                <p id="mensagem-error" role="alert" class="text-error-container text-xs mt-1 hidden"></p>
               </div>
+
+              <!-- Upload de arquivo -->
               <div>
-                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Telefone / WhatsApp</label>
-                <input type="tel" name="telefone" placeholder="(16) 99999-9999" class="input-underline" />
+                <label for="file-input" class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">
+                  Arquivo do Projeto (opcional)
+                </label>
+                <div
+                  id="drop-zone"
+                  class="relative border border-dashed border-white/30 rounded-sm p-8 text-center hover:border-primary-container/60 focus-within:border-primary-container transition-all duration-300 cursor-pointer group"
+                >
+                  <span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary-container transition-colors block mb-3" aria-hidden="true">upload_file</span>
+                  <p class="text-body-md text-on-surface mb-1">Arraste ou clique para fazer upload</p>
+                  <p class="text-code-data text-tertiary">.STL .OBJ .STEP .PDF .DXF — máx. 15MB</p>
+                  <input
+                    id="file-input"
+                    type="file"
+                    name="arquivo"
+                    accept=".stl,.obj,.step,.stp,.pdf,.dxf"
+                    aria-describedby="file-name"
+                    class="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+                <p id="file-name" aria-live="polite" class="text-code-data text-primary-container mt-2 hidden"></p>
               </div>
-            </div>
-
-            <!-- Empresa -->
-            <div>
-              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Empresa</label>
-              <input type="text" name="empresa" placeholder="Nome da empresa (opcional)" class="input-underline" />
-            </div>
-
-            <!-- Assunto -->
-            <div>
-              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Tipo de Projeto</label>
-              <div class="flex flex-wrap gap-2" id="subject-pills">
-                {['Prototipagem','Peça Funcional','Metal','Modelagem 3D','Engenharia Reversa','Outro'].map((s, i) => (
-                  <button
-                    type="button"
-                    data-value={s}
-                    class:list={['pill transition-all duration-200 hover:border-primary-container/70 cursor-pointer', i === 0 ? 'pill-active' : '']}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-              <input type="hidden" name="assunto" value="Prototipagem" id="assunto-hidden" />
-            </div>
-
-            <!-- Mensagem -->
-            <div>
-              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Descreva o Projeto</label>
-              <textarea
-                name="mensagem"
-                rows="4"
-                placeholder="Descreva a peça, material desejado, quantidade e prazo..."
-                class="input-underline resize-none w-full"
-              ></textarea>
-            </div>
-
-            <!-- Upload de arquivo -->
-            <div>
-              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Arquivo do Projeto (opcional)</label>
-              <div
-                id="drop-zone"
-                class="border border-dashed border-white/20 rounded-sm p-8 text-center hover:border-primary-container/50 transition-all duration-300 cursor-pointer group"
-              >
-                <span class="material-symbols-outlined text-3xl text-white/30 group-hover:text-primary-container transition-colors block mb-3">upload_file</span>
-                <p class="text-body-md text-on-surface-variant mb-1">Arraste ou clique para fazer upload</p>
-                <p class="text-code-data text-tertiary">.STL .OBJ .STEP .PDF .DXF — máx. 15MB</p>
-                <input type="file" id="file-input" name="arquivo" accept=".stl,.obj,.step,.stp,.pdf,.dxf" class="hidden" />
-              </div>
-              <p id="file-name" class="text-code-data text-primary-container mt-2 hidden"></p>
-            </div>
+            </fieldset>
 
             <!-- Submit -->
             <button
-              type="submit"
               id="submit-btn"
+              type="submit"
+              aria-busy="false"
               class="w-full inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <span id="submit-icon" class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
+              <span id="submit-icon" class="material-symbols-outlined text-base" aria-hidden="true" style="font-variation-settings:'FILL' 1;">send</span>
               <span id="submit-text">Enviar Projeto</span>
             </button>
 
@@ -143,15 +291,21 @@ import Footer from '../components/Footer.astro'
           </form>
 
           <!-- Success state -->
-          <div id="form-success" class="hidden text-center py-12">
+          <div id="form-success" tabindex="-1" class="hidden text-center py-12 outline-none" role="status" aria-live="polite">
             <div class="w-16 h-16 rounded-full bg-primary-container/15 border border-primary-container/30 flex items-center justify-center mx-auto mb-6">
-              <span class="material-symbols-outlined text-primary-container text-3xl" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              <span class="material-symbols-outlined text-primary-container text-3xl" aria-hidden="true" style="font-variation-settings:'FILL' 1;">check_circle</span>
             </div>
-            <h3 class="text-headline-md font-bold uppercase text-white mb-3">Projeto Recebido!</h3>
+            <h2 class="text-headline-md font-bold uppercase text-white mb-3">Projeto Recebido!</h2>
             <p class="text-body-md text-tertiary leading-relaxed max-w-xs mx-auto">Nossa equipe entrará em contato em até 24 horas úteis com orçamento detalhado.</p>
-            <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="mt-8 inline-flex items-center gap-2 border border-[#25D366]/40 text-[#25D366] text-label-caps uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 text-[11px]">
+            <a
+              href={COMPANY.contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Acompanhar o pedido pelo WhatsApp (abre em nova aba)"
+              class="mt-8 inline-flex items-center gap-2 border border-[#25D366]/40 text-[#25D366] text-label-caps uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 text-[11px]"
+            >
               Acompanhar pelo WhatsApp
-              <span class="material-symbols-outlined text-sm">open_in_new</span>
+              <span class="material-symbols-outlined text-sm" aria-hidden="true">open_in_new</span>
             </a>
           </div>
         </div>
@@ -160,12 +314,15 @@ import Footer from '../components/Footer.astro'
   </section>
 
   <!-- WhatsApp direto -->
-  <section class="bg-surface-low py-16 border-t border-white/5">
+  <section class="bg-surface-low py-16 border-t border-white/5" aria-labelledby="whatsapp-direto">
+    <h2 id="whatsapp-direto" class="sr-only">Contato direto pelo WhatsApp</h2>
     <div class="max-w-[1600px] mx-auto px-edge">
       <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-sm bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-center">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true" focusable="false">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
           </div>
           <div>
             <p class="text-body-md font-semibold text-white">Prefere pelo WhatsApp?</p>
@@ -173,13 +330,14 @@ import Footer from '../components/Footer.astro'
           </div>
         </div>
         <a
-          href="https://wa.me/5516992863412?text=Olá! Gostaria de solicitar um orçamento para impressão 3D."
+          href={`${COMPANY.contact.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de solicitar um orçamento para impressão 3D.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 border border-[#25D366]/30 text-[#25D366] text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 whitespace-nowrap"
+          aria-label="Abrir conversa no WhatsApp da AUMAF 3D (abre em nova aba)"
+          class="inline-flex items-center gap-2 border border-[#25D366]/40 text-[#25D366] text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 whitespace-nowrap"
         >
           Abrir WhatsApp
-          <span class="material-symbols-outlined text-base">open_in_new</span>
+          <span class="material-symbols-outlined text-base" aria-hidden="true">open_in_new</span>
         </a>
       </div>
     </div>
@@ -189,76 +347,140 @@ import Footer from '../components/Footer.astro'
 </Base>
 
 <script>
-  // Subject pill selector
-  const pills = document.querySelectorAll('#subject-pills button')
-  const hiddenInput = document.getElementById('assunto-hidden') as HTMLInputElement
+  // ── Tipo de Projeto: radiogroup acessível ──────────────────
+  const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('#subject-pills [role="radio"]'))
+  const hiddenInput = document.getElementById('assunto-hidden') as HTMLInputElement | null
 
-  pills.forEach(pill => {
+  function selectPill(pill: HTMLButtonElement) {
+    pills.forEach((p) => {
+      const active = p === pill
+      p.setAttribute('aria-checked', active ? 'true' : 'false')
+      p.tabIndex = active ? 0 : -1
+      p.classList.toggle('pill-active', active)
+    })
+    if (hiddenInput) hiddenInput.value = pill.dataset.value || ''
+  }
+
+  pills.forEach((pill, i) => {
     pill.addEventListener('click', () => {
-      pills.forEach(p => {
-        p.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
-        p.classList.add('border-white/20', 'text-on-surface-variant')
-      })
-      pill.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
-      pill.classList.remove('border-white/20', 'text-on-surface-variant')
-      if (hiddenInput) hiddenInput.value = (pill as HTMLButtonElement).dataset.value || ''
+      selectPill(pill)
+      pill.focus()
+    })
+    pill.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        const next = pills[(i + 1) % pills.length]
+        selectPill(next)
+        next.focus()
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const prev = pills[(i - 1 + pills.length) % pills.length]
+        selectPill(prev)
+        prev.focus()
+      } else if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault()
+        selectPill(pill)
+      }
     })
   })
 
-  // Form submission with loading + success states
-  const form = document.getElementById('contact-form') as HTMLFormElement
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement
+  // ── Validação inline ──────────────────────────────────────
+  const form = document.getElementById('contact-form') as HTMLFormElement | null
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null
   const submitIcon = document.getElementById('submit-icon')
   const submitText = document.getElementById('submit-text')
   const successEl = document.getElementById('form-success')
 
+  function setError(fieldId: string, message: string | null) {
+    const input = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement | null
+    const errorEl = document.getElementById(`${fieldId}-error`)
+    if (!input || !errorEl) return
+    if (message) {
+      input.setAttribute('aria-invalid', 'true')
+      errorEl.textContent = message
+      errorEl.classList.remove('hidden')
+    } else {
+      input.setAttribute('aria-invalid', 'false')
+      errorEl.textContent = ''
+      errorEl.classList.add('hidden')
+    }
+  }
+
+  function validate(): boolean {
+    let ok = true
+    const required = ['nome', 'sobrenome', 'email', 'mensagem'] as const
+    required.forEach((f) => {
+      const input = document.getElementById(f) as HTMLInputElement | HTMLTextAreaElement | null
+      if (!input) return
+      if (!input.value.trim()) {
+        setError(f, 'Campo obrigatório.')
+        ok = false
+      } else if (f === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+        setError(f, 'Email inválido.')
+        ok = false
+      } else {
+        setError(f, null)
+      }
+    })
+    return ok
+  }
+
+  ;['nome', 'sobrenome', 'email', 'mensagem'].forEach((id) => {
+    document.getElementById(id)?.addEventListener('blur', () => {
+      const input = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | null
+      if (input?.getAttribute('aria-invalid') === 'true') {
+        if (input.value.trim()) setError(id, null)
+      }
+    })
+  })
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault()
-    if (!submitBtn || !submitIcon || !submitText) return
+    if (!validate() || !submitBtn || !submitIcon || !submitText) return
 
     submitBtn.disabled = true
+    submitBtn.setAttribute('aria-busy', 'true')
     submitIcon.textContent = 'hourglass_top'
     submitText.textContent = 'Enviando...'
 
-    await new Promise(r => setTimeout(r, 1200))
+    // TODO: chamar API real do backoffice quando estiver pronto.
+    await new Promise((r) => setTimeout(r, 1200))
 
     form.style.display = 'none'
-    if (successEl) successEl.classList.remove('hidden')
+    if (successEl) {
+      successEl.classList.remove('hidden')
+      ;(successEl as HTMLElement).focus()
+    }
   })
 
-  // File drop zone
+  // ── File drop zone ────────────────────────────────────────
   const dropZone = document.getElementById('drop-zone')
-  const fileInput = document.getElementById('file-input') as HTMLInputElement
+  const fileInput = document.getElementById('file-input') as HTMLInputElement | null
   const fileName = document.getElementById('file-name')
-
-  dropZone?.addEventListener('click', () => fileInput?.click())
 
   dropZone?.addEventListener('dragover', (e) => {
     e.preventDefault()
-    dropZone.classList.add('border-primary-container/50')
+    dropZone.classList.add('border-primary-container/70')
   })
-
   dropZone?.addEventListener('dragleave', () => {
-    dropZone.classList.remove('border-primary-container/50')
+    dropZone.classList.remove('border-primary-container/70')
   })
-
   dropZone?.addEventListener('drop', (e) => {
     e.preventDefault()
-    dropZone.classList.remove('border-primary-container/50')
+    dropZone.classList.remove('border-primary-container/70')
     const files = (e as DragEvent).dataTransfer?.files
     if (files?.length && fileInput) {
       fileInput.files = files
       showFileName(files[0].name)
     }
   })
-
   fileInput?.addEventListener('change', () => {
     if (fileInput.files?.[0]) showFileName(fileInput.files[0].name)
   })
 
   function showFileName(name: string) {
     if (fileName) {
-      fileName.textContent = `✓ ${name}`
+      fileName.textContent = `Arquivo selecionado: ${name}`
       fileName.classList.remove('hidden')
     }
   }

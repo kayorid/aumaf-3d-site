@@ -23,6 +23,18 @@
     overflow-x: clip; /* clip não cria BFC, não quebra position:sticky */
   }
 
+  /* Foco visível global — anel verde com offset, contraste >= 3:1 */
+  :focus-visible {
+    outline: 2px solid #61c54f;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Garante que o <main> com tabindex=-1 não mostre outline em foco programático */
+  main:focus {
+    outline: none;
+  }
+
   ::selection {
     @apply bg-primary-container text-on-primary;
   }
@@ -94,8 +106,8 @@
 
   /* Underline inputs (contact form) */
   .input-underline {
-    @apply w-full bg-transparent border-0 border-b border-white/20 pb-3 pt-2
-           text-on-surface placeholder:text-white/25 placeholder:uppercase placeholder:tracking-widest
+    @apply w-full bg-transparent border-0 border-b border-white/30 pb-3 pt-2
+           text-on-surface placeholder:text-on-surface-variant placeholder:uppercase placeholder:tracking-widest
            placeholder:text-xs focus:outline-none focus:border-primary-container
            transition-colors duration-300;
   }
@@ -532,4 +544,24 @@
 @keyframes chevronFade {
   0%, 100% { opacity: 0.2; }
   50%       { opacity: 0.8; }
+}
+
+/* ─────────────────────────────────────────────────
+   Acessibilidade — prefers-reduced-motion
+   Pausa todas as animações infinitas e reduz transições
+   para usuários com sensibilidade vestibular.
+   ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
