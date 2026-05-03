@@ -22,12 +22,16 @@ async function main() {
     throw new Error('ADMIN_EMAIL e ADMIN_PASSWORD são obrigatórios no .env')
   }
 
+  const hash = await bcrypt.hash(adminPassword, 12)
   const existing = await prisma.user.findUnique({ where: { email: adminEmail } })
 
   if (existing) {
-    console.log(`✅ Admin já existe: ${adminEmail}`)
+    await prisma.user.update({
+      where: { email: adminEmail },
+      data: { password: hash, name: adminName, role: 'ADMIN', active: true },
+    })
+    console.log(`✅ Admin atualizado: ${adminEmail} (senha sincronizada do .env)`)
   } else {
-    const hash = await bcrypt.hash(adminPassword, 12)
     await prisma.user.create({
       data: {
         email: adminEmail,

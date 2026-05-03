@@ -5,21 +5,26 @@ import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap font-bold uppercase tracking-[0.15em] transition-all duration-200 focus-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        primary: 'bg-primary-500 text-background hover:bg-primary-400',
-        secondary: 'bg-surface-200 text-text-primary border border-border hover:bg-surface-300',
-        ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-200',
-        danger: 'bg-danger-500 text-white hover:bg-danger-600',
-        outline: 'border border-border-strong text-text-primary hover:bg-surface-200',
+        primary:
+          'bg-primary-container text-on-primary glow-effect hover:bg-primary-dim hover:shadow-glow-lg',
+        secondary:
+          'bg-transparent text-on-surface border border-white/20 hover:border-primary-container/50 hover:text-primary-container',
+        ghost:
+          'text-on-surface-variant hover:text-on-surface hover:bg-surface-base normal-case tracking-normal font-medium',
+        danger:
+          'bg-transparent text-error border border-error/30 hover:border-error/60 hover:bg-error/5',
+        outline:
+          'border border-white/20 text-on-surface hover:border-primary-container/50 hover:text-primary-container',
       },
       size: {
-        sm: 'h-8 rounded-md px-3 text-xs',
-        md: 'h-10 rounded-md px-4 text-sm',
-        lg: 'h-12 rounded-lg px-6 text-base',
-        icon: 'h-9 w-9 rounded-md',
+        sm: 'h-8 rounded-sm px-3 text-[10px] tracking-[0.2em]',
+        md: 'h-10 rounded-sm px-5 text-[11px]',
+        lg: 'h-12 rounded-sm px-7 text-[12px]',
+        icon: 'h-9 w-9 rounded-sm tracking-normal',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },

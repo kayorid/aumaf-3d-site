@@ -8,7 +8,6 @@ import { usePosts, useDeletePost } from '../api/use-posts'
 import { PostStatusBadge } from '../components/PostStatusBadge'
 import { PostFilters } from '../components/PostFilters'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import type { PostListQuery } from '@aumaf/shared'
 
 export function PostsListPage() {
@@ -28,35 +27,45 @@ export function PostsListPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-8 animate-fade-in max-w-[1400px]">
       <header className="flex items-end justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-semibold text-text-primary">Posts</h1>
-          <p className="text-sm text-text-secondary mt-1">
-            Gestão de conteúdo do blog — rascunhos, publicados e gerados por IA.
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary-container">
+              / 02
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant">
+              Conteúdo
+            </span>
+          </div>
+          <h1 className="text-[clamp(28px,3vw,40px)] font-bold text-white uppercase leading-none tracking-[-0.03em]">
+            Posts <span className="text-gradient-green">do blog.</span>
+          </h1>
+          <p className="text-[13px] text-on-surface-variant max-w-md leading-relaxed">
+            Rascunhos, publicados e gerados por IA — gestão completa.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild size="md">
           <Link to="/posts/new">
-            <Plus className="size-4" />
+            <Plus className="size-3.5" />
             Novo post
           </Link>
         </Button>
       </header>
 
-      <Card>
+      <div className="bg-surface-low/60 border border-white/10 rounded-sm p-4">
         <PostFilters value={query} onChange={setQuery} />
-      </Card>
+      </div>
 
-      <Card className="p-0 overflow-hidden">
+      <div className="bg-surface-low/60 border border-white/10 rounded-sm overflow-hidden">
         {isError && (
-          <div className="p-6 text-sm text-danger-400">Erro: {(error as Error).message}</div>
+          <div className="p-6 text-sm text-error">Erro: {(error as Error).message}</div>
         )}
 
         {isLoading ? (
           <div className="p-6 space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-12 rounded bg-surface-200 animate-pulse" />
+              <div key={i} className="h-12 bg-white/5 animate-pulse" />
             ))}
           </div>
         ) : data?.data.length === 0 ? (
@@ -64,45 +73,45 @@ export function PostsListPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b border-border bg-surface-50">
-                <tr className="text-text-tertiary text-xs uppercase tracking-wider font-mono">
-                  <th className="text-left px-6 py-3 font-medium">Título</th>
-                  <th className="text-left px-6 py-3 font-medium hidden md:table-cell">Status</th>
-                  <th className="text-left px-6 py-3 font-medium hidden lg:table-cell">Categoria</th>
-                  <th className="text-left px-6 py-3 font-medium hidden xl:table-cell">
+              <thead className="border-b border-white/10 bg-surface-dim/50">
+                <tr className="text-on-surface-variant/70 text-[10px] uppercase tracking-[0.2em] font-bold">
+                  <th className="text-left px-6 py-3">Título</th>
+                  <th className="text-left px-6 py-3 hidden md:table-cell">Status</th>
+                  <th className="text-left px-6 py-3 hidden lg:table-cell">Categoria</th>
+                  <th className="text-left px-6 py-3 hidden xl:table-cell">
                     Atualizado
                   </th>
-                  <th className="text-right px-6 py-3 font-medium w-32">Ações</th>
+                  <th className="text-right px-6 py-3 w-32">Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.data.map((post) => (
                   <tr
                     key={post.id}
-                    className="border-b border-border last:border-b-0 hover:bg-surface-100 cursor-pointer transition-colors"
+                    className="border-b border-white/8 last:border-b-0 hover:bg-white/3 cursor-pointer transition-colors"
                     onClick={() => navigate(`/posts/${post.id}`)}
                   >
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-text-primary font-medium">{post.title}</span>
+                        <span className="text-on-surface font-medium">{post.title}</span>
                         {post.generatedByAi && (
                           <Sparkles
-                            className="size-3.5 text-primary-400"
+                            className="size-3 text-primary-container"
                             aria-label="Gerado por IA"
                           />
                         )}
                       </div>
-                      <div className="text-[11px] text-text-tertiary font-mono mt-0.5">
+                      <div className="text-[10px] text-on-surface-variant/60 font-mono mt-0.5 uppercase tracking-[0.15em]">
                         /{post.slug}
                       </div>
                     </td>
                     <td className="px-6 py-3 hidden md:table-cell">
                       <PostStatusBadge status={post.status} />
                     </td>
-                    <td className="px-6 py-3 hidden lg:table-cell text-text-secondary">
+                    <td className="px-6 py-3 hidden lg:table-cell text-on-surface-variant text-[12px]">
                       {post.category?.name ?? '—'}
                     </td>
-                    <td className="px-6 py-3 hidden xl:table-cell text-text-tertiary text-xs font-mono">
+                    <td className="px-6 py-3 hidden xl:table-cell text-on-surface-variant/70 text-[11px] font-mono">
                       {format(new Date(post.updatedAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
                     </td>
                     <td
@@ -117,7 +126,7 @@ export function PostsListPage() {
                           aria-label="Editar"
                         >
                           <Link to={`/posts/${post.id}`}>
-                            <Edit3 className="size-4" />
+                            <Edit3 className="size-3.5" />
                           </Link>
                         </Button>
                         <Button
@@ -126,7 +135,7 @@ export function PostsListPage() {
                           onClick={() => handleDelete(post.id, post.title)}
                           aria-label="Excluir"
                         >
-                          <Trash2 className="size-4 text-danger-400" />
+                          <Trash2 className="size-3.5 text-error" />
                         </Button>
                       </div>
                     </td>
@@ -138,11 +147,11 @@ export function PostsListPage() {
         )}
 
         {data && data.pagination.totalPages > 1 && (
-          <div className="border-t border-border px-6 py-3 flex items-center justify-between">
-            <div className="text-xs text-text-tertiary">
-              {data.pagination.total} {data.pagination.total === 1 ? 'post' : 'posts'} ·{' '}
-              página {data.pagination.page} de {data.pagination.totalPages}
-              {isFetching && ' · atualizando...'}
+          <div className="border-t border-white/10 px-6 py-3 flex items-center justify-between bg-surface-dim/30">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/70 font-mono">
+              {data.pagination.total} {data.pagination.total === 1 ? 'post' : 'posts'} · página{' '}
+              {data.pagination.page} de {data.pagination.totalPages}
+              {isFetching && ' · atualizando'}
             </div>
             <div className="flex gap-2">
               <Button
@@ -164,24 +173,26 @@ export function PostsListPage() {
             </div>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   )
 }
 
 function Empty() {
   return (
-    <div className="flex flex-col items-center text-center py-16 gap-3 px-6">
-      <div className="size-12 rounded-md bg-surface-200 text-text-tertiary flex items-center justify-center">
-        <FileText className="size-6" />
+    <div className="flex flex-col items-center text-center py-16 gap-4 px-6">
+      <div className="size-12 border border-white/15 text-on-surface-variant flex items-center justify-center">
+        <FileText className="size-5" />
       </div>
-      <div className="text-sm font-medium text-text-primary">Nenhum post ainda</div>
-      <div className="text-xs text-text-tertiary max-w-xs">
+      <div className="text-[12px] uppercase tracking-[0.2em] font-bold text-on-surface">
+        Nenhum post ainda
+      </div>
+      <div className="text-[12px] text-on-surface-variant/80 max-w-xs leading-relaxed">
         Crie seu primeiro post manualmente ou use o assistente de IA para gerar um rascunho.
       </div>
       <Button asChild size="sm" className="mt-2">
         <Link to="/posts/new">
-          <Plus className="size-4" />
+          <Plus className="size-3.5" />
           Novo post
         </Link>
       </Button>
