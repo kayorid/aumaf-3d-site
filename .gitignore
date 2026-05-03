@@ -40,3 +40,11 @@ storybook-static/
 
 # Turbo
 .turbo/
+
+# Docs assets — binários grandes e backups
+docs/assets/*.zip
+docs/assets/**/*.zip
+docs/assets/**/*.DS_Store
+docs/assets/**/*.kra
+docs/assets/**/*~
+docs/assets/**/*-autosave.*
