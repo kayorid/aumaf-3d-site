@@ -50,20 +50,17 @@ const excerpt = 'Como a AUMAF 3D entregou 7 componentes críticos para o carro d
   <!-- Cover -->
   <div class="bg-background pb-16">
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
-      <div class="relative h-64 md:h-80 rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/5">
-        <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
-        <div class="absolute inset-0 flex items-center justify-center opacity-10">
-          <svg viewBox="0 0 160 160" fill="none" class="w-48 h-48">
-            <polygon points="80,8 148,44 148,116 80,152 12,116 12,44" stroke="#61c54f" stroke-width="1.5" fill="none"/>
-            <polygon points="80,28 128,56 128,104 80,132 32,104 32,56" stroke="#61c54f" stroke-width="0.5" fill="none"/>
-            <circle cx="80" cy="80" r="24" stroke="#61c54f" stroke-width="1" fill="none"/>
-            <circle cx="80" cy="80" r="4" fill="#61c54f"/>
-          </svg>
-        </div>
+      <div class="relative h-64 md:h-[420px] rounded-sm overflow-hidden border border-white/5">
+        <img
+          src="/images/SAE-formula.avif"
+          alt="Carro Fórmula SAE USP São Carlos 2024 com peças impressas pela AUMAF 3D"
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         <div class="absolute bottom-4 left-4">
           <span class="pill-active">{cat}</span>
         </div>
-        <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest">AUMAF 3D // {date}</div>
+        <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/70 text-[10px] tracking-widest">AUMAF 3D // {date}</div>
       </div>
     </div>
   </div>

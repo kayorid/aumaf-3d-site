@@ -649,6 +649,29 @@ import Footer from '../components/Footer.astro'
 
 
   <!-- =============================================
+       CLIENTES — Logo grid
+       ============================================= -->
+  <section class="bg-surface-low border-y border-white/5 py-14">
+    <div class="max-w-[1600px] mx-auto px-edge">
+      <div class="text-center mb-10">
+        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Empresas que confiam na AUMAF 3D</span>
+      </div>
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-px border border-white/5 rounded-sm overflow-hidden">
+        {[
+          'Fugini','Aulevi','Tatu Marchesan','xmobots','Magnoflux',
+          'LATAM','brain4care','Tecumseh','Sapra Landauer','Piccin',
+          'Hortron','Razek','NSF Instalações','wisecomfort','Novel Tec',
+          'Callamarys',
+        ].map(name => (
+          <div class="bg-surface-base hover:bg-surface-high transition-colors duration-200 flex items-center justify-center px-4 py-6">
+            <span class="text-on-surface-variant hover:text-on-surface transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wider text-center leading-tight">{name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
        DEPOIMENTOS — Carousel
        ============================================= -->
   <section class="bg-background py-section">
