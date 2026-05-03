@@ -6,6 +6,13 @@ export const CreateLeadSchema = z.object({
   phone: z.string().min(8).max(20).optional(),
   message: z.string().max(2000).optional(),
   source: z.string().max(100).optional(),
+  utmSource: z.string().max(200).optional(),
+  utmMedium: z.string().max(200).optional(),
+  utmCampaign: z.string().max(200).optional(),
+  utmTerm: z.string().max(200).optional(),
+  utmContent: z.string().max(200).optional(),
+  referrer: z.string().max(500).optional(),
+  landingPage: z.string().max(500).optional(),
 })
 export type CreateLeadInput = z.infer<typeof CreateLeadSchema>
 
@@ -17,6 +24,14 @@ export const LeadDtoSchema = z.object({
   message: z.string().nullable(),
   source: z.string().nullable(),
   createdAt: z.string(),
+  utmSource: z.string().nullable().optional(),
+  utmMedium: z.string().nullable().optional(),
+  utmCampaign: z.string().nullable().optional(),
+  utmTerm: z.string().nullable().optional(),
+  utmContent: z.string().nullable().optional(),
+  referrer: z.string().nullable().optional(),
+  landingPage: z.string().nullable().optional(),
+  botyoStatus: z.string().nullable().optional(),
 })
 export type LeadDto = z.infer<typeof LeadDtoSchema>
 

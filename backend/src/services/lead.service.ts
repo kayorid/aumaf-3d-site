@@ -2,6 +2,7 @@ import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
 import { maskEmail, maskPhone } from '../lib/mask'
 import { enqueueLeadNotification } from '../workers/lead-notification.worker'
+import { enqueueBotyioLeadSync } from '../workers/botyio-lead-sync.worker'
 import type { CreateLeadInput, LeadDto, LeadMaskedDto } from '@aumaf/shared'
 
 function toDto(lead: Awaited<ReturnType<typeof prisma.lead.findUnique>>): LeadDto {
@@ -14,6 +15,14 @@ function toDto(lead: Awaited<ReturnType<typeof prisma.lead.findUnique>>): LeadDt
     message: lead.message,
     source: lead.source,
     createdAt: lead.createdAt.toISOString(),
+    utmSource: lead.utmSource,
+    utmMedium: lead.utmMedium,
+    utmCampaign: lead.utmCampaign,
+    utmTerm: lead.utmTerm,
+    utmContent: lead.utmContent,
+    referrer: lead.referrer,
+    landingPage: lead.landingPage,
+    botyoStatus: lead.botyoStatus,
   }
 }
 
@@ -36,6 +45,13 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
       phone: input.phone ?? null,
       message: input.message ?? null,
       source: input.source ?? null,
+      utmSource: input.utmSource ?? null,
+      utmMedium: input.utmMedium ?? null,
+      utmCampaign: input.utmCampaign ?? null,
+      utmTerm: input.utmTerm ?? null,
+      utmContent: input.utmContent ?? null,
+      referrer: input.referrer ?? null,
+      landingPage: input.landingPage ?? null,
     },
   })
   logger.info({ leadId: lead.id, source: lead.source }, 'Lead created')
@@ -44,6 +60,12 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
     await enqueueLeadNotification(lead.id)
   } catch (err) {
     logger.error({ err, leadId: lead.id }, 'Failed to enqueue lead notification — lead persisted anyway')
+  }
+
+  try {
+    await enqueueBotyioLeadSync(lead.id)
+  } catch (err) {
+    logger.error({ err, leadId: lead.id }, 'Failed to enqueue Botyio sync — lead persisted anyway')
   }
 
   return toDto(lead)

@@ -348,6 +348,11 @@ const infoCards = [
 </Base>
 
 <script>
+  import { captureUtm, readUtm } from '../lib/utm'
+
+  // Captura UTMs da URL atual e persiste em sessionStorage
+  captureUtm()
+
   // ── Tipo de Projeto: radiogroup acessível ──────────────────
   const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('#subject-pills [role="radio"]'))
   const hiddenInput = document.getElementById('assunto-hidden') as HTMLInputElement | null
@@ -435,6 +440,14 @@ const infoCards = [
     })
   })
 
+  function showGenericError() {
+    const mensagemEl = document.getElementById('mensagem-error')
+    if (mensagemEl) {
+      mensagemEl.textContent = 'Erro ao enviar. Tente novamente ou fale pelo WhatsApp.'
+      mensagemEl.classList.remove('hidden')
+    }
+  }
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault()
     if (!validate() || !submitBtn || !submitIcon || !submitText) return
@@ -444,13 +457,46 @@ const infoCards = [
     submitIcon.textContent = 'hourglass_top'
     submitText.textContent = 'Enviando...'
 
-    // TODO: chamar API real do backoffice quando estiver pronto.
-    await new Promise((r) => setTimeout(r, 1200))
+    const nome = (document.getElementById('nome') as HTMLInputElement).value.trim()
+    const sobrenome = (document.getElementById('sobrenome') as HTMLInputElement).value.trim()
+    const email = (document.getElementById('email') as HTMLInputElement).value.trim()
+    const telefone = (document.getElementById('telefone') as HTMLInputElement).value.trim()
+    const mensagem = (document.getElementById('mensagem') as HTMLTextAreaElement).value.trim()
+    const assunto = hiddenInput?.value ?? ''
+    const utm = readUtm()
 
-    form.style.display = 'none'
-    if (successEl) {
-      successEl.classList.remove('hidden')
-      ;(successEl as HTMLElement).focus()
+    const payload = {
+      name: `${nome} ${sobrenome}`.trim(),
+      email,
+      ...(telefone ? { phone: telefone } : {}),
+      message: mensagem,
+      source: `site-contato${assunto ? `-${assunto.toLowerCase().replace(/\s+/g, '-')}` : ''}`,
+      ...utm,
+    }
+
+    try {
+      const apiUrl = import.meta.env.PUBLIC_API_URL ?? ''
+      const res = await fetch(`${apiUrl}/api/v1/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+
+      form.style.display = 'none'
+      if (successEl) {
+        successEl.classList.remove('hidden')
+        ;(successEl as HTMLElement).focus()
+      }
+    } catch {
+      submitBtn.disabled = false
+      submitBtn.setAttribute('aria-busy', 'false')
+      submitIcon.textContent = 'send'
+      submitText.textContent = 'Enviar Projeto'
+      showGenericError()
     }
   })
 
