@@ -1,9 +1,11 @@
 # Status — q2-blog-backoffice
 
-**Fase atual**: validate (Phase 1 implementada e validada)
-**Iteração**: Phase 1 ✅ entregue · Phase 2 a iniciar
-**Última atualização**: 2026-05-03 12:20
-**Próximo passo concreto**: aguardar feedback do Kayo após teste manual no admin; iniciar Phase 2 (UI de leads, settings, migração `/blog`, BullMQ)
+**Fase atual**: implement (Phase 2 em execução)
+**Iteração**: Phase 1 ✅ entregue · **Phase 2 iniciada 2026-05-03**
+**Branch ativa**: `feat/admin-q2-phase2-migration-blog-dynamic`
+**Última atualização**: 2026-05-03 13:19
+**Próximo passo concreto**: executar Etapa A (migração: schema, endpoints públicos, conversor, seed)
+**Spec da Phase 2**: `./phase-2/{requirements,design,tasks}.md`
 
 ---
 

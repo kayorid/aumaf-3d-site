@@ -2,6 +2,35 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: ['./src/**/*.{astro,html,js,ts,jsx,tsx}'],
+  // === Phase 2 — safelist para classes usadas em conteúdo dinâmico de posts ===
+  // Os 6 posts migrados em P2 usam HTML inline com classes do design system
+  // que precisam sobreviver ao purge do Tailwind (não estão em arquivos .astro
+  // do source, e sim em strings vindas da API).
+  safelist: [
+    // Layout containers
+    'glass-panel', 'pill', 'pill-active', 'pill-green',
+    // Tipografia DS
+    'text-display-xl', 'text-headline-lg', 'text-headline-md',
+    'text-body-lg', 'text-body-md',
+    'text-label-caps', 'text-code-data',
+    // Cores DS — variantes usadas em conteúdo
+    'text-primary-container', 'text-on-surface', 'text-on-surface-variant',
+    'text-tertiary', 'text-white',
+    'bg-primary-container', 'bg-surface-base',
+    'border-primary-container', 'border-white/8', 'border-white/12', 'border-white/30',
+    // Patterns: opacidades das cores DS (recorrentes em conteúdo)
+    {
+      pattern: /^(text|bg|border)-(primary-container|tertiary|on-surface|on-surface-variant|white)\/(5|8|10|12|15|20|25|30|40|50|60|70|80|90)$/,
+    },
+    // Patterns: layouts comuns nos cards/grids dos posts
+    { pattern: /^(grid|grid-cols|sm:grid-cols|md:grid-cols|gap)-/ },
+    { pattern: /^(p|m|px|py|pt|pb|pl|pr|mt|mb|mx|my|gap)-/ },
+    { pattern: /^(w|h|max-w|min-h|aspect)-/ },
+    { pattern: /^(text|bg|border)-\[(.*)\]$/ },
+    { pattern: /^rounded-(sm|md|lg|xl|full|none)$/ },
+    { pattern: /^(uppercase|tracking|leading|font|italic|not-italic|relative|absolute|inset|top|left|right|bottom|flex|inline-flex|items|justify|space|overflow)/ },
+    'border-l-2',
+  ],
   theme: {
     extend: {
       colors: {

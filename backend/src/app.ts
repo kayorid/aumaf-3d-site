@@ -15,6 +15,7 @@ import { uploadRoutes } from './routes/upload.routes'
 import { leadRoutes } from './routes/lead.routes'
 import { aiRoutes } from './routes/ai.routes'
 import { metricsRoutes } from './routes/metrics.routes'
+import { publicRoutes } from './routes/public.routes'
 import { prisma } from './lib/prisma'
 
 const globalLimiter = rateLimit({
@@ -57,6 +58,7 @@ export function createApp() {
     })
   })
 
+  app.use('/api/v1/public', publicRoutes)
   app.use('/api/v1/auth', authRoutes)
   app.use('/api/v1/posts', postRoutes)
   app.use('/api/v1/categories', categoryRoutes)

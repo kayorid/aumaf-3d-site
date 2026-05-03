@@ -17,6 +17,9 @@ interface PostFormValues {
   metaDescription?: string | null
   status: 'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'UNPUBLISHED'
   generatedByAi: boolean
+  readingTimeMin?: number | null
+  featured: boolean
+  tags: string[]
 }
 import {
   useCategories,
@@ -78,6 +81,9 @@ export function PostEditorPage() {
       metaDescription: '',
       status: 'DRAFT',
       generatedByAi: false,
+      readingTimeMin: null,
+      featured: false,
+      tags: [],
     }),
     [],
   )
@@ -101,6 +107,9 @@ export function PostEditorPage() {
         metaDescription: post.data.metaDescription ?? '',
         status: post.data.status,
         generatedByAi: post.data.generatedByAi,
+        readingTimeMin: post.data.readingTimeMin,
+        featured: post.data.featured,
+        tags: post.data.tags,
       })
       setSlugManual(true)
     }
