@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useForm, Controller, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { ArrowLeft, Send, EyeOff, Trash2, Save, Sparkles } from 'lucide-react'
+import { ArrowLeft, Send, EyeOff, Trash2, Save, Sparkles, ExternalLink } from 'lucide-react'
 import { PostInputSchema } from '@aumaf/shared'
 
 interface PostFormValues {
@@ -288,6 +288,19 @@ export function PostEditorPage() {
             <Sparkles className="size-4" />
             IA
           </Button>
+
+          {!isNew && status === 'PUBLISHED' && slugValue && (
+            <a
+              href={`${import.meta.env.VITE_PUBLIC_URL ?? 'http://localhost:4321'}/blog/${slugValue}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-primary-container border border-primary-container/50 rounded-sm px-3 py-1.5 hover:bg-primary-container/10 transition-colors"
+              title="Abrir post no site público"
+            >
+              <ExternalLink className="size-3" />
+              Ver post
+            </a>
+          )}
 
           <div className="h-6 w-px bg-border mx-1" aria-hidden />
 

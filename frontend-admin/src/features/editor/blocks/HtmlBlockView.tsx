@@ -4,16 +4,18 @@ import type { NodeViewProps } from '@tiptap/react'
 import { Code2, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { BlockEditorModal } from './BlockEditorModal'
+import { BlockPreview } from './BlockPreview'
 
 /**
  * NodeView visual para HtmlBlock.
  *
- * IMPORTANTE — gestão de eventos em atom nodes:
- * O Tiptap captura mousedown em nodes atom para mover o cursor.
- * Para que botões dentro do NodeView funcionem, é necessário:
- * 1. `e.preventDefault()` no mousedown dos botões (impede o Tiptap de processar)
- * 2. Usar `onClick` para a ação (que dispara depois do mousedown não capturado)
- * 3. NÃO usar `data-drag-handle` no NodeViewWrapper raiz (causava conflito de drag vs click)
+ * Usa BlockPreview (componente React com estilos inline) para renderizar
+ * cada tipo de bloco com fidelidade visual ao site público — sem depender
+ * do Tailwind do admin conhecer as classes do DS.
+ *
+ * Gestão de eventos em atom nodes:
+ * O Tiptap captura mousedown em nodes atom. Para botões dentro do NodeView
+ * funcionarem, é necessário e.preventDefault() no mousedown.
  */
 export function HtmlBlockView({ node, updateAttributes, selected }: NodeViewProps) {
   const [editing, setEditing] = useState(false)
@@ -34,10 +36,12 @@ export function HtmlBlockView({ node, updateAttributes, selected }: NodeViewProp
     <NodeViewWrapper
       className={cn(
         'my-4 rounded-sm border transition-all duration-150',
-        selected ? 'border-primary-container/60 ring-1 ring-primary-container/30' : 'border-white/10',
+        selected
+          ? 'border-primary-container/60 ring-1 ring-primary-container/30'
+          : 'border-white/10',
       )}
     >
-      {/* Barra de controle INLINE (não absolute) — não é cortada por overflow */}
+      {/* Barra de controle inline — nunca cortada por overflow */}
       <div
         className="flex items-center gap-2 px-3 py-1.5 border-b border-white/8 bg-surface-dim/60"
         onMouseDown={(e) => e.preventDefault()}
@@ -57,13 +61,12 @@ export function HtmlBlockView({ node, updateAttributes, selected }: NodeViewProp
         </button>
       </div>
 
-      {/* Preview — pointer-events-none apenas no conteúdo (não na barra de controle) */}
-      <div
-        className="pointer-events-none select-none overflow-hidden p-3"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      {/* Preview com componente React (estilos inline — fidelidade máxima ao DS) */}
+      <div className="px-2 py-1 pointer-events-none select-none">
+        <BlockPreview html={html} />
+      </div>
 
-      {/* Modal estruturado por tipo */}
+      {/* Modal de edição estruturado por tipo */}
       {editing && !rawMode && (
         <BlockEditorModal
           html={html}
