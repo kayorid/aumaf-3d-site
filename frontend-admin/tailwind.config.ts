@@ -143,6 +143,47 @@ const config: Config = {
       },
     },
   },
+  // Safelist para classes usadas em blocos HTML do editor (HtmlBlock NodeView preview).
+  // O purger não analisa strings dinâmicas de HTML — estas classes precisam ser
+  // explicitamente preservadas para o preview do DS aparecer corretamente no editor.
+  safelist: [
+    // Layout dos blocos
+    'glass-panel', 'glass-panel-strong',
+    'pill', 'pill-green',
+    // Grid e flex
+    'grid', 'grid-cols-1', 'grid-cols-2', 'grid-cols-3',
+    'sm:grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-2',
+    'gap-3', 'gap-4', 'gap-6', 'space-y-3', 'space-y-4',
+    'flex', 'flex-col', 'flex-shrink-0', 'items-start', 'items-center', 'justify-center',
+    'relative', 'absolute', 'overflow-hidden', 'overflow-x-auto',
+    'inset-0', 'top-0', 'left-0', 'bottom-4', 'right-4',
+    // Tipografia DS
+    'text-body-lg', 'text-body-md', 'text-label-caps', 'text-code-data', 'text-headline-md',
+    'text-on-surface', 'text-on-surface-variant', 'text-tertiary',
+    'text-primary-container', 'text-white',
+    'uppercase', 'tracking-widest', 'tracking-\\[0\\.2em\\]', 'tracking-\\[0\\.15em\\]',
+    'leading-relaxed', 'leading-snug', 'leading-none',
+    'font-bold', 'font-medium', 'font-light', 'italic', 'not-italic',
+    'text-\\[10px\\]', 'text-\\[11px\\]', 'text-\\[12px\\]', 'text-sm',
+    // Bordas e backgrounds DS
+    'border-b', 'border-l-2', 'border-t',
+    'rounded-sm', 'rounded-full',
+    'p-3', 'p-4', 'p-5', 'p-6', 'pb-3', 'pt-4', 'px-4', 'py-3', 'my-4', 'my-6', 'my-8',
+    'mb-0', 'mb-1', 'mb-2', 'mb-3', 'mb-4', 'mt-2',
+    'w-full', 'h-px', 'w-8', 'h-8',
+    // Padrões com opacidade (Tailwind JIT) — usar regex
+    { pattern: /^(bg|border|text)-(primary-container|on-surface|on-surface-variant|tertiary|white)\/(5|8|10|12|15|20|25|30|40|50|60|70|80)$/ },
+    { pattern: /^(bg|border)-primary-container\/(10|15|20|40|50|60)$/ },
+    { pattern: /^gap-\d+$/ },
+    { pattern: /^(p|px|py|pb|pt|m|my|mb|mt)-\d+$/ },
+    { pattern: /^(w|h)-\d+$/ },
+    { pattern: /^grid-cols-\d+$/ },
+    { pattern: /^sm:grid-cols-\d+$/ },
+    { pattern: /^bg-gradient-to-r$/ },
+    { pattern: /^from-(transparent|primary-container\/40)$/ },
+    { pattern: /^via-(primary-container\/40)$/ },
+    { pattern: /^to-(transparent)$/ },
+  ],
   plugins: [tailwindAnimate],
 }
 

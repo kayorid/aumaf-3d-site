@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useForm, Controller, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { ArrowLeft, Eye, Pencil, Send, EyeOff, Trash2, Save, Sparkles } from 'lucide-react'
+import { ArrowLeft, Send, EyeOff, Trash2, Save, Sparkles, ExternalLink } from 'lucide-react'
 import { PostInputSchema } from '@aumaf/shared'
 
 interface PostFormValues {
@@ -33,7 +33,6 @@ import {
 import { PostStatusBadge } from '../components/PostStatusBadge'
 import { SlugInput } from '../components/SlugInput'
 import { MarkdownEditor } from '@/features/editor/MarkdownEditor'
-import { MarkdownRichRenderer } from '@/features/editor/MarkdownRichRenderer'
 import { MediaPickerDialog } from '@/features/editor/MediaPickerDialog'
 import { AIPanel } from '@/features/ai/components/AIPanel'
 import { Button } from '@/components/ui/button'
@@ -45,8 +44,6 @@ import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useAutoSave } from '../hooks/use-auto-save'
-
-type Tab = 'edit' | 'preview'
 
 export function PostEditorPage() {
   const { id } = useParams<{ id: string }>()
@@ -61,7 +58,6 @@ export function PostEditorPage() {
   const unpublish = useUnpublishPost()
   const del = useDeletePost()
 
-  const [tab, setTab] = useState<Tab>('edit')
   const [mediaPickerForCover, setMediaPickerForCover] = useState(false)
   const [mediaPickerForBody, setMediaPickerForBody] = useState(false)
   const [pendingBodyImageResolver, setPendingBodyImageResolver] = useState<
@@ -119,7 +115,6 @@ export function PostEditorPage() {
 
   const titleValue = form.watch('title')
   const slugValue = form.watch('slug')
-  const contentValue = form.watch('content')
   const coverValue = form.watch('coverImageUrl')
   const watchedAll = form.watch()
 
@@ -294,6 +289,19 @@ export function PostEditorPage() {
             IA
           </Button>
 
+          {!isNew && status === 'PUBLISHED' && slugValue && (
+            <a
+              href={`${import.meta.env.VITE_PUBLIC_URL ?? 'http://localhost:4321'}/blog/${slugValue}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-primary-container border border-primary-container/50 rounded-sm px-3 py-1.5 hover:bg-primary-container/10 transition-colors"
+              title="Abrir post no site público"
+            >
+              <ExternalLink className="size-3" />
+              Ver post
+            </a>
+          )}
+
           <div className="h-6 w-px bg-border mx-1" aria-hidden />
 
           {!isNew && status === 'PUBLISHED' && (
@@ -332,17 +340,7 @@ export function PostEditorPage() {
             )}
           </Card>
 
-          <div className="flex items-center gap-1 border-b border-border pb-2">
-            <TabBtn active={tab === 'edit'} onClick={() => setTab('edit')}>
-              <Pencil className="size-3.5" /> Editar
-            </TabBtn>
-            <TabBtn active={tab === 'preview'} onClick={() => setTab('preview')}>
-              <Eye className="size-3.5" /> Preview
-            </TabBtn>
-          </div>
-
-          {tab === 'edit' ? (
-            <Controller
+          <Controller
               control={form.control}
               name="content"
               render={({ field }) => (
@@ -354,15 +352,6 @@ export function PostEditorPage() {
                 />
               )}
             />
-          ) : (
-            <Card>
-              {contentValue ? (
-                <MarkdownRichRenderer content={contentValue} />
-              ) : (
-                <p className="text-sm text-text-tertiary">Sem conteúdo para visualizar.</p>
-              )}
-            </Card>
-          )}
         </div>
 
         <aside className="space-y-4">
@@ -506,30 +495,5 @@ export function PostEditorPage() {
         }}
       />
     </div>
-  )
-}
-
-function TabBtn({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
-        active
-          ? 'bg-surface-200 text-text-primary border border-border'
-          : 'text-text-tertiary hover:text-text-secondary border border-transparent',
-      )}
-    >
-      {children}
-    </button>
   )
 }
