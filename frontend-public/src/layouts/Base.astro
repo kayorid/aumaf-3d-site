@@ -79,9 +79,14 @@ const {
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Material Symbols com display=swap -->
+    <!--
+      Material Symbols com display=block (NÃO use swap aqui).
+      Com swap, enquanto a fonte carrega, o nome literal do ícone (`arrow_upward`,
+      `directions_car`, etc.) renderiza com a fonte fallback porque a ligature
+      não existe nela. `block` mantém o texto invisível até a fonte real chegar.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
       rel="stylesheet"
     />
 
