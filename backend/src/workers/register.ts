@@ -5,8 +5,7 @@
  * Adding a worker = adding an import here. No other site needs editing.
  */
 
-// Workers are registered as their files are added in subsequent commits.
-// Importing this empty module today is intentional: it gives `server.ts`
-// a single, stable side-effect entry point.
+// Each side-effect import wires its worker into the registry.
+import './lead-notification.worker'
 
 export {}
