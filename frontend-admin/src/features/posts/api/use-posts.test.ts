@@ -80,6 +80,8 @@ describe('use-posts hooks', () => {
       content: 'c',
       status: 'DRAFT',
       generatedByAi: false,
+      featured: false,
+      tags: [],
     })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(mocked.create).toHaveBeenCalled()
@@ -114,7 +116,7 @@ describe('use-posts hooks', () => {
     const { result } = renderHookWithQuery(() => useCreatePost())
     const onError = vi.fn()
     result.current.mutate(
-      { title: 'X', slug: 'x', content: 'c', status: 'DRAFT', generatedByAi: false },
+      { title: 'X', slug: 'x', content: 'c', status: 'DRAFT', generatedByAi: false, featured: false, tags: [] },
       { onError },
     )
     await waitFor(() => expect(result.current.isError).toBe(true))
