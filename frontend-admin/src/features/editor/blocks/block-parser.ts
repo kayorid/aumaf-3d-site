@@ -1,9 +1,10 @@
 /**
  * Parseia HTML de blocos do design system de volta para dados estruturados.
- * Usado pelo BlockEditorModal para popular os campos de edição.
  *
- * Cada parser retorna um objeto tipado; o gerador correspondente
- * reconstrói o HTML a partir do objeto editado.
+ * IMPORTANTE: não usar seletores CSS com caracteres especiais como / (barra).
+ * Classes Tailwind como `border-white/8` usam barra que o querySelector
+ * interpreta como separador de namespace — quebra o parse silenciosamente.
+ * Usar sempre [class*="substring"] ou seletores estruturais (nth-child, etc.).
  */
 
 /* ===== Specs Grid ===== */
@@ -14,26 +15,50 @@ export interface SpecsGridData {
 }
 
 export function parseSpecsGrid(html: string): SpecsGridData {
-  if (typeof document === 'undefined') return { title: '', items: [] }
+  if (typeof document === 'undefined') return { title: 'Dados do Projeto', items: [{ label: '', value: '' }] }
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
-  const titleEl = wrapper.querySelector('span.tracking-\\[0\\.2em\\], span[class*="tracking"]')
+
+  // Título: span com tracking-[0.2em] ou primeiro span uppercase com class*="on-surface-variant"
+  const titleEl =
+    wrapper.querySelector('span[class*="tracking-\\[0"]') ||
+    wrapper.querySelector('span[class*="on-surface-variant"][class*="uppercase"]') ||
+    wrapper.querySelector('span[class*="tracking-widest"][class*="uppercase"]')
   const title = titleEl?.textContent?.trim() ?? 'Dados do Projeto'
+
+  // Itens: divs que contêm exatamente 2 spans (label + value)
+  // Evita seletores com `/` — usa class*="pb-" como heurística
   const items: SpecsGridData['items'] = []
-  wrapper.querySelectorAll('div.border-b, div[class*="pb-3"]').forEach((div) => {
+  const itemDivs = wrapper.querySelectorAll('div[class*="pb-"]')
+  itemDivs.forEach((div) => {
     const spans = div.querySelectorAll('span')
     if (spans.length >= 2) {
-      items.push({
-        label: spans[0].textContent?.trim() ?? '',
-        value: spans[1].textContent?.trim() ?? '',
-      })
+      const label = spans[0].textContent?.trim() ?? ''
+      const value = spans[1].textContent?.trim() ?? ''
+      if (label || value) {
+        items.push({ label, value })
+      }
     }
   })
-  return { title, items: items.length ? items : [{ label: '', value: '' }] }
+
+  // Fallback: tentar pegar texto de qualquer div com class*="border-b"
+  if (items.length === 0) {
+    wrapper.querySelectorAll('div[class*="border-b"]').forEach((div) => {
+      const spans = div.querySelectorAll('span')
+      if (spans.length >= 2) {
+        const label = spans[0].textContent?.trim() ?? ''
+        const value = spans[1].textContent?.trim() ?? ''
+        if (label || value) items.push({ label, value })
+      }
+    })
+  }
+
+  return { title, items: items.length > 0 ? items : [{ label: '', value: '' }] }
 }
 
 export function generateSpecsGrid(data: SpecsGridData): string {
   const items = data.items
+    .filter((it) => it.label || it.value)
     .map(
       (it) =>
         `<div class="border-b border-white/8 pb-3"><span class="text-label-caps text-on-surface-variant uppercase tracking-widest block text-[10px] mb-0.5">${esc(it.label)}</span><span class="text-body-md text-on-surface font-medium">${esc(it.value)}</span></div>`,
@@ -59,12 +84,13 @@ export function parseQuoteCard(html: string): QuoteCardData {
   if (typeof document === 'undefined') return { text: '', author: '' }
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
-  const textEl = wrapper.querySelector('p')
-  const authorEl = wrapper.querySelector('cite')
-  return {
-    text: textEl?.textContent?.replace(/^"|"$/g, '').trim() ?? '',
-    author: authorEl?.textContent?.replace(/^—\s*/, '').trim() ?? '',
-  }
+  // Texto: primeiro <p> dentro do blockquote
+  const pEl = wrapper.querySelector('blockquote p') || wrapper.querySelector('p[class*="italic"]') || wrapper.querySelector('p')
+  const text = (pEl?.textContent ?? '').replace(/^["“]|["”]$/g, '').trim()
+  // Autor: elemento <cite>
+  const citeEl = wrapper.querySelector('cite') || wrapper.querySelector('[class*="tracking-\\[0"]')
+  const author = (citeEl?.textContent ?? '').replace(/^—\s*/, '').trim()
+  return { text, author }
 }
 
 export function generateQuoteCard(data: QuoteCardData): string {
@@ -87,12 +113,14 @@ export function parseInfoCard(html: string): InfoCardData {
   if (typeof document === 'undefined') return { title: '', description: '', accent: false }
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
-  const titleEl = wrapper.querySelector('h3')
-  const descEl = wrapper.querySelector('p')
-  const accent = html.includes('border-primary-container/20')
+  const h3 = wrapper.querySelector('h3')
+  const p = wrapper.querySelector('p')
+  // Detecta accent por presença de border-primary-container no class (sem /)
+  const mainDiv = wrapper.querySelector('div[class*="glass-panel"]')
+  const accent = (mainDiv?.className ?? '').includes('primary-container')
   return {
-    title: titleEl?.textContent?.trim() ?? '',
-    description: descEl?.textContent?.trim() ?? '',
+    title: h3?.textContent?.trim() ?? '',
+    description: p?.textContent?.trim() ?? '',
     accent,
   }
 }
@@ -114,17 +142,23 @@ export interface CardItem { title: string; description: string }
 export interface CardsListData { items: CardItem[] }
 
 export function parseCardsList(html: string): CardsListData {
-  if (typeof document === 'undefined') return { items: [] }
+  if (typeof document === 'undefined') return { items: [{ title: '', description: '' }] }
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
-  const cards = wrapper.querySelectorAll('div.glass-panel')
+  // Cada card é um div com glass-panel
+  const cards = wrapper.querySelectorAll('div[class*="glass-panel"]')
   const items: CardItem[] = []
   cards.forEach((card) => {
     const h3 = card.querySelector('h3')
     const p = card.querySelector('p')
-    items.push({ title: h3?.textContent?.trim() ?? '', description: p?.textContent?.trim() ?? '' })
+    // Só incluir se tem pelo menos h3 ou p com texto
+    const title = h3?.textContent?.trim() ?? ''
+    const description = p?.textContent?.trim() ?? ''
+    if (title || description) {
+      items.push({ title, description })
+    }
   })
-  return { items: items.length ? items : [{ title: '', description: '' }] }
+  return { items: items.length > 0 ? items : [{ title: '', description: '' }] }
 }
 
 export function generateCardsList(data: CardsListData): string {
@@ -144,26 +178,30 @@ export interface DecisionStep { question: string; yes: string; no: string }
 export interface DecisionFlowData { steps: DecisionStep[] }
 
 export function parseDecisionFlow(html: string): DecisionFlowData {
-  if (typeof document === 'undefined') return { steps: [] }
+  if (typeof document === 'undefined') return { steps: [{ question: '', yes: '', no: '' }] }
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
-  const rows = wrapper.querySelectorAll('div.flex.gap-4')
+  // Cada step é um div.flex com um span de número + div de conteúdo
+  const rows = wrapper.querySelectorAll('div[class*="flex"][class*="gap-4"]')
   const steps: DecisionStep[] = []
   rows.forEach((row) => {
-    const qEl = row.querySelector('p.text-on-surface, p.font-medium')
-    const ansEl = row.querySelector('p.text-tertiary, p.text-body-md')
+    // Pergunta: p com class*="font-medium" ou primeiro p
+    const qEl = row.querySelector('p[class*="font-medium"]') || row.querySelector('p')
+    // Resposta: segundo p (ou p com class*="text-tertiary")
+    const pEls = row.querySelectorAll('p')
+    const ansEl = pEls.length > 1 ? pEls[1] : null
     if (qEl) {
       const ansText = ansEl?.textContent ?? ''
-      const yesMatch = ansText.match(/Sim[:\s]+([^→.]+)/i)
-      const noMatch = ansText.match(/Não[:\s]+([^→.]+)/i)
+      const yesMatch = ansText.match(/[Ss]im[:\s]*([^→.—]+)/)?.[1]?.trim() ?? ''
+      const noMatch = ansText.match(/[Nn][aã]o[:\s]*([^→.—]+)/)?.[1]?.trim() ?? ''
       steps.push({
         question: qEl.textContent?.trim() ?? '',
-        yes: yesMatch?.[1]?.trim() ?? '',
-        no: noMatch?.[1]?.trim() ?? '',
+        yes: yesMatch,
+        no: noMatch,
       })
     }
   })
-  return { steps: steps.length ? steps : [{ question: '', yes: '', no: '' }] }
+  return { steps: steps.length > 0 ? steps : [{ question: '', yes: '', no: '' }] }
 }
 
 export function generateDecisionFlow(data: DecisionFlowData): string {
@@ -183,7 +221,7 @@ ${steps.join('\n')}
 </div>`
 }
 
-/* ===== Comparação Table ===== */
+/* ===== Comparison Table ===== */
 
 export interface TableData {
   headers: string[]
@@ -191,7 +229,7 @@ export interface TableData {
 }
 
 export function parseComparisonTable(html: string): TableData {
-  if (typeof document === 'undefined') return { headers: [], rows: [] }
+  if (typeof document === 'undefined') return { headers: ['Col 1', 'Col 2'], rows: [] }
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
   const headers = Array.from(wrapper.querySelectorAll('thead th')).map(
@@ -200,7 +238,10 @@ export function parseComparisonTable(html: string): TableData {
   const rows = Array.from(wrapper.querySelectorAll('tbody tr')).map((tr) =>
     Array.from(tr.querySelectorAll('td')).map((td) => td.textContent?.trim() ?? ''),
   )
-  return { headers: headers.length ? headers : ['Col 1', 'Col 2'], rows }
+  return {
+    headers: headers.length > 0 ? headers : ['Col 1', 'Col 2'],
+    rows,
+  }
 }
 
 export function generateComparisonTable(data: TableData): string {
@@ -210,15 +251,19 @@ export function generateComparisonTable(data: TableData): string {
         `<th class="text-left px-4 py-3 text-label-caps text-primary-container uppercase tracking-widest">${esc(h)}</th>`,
     )
     .join('')
-  const rows = data.rows.map((row, ri) => {
-    const cells = data.headers.map((_, ci) => {
-      const val = row[ci] ?? ''
-      const cls = ci === 0 ? 'text-on-surface-variant' : 'text-on-surface'
-      return `<td class="px-4 py-3 ${cls}">${esc(val)}</td>`
-    }).join('')
-    const border = ri < data.rows.length - 1 ? 'border-b border-white/5' : ''
-    return `<tr class="${border}">${cells}</tr>`
-  }).join('\n')
+  const rows = data.rows
+    .map((row, ri) => {
+      const cells = data.headers
+        .map((_, ci) => {
+          const val = row[ci] ?? ''
+          const cls = ci === 0 ? 'text-on-surface-variant' : 'text-on-surface'
+          return `<td class="px-4 py-3 ${cls}">${esc(val)}</td>`
+        })
+        .join('')
+      const border = ri < data.rows.length - 1 ? 'border-b border-white/5' : ''
+      return `<tr class="${border}">${cells}</tr>`
+    })
+    .join('\n')
   return `<div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 my-8">
 <table class="w-full text-body-md">
 <thead>
@@ -234,5 +279,8 @@ ${rows}
 /* ===== util ===== */
 
 function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
 }
