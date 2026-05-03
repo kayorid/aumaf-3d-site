@@ -39,6 +39,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#000000" />
 
+    <!-- Preload fonte local Pirulen (logo) -->
+    <link rel="preload" href="/fonts/pirulen.otf" as="font" type="font/otf" crossorigin />
+
     <!-- Preconnect fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

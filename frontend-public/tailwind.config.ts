@@ -78,6 +78,12 @@ const config: Config = {
         'fade-up': 'fadeUp 0.7s ease forwards',
         'marquee': 'marquee 25s linear infinite',
         'scan-line': 'scanLine 4s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'float-slow': 'float 10s ease-in-out infinite',
+        'drift': 'drift 8s ease-in-out infinite',
+        'blink': 'blink 1.2s step-end infinite',
+        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+        'rotate-slow': 'rotateSlow 20s linear infinite',
       },
       keyframes: {
         pulseDot: {
@@ -97,6 +103,27 @@ const config: Config = {
           '10%': { opacity: '1' },
           '90%': { opacity: '1' },
           '100%': { transform: 'translateY(100%)', opacity: '0' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
+        drift: {
+          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
+          '33%': { transform: 'translateY(-6px) translateX(4px)' },
+          '66%': { transform: 'translateY(4px) translateX(-3px)' },
+        },
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
+        glowPulse: {
+          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+        },
+        rotateSlow: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
         },
       },
       backgroundImage: {

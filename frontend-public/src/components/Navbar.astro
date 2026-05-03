@@ -18,21 +18,20 @@ const links = [
   class="fixed top-0 w-full z-50 nav-glass transition-all duration-500"
 >
   <nav class="flex justify-between items-center px-edge h-20 max-w-[1440px] mx-auto">
-    <!-- Logo -->
-    <a href="/" class="flex items-center gap-3 group">
-      <div class="w-7 h-7 border border-primary-container/60 rounded-sm flex items-center justify-center group-hover:border-primary-container group-hover:glow-effect transition-all duration-300">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7 0L14 4V10L7 14L0 10V4L7 0Z" fill="rgba(97,197,79,0.8)"/>
-          <path d="M7 3L11 5.5V9.5L7 12L3 9.5V5.5L7 3Z" fill="rgba(0,0,0,0.6)"/>
-        </svg>
-      </div>
-      <span class="text-[18px] font-bold tracking-[-0.02em] text-white uppercase">
-        AUMAF <span class="text-primary-container">3D</span>
-      </span>
+    <!-- Logo AUMAF 3D — Pirulen typeface -->
+    <a href="/" class="flex items-center gap-1 group" aria-label="AUMAF 3D — Página Inicial">
+      <span
+        class="font-pirulen text-[20px] text-white tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none"
+        style="font-family:'Pirulen',sans-serif;"
+      >AUMAF</span>
+      <span
+        class="font-pirulen text-[20px] text-primary-container tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none ml-1"
+        style="font-family:'Pirulen',sans-serif;"
+      >3D</span>
     </a>
 
-    <!-- Desktop Links -->
-    <ul class="hidden md:flex items-center gap-8">
+    <!-- Desktop Links (lg+) -->
+    <ul class="hidden lg:flex items-center gap-6">
       {links.map(link => (
         <li>
           <a
@@ -50,21 +49,22 @@ const links = [
       ))}
     </ul>
 
-    <!-- CTA -->
-    <div class="flex items-center gap-4">
+    <!-- CTA + Hamburger -->
+    <div class="flex items-center gap-3">
       <a
         href="/contato"
-        class="hidden md:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
+        class="hidden lg:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
       >
         Solicitar Orçamento
         <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
       </a>
 
-      <!-- Mobile hamburger -->
+      <!-- Mobile/tablet hamburger -->
       <button
         id="menu-toggle"
-        class="md:hidden w-10 h-10 border border-white/20 rounded-sm flex flex-col justify-center items-center gap-1.5 hover:border-primary-container transition-colors"
-        aria-label="Menu"
+        class="lg:hidden w-10 h-10 border border-white/20 rounded-sm flex flex-col justify-center items-center gap-1.5 hover:border-primary-container transition-colors"
+        aria-label="Abrir menu"
+        aria-expanded="false"
       >
         <span class="w-5 h-px bg-white transition-all duration-300" id="bar1"></span>
         <span class="w-5 h-px bg-white transition-all duration-300" id="bar2"></span>
@@ -74,10 +74,11 @@ const links = [
   </nav>
 </header>
 
-<!-- Mobile Drawer -->
+<!-- Mobile/Tablet Drawer -->
 <div
   id="mobile-menu"
   class="fixed inset-0 z-40 glass-panel-strong flex-col justify-center items-start px-8 hidden"
+  aria-hidden="true"
 >
   <div class="mt-20 space-y-1 w-full">
     {links.map((link, i) => (
@@ -90,12 +91,15 @@ const links = [
         {link.label}
       </a>
     ))}
-    <a
-      href="/contato"
-      class="mt-8 inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
-    >
-      Solicitar Orçamento
-    </a>
+    <div class="pt-8">
+      <a
+        href="/contato"
+        class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
+      >
+        Solicitar Orçamento
+        <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -111,6 +115,8 @@ const links = [
     open = !open
     menu?.classList.toggle('hidden', !open)
     menu?.classList.toggle('flex', open)
+    menu?.setAttribute('aria-hidden', String(!open))
+    toggle.setAttribute('aria-expanded', String(open))
     document.body.style.overflow = open ? 'hidden' : ''
     if (bar1 && bar2 && bar3) {
       bar1.style.transform = open ? 'translateY(5px) rotate(45deg)' : ''
@@ -120,12 +126,30 @@ const links = [
     }
   })
 
-  // Scroll behavior
+  // Fechar ao clicar em link do drawer
+  menu?.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      open = false
+      menu.classList.add('hidden')
+      menu.classList.remove('flex')
+      menu.setAttribute('aria-hidden', 'true')
+      toggle?.setAttribute('aria-expanded', 'false')
+      document.body.style.overflow = ''
+      if (bar1 && bar2 && bar3) {
+        bar1.style.transform = ''
+        bar2.style.opacity = '1'
+        bar3.style.transform = ''
+        bar3.style.width = ''
+      }
+    })
+  })
+
+  // Hide/show on scroll
   const navbar = document.getElementById('navbar')
   let lastScroll = 0
   window.addEventListener('scroll', () => {
     const current = window.scrollY
-    if (current > 80 && current > lastScroll) {
+    if (current > 100 && current > lastScroll && !open) {
       navbar?.classList.add('-translate-y-full')
     } else {
       navbar?.classList.remove('-translate-y-full')

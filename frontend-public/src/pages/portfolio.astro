@@ -41,13 +41,18 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
     </div>
   </section>
 
-  <!-- Filters -->
-  <div class="bg-background border-b border-white/8 sticky top-20 z-40 backdrop-blur-nav">
-    <div class="max-w-[1440px] mx-auto px-edge py-4 flex flex-wrap gap-2">
+  <!-- Filters — sticky abaixo da navbar -->
+  <div class="bg-background/95 border-b border-white/8 sticky top-[80px] z-40" style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);">
+    <div class="max-w-[1440px] mx-auto px-edge py-3 flex flex-wrap gap-2">
       {cats.map((cat, i) => (
         <button
           data-filter={cat === 'Todos' ? 'all' : cat}
-          class:list={['pill transition-all duration-200 hover:border-primary-container/50 hover:text-primary-container', i === 0 ? 'pill-active' : '']}
+          class:list={[
+            'filter-pill transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
+            i === 0
+              ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
+              : 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
+          ]}
         >
           {cat}
         </button>
@@ -122,25 +127,42 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
 </Base>
 
 <script>
-  const filterBtns = document.querySelectorAll('[data-filter]')
-  const cards = document.querySelectorAll('[data-cat]')
+  const filterBtns = document.querySelectorAll<HTMLElement>('[data-filter]')
+  const cards = document.querySelectorAll<HTMLElement>('[data-cat]')
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = (btn as HTMLElement).dataset.filter
+  const ACTIVE   = 'bg-primary-container border-primary-container text-on-primary glow-effect'
+  const INACTIVE = 'border-white/15 text-on-surface-variant hover:border-primary-container/50 hover:text-primary-container'
 
-      filterBtns.forEach(b => {
-        b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
-        b.classList.add('border-white/20', 'text-on-surface-variant')
-      })
-      btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
-      btn.classList.remove('border-white/20', 'text-on-surface-variant')
+  function setFilter(btn: HTMLElement) {
+    const filter = btn.dataset.filter ?? 'all'
 
-      cards.forEach(card => {
-        const cat = (card as HTMLElement).dataset.cat
-        const show = filter === 'all' || cat === filter
-        ;(card as HTMLElement).style.display = show ? '' : 'none'
-      })
+    // Reset todos os botões
+    filterBtns.forEach(b => {
+      ACTIVE.split(' ').forEach(c => b.classList.remove(c))
+      INACTIVE.split(' ').forEach(c => b.classList.add(c))
     })
-  })
+
+    // Ativar botão clicado
+    INACTIVE.split(' ').forEach(c => btn.classList.remove(c))
+    ACTIVE.split(' ').forEach(c => btn.classList.add(c))
+
+    // Filtrar cards com fade
+    cards.forEach(card => {
+      const show = filter === 'all' || card.dataset.cat === filter
+      if (show) {
+        card.style.display = ''
+        card.style.opacity = '0'
+        requestAnimationFrame(() => {
+          card.style.transition = 'opacity 0.3s ease'
+          card.style.opacity = '1'
+        })
+      } else {
+        card.style.opacity = '0'
+        card.style.transition = 'opacity 0.2s ease'
+        setTimeout(() => { card.style.display = 'none' }, 200)
+      }
+    })
+  }
+
+  filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 </script>

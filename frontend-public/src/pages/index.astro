@@ -7,95 +7,155 @@ import Footer from '../components/Footer.astro'
 <Base title="Manufatura Aditiva Industrial de Precisão">
   <Navbar currentPath="/" />
 
-  <!-- HERO -->
+  <!-- =============================================
+       HERO — 2 colunas: conteúdo + painel de mídia
+       ============================================= -->
   <section class="relative min-h-screen flex items-center overflow-hidden bg-background">
-    <div class="absolute inset-0 bg-tech-grid pointer-events-none"></div>
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 60% 50%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <!-- Grid técnico de fundo -->
+    <div class="absolute inset-0 bg-tech-grid pointer-events-none opacity-50"></div>
 
-    <!-- Geometric background visual -->
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-70"></div>
-      <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[50vw] h-[80vh] opacity-[0.06] pointer-events-none">
-        <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-          <polygon points="250,20 480,140 480,360 250,480 20,360 20,140" stroke="#61c54f" stroke-width="1" fill="none"/>
-          <polygon points="250,60 440,160 440,340 250,440 60,340 60,160" stroke="#61c54f" stroke-width="0.5" fill="none"/>
-          <polygon points="250,100 400,180 400,320 250,400 100,320 100,180" stroke="#61c54f" stroke-width="0.5" fill="none" opacity="0.6"/>
-          <line x1="250" y1="20" x2="250" y2="480" stroke="#61c54f" stroke-width="0.3" opacity="0.5"/>
-          <line x1="20" y1="140" x2="480" y2="360" stroke="#61c54f" stroke-width="0.3" opacity="0.3"/>
-          <line x1="480" y1="140" x2="20" y2="360" stroke="#61c54f" stroke-width="0.3" opacity="0.3"/>
-          <circle cx="250" cy="250" r="60" stroke="#61c54f" stroke-width="0.5" fill="none" opacity="0.4"/>
-          <circle cx="250" cy="250" r="120" stroke="#61c54f" stroke-width="0.3" fill="none" opacity="0.3"/>
-          <circle cx="250" cy="250" r="5" fill="#61c54f" opacity="0.6"/>
-          <circle cx="250" cy="250" r="2" fill="#61c54f"/>
-        </svg>
-      </div>
-    </div>
+    <!-- Glow 1: halo central difuso -->
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(97,197,79,0.08) 0%,transparent 65%);"></div>
 
-    <!-- Content -->
-    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-edge pt-32 pb-20">
-      <div class="max-w-3xl">
-        <!-- Status pill -->
-        <div class="flex items-center gap-3 mb-8">
-          <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
-          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">
-            Sistema Online // Imprimindo Agora
-          </span>
-        </div>
+    <!-- Glow 2: halo mais quente no canto superior direito -->
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 40% 40% at 90% 10%,rgba(97,197,79,0.05) 0%,transparent 70%);"></div>
 
-        <h1 class="text-display-xl font-bold text-white uppercase leading-none tracking-[-0.04em] mb-6 opacity-0 animate-fade-up" style="animation-delay:100ms;animation-fill-mode:forwards;">
-          Zero-Error<br/>
-          <span style="background:linear-gradient(135deg,#7ce268,#61c54f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Precision.</span>
-        </h1>
+    <!-- Glow 3: reflexo inferior esquerdo -->
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 25% at 5% 95%,rgba(97,197,79,0.04) 0%,transparent 70%);"></div>
 
-        <p class="text-body-lg text-tertiary max-w-xl leading-relaxed mb-10 opacity-0 animate-fade-up" style="animation-delay:250ms;animation-fill-mode:forwards;">
-          Manufatura aditiva industrial para aplicações críticas.
-          Peças em metal, carbono e polímeros de alta performance —
-          tolerância <span class="text-on-surface font-medium">±0.05mm</span>, entregues onde você precisar.
-        </p>
+    <!-- Gradiente esquerdo para legibilidade do texto -->
+    <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(90deg,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.25) 55%,transparent 100%);"></div>
 
-        <div class="flex flex-wrap items-center gap-4 opacity-0 animate-fade-up" style="animation-delay:380ms;animation-fill-mode:forwards;">
-          <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim hover:shadow-glow-lg transition-all duration-300">
-            <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">rocket_launch</span>
-            Solicitar Orçamento
-          </a>
-          <a href="/portfolio" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
-            Ver Portfolio
-            <span class="material-symbols-outlined text-base leading-none">arrow_forward</span>
-          </a>
-        </div>
-      </div>
-    </div>
+    <!-- Elementos geométricos flutuantes decorativos -->
+    <div class="absolute top-24 right-[12%] w-px h-32 bg-gradient-to-b from-transparent via-primary-container/20 to-transparent animate-float-slow hidden lg:block pointer-events-none"></div>
+    <div class="absolute bottom-32 right-[8%] w-16 h-px bg-gradient-to-r from-transparent via-primary-container/15 to-transparent animate-float hidden lg:block pointer-events-none"></div>
+    <div class="absolute top-1/3 left-8 w-1.5 h-1.5 rounded-full bg-primary-container/20 animate-pulse-dot hidden lg:block pointer-events-none"></div>
+    <div class="absolute top-2/3 left-16 w-1 h-1 rounded-full bg-primary-container/15 animate-pulse-dot hidden lg:block pointer-events-none" style="animation-delay:1s;"></div>
 
-    <!-- Active Build widget -->
-    <div class="absolute bottom-12 right-16 hidden lg:block z-10 opacity-0 animate-fade-up" style="animation-delay:500ms;animation-fill-mode:forwards;">
-      <div class="glass-panel rounded-lg p-5 w-72 relative" style="border:1px solid rgba(97,197,79,0.15);">
-        <div class="flex justify-between items-center mb-4 border-b border-white/8 pb-4">
-          <span class="text-label-caps text-tertiary uppercase tracking-widest">Active Build</span>
-          <span class="text-label-caps text-primary-container tracking-widest">ID_409X</span>
-        </div>
-        <div class="space-y-3">
-          <div>
-            <div class="flex justify-between text-code-data text-white/60 mb-1.5">
-              <span>Impressão</span>
-              <span class="text-primary-container font-medium">80%</span>
-            </div>
-            <div class="h-px bg-surface-high rounded overflow-hidden">
-              <div class="h-full bg-primary-container glow-effect" style="width:80%;"></div>
-            </div>
+    <!-- Conteúdo principal -->
+    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-edge pt-28 pb-16 lg:pt-32 lg:pb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[calc(100vh-80px)]">
+
+        <!-- Coluna esquerda: texto + CTAs -->
+        <div class="flex flex-col justify-center">
+          <!-- Status pill -->
+          <div class="flex items-center gap-3 mb-8">
+            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect flex-shrink-0"></span>
+            <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">
+              Sistema Online // Imprimindo Agora
+            </span>
           </div>
-          <div>
-            <div class="flex justify-between text-code-data text-white/60 mb-1.5">
-              <span>Temperatura</span>
-              <span class="text-error font-medium">265°C</span>
-            </div>
-            <div class="h-px bg-surface-high rounded overflow-hidden">
-              <div class="h-full bg-error" style="width:95%;"></div>
-            </div>
+
+          <h1 class="text-display-xl font-bold text-white uppercase leading-none tracking-[-0.04em] mb-6 opacity-0 animate-fade-up" style="animation-delay:100ms;animation-fill-mode:forwards;">
+            Zero-Error<br/>
+            <span style="background:linear-gradient(135deg,#7ce268,#61c54f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Precision.</span>
+          </h1>
+
+          <p class="text-body-lg text-tertiary max-w-lg leading-relaxed mb-10 opacity-0 animate-fade-up" style="animation-delay:250ms;animation-fill-mode:forwards;">
+            Manufatura aditiva industrial para aplicações críticas.
+            Peças em metal, carbono e polímeros de alta performance —
+            tolerância <span class="text-on-surface font-medium">±0.05mm</span>, entregues onde você precisar.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 opacity-0 animate-fade-up" style="animation-delay:380ms;animation-fill-mode:forwards;">
+            <a
+              href="/contato"
+              class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim hover:shadow-glow-lg transition-all duration-300"
+            >
+              <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">rocket_launch</span>
+              Solicitar Orçamento
+            </a>
+            <a
+              href="/portfolio"
+              class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300"
+            >
+              Ver Portfolio
+              <span class="material-symbols-outlined text-base leading-none">arrow_forward</span>
+            </a>
           </div>
-          <div class="pt-1 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot"></span>
-            <span class="text-code-data text-tertiary text-[11px]">PA CF15 · Layer: 0.15mm</span>
+
+          <!-- Métricas rápidas sob os CTAs -->
+          <div class="flex items-center gap-8 mt-12 pt-8 border-t border-white/8 opacity-0 animate-fade-up" style="animation-delay:500ms;animation-fill-mode:forwards;">
+            {[
+              {value:'+500',label:'Projetos'},
+              {value:'20+',label:'Materiais'},
+              {value:'±0.05mm',label:'Tolerância'},
+            ].map(m => (
+              <div class="flex flex-col gap-1">
+                <span class="text-2xl font-bold text-white tracking-tighter leading-none">{m.value}</span>
+                <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.15em] text-[10px]">{m.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Coluna direita: painel de vídeo/mídia -->
+        <div class="hidden lg:flex flex-col gap-4 opacity-0 animate-fade-up" style="animation-delay:300ms;animation-fill-mode:forwards;">
+          <!-- VIDEO_HERO: slot de vídeo principal -->
+          <div class="relative aspect-video rounded-sm overflow-hidden bg-surface-base border border-white/8 group" style="box-shadow:0 0 60px rgba(0,0,0,0.8),0 0 30px rgba(97,197,79,0.05);">
+            <!--
+              VIDEO_HERO — Substituir pelo vídeo real da impressora em ação:
+              <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+                <source src="/videos/hero-printing.mp4" type="video/mp4" />
+              </video>
+            -->
+            <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+            <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 40%,rgba(97,197,79,0.1) 0%,transparent 65%);"></div>
+
+            <!-- Conteúdo do placeholder -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-4">
+              <div class="w-16 h-16 rounded-full border border-primary-container/30 flex items-center justify-center bg-black/50 backdrop-blur-sm group-hover:border-primary-container/60 transition-colors duration-300">
+                <span class="material-symbols-outlined text-primary-container/70 text-3xl" style="font-variation-settings:'FILL' 1;">play_circle</span>
+              </div>
+              <div class="text-center">
+                <p class="text-label-caps text-primary-container/60 uppercase tracking-[0.2em] text-[10px]">Showreel de Impressão</p>
+                <p class="text-label-caps text-white/20 uppercase tracking-[0.15em] text-[9px] mt-1">Vídeo em produção</p>
+              </div>
+            </div>
+
+            <!-- Corner decorations -->
+            <div class="absolute top-3 left-3 w-4 h-4 border-t border-l border-primary-container/40"></div>
+            <div class="absolute top-3 right-3 w-4 h-4 border-t border-r border-primary-container/40"></div>
+            <div class="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-primary-container/40"></div>
+            <div class="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-primary-container/40"></div>
+
+            <!-- Labels sobrepostos -->
+            <div class="absolute top-3 left-1/2 -translate-x-1/2">
+              <span class="text-label-caps text-primary-container/30 uppercase tracking-widest text-[9px]">VIDEO_HERO</span>
+            </div>
+            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
+          </div>
+
+          <!-- Active Build widget — abaixo do vídeo -->
+          <div class="glass-panel rounded-sm p-5 w-full" style="border:1px solid rgba(97,197,79,0.12);">
+            <div class="flex justify-between items-center mb-4 border-b border-white/8 pb-3">
+              <span class="text-label-caps text-tertiary uppercase tracking-widest text-[10px]">Active Build</span>
+              <span class="text-label-caps text-primary-container tracking-widest text-[10px]">ID_409X</span>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <div class="flex justify-between text-[11px] text-white/50 mb-1.5">
+                  <span class="uppercase tracking-wider">Impressão</span>
+                  <span class="text-primary-container font-semibold">80%</span>
+                </div>
+                <div class="h-px bg-surface-high rounded overflow-hidden">
+                  <div class="h-full bg-primary-container glow-effect transition-all duration-1000" style="width:80%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[11px] text-white/50 mb-1.5">
+                  <span class="uppercase tracking-wider">Temperatura</span>
+                  <span class="text-error font-semibold">265°C</span>
+                </div>
+                <div class="h-px bg-surface-high rounded overflow-hidden">
+                  <div class="h-full bg-error" style="width:95%;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot flex-shrink-0"></span>
+              <span class="text-[11px] text-tertiary tracking-wide font-mono">PA CF15 · Layer: 0.15mm · Nozzle: 0.4mm</span>
+            </div>
           </div>
         </div>
       </div>
@@ -109,19 +169,26 @@ import Footer from '../components/Footer.astro'
   </section>
 
 
-  <!-- STATS STRIP -->
-  <div class="border-y border-primary-container/20 bg-surface-dim">
+  <!-- =============================================
+       STATS STRIP
+       ============================================= -->
+  <div class="border-y border-primary-container/15 bg-surface-dim">
     <div class="max-w-[1440px] mx-auto px-edge py-10">
-      <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0">
         {[
-          {value:'+500',label:'Projetos Entregues'},
-          {value:'20+',label:'Materiais Disponíveis'},
-          {value:'±0.05mm',label:'Tolerância Dimensional'},
-          {value:'3',label:'Tecnologias de Impressão'},
-        ].map(s => (
-          <div class="flex flex-col items-center md:items-start px-6 md:px-10 py-2 gap-1.5 first:pl-0 last:border-r-0">
+          {value:'+500',label:'Projetos Entregues',icon:'check_circle'},
+          {value:'20+',label:'Materiais Disponíveis',icon:'category'},
+          {value:'±0.05mm',label:'Tolerância Dimensional',icon:'precision_manufacturing'},
+          {value:'3',label:'Tecnologias de Impressão',icon:'settings_suggest'},
+        ].map((s, i) => (
+          <div class:list={[
+            'flex flex-col items-center md:items-start px-6 md:px-10 py-2 gap-2',
+            i < 3 ? 'md:border-r md:border-white/8' : '',
+            i % 2 === 0 && i < 2 ? 'border-r border-white/8 md:border-r-0' : '',
+          ]}>
+            <span class="material-symbols-outlined text-primary-container/40 text-lg" style="font-variation-settings:'FILL' 1;">{s.icon}</span>
             <span class="text-[clamp(28px,4vw,48px)] font-bold tracking-tighter text-white leading-none">{s.value}</span>
-            <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.15em] text-[10px]">{s.label}</span>
+            <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.12em] text-[10px] text-center md:text-left">{s.label}</span>
           </div>
         ))}
       </div>
@@ -129,51 +196,126 @@ import Footer from '../components/Footer.astro'
   </div>
 
 
-  <!-- CAPACIDADES — Zigzag -->
+  <!-- =============================================
+       CAPACIDADES — Zigzag com video containers
+       ============================================= -->
   <section class="bg-background py-section">
     <div class="max-w-[1440px] mx-auto px-edge">
+      <!-- Header da seção -->
       <div class="mb-20 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">01 // Módulos</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Capacidades Core</h2>
         </div>
-        <a href="/servicos" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200">
-          Todos os Serviços <span class="material-symbols-outlined text-base">arrow_forward</span>
+        <a href="/servicos" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
+          Todos os Serviços
+          <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </a>
       </div>
 
       <div class="divide-y divide-white/5">
         {[
-          {num:'01',title:'Prototipagem Rápida',body:'Valide conceitos em horas, não semanas. Processos FDM e SLA entregam protótipos funcionais com geometrias complexas e tolerância dimensional rigorosa para ciclos de iteração acelerados.',specs:['FDM / SLA / SLS','Entrega 24–72h','Geometria Complexa'],href:'/servicos',reverse:false},
-          {num:'02',title:'Peças Funcionais & Metal',body:'Do projeto à peça final em materiais de engenharia: carbono, nylon de alta temperatura, PEEK e aço inoxidável via BASF Ultrafuse 316L. Componentes para ambientes industriais severos.',specs:['Metal 316L','PA CF15 / PEEK','Alta Temperatura'],href:'/servicos',reverse:true},
-          {num:'03',title:'Modelagem & Engenharia Reversa',body:'Transformamos desenhos, esboços e peças físicas em modelos digitais precisos. Scanner 3D para captura de geometrias complexas e otimização DfAM para manufatura aditiva.',specs:['CAD Profissional','Scanner 3D','DfAM'],href:'/servicos',reverse:false},
-          {num:'04',title:'Peças de Reposição Sob Demanda',body:'Pare de esperar por peças descontinuadas. Fabricamos substitutas em plástico técnico ou metal em prazo reduzido, sem mínimo de quantidade.',specs:['Sem Mínimo','Sob Medida','Entrega Ágil'],href:'/servicos',reverse:true},
+          {
+            num:'01',
+            title:'Prototipagem Rápida',
+            body:'Valide conceitos em horas, não semanas. Processos FDM e SLA entregam protótipos funcionais com geometrias complexas e tolerância dimensional rigorosa para ciclos de iteração acelerados.',
+            specs:['FDM / SLA / SLS','Entrega 24–72h','Geometria Complexa'],
+            href:'/servicos',
+            videoId:'VIDEO_CAP_01',
+            videoLabel:'Prototipagem em ação',
+            videoFile:'prototipagem.mp4',
+            reverse:false,
+          },
+          {
+            num:'02',
+            title:'Peças Funcionais & Metal',
+            body:'Do projeto à peça final em materiais de engenharia: carbono, nylon de alta temperatura, PEEK e aço inoxidável via BASF Ultrafuse 316L. Componentes para ambientes industriais severos.',
+            specs:['Metal 316L','PA CF15 / PEEK','Alta Temperatura'],
+            href:'/servicos',
+            videoId:'VIDEO_CAP_02',
+            videoLabel:'Peça metálica finalizada',
+            videoFile:'metal-parts.mp4',
+            reverse:true,
+          },
+          {
+            num:'03',
+            title:'Modelagem & Engenharia Reversa',
+            body:'Transformamos desenhos, esboços e peças físicas em modelos digitais precisos. Scanner 3D para captura de geometrias complexas e otimização DfAM para manufatura aditiva.',
+            specs:['CAD Profissional','Scanner 3D','DfAM'],
+            href:'/servicos',
+            videoId:'VIDEO_CAP_03',
+            videoLabel:'Scanner 3D em operação',
+            videoFile:'reverse-engineering.mp4',
+            reverse:false,
+          },
+          {
+            num:'04',
+            title:'Peças de Reposição Sob Demanda',
+            body:'Pare de esperar por peças descontinuadas. Fabricamos substitutas em plástico técnico ou metal em prazo reduzido, sem mínimo de quantidade.',
+            specs:['Sem Mínimo','Sob Medida','Entrega Ágil'],
+            href:'/servicos',
+            videoId:'VIDEO_CAP_04',
+            videoLabel:'Linha de produção customizada',
+            videoFile:'on-demand.mp4',
+            reverse:true,
+          },
         ].map((item) => (
-          <div class:list={['grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-20', item.reverse ? 'direction-rtl' : '']}>
+          <div class:list={['grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-20']}>
+            <!-- Texto -->
             <div class:list={item.reverse ? 'lg:order-2' : ''}>
               <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">[{item.num}]</span>
               <h3 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-5">{item.title}</h3>
-              <p class="text-body-lg text-tertiary leading-relaxed mb-6">{item.body}</p>
+              <p class="text-body-lg text-tertiary leading-relaxed mb-7">{item.body}</p>
               <div class="flex flex-wrap gap-2 mb-8">
-                {item.specs.map(s => <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{s}</span>)}
+                {item.specs.map(s => (
+                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest">{s}</span>
+                ))}
               </div>
               <a href={item.href} class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
                 Saiba mais
                 <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </a>
             </div>
+
+            <!-- Video container -->
             <div class:list={item.reverse ? 'lg:order-1' : ''}>
-              <div class="relative aspect-square max-w-md mx-auto rounded-sm overflow-hidden bg-surface-base border border-white/5">
-                <div class="absolute inset-0 bg-tech-grid opacity-50"></div>
-                <div class="absolute inset-0" style={`background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.08) 0%,transparent 70%);`}></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="text-[100px] font-black text-white/[0.025] leading-none select-none tracking-tighter">{item.num}</div>
+              <div class="relative aspect-square max-w-md mx-auto rounded-sm overflow-hidden bg-surface-base border border-white/8 group/media" style="box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+                <!--
+                  {item.videoId} — substituir pelo vídeo real:
+                  <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+                    <source src={`/videos/${item.videoFile}`} type="video/mp4" />
+                  </video>
+                -->
+                <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+                <div class="absolute inset-0" style={`background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.07) 0%,transparent 65%);`}></div>
+
+                <!-- Número grande decorativo -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                  <span class="text-[120px] font-black text-white/[0.03] leading-none tracking-tighter">{item.num}</span>
                 </div>
-                <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/30 to-transparent animate-scan-line"></div>
-                <div class="absolute top-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest uppercase">MODULE_{item.num}</div>
+
+                <!-- Play button -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="w-14 h-14 rounded-full border border-primary-container/25 flex items-center justify-center bg-black/30 backdrop-blur-sm group-hover/media:border-primary-container/50 group-hover/media:bg-black/50 transition-all duration-300">
+                    <span class="material-symbols-outlined text-primary-container/50 text-2xl group-hover/media:text-primary-container/80 transition-colors duration-300" style="font-variation-settings:'FILL' 1;">play_arrow</span>
+                  </div>
+                </div>
+
+                <!-- Scan line animation -->
+                <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/25 to-transparent animate-scan-line"></div>
+
+                <!-- Labels -->
+                <div class="absolute top-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest uppercase font-mono">{item.videoId}</div>
                 <div class="absolute bottom-4 left-4">
                   <span class="pill-green text-[10px]">{item.specs[0]}</span>
                 </div>
+                <div class="absolute bottom-4 right-4 text-label-caps text-white/20 text-[9px] tracking-widest">{item.videoLabel}</div>
+
+                <!-- Corner brackets -->
+                <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/30"></div>
+                <div class="absolute top-3 right-3 w-3 h-3 border-t border-r border-primary-container/30"></div>
+                <div class="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-primary-container/30"></div>
+                <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/30"></div>
               </div>
             </div>
           </div>
@@ -183,16 +325,19 @@ import Footer from '../components/Footer.astro'
   </section>
 
 
-  <!-- DIFERENCIAIS -->
-  <section class="bg-surface-low py-section">
+  <!-- =============================================
+       DIFERENCIAIS — Grid de cards
+       ============================================= -->
+  <section class="bg-surface-low py-section section-glow-top relative overflow-hidden">
     <div class="max-w-[1440px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">02 // Diferenciais</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Por que AUMAF 3D</h2>
         </div>
-        <p class="text-body-md text-tertiary max-w-sm">Precisão industrial, entrega ágil e parceria técnica em cada projeto.</p>
+        <p class="text-body-md text-tertiary max-w-sm leading-relaxed">Precisão industrial, entrega ágil e parceria técnica em cada projeto.</p>
       </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {[
           {icon:'precision_manufacturing',num:'01',title:'Precisão Certificada',body:'±0.05mm em FDM industrial. Peças dimensionalmente consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE'},
@@ -202,13 +347,15 @@ import Footer from '../components/Footer.astro'
           {icon:'location_on',num:'05',title:'Hub de Inovação',body:'Parque Tecnológico Damha II, São Carlos – SP. Polo tecnológico próximo à USP e UFSCar.',tag:'SÃO CARLOS'},
           {icon:'local_shipping',num:'06',title:'Entrega Ágil',body:'Orçamento em até 24h, produção ágil, atendimento nacional com prazo definido desde o primeiro contato.',tag:'LOGÍSTICA'},
         ].map(card => (
-          <div class="glass-panel p-8 group hover:-translate-y-1 transition-all duration-300" style="border-radius:2px;">
+          <div class="glass-panel p-8 rounded-sm group hover:-translate-y-1 hover:border-primary-container/15 transition-all duration-300">
             <div class="flex justify-between items-start mb-6">
-              <span class="material-symbols-outlined text-primary-container text-3xl" style="font-variation-settings:'FILL' 1;">{card.icon}</span>
-              <span class="text-code-data text-white/10 font-bold">[{card.num}]</span>
+              <div class="w-10 h-10 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center group-hover:bg-primary-container/15 transition-colors duration-300">
+                <span class="material-symbols-outlined text-primary-container text-xl" style="font-variation-settings:'FILL' 1;">{card.icon}</span>
+              </div>
+              <span class="text-code-data text-white/10 font-bold font-mono">[{card.num}]</span>
             </div>
-            <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-4">{card.tag}</span>
-            <h3 class="text-headline-md font-semibold uppercase text-white mb-3 tracking-[0.02em]">{card.title}</h3>
+            <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/30 text-primary-container text-label-caps uppercase tracking-widest mb-4 text-[10px]">{card.tag}</span>
+            <h3 class="text-headline-md font-semibold uppercase text-white mb-3 tracking-[0.01em]">{card.title}</h3>
             <p class="text-body-md text-tertiary leading-relaxed">{card.body}</p>
           </div>
         ))}
@@ -217,7 +364,9 @@ import Footer from '../components/Footer.astro'
   </section>
 
 
-  <!-- TECNOLOGIAS -->
+  <!-- =============================================
+       TECNOLOGIAS DISPONÍVEIS
+       ============================================= -->
   <section class="bg-background py-section">
     <div class="max-w-[1440px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10">
@@ -225,52 +374,94 @@ import Footer from '../components/Footer.astro'
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Tecnologias Disponíveis</h2>
       </div>
 
-      <!-- SLS destaque -->
-      <div class="glass-panel p-10 mb-gutter" style="border:1px solid rgba(97,197,79,0.12);border-radius:2px;">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <!-- SLS — Destaque -->
+      <div class="glass-panel p-8 lg:p-12 mb-gutter rounded-sm" style="border:1px solid rgba(97,197,79,0.10);">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <!-- Texto SLS -->
           <div>
             <div class="flex items-center gap-4 mb-6">
-              <span class="text-[52px] font-black text-primary-container leading-none tracking-[-0.04em]">SLS</span>
+              <span class="text-[56px] font-black text-primary-container leading-none tracking-[-0.04em]">SLS</span>
               <div class="border-l border-white/10 pl-4">
                 <p class="text-body-md text-on-surface font-medium">Sinterização Seletiva a Laser</p>
-                <p class="text-sm text-tertiary">Sem estruturas de suporte</p>
+                <p class="text-sm text-tertiary mt-0.5">Sem estruturas de suporte</p>
               </div>
             </div>
-            <p class="text-body-md text-tertiary leading-relaxed mb-6">Peças com densidade máxima e geometrias internas complexas impossíveis por outros métodos. Ideal para protótipos funcionais de alta precisão e pequenas séries técnicas.</p>
-            <div class="flex flex-wrap gap-2">
-              <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">Resolução 100μm</span>
-              <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">Sem Suporte</span>
-              <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">Nylon / PA / TPU</span>
+            <p class="text-body-md text-tertiary leading-relaxed mb-6">
+              Peças com densidade máxima e geometrias internas complexas impossíveis por outros métodos.
+              Ideal para protótipos funcionais de alta precisão e pequenas séries técnicas.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="pill-green">Resolução 100μm</span>
+              <span class="pill-green">Sem Suporte</span>
+              <span class="pill-green">Nylon / PA / TPU</span>
             </div>
+            <a href="/servicos" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+              Saber mais sobre SLS
+              <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
           </div>
-          <div class="relative h-52 rounded-sm overflow-hidden bg-surface-high border border-white/5">
-            <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
-            <div class="absolute inset-0 flex items-center justify-center opacity-25">
-              <svg viewBox="0 0 120 120" fill="none" class="w-28 h-28">
-                <rect x="20" y="20" width="80" height="80" stroke="#61c54f" stroke-width="0.8"/>
-                <rect x="35" y="35" width="50" height="50" stroke="#61c54f" stroke-width="0.5"/>
-                <line x1="20" y1="60" x2="100" y2="60" stroke="#61c54f" stroke-width="0.3"/>
-                <line x1="60" y1="20" x2="60" y2="100" stroke="#61c54f" stroke-width="0.3"/>
-                <circle cx="60" cy="60" r="8" stroke="#61c54f" stroke-width="0.8" fill="rgba(97,197,79,0.1)"/>
-                <circle cx="60" cy="60" r="2" fill="#61c54f"/>
+
+          <!-- VIDEO_SLS -->
+          <div class="relative h-60 lg:h-72 rounded-sm overflow-hidden bg-surface-high border border-white/8 group/sls" style="box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+            <!--
+              VIDEO_SLS — substituir pelo vídeo real do laser SLS:
+              <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+                <source src="/videos/sls-laser.mp4" type="video/mp4" />
+              </video>
+            -->
+            <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+            <div class="absolute inset-0" style="background:radial-gradient(circle at 50% 40%,rgba(97,197,79,0.08) 0%,transparent 65%);"></div>
+
+            <!-- SVG decorativo do laser -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none">
+              <svg viewBox="0 0 120 120" fill="none" class="w-32 h-32">
+                <rect x="10" y="10" width="100" height="100" stroke="#61c54f" stroke-width="0.6"/>
+                <rect x="30" y="30" width="60" height="60" stroke="#61c54f" stroke-width="0.4"/>
+                <line x1="10" y1="60" x2="110" y2="60" stroke="#61c54f" stroke-width="0.3"/>
+                <line x1="60" y1="10" x2="60" y2="110" stroke="#61c54f" stroke-width="0.3"/>
+                <circle cx="60" cy="60" r="10" stroke="#61c54f" stroke-width="0.8" fill="rgba(97,197,79,0.15)"/>
+                <circle cx="60" cy="60" r="3" fill="#61c54f"/>
+                <!-- Raios do laser -->
+                <line x1="60" y1="10" x2="60" y2="50" stroke="#61c54f" stroke-width="1.5" opacity="0.6"/>
+                <line x1="45" y1="25" x2="55" y2="55" stroke="#61c54f" stroke-width="0.8" opacity="0.4"/>
+                <line x1="75" y1="25" x2="65" y2="55" stroke="#61c54f" stroke-width="0.8" opacity="0.4"/>
               </svg>
             </div>
-            <div class="absolute top-3 right-3 text-label-caps text-primary-container/40 text-[10px] tracking-widest">LASER_HEAD</div>
+
+            <!-- Play -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-14 h-14 rounded-full border border-primary-container/30 flex items-center justify-center bg-black/40 backdrop-blur-sm group-hover/sls:border-primary-container/60 transition-colors duration-300">
+                <span class="material-symbols-outlined text-primary-container/60 text-2xl group-hover/sls:text-primary-container/90 transition-colors" style="font-variation-settings:'FILL' 1;">play_circle</span>
+              </div>
+            </div>
+
+            <div class="absolute top-3 right-3 text-label-caps text-primary-container/30 text-[9px] tracking-widest uppercase font-mono">VIDEO_SLS</div>
+            <div class="absolute bottom-3 left-3"><span class="pill-green text-[9px]">Laser Head Active</span></div>
+
+            <!-- Corner brackets -->
+            <div class="absolute top-2 left-2 w-3 h-3 border-t border-l border-primary-container/30"></div>
+            <div class="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-primary-container/30"></div>
+            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
           </div>
         </div>
       </div>
 
+      <!-- SLA + FDM grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
         {[
-          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica.',specs:['Resina ABS/Cerâmica','Resolução 25μm','Acabamento Premium']},
-          {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono, metal e flexíveis.',specs:['20+ Materiais','Metal Disponível','Maior Portfólio']},
+          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina ABS/Cerâmica','Resolução 25μm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
+          {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono, metal e flexíveis. Melhor custo-benefício para séries.',specs:['20+ Materiais','Metal Disponível','Maior Portfólio'],accent:'rgba(97,197,79,0.03)'},
         ].map(t => (
-          <div class="glass-panel p-8 hover:border-primary-container/20 transition-all duration-300" style="border-radius:2px;">
-            <span class="text-[40px] font-black text-on-surface leading-none tracking-[-0.04em] block mb-2">{t.code}</span>
-            <p class="text-sm text-tertiary mb-1">{t.title}</p>
+          <div class="glass-panel p-8 lg:p-10 rounded-sm hover:border-primary-container/15 transition-all duration-300 group" style={`background:linear-gradient(135deg,${t.accent},transparent);`}>
+            <div class="flex items-end gap-4 mb-4">
+              <span class="text-[48px] font-black text-white leading-none tracking-[-0.04em] group-hover:text-primary-container transition-colors duration-300">{t.code}</span>
+              <div class="pb-1">
+                <p class="text-[11px] text-tertiary tracking-widest uppercase">{t.title}</p>
+              </div>
+            </div>
             <p class="text-body-md text-on-surface-variant leading-relaxed mb-6">{t.body}</p>
             <div class="flex flex-wrap gap-2">
-              {t.specs.map(s => <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{s}</span>)}
+              {t.specs.map(s => <span class="pill-green text-[10px]">{s}</span>)}
             </div>
           </div>
         ))}
@@ -278,22 +469,28 @@ import Footer from '../components/Footer.astro'
 
       <div class="mt-10 text-center">
         <a href="/materiais" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
-          Ver Catálogo de Materiais <span class="material-symbols-outlined text-base">arrow_forward</span>
+          Ver Catálogo Completo de Materiais
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
         </a>
       </div>
     </div>
   </section>
 
 
-  <!-- INDÚSTRIAS -->
-  <section class="bg-surface-dim py-section">
+  <!-- =============================================
+       INDÚSTRIAS QUE ATENDEMOS
+       ============================================= -->
+  <section class="bg-surface-dim py-section section-glow-top section-glow-bottom relative overflow-hidden">
+    <!-- Glow atmosférico de fundo -->
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(97,197,79,0.04) 0%,transparent 70%);"></div>
     <div class="max-w-[1440px] mx-auto px-edge">
       <div class="mb-16 text-center">
         <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">04 // Setores</span>
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Indústrias que Atendemos</h2>
-        <p class="text-body-md text-tertiary mt-4 max-w-lg mx-auto">Da prototipagem de pesquisa universitária à produção de componentes aeroespaciais.</p>
+        <p class="text-body-md text-tertiary mt-4 max-w-lg mx-auto leading-relaxed">Da prototipagem de pesquisa universitária à produção de componentes aeroespaciais.</p>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 lg:gap-4">
         {[
           {icon:'directions_car',label:'Automotiva'},
           {icon:'flight',label:'Aeroespacial'},
@@ -304,9 +501,11 @@ import Footer from '../components/Footer.astro'
           {icon:'science',label:'P&D Universitária'},
           {icon:'factory',label:'Agroindustrial'},
         ].map(i => (
-          <div class="glass-panel p-5 flex flex-col items-center gap-3 text-center group hover:border-primary-container/20 hover:-translate-y-0.5 transition-all duration-300" style="border-radius:2px;">
-            <span class="material-symbols-outlined text-2xl text-white/30 group-hover:text-primary-container transition-colors">{i.icon}</span>
-            <span class="text-code-data text-on-surface-variant uppercase tracking-widest text-[11px] group-hover:text-on-surface transition-colors">{i.label}</span>
+          <div class="glass-panel p-5 lg:p-6 flex flex-col items-center gap-3 text-center group hover:border-primary-container/20 hover:-translate-y-0.5 transition-all duration-300 rounded-sm">
+            <div class="w-10 h-10 rounded-sm bg-surface-high flex items-center justify-center group-hover:bg-primary-container/10 transition-colors duration-300">
+              <span class="material-symbols-outlined text-xl text-white/25 group-hover:text-primary-container transition-colors duration-300">{i.icon}</span>
+            </div>
+            <span class="text-code-data text-on-surface-variant uppercase tracking-widest text-[11px] group-hover:text-on-surface transition-colors duration-300 leading-tight">{i.label}</span>
           </div>
         ))}
       </div>
@@ -314,7 +513,9 @@ import Footer from '../components/Footer.astro'
   </section>
 
 
-  <!-- DEPOIMENTOS -->
+  <!-- =============================================
+       DEPOIMENTOS — Carousel
+       ============================================= -->
   <section class="bg-background py-section">
     <div class="max-w-[1440px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10">
@@ -323,26 +524,33 @@ import Footer from '../components/Footer.astro'
       </div>
 
       <div class="relative">
-        <div class="overflow-hidden">
+        <div class="overflow-hidden rounded-sm">
           <div id="testimonial-track" class="flex transition-transform duration-500 ease-in-out">
             {[
               {quote:'Peças impressas com rapidez, personalização e muita precisão. Usamos a AUMAF 3D como fornecedora de componentes para máquinas e robôs. Impressionante!',name:'Raissa Ninelli',role:'Diretora',company:'Fugini Alimentos'},
               {quote:'Agilidade no orçamento e na entrega do projeto. Produtos chegaram com a qualidade e acabamento esperados. Recomendo para projetos exigentes.',name:'Thiago Gerotto',role:'Responsável Técnico',company:'Callamarys'},
               {quote:'Utilizamos maquetes e protótipos produzidos pela AUMAF 3D. Sempre fomos muito bem atendidos, com suporte completo em todas as etapas do projeto.',name:'Vitor Gonçalez',role:'Sócio Proprietário',company:'Aulevi'},
             ].map(t => (
-              <div class="min-w-full px-4">
-                <div class="max-w-3xl mx-auto glass-panel p-10 md:p-16" style="border-radius:2px;border:1px solid rgba(255,255,255,0.08);">
+              <div class="min-w-full px-0 sm:px-4">
+                <div class="max-w-3xl mx-auto glass-panel p-8 md:p-14 rounded-sm" style="border:1px solid rgba(255,255,255,0.06);">
+                  <!-- Stars -->
                   <div class="flex gap-1 mb-8">
-                    {Array(5).fill(0).map(() => <span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings:'FILL' 1;">star</span>)}
+                    {Array(5).fill(0).map(() => (
+                      <span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings:'FILL' 1;">star</span>
+                    ))}
                   </div>
-                  <blockquote class="text-headline-md font-light text-on-surface leading-relaxed mb-10">"{t.quote}"</blockquote>
+                  <!-- Quote -->
+                  <blockquote class="text-headline-md font-light text-on-surface leading-relaxed mb-10">
+                    <span class="text-primary-container text-4xl leading-none font-serif mr-1">"</span>{t.quote}<span class="text-primary-container text-4xl leading-none font-serif ml-1">"</span>
+                  </blockquote>
+                  <!-- Author -->
                   <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full border border-primary-container/30 flex items-center justify-center bg-primary-container/10">
-                      <span class="text-primary-container font-bold text-sm">{t.name[0]}</span>
+                    <div class="w-11 h-11 rounded-full border border-primary-container/30 flex items-center justify-center bg-primary-container/10 flex-shrink-0">
+                      <span class="text-primary-container font-bold">{t.name[0]}</span>
                     </div>
                     <div>
                       <p class="text-label-caps text-primary-container uppercase tracking-[0.15em] font-bold">{t.name}</p>
-                      <p class="text-sm text-tertiary">{t.role} · {t.company}</p>
+                      <p class="text-sm text-tertiary mt-0.5">{t.role} · <span class="text-on-surface-variant">{t.company}</span></p>
                     </div>
                   </div>
                 </div>
@@ -350,21 +558,29 @@ import Footer from '../components/Footer.astro'
             ))}
           </div>
         </div>
+
+        <!-- Controls -->
         <div class="flex items-center justify-center gap-4 mt-8">
-          <button id="prev-t" class="w-10 h-10 border border-white/15 rounded-full flex items-center justify-center text-white/40 hover:border-primary-container/50 hover:text-primary-container transition-all duration-200"><span class="material-symbols-outlined text-base">arrow_back</span></button>
-          <div id="t-dots" class="flex gap-2">
-            <button class="w-2 h-2 rounded-full bg-primary-container" data-i="0" style="box-shadow:0 0 8px rgba(97,197,79,0.4);"></button>
-            <button class="w-2 h-2 rounded-full bg-white/20" data-i="1"></button>
-            <button class="w-2 h-2 rounded-full bg-white/20" data-i="2"></button>
+          <button id="prev-t" aria-label="Depoimento anterior" class="w-10 h-10 border border-white/15 rounded-full flex items-center justify-center text-white/40 hover:border-primary-container/50 hover:text-primary-container transition-all duration-200">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+          </button>
+          <div id="t-dots" class="flex gap-2" role="tablist" aria-label="Depoimentos">
+            <button class="w-2 h-2 rounded-full bg-primary-container" data-i="0" role="tab" aria-selected="true" style="box-shadow:0 0 8px rgba(97,197,79,0.4);"></button>
+            <button class="w-2 h-2 rounded-full bg-white/20" data-i="1" role="tab" aria-selected="false"></button>
+            <button class="w-2 h-2 rounded-full bg-white/20" data-i="2" role="tab" aria-selected="false"></button>
           </div>
-          <button id="next-t" class="w-10 h-10 border border-white/15 rounded-full flex items-center justify-center text-white/40 hover:border-primary-container/50 hover:text-primary-container transition-all duration-200"><span class="material-symbols-outlined text-base">arrow_forward</span></button>
+          <button id="next-t" aria-label="Próximo depoimento" class="w-10 h-10 border border-white/15 rounded-full flex items-center justify-center text-white/40 hover:border-primary-container/50 hover:text-primary-container transition-all duration-200">
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </button>
         </div>
       </div>
     </div>
   </section>
 
 
-  <!-- BLOG PREVIEW -->
+  <!-- =============================================
+       BLOG PREVIEW
+       ============================================= -->
   <section class="bg-surface-low py-section">
     <div class="max-w-[1440px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -372,32 +588,59 @@ import Footer from '../components/Footer.astro'
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">06 // Conteúdo</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Do Nosso Blog</h2>
         </div>
-        <a href="/blog" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200">
-          Ver todos <span class="material-symbols-outlined text-base">arrow_forward</span>
+        <a href="/blog" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
+          Ver todos
+          <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </a>
       </div>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
         {[
-          {cat:'Parceria',title:'AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',date:'Jun 2024',time:'1 min',accent:true},
-          {cat:'Tecnologia',title:'Quais filamentos podem ser usados na impressão 3D?',date:'Abr 2023',time:'2 min',accent:false},
-          {cat:'Inovação',title:'Impressão 3D na Ciência: aplicações que estão mudando o mundo',date:'Abr 2023',time:'2 min',accent:false},
+          {cat:'Parceria',title:'AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',date:'Jun 2024',time:'1 min',accent:true,slug:'formula-sae-usp',imgId:'IMG_BLOG_01'},
+          {cat:'Tecnologia',title:'Quais filamentos podem ser usados na impressão 3D?',date:'Abr 2023',time:'2 min',accent:false,slug:'filamentos-impressao-3d',imgId:'IMG_BLOG_02'},
+          {cat:'Inovação',title:'Impressão 3D na Ciência: aplicações que estão mudando o mundo',date:'Abr 2023',time:'2 min',accent:false,slug:'impressao-3d-ciencia',imgId:'IMG_BLOG_03'},
         ].map(p => (
           <article class="group cursor-pointer">
-            <div class:list={['relative h-52 rounded-sm overflow-hidden mb-4', p.accent ? 'bg-gradient-to-br from-primary-container/15 to-surface-high' : 'bg-gradient-to-br from-surface-high to-surface-base']}>
-              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
-              <div class="absolute inset-0 flex items-center justify-center opacity-15">
-                <svg viewBox="0 0 60 60" fill="none" class="w-16 h-16">
-                  <polygon points="30,5 55,20 55,45 30,55 5,45 5,20" stroke="#61c54f" stroke-width="1" fill="none"/>
-                  <circle cx="30" cy="30" r="6" stroke="#61c54f" stroke-width="1" fill="none"/>
-                </svg>
+            <!--
+              {p.imgId} — substituir pelo arquivo real:
+              <img src={`/images/blog/${p.slug}.jpg`} alt={p.title} class="w-full h-52 object-cover rounded-sm mb-4" loading="lazy" />
+            -->
+            <div class:list={[
+              'relative h-52 rounded-sm overflow-hidden mb-5 border border-white/5',
+              p.accent ? 'bg-gradient-to-br from-primary-container/12 via-surface-high to-surface-base' : 'bg-gradient-to-br from-surface-high to-surface-base'
+            ]}>
+              <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
+              <!-- Ícone placeholder de imagem -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="flex flex-col items-center gap-2 opacity-20 group-hover:opacity-30 transition-opacity">
+                  <span class="material-symbols-outlined text-4xl text-white">image</span>
+                  <span class="text-label-caps text-white text-[9px] uppercase tracking-widest font-mono">{p.imgId}</span>
+                </div>
               </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <!-- Hover overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <!-- Read more CTA on hover -->
+              <div class="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span class="text-label-caps text-white uppercase tracking-[0.15em] text-[10px] flex items-center gap-1">
+                  Ler artigo
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </span>
+              </div>
+              <!-- Category pill no canto -->
+              {p.accent && (
+                <div class="absolute top-3 right-3">
+                  <span class="pill-active text-[9px]">{p.cat}</span>
+                </div>
+              )}
             </div>
-            <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-3">{p.cat}</span>
-            <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-3">{p.title}</h3>
-            <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
+
+            <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest mb-3 text-[10px]">{p.cat}</span>
+            <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors duration-200 leading-snug mb-3">{p.title}</h3>
+            <div class="flex items-center gap-3 text-code-data text-on-surface-variant text-[12px]">
+              <span class="material-symbols-outlined text-sm text-white/20">calendar_month</span>
               <span>{p.date}</span>
-              <span class="w-px h-3 bg-white/20"></span>
+              <span class="w-px h-3 bg-white/15"></span>
+              <span class="material-symbols-outlined text-sm text-white/20">timer</span>
               <span>{p.time} leitura</span>
             </div>
           </article>
@@ -407,31 +650,48 @@ import Footer from '../components/Footer.astro'
   </section>
 
 
-  <!-- CTA FINAL -->
-  <section class="bg-background border-y border-primary-container/20 py-section">
-    <div class="max-w-[1440px] mx-auto px-edge text-center">
-      <div class="relative py-8">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-32 bg-primary-container/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
-          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Sistema Disponível</span>
-        </div>
-        <h2 class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] mb-6">
-          Pronto para Começar<br/>Seu Projeto?
-        </h2>
-        <p class="text-body-lg text-tertiary max-w-lg mx-auto mb-10">
-          Nossa equipe analisa seu arquivo em até 24 horas e retorna com orçamento detalhado e prazo definido.
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-4">
-          <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-effect-lg hover:bg-primary-dim transition-all duration-300">
-            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">upload_file</span>
-            Enviar Arquivo e Solicitar Orçamento
-          </a>
-          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-5 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-            Falar pelo WhatsApp
-          </a>
-        </div>
+  <!-- =============================================
+       CTA FINAL
+       ============================================= -->
+  <section class="bg-background border-y border-primary-container/15 py-section relative overflow-hidden">
+    <!-- Glow de fundo -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-primary-container/4 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Grid sutil -->
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+
+    <div class="max-w-[1440px] mx-auto px-edge text-center relative z-10">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Sistema Disponível</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
+      </div>
+
+      <h2 class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] mb-5">
+        Pronto para Começar<br/>Seu Projeto?
+      </h2>
+      <p class="text-body-lg text-tertiary max-w-lg mx-auto mb-10 leading-relaxed">
+        Nossa equipe analisa seu arquivo em até <span class="text-on-surface font-medium">24 horas</span> e retorna com orçamento detalhado e prazo definido.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/contato"
+          class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-effect-lg hover:bg-primary-dim transition-all duration-300"
+        >
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">upload_file</span>
+          Enviar Arquivo e Solicitar Orçamento
+        </a>
+        <a
+          href="https://wa.me/5516992863412"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-5 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          Falar pelo WhatsApp
+        </a>
       </div>
     </div>
   </section>
@@ -440,10 +700,11 @@ import Footer from '../components/Footer.astro'
 </Base>
 
 <script>
-  // Testimonials carousel
+  // Testimonials carousel com auto-play
   let cur = 0
   const track = document.getElementById('testimonial-track')
   const dots = document.querySelectorAll('#t-dots button')
+  let autoTimer: ReturnType<typeof setInterval>
 
   function goTo(i: number) {
     cur = i
@@ -452,11 +713,21 @@ import Footer from '../components/Footer.astro'
       const active = idx === i
       ;(d as HTMLElement).style.backgroundColor = active ? '#61c54f' : 'rgba(255,255,255,0.2)'
       ;(d as HTMLElement).style.boxShadow = active ? '0 0 8px rgba(97,197,79,0.4)' : ''
+      d.setAttribute('aria-selected', String(active))
     })
   }
 
-  document.getElementById('prev-t')?.addEventListener('click', () => goTo((cur - 1 + 3) % 3))
-  document.getElementById('next-t')?.addEventListener('click', () => goTo((cur + 1) % 3))
-  dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)))
-  setInterval(() => goTo((cur + 1) % 3), 6000)
+  function startAuto() {
+    autoTimer = setInterval(() => goTo((cur + 1) % 3), 6000)
+  }
+
+  function resetAuto() {
+    clearInterval(autoTimer)
+    startAuto()
+  }
+
+  document.getElementById('prev-t')?.addEventListener('click', () => { goTo((cur - 1 + 3) % 3); resetAuto() })
+  document.getElementById('next-t')?.addEventListener('click', () => { goTo((cur + 1) % 3); resetAuto() })
+  dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); resetAuto() }))
+  startAuto()
 </script>
