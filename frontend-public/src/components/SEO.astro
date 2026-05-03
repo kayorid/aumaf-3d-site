@@ -1,0 +1,111 @@
+---
+import { COMPANY } from '../lib/company'
+import {
+  organizationSchema,
+  localBusinessSchema,
+  webSiteSchema,
+  webPageSchema,
+  breadcrumbSchema,
+  graphPayload,
+} from '../lib/schemas'
+
+export interface Props {
+  title: string
+  description?: string
+  ogImage?: string
+  ogType?: 'website' | 'article'
+  noindex?: boolean
+  /** Schemas extras a injetar no @graph desta página (FAQPage, BlogPosting, HowTo, Service, ItemList...). */
+  schemas?: object[]
+  /** Itens de breadcrumb. Quando vazio, omite (a homepage não precisa). */
+  breadcrumb?: { name: string; url: string }[]
+  /** Tipo da WebPage (default: WebPage). Para coleções, FAQ etc. */
+  pageType?: 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage' | 'FAQPage'
+  /** Article meta (para ogType=article). */
+  article?: {
+    datePublished?: string
+    dateModified?: string
+    author?: string
+    section?: string
+  }
+}
+
+const {
+  title,
+  description = COMPANY.description,
+  ogImage = COMPANY.ogImageDefault,
+  ogType = 'website',
+  noindex = false,
+  schemas = [],
+  breadcrumb = [],
+  pageType = 'WebPage',
+  article,
+} = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString()
+const fullTitle = title.includes('AUMAF 3D') ? title : `${title} | AUMAF 3D`
+const imageAlt = title.includes('AUMAF 3D') ? title : `${title} — AUMAF 3D`
+
+// @graph base: Organization + LocalBusiness + WebSite + WebPage atual
+const baseGraph: object[] = [
+  organizationSchema(),
+  localBusinessSchema(),
+  webSiteSchema(),
+  webPageSchema({
+    url: canonical,
+    name: fullTitle,
+    description,
+    type: pageType,
+  }),
+]
+
+if (breadcrumb.length > 0) {
+  // Sempre prefixar com Home — schema breadcrumb deve começar do raiz.
+  const fullBreadcrumb = [
+    { name: 'Home', url: COMPANY.url + '/' },
+    ...breadcrumb.map((b) => ({
+      name: b.name,
+      url: b.url.startsWith('http') ? b.url : COMPANY.url + b.url,
+    })),
+  ]
+  baseGraph.push(breadcrumbSchema(fullBreadcrumb))
+}
+
+const graph = graphPayload([...baseGraph, ...schemas])
+---
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+{!noindex && <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />}
+
+<!-- Open Graph -->
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:type" content={ogType} />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:site_name" content="AUMAF 3D" />
+
+<!-- Open Graph: imagem complementar -->
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={imageAlt} />
+
+<!-- Article meta (para BlogPosting) -->
+{ogType === 'article' && article?.datePublished && <meta property="article:published_time" content={article.datePublished} />}
+{ogType === 'article' && article?.dateModified && <meta property="article:modified_time" content={article.dateModified} />}
+{ogType === 'article' && article?.author && <meta property="article:author" content={article.author} />}
+{ogType === 'article' && article?.section && <meta property="article:section" content={article.section} /> }
+
+<!-- JSON-LD @graph -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify(graph)} />

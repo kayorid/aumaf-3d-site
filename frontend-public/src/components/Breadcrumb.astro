@@ -1,0 +1,32 @@
+---
+export interface Props {
+  items: { name: string; url?: string }[]
+  /** Visualmente compacto (usado dentro de hero). */
+  compact?: boolean
+}
+
+const { items, compact = false } = Astro.props
+---
+<nav aria-label="Trilha de navegação" class={compact ? 'mb-4' : 'mb-8'}>
+  <ol class="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
+    <li>
+      <a href="/" class="hover:text-primary-container transition-colors focus-visible:text-primary-container">
+        Home
+      </a>
+    </li>
+    {items.map((item, i) => (
+      <>
+        <li aria-hidden="true" class="text-white/30">/</li>
+        <li>
+          {i === items.length - 1 || !item.url ? (
+            <span aria-current="page" class="text-primary-container">{item.name}</span>
+          ) : (
+            <a href={item.url} class="hover:text-primary-container transition-colors focus-visible:text-primary-container">
+              {item.name}
+            </a>
+          )}
+        </li>
+      </>
+    ))}
+  </ol>
+</nav>

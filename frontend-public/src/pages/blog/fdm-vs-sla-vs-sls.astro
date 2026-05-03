@@ -2,28 +2,50 @@
 import Base from '../../layouts/Base.astro'
 import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import { COMPANY } from '../../lib/company'
+import { blogPostingSchema } from '../../lib/schemas'
 
 const title = 'FDM, SLA ou SLS? O Guia Definitivo para Escolher o Processo Certo'
 const cat = 'Guia Técnico'
 const date = 'Mai 2026'
+const dateIso = '2026-05-01'
 const time = '8 min'
 const author = 'Equipe AUMAF 3D'
 const excerpt = 'Entenda as diferenças reais entre FDM, SLA e SLS — custo, precisão, materiais e acabamento — e descubra qual processo é o certo para o seu projeto de impressão 3D industrial.'
+
+const slug = 'fdm-vs-sla-vs-sls'
+const url = `${COMPANY.url}/blog/${slug}`
+const ogImage = COMPANY.ogImageDefault
+const schemas = [
+  blogPostingSchema({
+    url,
+    headline: title,
+    description: excerpt,
+    image: ogImage,
+    datePublished: dateIso,
+    authorName: author,
+    section: cat,
+  }),
+]
 ---
 
-<Base title={`${title} — AUMAF 3D`} description={excerpt}>
+<Base
+  title={`${title} — AUMAF 3D`}
+  description={excerpt}
+  ogImage={ogImage}
+  ogType="article"
+  article={{ datePublished: dateIso, author, section: cat }}
+  breadcrumb={[{ name: 'Blog', url: '/blog' }, { name: title, url: `/blog/${slug}` }]}
+  schemas={schemas}
+>
   <Navbar currentPath="/blog" />
 
   <!-- Hero do Post -->
-  <section class="bg-background pt-28 pb-16 relative overflow-hidden">
-    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+  <section class="bg-background pt-28 pb-16 relative overflow-hidden" aria-labelledby="post-title">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 relative z-10">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center gap-2 text-code-data text-on-surface-variant mb-8">
-        <a href="/blog" class="hover:text-primary-container transition-colors">Blog</a>
-        <span class="text-white/20">/</span>
-        <span class="text-primary-container">{cat}</span>
-      </nav>
+      <Breadcrumb items={[{ name: 'Blog', url: '/blog' }, { name: cat }]} compact />
 
       <!-- Category badge -->
       <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-6 block w-fit">{cat}</span>

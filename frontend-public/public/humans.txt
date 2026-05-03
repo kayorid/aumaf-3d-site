@@ -1,0 +1,18 @@
+/* TIME / TEAM */
+
+  Empresa: AUMAF 3D — Manufatura Aditiva Industrial
+  Local: São Carlos – SP, Brasil
+  Site: https://aumaf3d.com.br
+  Contato: comercial@auma3d.com.br
+
+/* DESENVOLVIMENTO */
+
+  Desenvolvedor: Kayo Ridolfi
+  Site: https://kayoridolfi.ai
+  Stack: Astro 5 + Tailwind CSS + Node.js + Prisma + PostgreSQL
+
+/* AGRADECIMENTOS */
+
+  Equipe Fórmula SAE — USP São Carlos
+  BASF — material Ultrafuse 316L
+  Parque Tecnológico Damha II

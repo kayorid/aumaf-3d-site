@@ -4,24 +4,49 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const envSchema = z.object({
+  // Core
   DATABASE_URL: z.string().url(),
   PORT: z.coerce.number().default(3000),
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+
+  // Auth
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().default('7d'),
+  ADMIN_EMAIL: z.string().email(),
+  ADMIN_PASSWORD: z.string().min(8),
+  ADMIN_NAME: z.string().default('Admin AUMAF'),
+
+  // CORS
   FRONTEND_ADMIN_URL: z.string().url(),
   FRONTEND_PUBLIC_URL: z.string().url(),
+  BACKEND_URL: z.string().url().default('http://localhost:3000'),
+
+  // Storage (MinIO/S3)
   STORAGE_DRIVER: z.enum(['fs', 's3']).default('s3'),
-  S3_ENDPOINT: z.string().optional(),
-  S3_REGION: z.string().optional(),
-  S3_ACCESS_KEY: z.string().optional(),
-  S3_SECRET_KEY: z.string().optional(),
-  S3_BUCKET: z.string().optional(),
+  S3_ENDPOINT: z.string().url(),
+  S3_PUBLIC_URL: z.string().url(),
+  S3_REGION: z.string().default('us-east-1'),
+  S3_ACCESS_KEY: z.string(),
+  S3_SECRET_KEY: z.string(),
+  S3_BUCKET: z.string().default('aumaf-blog-images'),
+
+  // Redis (não usado em Phase 1; vars mantidas para Phase 2)
   REDIS_URL: z.string().default('redis://localhost:6379'),
+
+  // Observability
   SENTRY_DSN: z.string().optional(),
   LOG_FORMAT: z.enum(['text', 'json']).default('text'),
-  AI_PROVIDER: z.enum(['openai', 'anthropic', 'gemini']).optional(),
-  AI_API_KEY: z.string().optional(),
+
+  // IA — multi-provedor
+  AI_PROVIDER: z.enum(['anthropic', 'openai', 'gemini']).default('anthropic'),
+  ANTHROPIC_API_KEY: z.string().optional(),
+  ANTHROPIC_MODEL: z.string().default('claude-sonnet-4-6'),
+  OPENAI_API_KEY: z.string().optional(),
+  OPENAI_MODEL: z.string().default('gpt-4o-mini'),
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().default('gemini-2.0-flash-exp'),
+
+  // Botyo (futuro)
   BOTYO_WEBHOOK_URL: z.string().url().or(z.literal('')).optional(),
 })
 
@@ -33,3 +58,4 @@ if (!parsed.success) {
 }
 
 export const env = parsed.data
+export type Env = typeof env

@@ -1,25 +1,53 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const prisma = new PrismaClient()
 
-async function main() {
-  const seedPassword = process.env.SEED_ADMIN_PASSWORD ?? 'Admin@12345'
-  if (!process.env.SEED_ADMIN_PASSWORD) {
-    console.warn('⚠️  SEED_ADMIN_PASSWORD não definida — usando senha padrão insegura. Não use em produção.')
-  }
-  const hashedPassword = await bcrypt.hash(seedPassword, 12)
+const CATEGORIES = [
+  { name: 'Engenharia', slug: 'engenharia' },
+  { name: 'Materiais', slug: 'materiais' },
+  { name: 'Cases', slug: 'cases' },
+  { name: 'Tutorial', slug: 'tutorial' },
+]
 
-  await prisma.user.upsert({
-    where: { email: 'admin@aumaf3d.com.br' },
-    update: {},
-    create: {
-      name: 'Administrador',
-      email: 'admin@aumaf3d.com.br',
-      password: hashedPassword,
-      role: 'ADMIN',
-    },
-  })
+async function main() {
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+  const adminName = process.env.ADMIN_NAME ?? 'Admin AUMAF'
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error('ADMIN_EMAIL e ADMIN_PASSWORD são obrigatórios no .env')
+  }
+
+  const existing = await prisma.user.findUnique({ where: { email: adminEmail } })
+
+  if (existing) {
+    console.log(`✅ Admin já existe: ${adminEmail}`)
+  } else {
+    const hash = await bcrypt.hash(adminPassword, 12)
+    await prisma.user.create({
+      data: {
+        email: adminEmail,
+        password: hash,
+        name: adminName,
+        role: 'ADMIN',
+        active: true,
+      },
+    })
+    console.log(`✅ Admin criado: ${adminEmail}`)
+  }
+
+  for (const cat of CATEGORIES) {
+    await prisma.category.upsert({
+      where: { slug: cat.slug },
+      create: cat,
+      update: {},
+    })
+  }
+  console.log(`✅ ${CATEGORIES.length} categorias seedadas`)
 
   await prisma.setting.upsert({
     where: { id: 'default' },
@@ -30,10 +58,11 @@ async function main() {
       siteDescription: 'Impressão 3D profissional — FDM, SLA, SLS, SLM e mais.',
     },
   })
-
-  console.log('✅ Seed concluído.')
 }
 
 main()
-  .catch(console.error)
+  .catch((err) => {
+    console.error('❌ Seed falhou:', err)
+    process.exit(1)
+  })
   .finally(() => prisma.$disconnect())

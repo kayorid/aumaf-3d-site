@@ -2,6 +2,9 @@
 import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
+import Breadcrumb from '../components/Breadcrumb.astro'
+import { COMPANY } from '../lib/company'
+import { faqPageSchema } from '../lib/schemas'
 
 const faqs = [
   {
@@ -17,7 +20,11 @@ const faqs = [
       },
       {
         q: 'Vocês atendem todo o Brasil?',
-        a: 'Sim. Atendemos clientes em todo o território nacional com envio via transportadora. Para clientes em São Carlos e região, oferecemos retirada presencial no Parque Tecnológico Damha II.',
+        a: 'Sim. Atendemos clientes em todo o território nacional com envio via transportadora (prazo médio de 2 a 5 dias úteis pelos Correios/Sedex). Para clientes em São Carlos e região, oferecemos retirada presencial gratuita no Parque Tecnológico Damha II.',
+      },
+      {
+        q: 'Vocês emitem nota fiscal?',
+        a: 'Sim. Emitimos nota fiscal eletrônica (NF-e) para todos os pedidos, com discriminação de produto e serviço conforme a operação.',
       },
     ],
   },
@@ -77,24 +84,38 @@ const faqs = [
     ],
   },
 ]
+
+const flatFaqs = faqs.flatMap((g) => g.items)
+const description = 'Perguntas frequentes sobre impressão 3D na AUMAF 3D: tolerância, materiais, prazo, metal 316L, engenharia reversa, cobertura geográfica e orçamento. Respostas técnicas de quem fabrica.'
+
+const schemas = [faqPageSchema(flatFaqs)]
 ---
 
-<Base title="FAQ" description="Perguntas frequentes sobre impressão 3D, materiais, processos, prazo e entrega na AUMAF 3D.">
+<Base
+  title="Perguntas Frequentes (FAQ)"
+  description={description}
+  pageType="FAQPage"
+  breadcrumb={[{ name: 'FAQ', url: '/faq' }]}
+  schemas={schemas}
+>
   <Navbar currentPath="/faq" />
 
-  <!-- Hero (coffee-tech FAQ style) -->
-  <section class="bg-background pt-28 pb-20 relative overflow-hidden">
-    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
-    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
-    <div class="max-w-3xl mx-auto px-edge text-center relative z-10">
-      <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-6">Suporte // Informações</span>
-      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
-        Você Perguntou,<br/>
-        <span class="text-gradient-glow">Nós Respondemos.</span>
-      </h1>
-      <p class="text-body-lg text-tertiary">
-        Tudo que você precisa saber antes de iniciar seu projeto de impressão 3D.
-      </p>
+  <!-- Hero -->
+  <section class="bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-faq">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+    <div class="max-w-3xl mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'FAQ' }]} compact />
+      <div class="text-center">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-6">Suporte // Informações</span>
+        <h1 id="hero-faq" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+          Você Perguntou,<br/>
+          <span class="text-gradient-glow">Nós Respondemos.</span>
+        </h1>
+        <p class="text-body-lg text-tertiary">
+          {flatFaqs.length} perguntas com respostas técnicas sobre impressão 3D — material, processo, prazo, entrega e cobertura geográfica.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -105,17 +126,25 @@ const faqs = [
     style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3 flex items-center justify-between gap-4 flex-wrap">
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Filtrar perguntas por categoria">
         <button
+          type="button"
+          role="radio"
+          aria-checked="true"
+          tabindex="0"
           class="pill pill-active transition-all duration-200"
           data-cat="all"
           id="filter-all"
         >
           Todas
         </button>
-        {faqs.map(f => (
+        {faqs.map((f) => (
           <button
-            class="pill transition-all duration-200 hover:border-primary-container/50 hover:text-primary-container"
+            type="button"
+            role="radio"
+            aria-checked="false"
+            tabindex="-1"
+            class="pill transition-all duration-200 hover:border-primary-container/70 hover:text-primary-container"
             data-cat={f.cat}
           >
             {f.cat}
@@ -124,47 +153,71 @@ const faqs = [
       </div>
       <!-- Controles expand -->
       <div class="flex items-center gap-3 shrink-0">
-        <button id="expand-all" class="inline-flex items-center gap-1.5 text-label-caps text-on-surface-variant hover:text-primary-container transition-colors duration-200 uppercase tracking-widest text-[10px]">
-          <span class="material-symbols-outlined text-sm">unfold_more</span>
+        <button id="expand-all" type="button" class="inline-flex items-center gap-1.5 text-label-caps text-tertiary hover:text-primary-container transition-colors duration-200 uppercase tracking-widest text-[10px]">
+          <span class="material-symbols-outlined text-sm" aria-hidden="true">unfold_more</span>
           Abrir todos
         </button>
-        <span class="w-px h-3 bg-white/15"></span>
-        <button id="collapse-all" class="inline-flex items-center gap-1.5 text-label-caps text-on-surface-variant hover:text-primary-container transition-colors duration-200 uppercase tracking-widest text-[10px]">
-          <span class="material-symbols-outlined text-sm">unfold_less</span>
+        <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
+        <button id="collapse-all" type="button" class="inline-flex items-center gap-1.5 text-label-caps text-tertiary hover:text-primary-container transition-colors duration-200 uppercase tracking-widest text-[10px]">
+          <span class="material-symbols-outlined text-sm" aria-hidden="true">unfold_less</span>
           Minimizar todos
         </button>
       </div>
     </div>
+    <div class="max-w-[1600px] mx-auto px-edge pb-2">
+      <p id="faq-count" aria-live="polite" class="text-code-data text-on-surface-variant text-[11px]">
+        Exibindo {flatFaqs.length} perguntas
+      </p>
+    </div>
   </div>
 
   <!-- FAQ Accordions -->
-  <section class="bg-background py-section">
+  <section class="bg-background py-section" aria-labelledby="faq-list">
+    <h2 id="faq-list" class="sr-only">Lista de perguntas e respostas</h2>
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
-      {faqs.map(group => (
-        <div data-group={group.cat} class="mb-16">
-          <h2 class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-6 border-b border-white/8 pb-4">{group.cat}</h2>
+      {faqs.map((group, gi) => (
+        <section data-group={group.cat} class="mb-16" aria-labelledby={`group-${gi}`}>
+          <h2 id={`group-${gi}`} class="text-label-caps text-primary-container uppercase tracking-[0.2em] mb-6 border-b border-white/12 pb-4">{group.cat}</h2>
           <div class="space-y-0">
-            {group.items.map((item) => (
-              <div class="accordion-item border-b border-white/8 last:border-b-0">
-                <button class="accordion-trigger group" onclick="toggleAccordion(this)">
-                  <span class="text-body-lg font-medium text-on-surface group-hover:text-white transition-colors pr-4 text-left">{item.q}</span>
-                  <span class="accordion-icon flex-shrink-0">
-                    <span class="material-symbols-outlined text-base leading-none">add</span>
-                  </span>
-                </button>
-                <div class="accordion-content">
-                  <p class="text-body-md text-tertiary leading-relaxed pb-6 pr-12">{item.a}</p>
+            {group.items.map((item, ii) => {
+              const id = `q-${gi}-${ii}`
+              return (
+                <div class="accordion-item border-b border-white/12 last:border-b-0" data-accordion>
+                  <h3>
+                    <button
+                      type="button"
+                      class="accordion-trigger group w-full flex justify-between items-center py-6 text-left text-on-surface hover:text-white transition-colors duration-200"
+                      aria-expanded="false"
+                      aria-controls={`panel-${id}`}
+                      id={`trigger-${id}`}
+                    >
+                      <span class="text-body-lg font-medium pr-4 flex-1">{item.q}</span>
+                      <span class="accordion-icon flex-shrink-0" aria-hidden="true">
+                        <span class="material-symbols-outlined text-base leading-none">add</span>
+                      </span>
+                    </button>
+                  </h3>
+                  <div
+                    id={`panel-${id}`}
+                    role="region"
+                    aria-labelledby={`trigger-${id}`}
+                    class="accordion-content"
+                    hidden
+                  >
+                    <p class="text-body-md text-tertiary leading-relaxed pb-6 pr-12">{item.a}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
-        </div>
+        </section>
       ))}
     </div>
   </section>
 
   <!-- CTA ainda tem dúvidas -->
-  <section class="bg-surface-low border-t border-white/5 py-16">
+  <section class="bg-surface-low border-t border-white/8 py-16" aria-labelledby="cta-faq">
+    <h2 id="cta-faq" class="sr-only">Ainda tem dúvidas?</h2>
     <div class="max-w-[1600px] mx-auto px-edge">
       <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
@@ -173,10 +226,17 @@ const faqs = [
         </div>
         <div class="flex flex-wrap gap-4">
           <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
-            Falar com a Equipe
+            Falar com a equipe
           </a>
-          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+          <a
+            href={COMPANY.contact.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Falar pelo WhatsApp: ${COMPANY.contact.phoneDisplay} (abre em nova aba)`}
+            class="inline-flex items-center gap-2 border border-white/30 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:border-primary-container hover:text-primary-container transition-all duration-300"
+          >
             WhatsApp
+            <span class="material-symbols-outlined text-base" aria-hidden="true">open_in_new</span>
           </a>
         </div>
       </div>
@@ -187,47 +247,84 @@ const faqs = [
 </Base>
 
 <script>
-  // Toggle individual — múltiplos podem ficar abertos simultaneamente
+  // ─── Accordion: button toggle controla aria-expanded + hidden do panel ───
   function toggleAccordion(btn: HTMLButtonElement) {
-    btn.closest('.accordion-item')?.classList.toggle('open')
+    const expanded = btn.getAttribute('aria-expanded') === 'true'
+    const panelId = btn.getAttribute('aria-controls')
+    const panel = panelId ? document.getElementById(panelId) : null
+    btn.setAttribute('aria-expanded', String(!expanded))
+    btn.parentElement?.parentElement?.classList.toggle('open', !expanded)
+    if (panel) {
+      if (expanded) panel.setAttribute('hidden', '')
+      else panel.removeAttribute('hidden')
+    }
   }
-  (window as any).toggleAccordion = toggleAccordion
 
-  // Abrir / minimizar todos os visíveis
-  document.getElementById('expand-all')?.addEventListener('click', () => {
-    document.querySelectorAll('[data-group]').forEach(g => {
-      if ((g as HTMLElement).style.display !== 'none') {
-        g.querySelectorAll('.accordion-item').forEach(item => item.classList.add('open'))
+  document.querySelectorAll<HTMLButtonElement>('.accordion-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => toggleAccordion(btn))
+  })
+
+  function setAllAccordions(open: boolean) {
+    document.querySelectorAll<HTMLElement>('[data-group]').forEach((g) => {
+      if (g.style.display === 'none') return
+      g.querySelectorAll<HTMLButtonElement>('.accordion-trigger').forEach((btn) => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true'
+        if (isOpen !== open) toggleAccordion(btn)
+      })
+    })
+  }
+
+  document.getElementById('expand-all')?.addEventListener('click', () => setAllAccordions(true))
+  document.getElementById('collapse-all')?.addEventListener('click', () => setAllAccordions(false))
+
+  // ─── Filtros (radiogroup) com contador aria-live ───
+  const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('#faq-filter [role="radio"]'))
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-group]'))
+  const counter = document.getElementById('faq-count')
+
+  function updateCounter() {
+    const visibleQs = Array.from(document.querySelectorAll<HTMLElement>('[data-group]'))
+      .filter((g) => g.style.display !== 'none')
+      .reduce((acc, g) => acc + g.querySelectorAll('[data-accordion]').length, 0)
+    if (counter) counter.textContent = `Exibindo ${visibleQs} perguntas`
+  }
+
+  function setFilter(btn: HTMLButtonElement) {
+    const cat = btn.dataset.cat
+    filterBtns.forEach((b) => {
+      const active = b === btn
+      b.setAttribute('aria-checked', active ? 'true' : 'false')
+      b.tabIndex = active ? 0 : -1
+      b.classList.toggle('pill-active', active)
+    })
+    groups.forEach((g) => {
+      const show = cat === 'all' || g.dataset.group === cat
+      g.style.display = show ? '' : 'none'
+    })
+    updateCounter()
+  }
+
+  filterBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      setFilter(btn)
+      btn.focus()
+    })
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        const next = filterBtns[(i + 1) % filterBtns.length]
+        setFilter(next)
+        next.focus()
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const prev = filterBtns[(i - 1 + filterBtns.length) % filterBtns.length]
+        setFilter(prev)
+        prev.focus()
       }
     })
   })
 
-  document.getElementById('collapse-all')?.addEventListener('click', () => {
-    document.querySelectorAll('.accordion-item.open').forEach(item => item.classList.remove('open'))
-  })
-
-  // Category filter
-  const filterBtns = document.querySelectorAll('[data-cat]')
-  const groups = document.querySelectorAll('[data-group]')
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const cat = (btn as HTMLElement).dataset.cat
-
-      filterBtns.forEach(b => {
-        b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
-        b.classList.add('border-white/20', 'text-on-surface-variant')
-      })
-      btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
-      btn.classList.remove('border-white/20', 'text-on-surface-variant')
-
-      groups.forEach(g => {
-        const show = cat === 'all' || (g as HTMLElement).dataset.group === cat
-        ;(g as HTMLElement).style.display = show ? '' : 'none'
-      })
-    })
-  })
-
-  // Primeiro item aberto por padrão
-  document.querySelector('.accordion-item')?.classList.add('open')
+  // ─── Primeiro item já aberto ───
+  const firstTrigger = document.querySelector<HTMLButtonElement>('.accordion-trigger')
+  if (firstTrigger) toggleAccordion(firstTrigger)
 </script>

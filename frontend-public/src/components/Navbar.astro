@@ -15,11 +15,11 @@ const links = [
 
 <header
   id="navbar"
-  class="fixed top-0 w-full z-50 nav-glass border-b border-white/5"
+  class="fixed top-0 w-full z-50 nav-glass border-b border-white/8"
 >
-  <nav class="flex justify-between items-center px-edge h-16 max-w-[1600px] mx-auto">
+  <nav aria-label="Principal" class="flex justify-between items-center px-edge h-16 max-w-[1600px] mx-auto">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-1 group" aria-label="AUMAF 3D — Página Inicial">
+    <a href="/" class="flex items-center gap-1 group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm" aria-label="AUMAF 3D — Página Inicial">
       <span
         class="font-pirulen text-[18px] text-white tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none"
         style="font-family:'Pirulen',sans-serif;"
@@ -31,21 +31,26 @@ const links = [
     </a>
 
     <!-- Desktop Links (lg+) -->
-    <ul class="hidden lg:flex items-center gap-6">
-      {links.map(link => (
-        <li>
-          <a
-            href={link.href}
-            class:list={[
-              currentPath === link.href
-                ? 'text-[13px] font-light uppercase tracking-[0.2em] text-primary-container border-b border-primary-container pb-0.5 transition-all duration-200'
-                : 'text-[13px] font-light uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all duration-200'
-            ]}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+    <ul class="hidden lg:flex items-center gap-6" role="list">
+      {links.map((link) => {
+        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))
+        return (
+          <li>
+            <a
+              href={link.href}
+              aria-current={isActive ? 'page' : undefined}
+              class:list={[
+                'text-[13px] font-light uppercase tracking-[0.2em] transition-all duration-200 pb-0.5',
+                isActive
+                  ? 'text-primary-container border-b border-primary-container'
+                  : 'text-on-surface-variant hover:text-white',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        )
+      })}
     </ul>
 
     <!-- CTA + Hamburger -->
@@ -55,19 +60,21 @@ const links = [
         class="hidden lg:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-2.5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
       >
         Solicitar Orçamento
-        <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
+        <span class="material-symbols-outlined text-base leading-none" aria-hidden="true" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
       </a>
 
       <!-- Mobile hamburger -->
       <button
         id="menu-toggle"
-        class="lg:hidden w-10 h-10 border border-white/20 rounded-sm flex flex-col justify-center items-center gap-1.5 hover:border-primary-container transition-colors"
-        aria-label="Abrir menu"
+        type="button"
+        class="lg:hidden w-10 h-10 border border-white/30 rounded-sm flex flex-col justify-center items-center gap-1.5 hover:border-primary-container transition-colors"
+        aria-label="Abrir menu de navegação"
         aria-expanded="false"
+        aria-controls="mobile-menu"
       >
-        <span class="w-5 h-px bg-white transition-all duration-300" id="bar1"></span>
-        <span class="w-5 h-px bg-white transition-all duration-300" id="bar2"></span>
-        <span class="w-3 h-px bg-primary-container transition-all duration-300" id="bar3"></span>
+        <span class="w-5 h-px bg-white transition-all duration-300" id="bar1" aria-hidden="true"></span>
+        <span class="w-5 h-px bg-white transition-all duration-300" id="bar2" aria-hidden="true"></span>
+        <span class="w-3 h-px bg-primary-container transition-all duration-300" id="bar3" aria-hidden="true"></span>
       </button>
     </div>
   </nav>
@@ -78,68 +85,98 @@ const links = [
   id="mobile-menu"
   class="fixed inset-0 z-40 glass-panel-strong flex-col justify-center items-start px-8 hidden"
   aria-hidden="true"
+  aria-label="Menu de navegação móvel"
+  role="dialog"
+  aria-modal="true"
 >
-  <div class="mt-16 space-y-1 w-full">
+  <ul role="list" class="mt-16 space-y-1 w-full">
     {links.map((link, i) => (
-      <a
-        href={link.href}
-        class="block py-5 text-headline-md font-bold uppercase tracking-[-0.02em] text-white/70 hover:text-white border-b border-white/5 transition-colors"
-        style={`animation-delay: ${i * 60}ms`}
-      >
-        <span class="text-primary-container text-label-caps mr-4 font-bold">0{i + 1}</span>
-        {link.label}
-      </a>
+      <li>
+        <a
+          href={link.href}
+          class="block py-5 text-headline-md font-bold uppercase tracking-[-0.02em] text-on-surface hover:text-white border-b border-white/8 transition-colors focus-visible:text-primary-container"
+          style={`animation-delay: ${i * 60}ms`}
+        >
+          <span class="text-primary-container text-label-caps mr-4 font-bold" aria-hidden="true">0{i + 1}</span>
+          {link.label}
+        </a>
+      </li>
     ))}
-    <div class="pt-8">
-      <a
-        href="/contato"
-        class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
-      >
-        Solicitar Orçamento
-        <span class="material-symbols-outlined text-base leading-none" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
-      </a>
-    </div>
+  </ul>
+  <div class="pt-8">
+    <a
+      href="/contato"
+      class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
+    >
+      Solicitar Orçamento
+      <span class="material-symbols-outlined text-base leading-none" aria-hidden="true" style="font-variation-settings:'FILL' 1;">arrow_outward</span>
+    </a>
   </div>
 </div>
 
 <script>
-  const toggle = document.getElementById('menu-toggle')
-  const menu   = document.getElementById('mobile-menu')
-  const bar1   = document.getElementById('bar1')
-  const bar2   = document.getElementById('bar2')
-  const bar3   = document.getElementById('bar3')
+  const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null
+  const menu = document.getElementById('mobile-menu')
+  const bar1 = document.getElementById('bar1')
+  const bar2 = document.getElementById('bar2')
+  const bar3 = document.getElementById('bar3')
   let open = false
+  let lastFocus: HTMLElement | null = null
 
-  toggle?.addEventListener('click', () => {
-    open = !open
-    menu?.classList.toggle('hidden', !open)
-    menu?.classList.toggle('flex', open)
-    menu?.setAttribute('aria-hidden', String(!open))
+  function setMenu(state: boolean) {
+    open = state
+    if (!menu || !toggle) return
+    menu.classList.toggle('hidden', !open)
+    menu.classList.toggle('flex', open)
+    menu.setAttribute('aria-hidden', String(!open))
     toggle.setAttribute('aria-expanded', String(open))
+    toggle.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação')
     document.body.style.overflow = open ? 'hidden' : ''
     if (bar1 && bar2 && bar3) {
       bar1.style.transform = open ? 'translateY(5px) rotate(45deg)' : ''
-      bar2.style.opacity   = open ? '0' : '1'
+      bar2.style.opacity = open ? '0' : '1'
       bar3.style.transform = open ? 'translateY(-5px) rotate(-45deg)' : ''
-      bar3.style.width     = open ? '20px' : ''
+      bar3.style.width = open ? '20px' : ''
+    }
+    if (open) {
+      lastFocus = document.activeElement as HTMLElement
+      const firstLink = menu.querySelector<HTMLAnchorElement>('a')
+      firstLink?.focus()
+    } else {
+      lastFocus?.focus()
+    }
+  }
+
+  toggle?.addEventListener('click', () => setMenu(!open))
+
+  // Fechar com Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) {
+      e.preventDefault()
+      setMenu(false)
     }
   })
 
-  menu?.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      open = false
-      menu.classList.add('hidden')
-      menu.classList.remove('flex')
-      menu.setAttribute('aria-hidden', 'true')
-      toggle?.setAttribute('aria-expanded', 'false')
-      document.body.style.overflow = ''
-      if (bar1 && bar2 && bar3) {
-        bar1.style.transform = ''
-        bar2.style.opacity   = '1'
-        bar3.style.transform = ''
-        bar3.style.width     = ''
-      }
-    })
+  // Focus trap simples — Tab no último volta pro primeiro
+  menu?.addEventListener('keydown', (e) => {
+    if (!open || e.key !== 'Tab') return
+    const focusables = Array.from(
+      menu.querySelectorAll<HTMLElement>('a, button, [tabindex]:not([tabindex="-1"])'),
+    )
+    if (focusables.length === 0) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
   })
 
+  // Fechar ao clicar em link
+  menu?.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => setMenu(false))
+  })
 </script>

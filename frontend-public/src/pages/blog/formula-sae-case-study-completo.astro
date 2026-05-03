@@ -2,28 +2,51 @@
 import Base from '../../layouts/Base.astro'
 import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import { COMPANY } from '../../lib/company'
+import { blogPostingSchema } from '../../lib/schemas'
 
 const title = 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista'
 const cat = 'Case Study'
 const date = 'Jun 2024'
+const dateIso = '2024-06-26'
 const time = '5 min'
 const author = 'Equipe AUMAF 3D'
 const excerpt = 'Como a AUMAF 3D entregou 7 componentes críticos para o carro da Fórmula SAE USP São Carlos em 5 dias úteis — com tolerância ±0.05mm e aprovação no primeiro lote sem retrabalho.'
+
+const slug = 'formula-sae-case-study-completo'
+const url = `${COMPANY.url}/blog/${slug}`
+const ogImage = `${COMPANY.url}/images/SAE-formula.avif`
+const schemas = [
+  blogPostingSchema({
+    url,
+    headline: title,
+    description: excerpt,
+    image: ogImage,
+    datePublished: dateIso,
+    authorName: author,
+    section: cat,
+  }),
+]
 ---
 
-<Base title={`${title} — AUMAF 3D`} description={excerpt}>
+<Base
+  title={`${title} — AUMAF 3D`}
+  description={excerpt}
+  ogImage={ogImage}
+  ogType="article"
+  preloadImage="/images/SAE-formula.avif"
+  article={{ datePublished: dateIso, author, section: cat }}
+  breadcrumb={[{ name: 'Blog', url: '/blog' }, { name: title, url: `/blog/${slug}` }]}
+  schemas={schemas}
+>
   <Navbar currentPath="/blog" />
 
   <!-- Hero do Post -->
-  <section class="bg-background pt-28 pb-16 relative overflow-hidden">
-    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+  <section class="bg-background pt-28 pb-16 relative overflow-hidden" aria-labelledby="post-title">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 relative z-10">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center gap-2 text-code-data text-on-surface-variant mb-8">
-        <a href="/blog" class="hover:text-primary-container transition-colors">Blog</a>
-        <span class="text-white/20">/</span>
-        <span class="text-primary-container">{cat}</span>
-      </nav>
+      <Breadcrumb items={[{ name: 'Blog', url: '/blog' }, { name: cat }]} compact />
 
       <!-- Badges -->
       <div class="flex flex-wrap gap-2 mb-6">
@@ -53,7 +76,12 @@ const excerpt = 'Como a AUMAF 3D entregou 7 componentes críticos para o carro d
       <div class="relative h-64 md:h-[420px] rounded-sm overflow-hidden border border-white/5">
         <img
           src="/images/SAE-formula.avif"
-          alt="Carro Fórmula SAE USP São Carlos 2024 com peças impressas pela AUMAF 3D"
+          alt="Carro Fórmula SAE USP São Carlos 2024 com peças estruturais e aerodinâmicas impressas em Nylon PA e PET-G CF15 pela AUMAF 3D"
+          width="1280"
+          height="720"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
           class="absolute inset-0 w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>

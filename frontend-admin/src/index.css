@@ -1,9 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --radius: 0.5rem;
+    --radius: 0.625rem;
+  }
+
+  * {
+    border-color: theme('colors.border.DEFAULT');
+  }
+
+  html, body {
+    background-color: theme('colors.background');
+    color: theme('colors.text.primary');
+    font-family: theme('fontFamily.sans');
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: theme('colors.primary.500');
+    color: theme('colors.background');
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.surface.300');
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.surface.400');
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply bg-surface-100 border border-border rounded-lg;
+  }
+
+  .surface-card-hover {
+    @apply transition-colors hover:bg-surface-200 hover:border-border-strong;
+  }
+
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 }
