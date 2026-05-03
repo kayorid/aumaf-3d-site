@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import sitemap from '@astrojs/sitemap'
+import node from '@astrojs/node'
 import { EnumChangefreq } from 'sitemap'
 import { fetchPublicSlugs } from './src/lib/api'
 
@@ -19,10 +20,11 @@ async function dynamicBlogPages(): Promise<string[]> {
 
 export default defineConfig({
   site: 'https://aumaf3d.com.br',
-  // Astro 5 unifica static/hybrid; controle por `export const prerender = true`
-  // em cada página. Todas as páginas do blog usam prerender — build estático.
-  // Re-publish via rebuild (futuro: webhook do admin que aciona CI).
-  output: 'static',
+  // output: 'server' — todas as páginas são SSR por padrão.
+  // Páginas estáticas (home, servicos etc.) marcadas com `export const prerender = true`.
+  // Blog (/blog, /blog/[slug]) é SSR puro: cada F5 busca da API e reflete edições imediatamente.
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
   compressHTML: true,
   build: {
     inlineStylesheets: 'auto',
