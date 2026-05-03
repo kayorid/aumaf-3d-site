@@ -528,25 +528,33 @@ input.bg-surface-low:-webkit-autofill {
    Cancela estilos do Tailwind prose que sobreescrevem
    o DS, garantindo WYSIWYG fiel ao público.
    ══════════════════════════════════════════════════════ */
-.prose-aumaf-editor .tiptap,
-.prose-aumaf-editor [contenteditable] {
-  /* Remove todas as classes prose do Tailwind Typography */
-  all: unset;
-  display: block;
-  font-family: 'Space Grotesk', sans-serif;
-  color: #e5e2e1;
-  cursor: text;
-  word-break: break-word;
-  white-space: pre-wrap;
-  -webkit-font-smoothing: antialiased;
+.prose-aumaf-editor {
+  /* Container do editor — overflow:visible para que NodeViews e badges não sejam cortados */
+  overflow: visible;
 }
 
-/* Re-aplicar foco (necessário após "all: unset") */
-.prose-aumaf-editor [contenteditable]:focus {
-  outline: none;
+/* Garante que o ProseMirror herda os estilos do DS sem ser sobrescrito pelo
+   Tailwind Typography (prose-sm / prose-invert) que pode estar ativo no ancestral. */
+.prose-aumaf-editor .ProseMirror,
+.tiptap-editor-body {
+  /* Padding padrão do editor — espaçamento confortável para edição */
+  padding: 1.25rem 1.5rem !important;
+  outline: none !important;
+  /* Garante que a min-height inline tem efeito */
+  box-sizing: border-box;
 }
 
-/* Garantir que HtmlBlock nodes não sofram all:unset */
+/* Cancela estilos do Tailwind Typography que sobrescrevem o DS */
+.prose-aumaf-editor .ProseMirror.prose-invert,
+.prose-aumaf-editor .ProseMirror.prose-sm,
+.prose-aumaf-editor .ProseMirror.prose {
+  color: unset;
+  max-width: unset;
+  line-height: unset;
+  font-size: unset;
+}
+
+/* NodeViewWrapper dos blocos: overflow visible para barra de controle não ser cortada */
 .prose-aumaf-editor [data-node-view-wrapper] {
-  all: revert;
+  overflow: visible !important;
 }

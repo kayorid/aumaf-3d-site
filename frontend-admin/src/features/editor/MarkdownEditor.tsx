@@ -72,7 +72,7 @@ export function MarkdownEditor({
     editorProps: {
       attributes: {
         class:
-          'focus:outline-none',
+          'tiptap-editor-body',
         style: `min-height: ${minHeight};`,
         spellcheck: 'true',
       },
