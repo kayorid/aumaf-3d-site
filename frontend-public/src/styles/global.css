@@ -119,6 +119,14 @@
     @apply py-[80px] md:py-[120px] lg:py-[160px];
   }
 
+  .pt-section {
+    @apply pt-[80px] md:pt-[120px] lg:pt-[160px];
+  }
+
+  .pb-section {
+    @apply pb-[80px] md:pb-[120px] lg:pb-[160px];
+  }
+
   .px-edge {
     @apply px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20;
   }
