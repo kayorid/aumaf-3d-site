@@ -37,10 +37,9 @@ const links = [
           <a
             href={link.href}
             class:list={[
-              'text-label-caps font-bold uppercase tracking-[0.15em] transition-colors duration-200 pb-0.5',
               currentPath === link.href
-                ? 'text-primary-container border-b border-primary-container'
-                : 'text-white/50 hover:text-white'
+                ? 'text-[13px] font-light uppercase tracking-[0.2em] text-primary-container border-b border-primary-container pb-0.5 transition-all duration-200'
+                : 'text-[13px] font-light uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all duration-200'
             ]}
           >
             {link.label}

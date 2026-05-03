@@ -161,12 +161,46 @@ import Footer from '../components/Footer.astro'
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30 z-10">
-      <span class="text-label-caps text-tertiary uppercase tracking-widest text-[10px]">Scroll</span>
-      <div class="w-px h-10 bg-gradient-to-b from-tertiary to-transparent"></div>
+    <!-- Indicador de rolagem animado -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10 select-none pointer-events-none">
+      <div class="w-5 h-8 border border-white/15 rounded-full flex items-start justify-center pt-1.5">
+        <div class="w-0.5 h-1.5 bg-primary-container/60 rounded-full" style="animation:mouseScroll 1.8s ease-in-out infinite;"></div>
+      </div>
+      <div class="flex flex-col items-center gap-0.5">
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="animation:chevronFade 1.8s ease-in-out infinite;">
+          <path d="M1 1L5 5L9 1" stroke="rgba(97,197,79,0.45)" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="animation:chevronFade 1.8s ease-in-out infinite;animation-delay:0.25s;">
+          <path d="M1 1L5 5L9 1" stroke="rgba(97,197,79,0.25)" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="text-[8px] text-white/20 uppercase tracking-[0.35em] font-light mt-0.5">Rolar</span>
     </div>
+
+    <!-- Transição gradiente hero → próxima seção -->
+    <div class="absolute bottom-0 inset-x-0 h-24 pointer-events-none" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.8));"></div>
   </section>
+
+  <!-- =============================================
+       TICKER — Especificações em loop
+       ============================================= -->
+  <div class="bg-surface-dim border-y border-white/5 overflow-hidden py-3 relative">
+    <div class="absolute inset-y-0 left-0 w-16 z-10 pointer-events-none" style="background:linear-gradient(90deg,#0e0e0e,transparent);"></div>
+    <div class="absolute inset-y-0 right-0 w-16 z-10 pointer-events-none" style="background:linear-gradient(-90deg,#0e0e0e,transparent);"></div>
+    <div class="flex animate-marquee whitespace-nowrap gap-0">
+      {[
+        'PA CF15','PEEK','TPU','Metal 316L','FDM','SLA','SLS',
+        '±0.05mm','+500 Projetos','24h Orçamento','São Carlos – SP',
+        'PA CF15','PEEK','TPU','Metal 316L','FDM','SLA','SLS',
+        '±0.05mm','+500 Projetos','24h Orçamento','São Carlos – SP',
+      ].map((item, i) => (
+        <span class="inline-flex items-center gap-3 px-6 text-label-caps text-on-surface-variant uppercase tracking-[0.15em] text-[10px]">
+          <span class="w-1 h-1 rounded-full bg-primary-container/50 flex-shrink-0"></span>
+          {item}
+        </span>
+      ))}
+    </div>
+  </div>
 
 
   <!-- =============================================
@@ -340,14 +374,14 @@ import Footer from '../components/Footer.astro'
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {[
-          {icon:'precision_manufacturing',num:'01',title:'Precisão Certificada',body:'±0.05mm em FDM industrial. Peças dimensionalmente consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE'},
-          {icon:'category',num:'02',title:'Portfólio de Materiais',body:'20+ materiais: PA CF15, PEEK, TPU, ABS, Policarbonato, Resina e BASF Ultrafuse 316L (aço inoxidável).',tag:'MATERIAIS'},
-          {icon:'tune',num:'03',title:'Feito Sob Medida',body:'Personalização total de geometria, material e acabamento. Sem mínimo de produção para projetos unitários.',tag:'FLEXIBILIDADE'},
-          {icon:'support_agent',num:'04',title:'Consultoria Técnica',body:'Equipe especializada indica tecnologia, material e processo ideal. Suporte do arquivo à entrega final.',tag:'SUPORTE'},
-          {icon:'location_on',num:'05',title:'Hub de Inovação',body:'Parque Tecnológico Damha II, São Carlos – SP. Polo tecnológico próximo à USP e UFSCar.',tag:'SÃO CARLOS'},
-          {icon:'local_shipping',num:'06',title:'Entrega Ágil',body:'Orçamento em até 24h, produção ágil, atendimento nacional com prazo definido desde o primeiro contato.',tag:'LOGÍSTICA'},
+          {icon:'precision_manufacturing',num:'01',title:'Precisão Certificada',body:'±0.05mm em FDM industrial. Peças dimensionalmente consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE',stagger:'stagger-1'},
+          {icon:'category',num:'02',title:'Portfólio de Materiais',body:'20+ materiais: PA CF15, PEEK, TPU, ABS, Policarbonato, Resina e BASF Ultrafuse 316L (aço inoxidável).',tag:'MATERIAIS',stagger:'stagger-2'},
+          {icon:'tune',num:'03',title:'Feito Sob Medida',body:'Personalização total de geometria, material e acabamento. Sem mínimo de produção para projetos unitários.',tag:'FLEXIBILIDADE',stagger:'stagger-3'},
+          {icon:'support_agent',num:'04',title:'Consultoria Técnica',body:'Equipe especializada indica tecnologia, material e processo ideal. Suporte do arquivo à entrega final.',tag:'SUPORTE',stagger:'stagger-4'},
+          {icon:'location_on',num:'05',title:'Hub de Inovação',body:'Parque Tecnológico Damha II, São Carlos – SP. Polo tecnológico próximo à USP e UFSCar.',tag:'SÃO CARLOS',stagger:'stagger-5'},
+          {icon:'local_shipping',num:'06',title:'Entrega Ágil',body:'Orçamento em até 24h, produção ágil, atendimento nacional com prazo definido desde o primeiro contato.',tag:'LOGÍSTICA',stagger:'stagger-6'},
         ].map(card => (
-          <div class="glass-panel p-8 rounded-sm group hover:-translate-y-1 hover:border-primary-container/15 transition-all duration-300">
+          <div class:list={['glass-panel p-8 rounded-sm group hover:-translate-y-1 hover:border-primary-container/15 transition-all duration-300 reveal-hidden', card.stagger]} data-animate>
             <div class="flex justify-between items-start mb-6">
               <div class="w-10 h-10 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center group-hover:bg-primary-container/15 transition-colors duration-300">
                 <span class="material-symbols-outlined text-primary-container text-xl" style="font-variation-settings:'FILL' 1;">{card.icon}</span>
@@ -492,16 +526,16 @@ import Footer from '../components/Footer.astro'
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 lg:gap-4">
         {[
-          {icon:'directions_car',label:'Automotiva'},
-          {icon:'flight',label:'Aeroespacial'},
-          {icon:'medical_services',label:'Médica & Hospitalar'},
-          {icon:'precision_manufacturing',label:'Robótica Industrial'},
-          {icon:'architecture',label:'Arquitetura & AEC'},
-          {icon:'sports_motorsports',label:'Fórmula SAE / Racing'},
-          {icon:'science',label:'P&D Universitária'},
-          {icon:'factory',label:'Agroindustrial'},
+          {icon:'directions_car',label:'Automotiva',stagger:'stagger-1'},
+          {icon:'flight',label:'Aeroespacial',stagger:'stagger-2'},
+          {icon:'medical_services',label:'Médica & Hospitalar',stagger:'stagger-3'},
+          {icon:'precision_manufacturing',label:'Robótica Industrial',stagger:'stagger-4'},
+          {icon:'architecture',label:'Arquitetura & AEC',stagger:'stagger-5'},
+          {icon:'sports_motorsports',label:'Fórmula SAE / Racing',stagger:'stagger-6'},
+          {icon:'science',label:'P&D Universitária',stagger:'stagger-1'},
+          {icon:'factory',label:'Agroindustrial',stagger:'stagger-2'},
         ].map(i => (
-          <div class="glass-panel p-5 lg:p-6 flex flex-col items-center gap-3 text-center group hover:border-primary-container/20 hover:-translate-y-0.5 transition-all duration-300 rounded-sm">
+          <div class:list={['glass-panel p-5 lg:p-6 flex flex-col items-center gap-3 text-center group hover:border-primary-container/20 hover:-translate-y-0.5 transition-all duration-300 rounded-sm reveal-hidden', i.stagger]} data-animate>
             <div class="w-10 h-10 rounded-sm bg-surface-high flex items-center justify-center group-hover:bg-primary-container/10 transition-colors duration-300">
               <span class="material-symbols-outlined text-xl text-white/25 group-hover:text-primary-container transition-colors duration-300">{i.icon}</span>
             </div>
@@ -596,11 +630,11 @@ import Footer from '../components/Footer.astro'
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
         {[
-          {cat:'Parceria',title:'AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',date:'Jun 2024',time:'1 min',accent:true,slug:'formula-sae-usp',imgId:'IMG_BLOG_01'},
-          {cat:'Tecnologia',title:'Quais filamentos podem ser usados na impressão 3D?',date:'Abr 2023',time:'2 min',accent:false,slug:'filamentos-impressao-3d',imgId:'IMG_BLOG_02'},
-          {cat:'Inovação',title:'Impressão 3D na Ciência: aplicações que estão mudando o mundo',date:'Abr 2023',time:'2 min',accent:false,slug:'impressao-3d-ciencia',imgId:'IMG_BLOG_03'},
+          {cat:'Parceria',title:'AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',date:'Jun 2024',time:'1 min',accent:true,slug:'formula-sae-usp',imgId:'IMG_BLOG_01',stagger:'stagger-1'},
+          {cat:'Tecnologia',title:'Quais filamentos podem ser usados na impressão 3D?',date:'Abr 2023',time:'2 min',accent:false,slug:'filamentos-impressao-3d',imgId:'IMG_BLOG_02',stagger:'stagger-2'},
+          {cat:'Inovação',title:'Impressão 3D na Ciência: aplicações que estão mudando o mundo',date:'Abr 2023',time:'2 min',accent:false,slug:'impressao-3d-ciencia',imgId:'IMG_BLOG_03',stagger:'stagger-3'},
         ].map(p => (
-          <article class="group cursor-pointer">
+          <article class:list={['group cursor-pointer reveal-hidden', p.stagger]} data-animate>
             <!--
               {p.imgId} — substituir pelo arquivo real:
               <img src={`/images/blog/${p.slug}.jpg`} alt={p.title} class="w-full h-52 object-cover rounded-sm mb-4" loading="lazy" />
@@ -730,4 +764,21 @@ import Footer from '../components/Footer.astro'
   document.getElementById('next-t')?.addEventListener('click', () => { goTo((cur + 1) % 3); resetAuto() })
   dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); resetAuto() }))
   startAuto()
+
+  // Scroll reveal com IntersectionObserver
+  const revealEls = document.querySelectorAll('[data-animate]')
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement
+          el.classList.remove('reveal-hidden', 'reveal-hidden-left')
+          el.classList.add('reveal-visible')
+          revealObserver.unobserve(el)
+        }
+      })
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+  )
+  revealEls.forEach(el => revealObserver.observe(el))
 </script>

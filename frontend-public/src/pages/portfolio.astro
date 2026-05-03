@@ -41,8 +41,12 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
     </div>
   </section>
 
-  <!-- Filters — sticky abaixo da navbar -->
-  <div class="bg-background/95 border-b border-white/8 sticky top-[80px] z-40" style="backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);">
+  <!-- Filters — sticky sincronizado com o navbar -->
+  <div
+    id="portfolio-filter"
+    class="bg-background/95 border-b border-white/8 sticky z-40"
+    style="top:80px;transition:top 0.4s cubic-bezier(0.4,0,0.2,1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"
+  >
     <div class="max-w-[1440px] mx-auto px-edge py-3 flex flex-wrap gap-2">
       {cats.map((cat, i) => (
         <button
@@ -165,4 +169,22 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
   }
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
+
+  // Sincronizar posição sticky do filtro com visibilidade do navbar
+  const navbar = document.getElementById('navbar')
+  const filterBar = document.getElementById('portfolio-filter')
+
+  if (navbar && filterBar) {
+    const syncFilterTop = () => {
+      const navbarHidden = navbar.classList.contains('-translate-y-full')
+      filterBar.style.top = navbarHidden ? '0px' : '80px'
+    }
+
+    // Observa mudanças de classe no navbar
+    const navObserver = new MutationObserver(syncFilterTop)
+    navObserver.observe(navbar, { attributes: true, attributeFilter: ['class'] })
+
+    // Estado inicial
+    syncFilterTop()
+  }
 </script>
