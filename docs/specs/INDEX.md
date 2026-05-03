@@ -2,15 +2,16 @@
 
 > Visão de portfólio das specs deste projeto. Regenerado por `scripts/update_index.py`.
 
-**Última atualização**: 2026-05-02 22:16
+**Última atualização**: 2026-05-03 12:08
 
 ---
 
 ## Em andamento
 
-| Feature | Fase | Início | Próximo passo | Link |
-|---------|------|--------|---------------|------|
-| q2-blog-backoffice | specify | 2026-05-02 | Preencher requirements.md com user stories e critérios EARS para Blog, Backoffice e integração de IA | [pasta](_active/2026-05-02-q2-blog-backoffice/) |
+| Feature | Fase | Iteração | Início | Próximo passo | Link |
+|---------|------|----------|--------|---------------|------|
+| q2-blog-backoffice | validate ✅ | Phase 1 entregue | 2026-05-02 | Teste manual no admin pelo Kayo; Phase 2 a seguir (UI leads, settings, migração `/blog`, BullMQ) | [pasta](_active/2026-05-02-q2-blog-backoffice/) |
+| frontend-public-uxa11y-seo-geo | validate ✅ | — | 2026-05-03 | Mover para _completed/ + retrospective | [pasta](_active/2026-05-03-frontend-public-uxa11y-seo-geo/) |
 
 ## Recém concluídas
 

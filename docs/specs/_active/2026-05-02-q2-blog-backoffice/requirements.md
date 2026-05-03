@@ -4,8 +4,15 @@
 
 **Slug**: `2026-05-02-q2-blog-backoffice`
 **Início**: 2026-05-02
+**Iteração ativa**: Phase 1 (auth + dashboard + posts CRUD + IA multi-provedor)
 **Stakeholders**: AUMAF 3D (cliente), Kayo Ridolfi (dev/IA)
-**Status**: draft
+**Status**: tasks (a implementar)
+
+> **Nota de iteração (2026-05-03)**: O escopo original cobre todo o backoffice + público. Para entrega faseada, esta spec foi dividida em duas iterações:
+> - **Phase 1** (esta): auth, dashboard com métricas DB, gestão de posts (CRUD + editor + IA multi-provedor + upload), seed do admin único.
+> - **Phase 2** (próxima): UI de leads, UI de settings, migração do `/blog` público para consumir API, CRUD de categorias, BullMQ assíncrono para IA.
+>
+> Critérios marcados com `[P2]` ficam fora desta iteração.
 
 ---
 
@@ -44,12 +51,14 @@ Adicionalmente, a AUMAF quer reduzir o esforço de criação de conteúdo usando
 
 ## 5. Critérios de aceitação (EARS)
 
-### Blog público
+### Blog público `[P2]`
 
-- **R1**: O sistema deve exibir em `/blog` a lista de posts publicados, ordenados por data de publicação decrescente, com título, imagem de capa, data e resumo de até 200 caracteres.
-- **R2**: Quando um visitante acessa `/blog/[slug]`, o sistema deve exibir o conteúdo completo do post renderizado, incluindo título, imagem de capa, data de publicação e corpo em rich text.
-- **R3**: Se um visitante acessa `/blog/[slug]` de um post não publicado ou inexistente, então o sistema deve retornar 404.
-- **R4**: Quando um post é exibido, o sistema deve exibir ao menos 2 posts relacionados (mesma categoria ou mais recentes) ao fim da página.
+> Phase 2 — frontend público continua com posts hardcoded até a migração.
+
+- **R1** `[P2]`: O sistema deve exibir em `/blog` a lista de posts publicados consumindo a API, ordenados por data de publicação decrescente, com título, imagem de capa, data e resumo de até 200 caracteres.
+- **R2** `[P2]`: Quando um visitante acessa `/blog/[slug]`, o sistema deve exibir o conteúdo completo do post renderizado a partir da API, incluindo título, imagem de capa, data de publicação e corpo em rich text.
+- **R3** `[P2]`: Se um visitante acessa `/blog/[slug]` de um post não publicado ou inexistente, então o sistema deve retornar 404.
+- **R4** `[P2]`: Quando um post é exibido, o sistema deve exibir ao menos 2 posts relacionados (mesma categoria ou mais recentes) ao fim da página.
 
 ### Autenticação do backoffice
 
@@ -59,17 +68,25 @@ Adicionalmente, a AUMAF quer reduzir o esforço de criação de conteúdo usando
 
 ### Gestão de posts (backoffice)
 
-- **R8**: O sistema deve permitir ao administrador criar um post com título, slug (gerado automaticamente a partir do título, editável), corpo rich text, imagem de capa, categoria e status (rascunho ou publicado).
+- **R8**: O sistema deve permitir ao administrador criar um post com título, slug (gerado automaticamente a partir do título, editável), corpo em **Markdown** (CommonMark + GFM), imagem de capa, categoria e status (rascunho ou publicado).
 - **R9**: Quando o administrador salva um post com status "rascunho", o sistema deve persistir o post sem torná-lo visível no site público.
 - **R10**: Quando o administrador publica um post, o sistema deve torná-lo visível imediatamente na rota `/blog/[slug]`.
 - **R11**: O sistema deve permitir ao administrador fazer upload de imagens via MinIO e inserir no corpo ou como capa do post.
 - **R12**: Enquanto o administrador edita um post, o sistema deve indicar visualmente o status de salvamento (salvo / salvando / erro).
 
-### Assistente de IA
+### Assistente de IA (multi-provedor)
 
 - **R13**: Onde o administrador está criando um post, o sistema deve oferecer a opção de gerar um rascunho a partir de um tema/prompt via integração com IA.
-- **R14**: Quando a geração de IA é concluída, o sistema deve inserir o rascunho no editor de rich text para revisão humana antes de salvar.
+- **R14**: Quando a geração de IA é concluída, o sistema deve inserir o rascunho **em Markdown** no editor (modo Visual converte para visualização Tiptap) para revisão humana antes de salvar, marcando o post com `generatedByAi=true` ao primeiro save.
 - **R15**: Se a geração de IA falhar (timeout, erro de API), então o sistema deve exibir mensagem de erro e permitir nova tentativa sem perder o conteúdo já editado.
+- **R16**: O sistema deve permitir ao administrador escolher o provedor de IA por requisição (Anthropic, OpenAI, Gemini), com um padrão definido por variável de ambiente do backend.
+- **R17**: Quando uma geração é solicitada, o sistema deve registrar no log estruturado: provedor escolhido, modelo, tamanho do prompt, tamanho da resposta, latência, custo estimado se disponível.
+
+### Dashboard (home do backoffice)
+
+- **R18**: Quando o administrador autenticado acessa `/admin`, o sistema deve exibir um dashboard com 4 cards de KPI: total de posts publicados, total de posts em rascunho, total de leads dos últimos 30 dias, total de posts gerados por IA.
+- **R19**: O dashboard deve exibir uma lista dos 5 posts mais recentes (qualquer status), com título, status e data de última edição, com link direto para edição.
+- **R20**: O dashboard deve exibir uma lista dos 5 leads mais recentes (nome, contato mascarado, data de chegada, fonte). Se ainda não houver endpoint de leads ativo, exibir estado vazio bem desenhado.
 
 ## 6. Edge cases conhecidos
 
@@ -78,12 +95,22 @@ Adicionalmente, a AUMAF quer reduzir o esforço de criação de conteúdo usando
 - Post sem imagem de capa: exibir placeholder visual definido no design system
 - Sessão expirada durante edição: preservar rascunho em localStorage e alertar ao relogin
 
-## 7. Fora de escopo (explícito)
+## 7. Fora de escopo
 
-- **Múltiplos usuários admin**: Q2 tem apenas um admin — sistema de equipe/permissões é Q3+
+### Phase 1 (esta iteração) — fora de escopo
+
+- UI de leads (apenas seção vazia no dashboard se não houver dados ainda)
+- UI de settings (analytics IDs ficam em `.env` provisoriamente)
+- Migração do `/blog` público para consumir API (continua hardcoded)
+- CRUD de categorias (apenas seed inicial — Engenharia, Materiais, Cases, Tutorial)
+- BullMQ para IA assíncrona (geração é síncrona com timeout 90s)
+- Histórico de versões do post
+
+### Permanente (todo o projeto)
+
+- **Múltiplos usuários admin**: Q2 tem apenas um admin único — sistema de equipe/permissões é pós-projeto
 - **Comentários no blog**: sem sistema de comentários — redirecionar para WhatsApp se necessário
 - **Newsletter/e-mail**: fora deste contrato
-- **Versionamento de posts**: sem histórico de edições — apenas a versão atual
 - **Multi-idioma**: apenas pt-BR
 
 ## 8. Métricas de sucesso
@@ -110,11 +137,16 @@ Exemplo: "Quando o usuário recebe a notificação, o sistema deve [CLARIFY: env
 
 ## 11. Clarifications
 
-> Preenchido na fase Clarify. Cada entrada: data, pergunta, opções consideradas, decisão.
-
 | Data | Pergunta | Opções | Decisão | Razão |
 |------|----------|--------|---------|-------|
-| 2026-05-02 | <pergunta> | A, B, C | <decisão> | <razão curta> |
+| 2026-05-03 | Provedor de IA para geração de posts | Anthropic / OpenAI / Gemini / outro | **Multi-provedor**: interface `AIProvider` com 3 implementações; padrão por env var; override por requisição | Flexibilidade sem complexidade; troca trivial; padrão de fábrica |
+| 2026-05-03 | Workflow de aprovação | 2 estados (Draft/Published) ou 3 (Draft/PendingReview/Published) | **2 estados na UI**; enum mantém PENDING_REVIEW dormente | Q2 tem 1 admin único; aprovação = humano revisar rascunho IA antes de publicar |
+| 2026-05-03 | Upload múltiplo de imagens | 1 por vez ou batch | **1 por vez**, ilimitado por post via biblioteca de mídia | UX simples; presigned URL por arquivo evita timeout |
+| 2026-05-03 | Geração IA: síncrona ou via fila | Sync (bloqueia HTTP) / BullMQ (assíncrono + polling) | **Sync com timeout 90s nesta iteração**; BullMQ para Phase 2 | Modelos modernos entregam em 20-40s; simplifica MVP |
+| 2026-05-03 | Métricas do dashboard | DB only / GA4 / mistas | **DB only nesta iteração**; GA4 fica para Phase 2 | Sem dependência externa para go-live; valor imediato com contadores reais |
+| 2026-05-03 | Editor rich text | TipTap / Lexical / Quill | **TipTap** | Headless, controla bem imagens, output HTML limpo, mantido ativamente |
+| 2026-05-03 | Routing no admin | React Router / TanStack Router | **React Router v6** | Maduro, suficiente para o admin (sem SSR) |
+| 2026-05-03 | Data fetching no admin | TanStack Query / SWR / nada | **TanStack Query v5** | Cache + invalidation declarativo, padrão de mercado |
 
 ## 12. Links
 

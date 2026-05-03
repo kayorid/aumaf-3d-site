@@ -1,26 +1,53 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
+import axios, { AxiosError } from 'axios'
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...init?.headers },
-    ...init,
-  })
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: res.statusText }))
-    throw new Error(error.message ?? 'Request failed')
-  }
-  if (res.status === 204) return undefined as T
-  return res.json()
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/v1',
+  withCredentials: true,
+  headers: { 'Content-Type': 'application/json' },
+})
+
+export interface ApiErrorResponse {
+  status: 'error'
+  code: string
+  message: string
+  details?: unknown
 }
 
-export const api = {
-  get: <T>(path: string) => request<T>(path),
-  post: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
-  put: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: 'PUT', body: JSON.stringify(body) }),
-  patch: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: 'PATCH', body: JSON.stringify(body) }),
-  delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    message: string,
+    public readonly details?: unknown,
+  ) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err: AxiosError<ApiErrorResponse>) => {
+    if (err.response?.data) {
+      const { code, message, details } = err.response.data
+      return Promise.reject(new ApiError(err.response.status, code, message, details))
+    }
+    return Promise.reject(new ApiError(0, 'NETWORK_ERROR', err.message))
+  },
+)
+
+export interface ApiSuccess<T> {
+  status: 'ok'
+  data: T
+}
+
+export interface ApiList<T> {
+  status: 'ok'
+  data: T[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+  }
 }

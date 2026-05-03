@@ -3,8 +3,16 @@ import { createTerminus } from '@godaddy/terminus'
 import { createApp } from './app'
 import { env } from './config/env'
 import { logger } from './config/logger'
+import { ensureBucket } from './services/upload.service'
+import { prisma } from './lib/prisma'
 
 async function main() {
+  try {
+    await ensureBucket()
+  } catch (err) {
+    logger.error({ err }, 'Failed to ensure MinIO bucket — continuing anyway')
+  }
+
   const app = createApp()
   const server = createServer(app)
 
@@ -13,6 +21,7 @@ async function main() {
     healthChecks: { '/health': async () => {} },
     onSignal: async () => {
       logger.info('Server shutting down...')
+      await prisma.$disconnect()
     },
   })
 
