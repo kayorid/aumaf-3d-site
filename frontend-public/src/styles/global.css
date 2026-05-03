@@ -35,6 +35,29 @@
     outline: none;
   }
 
+  /*
+    Material Symbols — força font-family + ligature, esconde texto literal
+    enquanto a fonte carrega. Defesa contra swap-FOIT (texto da ligature
+    aparece com fonte fallback se algo cair).
+  */
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -moz-font-feature-settings: 'liga';
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+
+
   ::selection {
     @apply bg-primary-container text-on-primary;
   }
