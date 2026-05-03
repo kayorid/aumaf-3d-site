@@ -41,19 +41,71 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
   return toDto(lead)
 }
 
-export async function listLeads(page: number, pageSize: number) {
+export interface LeadFilters {
+  from?: Date
+  to?: Date
+  source?: string
+  q?: string
+}
+
+function buildLeadWhere(filters: LeadFilters) {
+  return {
+    ...(filters.from || filters.to
+      ? {
+          createdAt: {
+            ...(filters.from ? { gte: filters.from } : {}),
+            ...(filters.to ? { lte: filters.to } : {}),
+          },
+        }
+      : {}),
+    ...(filters.source ? { source: filters.source } : {}),
+    ...(filters.q
+      ? {
+          OR: [
+            { name: { contains: filters.q, mode: 'insensitive' as const } },
+            { email: { contains: filters.q, mode: 'insensitive' as const } },
+            { message: { contains: filters.q, mode: 'insensitive' as const } },
+          ],
+        }
+      : {}),
+  }
+}
+
+export async function listLeads(page: number, pageSize: number, filters: LeadFilters = {}) {
+  const where = buildLeadWhere(filters)
   const [items, total] = await Promise.all([
     prisma.lead.findMany({
+      where,
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * pageSize,
       take: pageSize,
     }),
-    prisma.lead.count(),
+    prisma.lead.count({ where }),
   ])
   return {
     data: items.map(toDto),
     pagination: { page, pageSize, total, totalPages: Math.max(1, Math.ceil(total / pageSize)) },
   }
+}
+
+export async function listAllLeadsForExport(filters: LeadFilters = {}): Promise<LeadDto[]> {
+  const where = buildLeadWhere(filters)
+  const items = await prisma.lead.findMany({
+    where,
+    orderBy: { createdAt: 'desc' },
+    take: 10000, // limite de segurança
+  })
+  return items.map(toDto)
+}
+
+export async function listLeadSources(): Promise<string[]> {
+  const rows = await prisma.lead.findMany({
+    where: { source: { not: null } },
+    select: { source: true },
+    distinct: ['source'],
+    orderBy: { source: 'asc' },
+  })
+  return rows.map((r) => r.source!).filter(Boolean)
 }
 
 export async function countLeadsLast30Days(): Promise<number> {

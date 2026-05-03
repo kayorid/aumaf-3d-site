@@ -5,6 +5,9 @@ import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { PostsListPage } from '@/features/posts/pages/PostsListPage'
 import { PostEditorPage } from '@/features/posts/pages/PostEditorPage'
+import { LeadsListPage } from '@/features/leads/pages/LeadsListPage'
+import { SettingsPage } from '@/features/settings/pages/SettingsPage'
+import { CategoriesPage } from '@/features/categories/pages/CategoriesPage'
 import { NotFoundPage } from '@/components/layout/NotFoundPage'
 
 export const router = createBrowserRouter([
@@ -20,6 +23,9 @@ export const router = createBrowserRouter([
           { path: '/posts', element: <PostsListPage /> },
           { path: '/posts/new', element: <PostEditorPage /> },
           { path: '/posts/:id', element: <PostEditorPage /> },
+          { path: '/categories', element: <CategoriesPage /> },
+          { path: '/leads', element: <LeadsListPage /> },
+          { path: '/settings', element: <SettingsPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

@@ -17,6 +17,9 @@ interface PostFormValues {
   metaDescription?: string | null
   status: 'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'UNPUBLISHED'
   generatedByAi: boolean
+  readingTimeMin?: number | null
+  featured: boolean
+  tags: string[]
 }
 import {
   useCategories,
@@ -41,6 +44,7 @@ import { Select } from '@/components/ui/select'
 import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { useAutoSave } from '../hooks/use-auto-save'
 
 type Tab = 'edit' | 'preview'
 
@@ -78,6 +82,9 @@ export function PostEditorPage() {
       metaDescription: '',
       status: 'DRAFT',
       generatedByAi: false,
+      readingTimeMin: null,
+      featured: false,
+      tags: [],
     }),
     [],
   )
@@ -101,6 +108,9 @@ export function PostEditorPage() {
         metaDescription: post.data.metaDescription ?? '',
         status: post.data.status,
         generatedByAi: post.data.generatedByAi,
+        readingTimeMin: post.data.readingTimeMin,
+        featured: post.data.featured,
+        tags: post.data.tags,
       })
       setSlugManual(true)
     }
@@ -111,9 +121,17 @@ export function PostEditorPage() {
   const slugValue = form.watch('slug')
   const contentValue = form.watch('content')
   const coverValue = form.watch('coverImageUrl')
+  const watchedAll = form.watch()
 
   const isPending = create.isPending || update.isPending || publish.isPending || unpublish.isPending || del.isPending
   const status = form.watch('status')
+
+  // Auto-save: ativo apenas para posts existentes (edição), não em criação inicial
+  const autoSave = useAutoSave({
+    postId: id,
+    values: form.formState.isDirty ? watchedAll : {},
+    enabled: !isNew && form.formState.isDirty,
+  })
 
   const saveLabel = useMemo(() => {
     if (create.isPending || update.isPending) return 'Salvando...'
@@ -238,6 +256,30 @@ export function PostEditorPage() {
             <div className={cn('text-xs font-mono mt-0.5', saveLabelTone)}>
               {saveLabel}
             </div>
+            {!isNew && (
+              <div className="text-[10px] font-mono mt-1 flex items-center gap-1.5">
+                {autoSave.state === 'saving' && (
+                  <span className="text-on-surface-variant">Auto-salvando...</span>
+                )}
+                {autoSave.state === 'saved' && autoSave.lastSavedAt && (
+                  <span className="text-primary-container/80">
+                    Auto-salvo {autoSave.lastSavedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                )}
+                {autoSave.state === 'error' && (
+                  <span className="text-error">Falha no auto-save (tentativa {autoSave.failureCount})</span>
+                )}
+                {autoSave.state === 'paused' && (
+                  <button
+                    type="button"
+                    onClick={autoSave.retry}
+                    className="text-error hover:underline"
+                  >
+                    Auto-save pausado — clique para tentar novamente
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

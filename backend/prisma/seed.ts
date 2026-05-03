@@ -7,9 +7,12 @@ dotenv.config()
 const prisma = new PrismaClient()
 
 const CATEGORIES = [
-  { name: 'Engenharia', slug: 'engenharia' },
+  { name: 'Guia Técnico', slug: 'guia-tecnico' },
   { name: 'Materiais', slug: 'materiais' },
-  { name: 'Cases', slug: 'cases' },
+  { name: 'Case Study', slug: 'case-study' },
+  { name: 'Engenharia', slug: 'engenharia' },
+  { name: 'Parceria', slug: 'parceria' },
+  { name: 'Inovação', slug: 'inovacao' },
   { name: 'Tutorial', slug: 'tutorial' },
 ]
 

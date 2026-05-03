@@ -16,6 +16,9 @@ export const PostInputSchema = z.object({
   metaDescription: z.string().max(200).optional().nullable(),
   status: PostStatusSchema.default('DRAFT'),
   generatedByAi: z.boolean().default(false),
+  readingTimeMin: z.number().int().min(1).max(60).optional().nullable(),
+  featured: z.boolean().default(false),
+  tags: z.array(z.string().min(1).max(40)).max(15).default([]),
 })
 export type PostInput = z.infer<typeof PostInputSchema>
 
@@ -46,6 +49,9 @@ export const PostDtoSchema = z.object({
   metaDescription: z.string().nullable(),
   generatedByAi: z.boolean(),
   publishedAt: z.string().nullable(),
+  readingTimeMin: z.number().int().nullable(),
+  featured: z.boolean(),
+  tags: z.array(z.string()),
   createdAt: z.string(),
   updatedAt: z.string(),
   categoryId: z.string().nullable(),
@@ -68,3 +74,42 @@ export const PostListResponseSchema = z.object({
   }),
 })
 export type PostListResponse = z.infer<typeof PostListResponseSchema>
+
+// === Phase 2 — public read DTOs ===
+
+export const PostPublicDtoSchema = z.object({
+  slug: z.string(),
+  title: z.string(),
+  excerpt: z.string().nullable(),
+  content: z.string(),
+  coverImageUrl: z.string().nullable(),
+  publishedAt: z.string(),
+  readingTimeMin: z.number().int().nullable(),
+  featured: z.boolean(),
+  tags: z.array(z.string()),
+  metaTitle: z.string().nullable(),
+  metaDescription: z.string().nullable(),
+  category: z.object({ name: z.string(), slug: z.string() }).nullable(),
+  author: z.object({ name: z.string() }).nullable(),
+  updatedAt: z.string(),
+})
+export type PostPublicDto = z.infer<typeof PostPublicDtoSchema>
+
+export const PublicPostListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(12),
+  category: z.string().optional(),
+  featured: z.coerce.boolean().optional(),
+})
+export type PublicPostListQuery = z.infer<typeof PublicPostListQuerySchema>
+
+export const PublicPostListResponseSchema = z.object({
+  data: z.array(PostPublicDtoSchema),
+  pagination: z.object({
+    page: z.number(),
+    pageSize: z.number(),
+    total: z.number(),
+    totalPages: z.number(),
+  }),
+})
+export type PublicPostListResponse = z.infer<typeof PublicPostListResponseSchema>

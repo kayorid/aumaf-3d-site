@@ -1,86 +1,36 @@
 ---
+export const prerender = true
+
 import Base from '../../layouts/Base.astro'
 import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
 import Breadcrumb from '../../components/Breadcrumb.astro'
 import { COMPANY } from '../../lib/company'
 import { itemListSchema } from '../../lib/schemas'
+import { fetchPublicPosts } from '../../lib/api'
+import { formatPostDateShort } from '../../lib/render-post'
 
-const posts = [
-  {
-    cat: 'Guia Técnico',
-    title: 'FDM, SLA ou SLS? O guia definitivo para escolher o processo certo',
-    date: '2026-05-01',
-    dateDisplay: 'Mai 2026',
-    time: '8 min',
-    featured: true,
-    href: '/blog/fdm-vs-sla-vs-sls',
-    excerpt: 'Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, tolerância, materiais e casos de uso reais de cada processo.',
-  },
-  {
-    cat: 'Materiais',
-    title: 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação',
-    date: '2026-05-01',
-    dateDisplay: 'Mai 2026',
-    time: '6 min',
-    featured: false,
-    href: '/blog/guia-materiais-impressao-3d',
-    excerpt: 'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.',
-  },
-  {
-    cat: 'Case Study',
-    title: 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',
-    date: '2026-05-01',
-    dateDisplay: 'Mai 2026',
-    time: '5 min',
-    featured: false,
-    href: '/blog/formula-sae-case-study-completo',
-    image: '/images/SAE-formula.avif',
-    excerpt: 'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.',
-  },
-  {
-    cat: 'Engenharia',
-    title: 'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original',
-    date: '2026-05-01',
-    dateDisplay: 'Mai 2026',
-    time: '7 min',
-    featured: false,
-    href: '/blog/engenharia-reversa-passo-a-passo',
-    excerpt: 'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.',
-  },
-  {
-    cat: 'Parceria',
-    title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',
-    date: '2024-06-26',
-    dateDisplay: 'Jun 2024',
-    time: '1 min',
-    featured: false,
-    href: '/blog/formula-sae-usp-sao-carlos',
-    excerpt: 'Peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos.',
-  },
-  {
-    cat: 'Inovação',
-    title: 'Construtora árabe lança edifício impresso mais alto do mundo',
-    date: '2023-10-07',
-    dateDisplay: 'Out 2023',
-    time: '2 min',
-    featured: false,
-    href: '/blog/construtora-arabe-edificio-mais-alto',
-    excerpt: 'Dubai sedia a estrutura impressa em 3D de maior altitude já registrada — e os materiais utilizados surpreendem.',
-  },
-]
+// Carrega todos os posts publicados em build time
+const { data: posts } = await fetchPublicPosts({ pageSize: 50 })
 
-const description = 'Blog AUMAF 3D — guias técnicos de manufatura aditiva, comparativos de processos (FDM, SLA, SLS), seleção de materiais, cases de sucesso e inovação em impressão 3D industrial.'
+const description =
+  'Blog AUMAF 3D — guias técnicos de manufatura aditiva, comparativos de processos (FDM, SLA, SLS), seleção de materiais, cases de sucesso e inovação em impressão 3D industrial.'
+
+const featured = posts.find((p) => p.featured)
+const others = posts.filter((p) => !p.featured)
 
 const schemas = [
   itemListSchema(
     posts.map((p) => ({
       name: p.title,
-      url: `${COMPANY.url}${p.href}`,
-      description: p.excerpt,
+      url: `${COMPANY.url}/blog/${p.slug}`,
+      description: p.excerpt ?? '',
     })),
   ),
 ]
+
+const totalDisplay = posts.length
+const lastUpdate = posts[0]?.publishedAt ?? new Date().toISOString()
 ---
 
 <Base
@@ -107,12 +57,12 @@ const schemas = [
       <ul role="list" class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8">
         <li class="flex items-center gap-2">
           <span class="w-1.5 h-1.5 rounded-full bg-primary-container" aria-hidden="true"></span>
-          <span class="text-code-data text-on-surface-variant text-[11px] uppercase tracking-widest">{posts.length} artigos publicados</span>
+          <span class="text-code-data text-on-surface-variant text-[11px] uppercase tracking-widest">{totalDisplay} artigos publicados</span>
         </li>
         <li class="flex items-center gap-2">
           <span class="w-1.5 h-1.5 rounded-full bg-tertiary" aria-hidden="true"></span>
           <span class="text-code-data text-on-surface-variant text-[11px] uppercase tracking-widest">
-            Atualizado em <time datetime="2026-05">Mai 2026</time>
+            Atualizado em <time datetime={lastUpdate}>{formatPostDateShort(lastUpdate)}</time>
           </span>
         </li>
       </ul>
@@ -121,42 +71,64 @@ const schemas = [
   </section>
 
   <!-- Post em destaque -->
-  <section class="bg-background pt-16 pb-section" aria-labelledby="featured-heading">
-    <h2 id="featured-heading" class="sr-only">Artigo em destaque</h2>
-    <div class="max-w-[1600px] mx-auto px-edge">
-      {posts.filter((p) => p.featured).map((post) => (
-        <article aria-label={`Artigo em destaque: ${post.title}`}>
-          <a href={post.href} class="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
+  {featured && (
+    <section class="bg-background pt-16 pb-section" aria-labelledby="featured-heading">
+      <h2 id="featured-heading" class="sr-only">Artigo em destaque</h2>
+      <div class="max-w-[1600px] mx-auto px-edge">
+        <article aria-label={`Artigo em destaque: ${featured.title}`}>
+          <a href={`/blog/${featured.slug}`} class="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
             <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 relative hover:border-primary-container/40 transition-all duration-300">
               <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent" aria-hidden="true"></div>
               <div class="grid grid-cols-1 lg:grid-cols-5">
                 <div class="lg:col-span-3 relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-br from-primary-container/10 via-surface-high to-surface-base overflow-hidden">
-                  <div class="absolute inset-0 bg-tech-grid opacity-40" aria-hidden="true"></div>
-                  <div class="absolute inset-0" aria-hidden="true" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
-                  <div class="absolute inset-0 flex items-center justify-center opacity-20" aria-hidden="true">
-                    <svg viewBox="0 0 200 200" fill="none" class="w-48 h-48" focusable="false">
-                      <rect x="20" y="20" width="160" height="160" stroke="#61c54f" stroke-width="0.5"/>
-                      <rect x="50" y="50" width="100" height="100" stroke="#61c54f" stroke-width="0.5"/>
-                      <rect x="80" y="80" width="40" height="40" stroke="#61c54f" stroke-width="1" fill="rgba(97,197,79,0.05)"/>
-                      <line x1="20" y1="100" x2="180" y2="100" stroke="#61c54f" stroke-width="0.3"/>
-                      <line x1="100" y1="20" x2="100" y2="180" stroke="#61c54f" stroke-width="0.3"/>
-                      <circle cx="100" cy="100" r="8" fill="#61c54f" opacity="0.6"/>
-                      <circle cx="100" cy="100" r="20" stroke="#61c54f" stroke-width="0.5"/>
-                      <circle cx="100" cy="100" r="40" stroke="#61c54f" stroke-width="0.3"/>
-                    </svg>
-                  </div>
+                  {featured.coverImageUrl ? (
+                    <img
+                      src={featured.coverImageUrl}
+                      alt={`Capa: ${featured.title}`}
+                      width="1280"
+                      height="720"
+                      loading="lazy"
+                      decoding="async"
+                      class="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <>
+                      <div class="absolute inset-0 bg-tech-grid opacity-40" aria-hidden="true"></div>
+                      <div class="absolute inset-0" aria-hidden="true" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
+                      <div class="absolute inset-0 flex items-center justify-center opacity-20" aria-hidden="true">
+                        <svg viewBox="0 0 200 200" fill="none" class="w-48 h-48" focusable="false">
+                          <rect x="20" y="20" width="160" height="160" stroke="#61c54f" stroke-width="0.5"/>
+                          <rect x="50" y="50" width="100" height="100" stroke="#61c54f" stroke-width="0.5"/>
+                          <rect x="80" y="80" width="40" height="40" stroke="#61c54f" stroke-width="1" fill="rgba(97,197,79,0.05)"/>
+                          <line x1="20" y1="100" x2="180" y2="100" stroke="#61c54f" stroke-width="0.3"/>
+                          <line x1="100" y1="20" x2="100" y2="180" stroke="#61c54f" stroke-width="0.3"/>
+                          <circle cx="100" cy="100" r="8" fill="#61c54f" opacity="0.6"/>
+                          <circle cx="100" cy="100" r="20" stroke="#61c54f" stroke-width="0.5"/>
+                          <circle cx="100" cy="100" r="40" stroke="#61c54f" stroke-width="0.3"/>
+                        </svg>
+                      </div>
+                    </>
+                  )}
                   <div class="absolute top-4 left-4">
                     <span class="pill-active">Destaque</span>
                   </div>
                 </div>
                 <div class="lg:col-span-2 p-10 flex flex-col justify-center bg-surface-base">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest mb-4 w-fit">{post.cat}</span>
-                  <h3 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-4 group-hover:text-primary-container transition-colors duration-200">{post.title}</h3>
-                  <p class="text-body-md text-tertiary leading-relaxed mb-6">{post.excerpt}</p>
+                  {featured.category && (
+                    <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest mb-4 w-fit">{featured.category.name}</span>
+                  )}
+                  <h3 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-4 group-hover:text-primary-container transition-colors duration-200">{featured.title}</h3>
+                  {featured.excerpt && (
+                    <p class="text-body-md text-tertiary leading-relaxed mb-6">{featured.excerpt}</p>
+                  )}
                   <div class="flex items-center gap-4 text-code-data text-on-surface-variant mb-6">
-                    <time datetime={post.date}>{post.dateDisplay}</time>
-                    <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
-                    <span><span class="sr-only">Tempo de leitura: </span>{post.time} leitura</span>
+                    <time datetime={featured.publishedAt}>{formatPostDateShort(featured.publishedAt)}</time>
+                    {featured.readingTimeMin && (
+                      <>
+                        <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
+                        <span><span class="sr-only">Tempo de leitura: </span>{featured.readingTimeMin} min leitura</span>
+                      </>
+                    )}
                   </div>
                   <span class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] group-hover:gap-4 transition-all duration-200">
                     Ler artigo completo <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
@@ -166,9 +138,9 @@ const schemas = [
             </div>
           </a>
         </article>
-      ))}
-    </div>
-  </section>
+      </div>
+    </section>
+  )}
 
   <!-- Grid de posts -->
   <section class="bg-surface-low border-t border-white/8 py-section" aria-labelledby="all-posts">
@@ -176,15 +148,18 @@ const schemas = [
       <header class="mb-12 border-b border-white/12 pb-8">
         <h2 id="all-posts" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Todos os Posts</h2>
       </header>
+      {others.length === 0 && !featured && (
+        <p class="text-body-md text-on-surface-variant">Em breve, novos artigos.</p>
+      )}
       <ul role="list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        {posts.filter((p) => !p.featured).map((post) => (
+        {others.map((post) => (
           <li>
             <article class="h-full">
-              <a href={post.href} class="group cursor-pointer block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
+              <a href={`/blog/${post.slug}`} class="group cursor-pointer block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
                 <div class="relative aspect-[4/3] rounded-sm overflow-hidden bg-gradient-to-br from-surface-high to-surface-base mb-5 border border-white/8 hover:border-primary-container/30 transition-all duration-300">
-                  {post.image ? (
+                  {post.coverImageUrl ? (
                     <img
-                      src={post.image}
+                      src={post.coverImageUrl}
                       alt={`Capa do artigo: ${post.title}`}
                       width="640"
                       height="480"
@@ -201,17 +176,25 @@ const schemas = [
                     </>
                   )}
                   <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
-                  <div class="absolute top-4 left-4">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest text-[10px]">{post.cat}</span>
-                  </div>
+                  {post.category && (
+                    <div class="absolute top-4 left-4">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest text-[10px]">{post.category.name}</span>
+                    </div>
+                  )}
                 </div>
                 <h3 class="text-body-lg font-medium text-on-surface group-hover:text-white transition-colors duration-200 leading-snug mb-3">{post.title}</h3>
-                <p class="text-sm text-tertiary leading-relaxed mb-3">{post.excerpt}</p>
+                {post.excerpt && (
+                  <p class="text-sm text-tertiary leading-relaxed mb-3">{post.excerpt}</p>
+                )}
                 <div class="flex items-center gap-3 text-code-data text-on-surface-variant text-[12px]">
-                  <span class="material-symbols-outlined text-sm" aria-hidden="true">timer</span>
-                  <span><span class="sr-only">Tempo de leitura: </span>{post.time} leitura</span>
-                  <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
-                  <time datetime={post.date}>{post.dateDisplay}</time>
+                  {post.readingTimeMin && (
+                    <>
+                      <span class="material-symbols-outlined text-sm" aria-hidden="true">timer</span>
+                      <span><span class="sr-only">Tempo de leitura: </span>{post.readingTimeMin} min leitura</span>
+                      <span class="w-px h-3 bg-white/30" aria-hidden="true"></span>
+                    </>
+                  )}
+                  <time datetime={post.publishedAt}>{formatPostDateShort(post.publishedAt)}</time>
                 </div>
               </a>
             </article>

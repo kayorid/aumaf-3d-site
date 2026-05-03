@@ -1,9 +1,23 @@
 # Status — q2-blog-backoffice
 
-**Fase atual**: validate (Phase 1 implementada e validada)
-**Iteração**: Phase 1 ✅ entregue · Phase 2 a iniciar
-**Última atualização**: 2026-05-03 12:20
-**Próximo passo concreto**: aguardar feedback do Kayo após teste manual no admin; iniciar Phase 2 (UI de leads, settings, migração `/blog`, BullMQ)
+**Fase atual**: validate (Phase 2 implementada)
+**Iteração**: Phase 1 ✅ entregue · **Phase 2 ✅ A+B+C entregues · D postergada para Q3**
+**Branch ativa**: `feat/admin-q2-phase2-migration-blog-dynamic`
+**Última atualização**: 2026-05-03 13:50
+**Próximo passo concreto**: smoke test manual no admin + abrir PR com checklist de validação
+**Spec da Phase 2**: `./phase-2/{requirements,design,tasks}.md`
+
+## Phase 2 — entregue
+- **A**: schema (readingTimeMin/featured/tags + 2 índices), endpoints públicos com cache+ETag, seed expandido (7 categorias), script `migrate:posts` idempotente, 6 posts migrados com fidelidade visual integral, Tailwind safelist
+- **B**: Astro 5 prerender por página, src/lib/api.ts + render-post.ts (marked html:true), /blog/* dinâmicos, sitemap dinâmico (16 páginas em build, 6 do blog), Base.astro emite GA4/GTM/Clarity/Pixel/customScripts vindos das Settings
+- **C**: backend leads filter+CSV+sources, settings GET/PATCH, categories CRUD (409 com posts vinculados), auto-save endpoint; admin Sidebar 6 itens, rotas /admin/{leads,settings,categories}, useAutoSave hook (5s debounce, pausa após 3 falhas)
+- **D** (opcional): BullMQ assíncrono e Storybook stories postergados para Q3
+
+## Status técnico
+- typecheck monorepo: 5/5 verde (0 errors, 0 warnings)
+- frontend-public build: 16 páginas em ~3s
+- frontend-admin build: dist limpo (1.45MB JS / 35KB CSS)
+- 4 commits sequenciais na branch (Setup, A, B, C)
 
 ---
 
