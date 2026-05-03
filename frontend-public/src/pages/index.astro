@@ -685,9 +685,9 @@ import Footer from '../components/Footer.astro'
         <div class="overflow-hidden rounded-sm">
           <div id="testimonial-track" class="flex transition-transform duration-500 ease-in-out">
             {[
-              {quote:'Peças impressas com rapidez, personalização e muita precisão. Usamos a AUMAF 3D como fornecedora de componentes para máquinas e robôs. Impressionante!',name:'Raissa Ninelli',role:'Diretora',company:'Fugini Alimentos'},
-              {quote:'Agilidade no orçamento e na entrega do projeto. Produtos chegaram com a qualidade e acabamento esperados. Recomendo para projetos exigentes.',name:'Thiago Gerotto',role:'Responsável Técnico',company:'Callamarys'},
-              {quote:'Utilizamos maquetes e protótipos produzidos pela AUMAF 3D. Sempre fomos muito bem atendidos, com suporte completo em todas as etapas do projeto.',name:'Vitor Gonçalez',role:'Sócio Proprietário',company:'Aulevi'},
+              {quote:'Peças impressas com rapidez, personalização e muita precisão. Usamos a AUMAF 3D como fornecedora de componentes para máquinas e robôs. Impressionante!',name:'Raissa Ninelli',role:'Diretora',company:'Fugini Alimentos',img:'/images/raissa-ninelli.avif'},
+              {quote:'Agilidade no orçamento e na entrega do projeto. Produtos chegaram com a qualidade e acabamento esperados. Recomendo para projetos exigentes.',name:'Thiago Gerotto',role:'Responsável Técnico',company:'Callamarys',img:'/images/thiago-gerotto.avif'},
+              {quote:'Utilizamos maquetes e protótipos produzidos pela AUMAF 3D. Sempre fomos muito bem atendidos, com suporte completo em todas as etapas do projeto.',name:'Vitor Gonçalez',role:'Sócio Proprietário',company:'Aulevi',img:'/images/vitor-goncalez.avif'},
             ].map(t => (
               <div class="min-w-full px-0 sm:px-4">
                 <div class="max-w-3xl mx-auto glass-panel p-8 md:p-14 rounded-sm" style="border:1px solid rgba(255,255,255,0.06);">
@@ -703,9 +703,11 @@ import Footer from '../components/Footer.astro'
                   </blockquote>
                   <!-- Author -->
                   <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 rounded-full border border-primary-container/30 flex items-center justify-center bg-primary-container/10 flex-shrink-0">
-                      <span class="text-primary-container font-bold">{t.name[0]}</span>
-                    </div>
+                    <img
+                      src={t.img}
+                      alt={t.name}
+                      class="w-12 h-12 rounded-full object-cover flex-shrink-0 border border-primary-container/30"
+                    />
                     <div>
                       <p class="text-label-caps text-primary-container uppercase tracking-[0.15em] font-bold">{t.name}</p>
                       <p class="text-sm text-tertiary mt-0.5">{t.role} · <span class="text-on-surface-variant">{t.company}</span></p>
