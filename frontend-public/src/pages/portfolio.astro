@@ -25,7 +25,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
   <Navbar currentPath="/portfolio" />
 
   <!-- Hero minimalista -->
-  <section class="bg-background pt-20 pb-16 relative overflow-hidden">
+  <section class="bg-background pt-28 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -71,8 +71,7 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
         {projects.map((p, i) => (
           <article
             data-cat={p.cat}
-            data-animate
-            class:list={["group relative overflow-hidden rounded-sm cursor-pointer reveal-hidden", `stagger-${(i % 3) + 1}`]}
+            class="group relative overflow-hidden rounded-sm cursor-pointer"
           >
             <!-- Placeholder visual -->
             <div class:list={[
@@ -132,16 +131,6 @@ const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', '
 </Base>
 
 <script>
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('reveal-visible')
-        revealObs.unobserve(e.target)
-      }
-    })
-  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' })
-  document.querySelectorAll('[data-animate]').forEach(el => revealObs.observe(el))
-
   const filterBtns = document.querySelectorAll<HTMLElement>('[data-filter]')
   const cards = document.querySelectorAll<HTMLElement>('[data-cat]')
 

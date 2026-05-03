@@ -15,7 +15,7 @@ const links = [
 
 <header
   id="navbar"
-  class="fixed top-0 w-full z-50 nav-glass border-b border-white/5 transition-transform duration-500"
+  class="fixed top-0 w-full z-50 nav-glass border-b border-white/5"
 >
   <nav class="flex justify-between items-center px-edge h-16 max-w-[1600px] mx-auto">
     <!-- Logo -->
@@ -142,16 +142,4 @@ const links = [
     })
   })
 
-  // Hide on scroll down, show on scroll up
-  const navbar = document.getElementById('navbar')
-  let lastScroll = 0
-  window.addEventListener('scroll', () => {
-    const cur = window.scrollY
-    if (cur > 80 && cur > lastScroll && !open) {
-      navbar?.classList.add('-translate-y-full')
-    } else {
-      navbar?.classList.remove('-translate-y-full')
-    }
-    lastScroll = cur
-  }, { passive: true })
 </script>

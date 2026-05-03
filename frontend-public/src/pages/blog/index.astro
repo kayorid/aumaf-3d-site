@@ -17,19 +17,30 @@ const posts = [
   <Navbar currentPath="/blog" />
 
   <!-- Hero -->
-  <section class="bg-background pt-20 pb-16 relative overflow-hidden">
+  <section class="bg-background pt-28 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 55% 50% at 70% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 40% at 5% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
-      <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-5">Conteúdo // Conhecimento</span>
-      <h1 class="text-display-xl font-bold uppercase text-white text-glow-white tracking-[-0.04em] leading-none mb-5">Blog.</h1>
-      <p class="text-body-lg text-tertiary max-w-xl leading-relaxed">O guia de manufatura aditiva por especialistas da AUMAF 3D.</p>
+      <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-6">Conteúdo // Conhecimento</span>
+      <h1 class="text-display-xl font-bold uppercase text-white text-glow-white tracking-[-0.04em] leading-none mb-6">Blog.</h1>
+      <p class="text-body-lg text-tertiary max-w-2xl leading-relaxed">O guia de manufatura aditiva por especialistas da AUMAF 3D. Conteúdo técnico de quem fabrica peças, não de quem escreve sobre elas.</p>
+      <div class="flex items-center gap-6 mt-8">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+          <span class="text-code-data text-on-surface-variant text-[11px] uppercase tracking-widest">6 artigos publicados</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant/40"></span>
+          <span class="text-code-data text-on-surface-variant text-[11px] uppercase tracking-widest">Atualizado Mai 2026</span>
+        </div>
+      </div>
     </div>
     <div class="line-glow-bright absolute bottom-0 left-[5%] right-[5%] pointer-events-none"></div>
   </section>
 
   <!-- Post em destaque -->
-  <section class="bg-background pt-14 pb-section">
+  <section class="bg-background pt-16 pb-section">
     <div class="max-w-[1600px] mx-auto px-edge">
       {posts.filter(p => p.featured).map(post => (
         <a href={post.href} class="group block">
@@ -86,7 +97,7 @@ const posts = [
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {posts.filter(p => !p.featured).map((post, i) => (
-          <a href={post.href} data-animate class:list={["group cursor-pointer block reveal-hidden", `stagger-${(i % 3) + 1}`]}>
+          <a href={post.href} class="group cursor-pointer block">
             <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-high to-surface-base mb-5 border border-white/5 hover:border-primary-container/15 transition-all duration-300">
               <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
               <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
@@ -117,14 +128,3 @@ const posts = [
   <Footer />
 </Base>
 
-<script>
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('reveal-visible')
-        obs.unobserve(e.target)
-      }
-    })
-  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' })
-  document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el))
-</script>

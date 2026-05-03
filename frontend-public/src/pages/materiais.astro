@@ -27,7 +27,7 @@ const materials = [
   <Navbar currentPath="/materiais" />
 
   <!-- Hero -->
-  <section class="bg-background pt-20 pb-20 relative overflow-hidden">
+  <section class="bg-background pt-28 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
@@ -80,10 +80,8 @@ const materials = [
         {materials.map((mat, i) => (
           <div
             data-cat={mat.cat}
-            data-animate
             class:list={[
-              'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden reveal-hidden',
-              `stagger-${(i % 4) + 1}`,
+              'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden',
               mat.highlight ? 'border border-primary-container/20' : ''
             ]}
           >
@@ -224,13 +222,4 @@ const materials = [
 
   filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn)))
 
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('reveal-visible')
-        revealObs.unobserve(e.target)
-      }
-    })
-  }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' })
-  document.querySelectorAll('[data-animate]').forEach(el => revealObs.observe(el))
 </script>

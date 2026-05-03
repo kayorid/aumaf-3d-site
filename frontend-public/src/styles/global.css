@@ -18,8 +18,9 @@
   }
 
   body {
-    @apply bg-background text-on-surface antialiased overflow-x-hidden;
+    @apply bg-background text-on-surface antialiased;
     font-family: 'Space Grotesk', sans-serif;
+    overflow-x: clip; /* clip não cria BFC, não quebra position:sticky */
   }
 
   ::selection {
