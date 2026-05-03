@@ -4,12 +4,12 @@ import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
 
 const posts = [
-  { cat: 'Parceria', title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos', date: '26 jun 2024', time: '1 min', featured: true, href: '/blog/formula-sae-usp-sao-carlos' },
-  { cat: 'Inovação', title: 'Construtora árabe lança edifício impresso mais alto do mundo', date: '7 out 2023', time: '2 min', featured: false, href: '/blog/construtora-arabe-edificio-mais-alto' },
-  { cat: 'Visita Técnica', title: 'Visita ao Biofabris: impressão 3D na fronteira da bioengenharia', date: '27 abr 2023', time: '2 min', featured: false, href: null },
-  { cat: 'Ciência', title: 'Impressão 3D na ciência: aplicações que estão mudando o mundo', date: '25 abr 2023', time: '2 min', featured: false, href: null },
-  { cat: 'Materiais', title: 'Quais filamentos podem ser usados na impressão 3D?', date: '17 abr 2023', time: '2 min', featured: false, href: null },
-  { cat: 'Cases', title: 'Precisa construir peças para robôs? A AUMAF 3D pode ajudar', date: '10 mar 2023', time: '1 min', featured: false, href: null },
+  { cat: 'Guia Técnico', title: 'FDM, SLA ou SLS? O guia definitivo para escolher o processo certo', date: 'Mai 2026', time: '8 min', featured: true, href: '/blog/fdm-vs-sla-vs-sls', excerpt: 'Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, tolerância, materiais e casos de uso reais de cada processo.' },
+  { cat: 'Materiais',    title: 'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação',        date: 'Mai 2026', time: '6 min', featured: false, href: '/blog/guia-materiais-impressao-3d',      excerpt: 'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.' },
+  { cat: 'Case Study',   title: 'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',                   date: 'Mai 2026', time: '5 min', featured: false, href: '/blog/formula-sae-case-study-completo', excerpt: 'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.' },
+  { cat: 'Engenharia',   title: 'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original',        date: 'Mai 2026', time: '7 min', featured: false, href: '/blog/engenharia-reversa-passo-a-passo',  excerpt: 'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.' },
+  { cat: 'Parceria',     title: 'Parceria de Sucesso: AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',                date: 'Jun 2024', time: '1 min', featured: false, href: '/blog/formula-sae-usp-sao-carlos',      excerpt: 'Peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos.' },
+  { cat: 'Inovação',     title: 'Construtora árabe lança edifício impresso mais alto do mundo',                            date: 'Out 2023', time: '2 min', featured: false, href: '/blog/construtora-arabe-edificio-mais-alto', excerpt: 'Dubai sedia a estrutura impressa em 3D de maior altitude já registrada — e os materiais utilizados surpreendem.' },
 ]
 ---
 
@@ -31,43 +31,50 @@ const posts = [
   <!-- Post em destaque -->
   <section class="bg-background pt-14 pb-section">
     <div class="max-w-[1600px] mx-auto px-edge">
-      <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 relative">
-        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
-        <div class="grid grid-cols-1 lg:grid-cols-2">
-          <!-- Imagem -->
-          <div class="relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-br from-primary-container/10 to-surface-base overflow-hidden">
-            <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
-            <div class="absolute inset-0 flex items-center justify-center opacity-15">
-              <svg viewBox="0 0 120 120" fill="none" class="w-32 h-32">
-                <polygon points="60,10 110,37 110,83 60,110 10,83 10,37" stroke="#61c54f" stroke-width="1.5" fill="none"/>
-                <circle cx="60" cy="60" r="20" stroke="#61c54f" stroke-width="1" fill="none"/>
-                <circle cx="60" cy="60" r="3" fill="#61c54f"/>
-              </svg>
-            </div>
-            <div class="absolute top-4 left-4">
-              <span class="pill-active">Destaque</span>
+      {posts.filter(p => p.featured).map(post => (
+        <a href={post.href} class="group block">
+          <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 relative hover:border-primary-container/30 transition-all duration-300">
+            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-5">
+              <!-- Visual -->
+              <div class="lg:col-span-3 relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-br from-primary-container/10 via-surface-high to-surface-base overflow-hidden">
+                <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+                <div class="absolute inset-0" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
+                <div class="absolute inset-0 flex items-center justify-center opacity-20">
+                  <svg viewBox="0 0 200 200" fill="none" class="w-48 h-48">
+                    <rect x="20" y="20" width="160" height="160" stroke="#61c54f" stroke-width="0.5"/>
+                    <rect x="50" y="50" width="100" height="100" stroke="#61c54f" stroke-width="0.5"/>
+                    <rect x="80" y="80" width="40" height="40" stroke="#61c54f" stroke-width="1" fill="rgba(97,197,79,0.05)"/>
+                    <line x1="20" y1="100" x2="180" y2="100" stroke="#61c54f" stroke-width="0.3"/>
+                    <line x1="100" y1="20" x2="100" y2="180" stroke="#61c54f" stroke-width="0.3"/>
+                    <circle cx="100" cy="100" r="8" fill="#61c54f" opacity="0.6"/>
+                    <circle cx="100" cy="100" r="20" stroke="#61c54f" stroke-width="0.5"/>
+                    <circle cx="100" cy="100" r="40" stroke="#61c54f" stroke-width="0.3"/>
+                  </svg>
+                </div>
+                <div class="absolute top-4 left-4"><span class="pill-active">Destaque</span></div>
+                <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
+                <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-primary-container/30"></div>
+                <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-primary-container/30"></div>
+              </div>
+              <!-- Conteúdo -->
+              <div class="lg:col-span-2 p-10 flex flex-col justify-center bg-surface-base">
+                <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-4 w-fit">{post.cat}</span>
+                <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-4 group-hover:text-primary-container transition-colors duration-200">{post.title}</h2>
+                <p class="text-body-md text-tertiary leading-relaxed mb-6">{post.excerpt}</p>
+                <div class="flex items-center gap-4 text-code-data text-on-surface-variant mb-6">
+                  <span>{post.date}</span>
+                  <span class="w-px h-3 bg-white/20"></span>
+                  <span>{post.time} leitura</span>
+                </div>
+                <span class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] group-hover:gap-4 transition-all duration-200">
+                  Ler artigo <span class="material-symbols-outlined text-base">arrow_forward</span>
+                </span>
+              </div>
             </div>
           </div>
-          <!-- Conteúdo -->
-          <div class="p-10 flex flex-col justify-center">
-            <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-4 w-fit">Parceria</span>
-            <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">
-              AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos
-            </h2>
-            <p class="text-body-md text-tertiary leading-relaxed mb-6">
-              Peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos. Um case de parceria entre indústria e academia.
-            </p>
-            <div class="flex items-center gap-4 text-code-data text-on-surface-variant mb-6">
-              <span>26 jun 2024</span>
-              <span class="w-px h-3 bg-white/20"></span>
-              <span>1 min leitura</span>
-            </div>
-            <a href="/blog/formula-sae-usp-sao-carlos" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
-              Ler artigo <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </a>
-          </div>
-        </div>
-      </div>
+        </a>
+      ))}
     </div>
   </section>
 
@@ -79,48 +86,30 @@ const posts = [
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {posts.filter(p => !p.featured).map(post => (
-          post.href ? (
-            <a href={post.href} class="group cursor-pointer block">
-              <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-4">
-                <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute top-4 left-4">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{post.cat}</span>
-                </div>
+          <a href={post.href} class="group cursor-pointer block">
+            <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-high to-surface-base mb-5 border border-white/5 hover:border-primary-container/15 transition-all duration-300">
+              <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
+              <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
+                <span class="material-symbols-outlined text-5xl text-primary-container">description</span>
               </div>
-              <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors leading-snug mb-3">{post.title}</h3>
-              <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
-                <span>{post.date}</span>
-                <span class="w-px h-3 bg-white/20"></span>
-                <span>{post.time} leitura</span>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute top-4 left-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest text-[10px]">{post.cat}</span>
               </div>
-            </a>
-          ) : (
-            <article class="group cursor-default opacity-60 relative">
-              <div class="relative h-48 rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-4">
-                <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
-                <div class="absolute top-4 left-4">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{post.cat}</span>
-                </div>
-                <div class="absolute bottom-3 right-3">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-on-surface-variant uppercase tracking-widest">Em breve</span>
-                </div>
+              <div class="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span class="text-label-caps text-white uppercase tracking-[0.15em] text-[10px] flex items-center gap-1">Ler artigo <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
               </div>
-              <h3 class="text-body-lg font-medium text-on-surface-variant leading-snug mb-3">{post.title}</h3>
-              <div class="flex items-center gap-3 text-code-data text-on-surface-variant">
-                <span>{post.date}</span>
-                <span class="w-px h-3 bg-white/20"></span>
-                <span>{post.time} leitura</span>
-              </div>
-            </article>
-          )
+            </div>
+            <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors duration-200 leading-snug mb-3">{post.title}</h3>
+            <p class="text-sm text-tertiary leading-relaxed mb-3">{post.excerpt}</p>
+            <div class="flex items-center gap-3 text-code-data text-on-surface-variant text-[12px]">
+              <span class="material-symbols-outlined text-sm text-white/20">timer</span>
+              <span>{post.time} leitura</span>
+              <span class="w-px h-3 bg-white/15"></span>
+              <span>{post.date}</span>
+            </div>
+          </a>
         ))}
-      </div>
-
-      <div class="mt-16 glass-panel rounded-sm p-8 text-center border border-primary-container/10">
-        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect inline-block mb-4"></span>
-        <p class="text-body-lg text-on-surface font-medium mb-2">Novos posts em breve</p>
-        <p class="text-body-md text-tertiary">Nossa equipe está preparando conteúdo técnico sobre materiais, processos e cases de impressão 3D industrial.</p>
       </div>
     </div>
   </section>

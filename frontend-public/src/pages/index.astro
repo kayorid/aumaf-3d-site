@@ -237,6 +237,101 @@ import Footer from '../components/Footer.astro'
 
 
   <!-- =============================================
+       PROVA REAL — Contadores animados + Depoimento
+       ============================================= -->
+  <section class="bg-surface-dim py-section relative overflow-hidden" id="prova-real">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(97,197,79,0.05) 0%,transparent 70%);"></div>
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent"></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge">
+      <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">00 // Credenciais</span>
+          <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">
+            Prova Real.<br/>
+            <span class="text-on-surface-variant font-light">Números que não mentem.</span>
+          </h2>
+        </div>
+        <p class="text-body-md text-tertiary max-w-sm leading-relaxed">Cada número abaixo representa um projeto real, um cliente satisfeito, uma peça que funcionou.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <!-- Contadores animados -->
+        <div class="grid grid-cols-2 gap-4">
+          {[
+            {id:'cnt-projetos',   target:500,  suffix:'+', label:'Projetos Entregues',    sub:'desde 2022',            icon:'inventory_2'},
+            {id:'cnt-prazo',      target:99,   suffix:'%', label:'Taxa de Aprovação',     sub:'no primeiro lote',      icon:'verified'},
+            {id:'cnt-materiais',  target:20,   suffix:'+', label:'Materiais no Catálogo', sub:'termoplásticos + metal', icon:'science'},
+            {id:'cnt-tolerancia', target:0.05, suffix:'mm',label:'Tolerância Dimensional',sub:'±0.05mm garantida',     icon:'precision_manufacturing'},
+          ].map(c => (
+            <div class="glass-panel p-6 lg:p-8 rounded-sm border border-white/6 hover:border-primary-container/20 transition-all duration-300 group">
+              <div class="w-9 h-9 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center mb-5 group-hover:bg-primary-container/15 transition-colors duration-300">
+                <span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
+              </div>
+              <div class="flex items-end gap-1 mb-1">
+                {c.id === 'cnt-tolerancia' && <span class="text-[clamp(20px,3vw,32px)] font-bold text-white tracking-tighter leading-none">±</span>}
+                <span
+                  class="text-[clamp(28px,4vw,48px)] font-black text-white tracking-tighter leading-none tabular-nums"
+                  data-counter
+                  data-target={c.target}
+                  data-decimals={c.id === 'cnt-tolerancia' ? '2' : '0'}
+                >0</span>
+                <span class="text-[clamp(14px,2vw,22px)] font-bold text-primary-container leading-none mb-1">{c.suffix}</span>
+              </div>
+              <p class="text-label-caps text-on-surface uppercase tracking-[0.12em] text-[11px] mb-1">{c.label}</p>
+              <p class="text-[11px] text-tertiary tracking-wide">{c.sub}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Depoimento destaque + case -->
+        <div class="flex flex-col gap-4">
+          <div class="glass-panel p-8 lg:p-10 rounded-sm relative overflow-hidden" style="border:1px solid rgba(97,197,79,0.10);">
+            <div class="absolute top-4 right-6 text-[80px] leading-none font-serif text-primary-container/8 select-none pointer-events-none">"</div>
+            <div class="flex gap-1 mb-5">
+              {Array(5).fill(0).map(() => (
+                <span class="material-symbols-outlined text-primary-container text-base" style="font-variation-settings:'FILL' 1;">star</span>
+              ))}
+            </div>
+            <blockquote class="text-body-lg text-on-surface leading-relaxed mb-7 relative z-10">
+              "Peças impressas com rapidez, personalização e muita precisão. Usamos a AUMAF 3D como fornecedora de componentes para máquinas e robôs. <span class="text-primary-container font-medium">Impressionante!</span>"
+            </blockquote>
+            <div class="flex items-center gap-4">
+              <div class="w-11 h-11 rounded-full border border-primary-container/30 flex items-center justify-center bg-primary-container/10 flex-shrink-0">
+                <span class="text-primary-container font-bold text-base">R</span>
+              </div>
+              <div>
+                <p class="text-label-caps text-primary-container uppercase tracking-[0.15em] font-bold">Raissa Ninelli</p>
+                <p class="text-sm text-tertiary mt-0.5">Diretora · <span class="text-on-surface-variant">Fugini Alimentos</span></p>
+              </div>
+              <div class="ml-auto">
+                <span class="pill-green text-[9px]">Verificado</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="/blog/formula-sae-case-study-completo" class="glass-panel p-6 rounded-sm flex items-start gap-5 hover:border-primary-container/20 transition-all duration-300 group border border-white/6">
+            <div class="w-12 h-12 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container/20 transition-colors duration-300">
+              <span class="material-symbols-outlined text-primary-container text-2xl" style="font-variation-settings:'FILL' 1;">sports_score</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="pill-green text-[9px]">Case Study</span>
+                <span class="text-[10px] text-tertiary">USP São Carlos</span>
+              </div>
+              <p class="text-body-md text-on-surface font-medium leading-snug mb-1 group-hover:text-white transition-colors duration-200">Fórmula SAE 2024 — Componentes de Alta Performance</p>
+              <p class="text-sm text-tertiary leading-relaxed">Nylon PA + PET-G CF15 para suspensão e aerodinâmica. Entregue em 5 dias, aprovado sem retrabalho.</p>
+            </div>
+            <span class="material-symbols-outlined text-white/20 group-hover:text-primary-container/60 transition-colors duration-200 mt-1 flex-shrink-0">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
        CAPACIDADES — Zigzag com video containers
        ============================================= -->
   <section class="bg-background py-section">
@@ -619,71 +714,96 @@ import Footer from '../components/Footer.astro'
 
 
   <!-- =============================================
-       BLOG PREVIEW
+       BLOG PREVIEW — Posts reais com conteúdo técnico
        ============================================= -->
   <section class="bg-surface-low py-section">
     <div class="max-w-[1600px] mx-auto px-edge">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">06 // Conteúdo</span>
-          <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Do Nosso Blog</h2>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">06 // Conhecimento</span>
+          <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Engenharia em Palavras</h2>
+          <p class="text-body-md text-tertiary mt-3 max-w-lg leading-relaxed">Conteúdo técnico de quem fabrica peças, não de quem escreve sobre elas.</p>
         </div>
         <a href="/blog" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
-          Ver todos
+          Ver todos os artigos
           <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </a>
       </div>
 
+      <!-- Post em destaque (full-width) -->
+      <a href="/blog/fdm-vs-sla-vs-sls" class="group block mb-gutter">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-sm overflow-hidden border border-white/8 hover:border-primary-container/20 transition-all duration-300">
+          <!-- Visual destaque -->
+          <div class="lg:col-span-3 relative h-64 lg:h-auto bg-gradient-to-br from-primary-container/10 via-surface-high to-surface-base overflow-hidden">
+            <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+            <div class="absolute inset-0" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-20">
+              <svg viewBox="0 0 200 200" fill="none" class="w-48 h-48">
+                <rect x="20" y="20" width="160" height="160" stroke="#61c54f" stroke-width="0.5"/>
+                <rect x="50" y="50" width="100" height="100" stroke="#61c54f" stroke-width="0.5"/>
+                <rect x="80" y="80" width="40" height="40" stroke="#61c54f" stroke-width="1" fill="rgba(97,197,79,0.05)"/>
+                <line x1="20" y1="100" x2="180" y2="100" stroke="#61c54f" stroke-width="0.3"/>
+                <line x1="100" y1="20" x2="100" y2="180" stroke="#61c54f" stroke-width="0.3"/>
+                <circle cx="100" cy="100" r="8" fill="#61c54f" opacity="0.6"/>
+                <circle cx="100" cy="100" r="20" stroke="#61c54f" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="40" stroke="#61c54f" stroke-width="0.3"/>
+              </svg>
+            </div>
+            <div class="absolute top-4 left-4"><span class="pill-active text-[9px]">Guia Técnico</span></div>
+            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
+            <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-primary-container/30"></div>
+            <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-primary-container/30"></div>
+          </div>
+          <!-- Conteúdo -->
+          <div class="lg:col-span-2 p-8 lg:p-10 flex flex-col justify-between bg-surface-base">
+            <div>
+              <div class="flex items-center gap-3 mb-4">
+                <span class="pill-green text-[9px]">FDM vs SLA vs SLS</span>
+                <span class="text-[11px] text-tertiary">8 min leitura</span>
+              </div>
+              <h3 class="text-headline-md font-bold text-white uppercase tracking-[-0.01em] leading-tight mb-4 group-hover:text-primary-container transition-colors duration-200">
+                FDM, SLA ou SLS? O guia definitivo para escolher o processo certo
+              </h3>
+              <p class="text-body-md text-tertiary leading-relaxed">Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, tolerância, materiais e casos de uso reais de cada processo.</p>
+            </div>
+            <div class="flex items-center justify-between mt-8 pt-6 border-t border-white/8">
+              <span class="text-[11px] text-tertiary">Mai 2026 · Equipe AUMAF 3D</span>
+              <span class="text-label-caps text-primary-container uppercase tracking-[0.15em] text-[10px] flex items-center gap-1 group-hover:gap-3 transition-all duration-200">
+                Ler guia <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Grid 3 posts menores -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
         {[
-          {cat:'Parceria',title:'AUMAF 3D e Equipe de Fórmula SAE da USP São Carlos',date:'Jun 2024',time:'1 min',accent:true,slug:'formula-sae-usp',imgId:'IMG_BLOG_01',stagger:'stagger-1'},
-          {cat:'Tecnologia',title:'Quais filamentos podem ser usados na impressão 3D?',date:'Abr 2023',time:'2 min',accent:false,slug:'filamentos-impressao-3d',imgId:'IMG_BLOG_02',stagger:'stagger-2'},
-          {cat:'Inovação',title:'Impressão 3D na Ciência: aplicações que estão mudando o mundo',date:'Abr 2023',time:'2 min',accent:false,slug:'impressao-3d-ciencia',imgId:'IMG_BLOG_03',stagger:'stagger-3'},
+          {slug:'guia-materiais-impressao-3d',    cat:'Materiais',  time:'6 min', title:'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação',       excerpt:'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.'},
+          {slug:'formula-sae-case-study-completo',cat:'Case Study', time:'5 min', title:'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',                    excerpt:'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.'},
+          {slug:'engenharia-reversa-passo-a-passo',cat:'Engenharia',time:'7 min', title:'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original',        excerpt:'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.'},
         ].map(p => (
-          <article class:list={['group cursor-pointer reveal-hidden', p.stagger]} data-animate>
-            <!--
-              {p.imgId} — substituir pelo arquivo real:
-              <img src={`/images/blog/${p.slug}.jpg`} alt={p.title} class="w-full h-52 object-cover rounded-sm mb-4" loading="lazy" />
-            -->
-            <div class:list={[
-              'relative h-52 rounded-sm overflow-hidden mb-5 border border-white/5',
-              p.accent ? 'bg-gradient-to-br from-primary-container/12 via-surface-high to-surface-base' : 'bg-gradient-to-br from-surface-high to-surface-base'
-            ]}>
+          <a href={`/blog/${p.slug}`} class="group cursor-pointer block reveal-hidden stagger-{p.slug.slice(-1)}" data-animate>
+            <div class="relative h-48 rounded-sm overflow-hidden mb-5 bg-gradient-to-br from-surface-high to-surface-base border border-white/5 hover:border-primary-container/15 transition-all duration-300">
               <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
-              <!-- Ícone placeholder de imagem -->
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="flex flex-col items-center gap-2 opacity-20 group-hover:opacity-30 transition-opacity">
-                  <span class="material-symbols-outlined text-4xl text-white">image</span>
-                  <span class="text-label-caps text-white text-[9px] uppercase tracking-widest font-mono">{p.imgId}</span>
-                </div>
+              <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
+                <span class="material-symbols-outlined text-5xl text-primary-container">description</span>
               </div>
-              <!-- Hover overlay -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <!-- Read more CTA on hover -->
-              <div class="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span class="text-label-caps text-white uppercase tracking-[0.15em] text-[10px] flex items-center gap-1">
-                  Ler artigo
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </span>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span class="text-label-caps text-white uppercase tracking-[0.15em] text-[10px] flex items-center gap-1">Ler artigo <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
               </div>
-              <!-- Category pill no canto -->
-              {p.accent && (
-                <div class="absolute top-3 right-3">
-                  <span class="pill-active text-[9px]">{p.cat}</span>
-                </div>
-              )}
             </div>
-
             <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest mb-3 text-[10px]">{p.cat}</span>
             <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors duration-200 leading-snug mb-3">{p.title}</h3>
+            <p class="text-sm text-tertiary leading-relaxed mb-3">{p.excerpt}</p>
             <div class="flex items-center gap-3 text-code-data text-on-surface-variant text-[12px]">
-              <span class="material-symbols-outlined text-sm text-white/20">calendar_month</span>
-              <span>{p.date}</span>
-              <span class="w-px h-3 bg-white/15"></span>
               <span class="material-symbols-outlined text-sm text-white/20">timer</span>
               <span>{p.time} leitura</span>
+              <span class="w-px h-3 bg-white/15"></span>
+              <span>Mai 2026</span>
             </div>
-          </article>
+          </a>
         ))}
       </div>
     </div>
@@ -744,7 +864,38 @@ import Footer from '../components/Footer.astro'
 </Base>
 
 <script>
-  // Testimonials carousel com auto-play
+  // ─── CONTADORES ANIMADOS (Intersection Observer) ───────────────────────────
+  const counters = document.querySelectorAll<HTMLElement>('[data-counter]')
+  if (counters.length) {
+    const ease = (t: number) => t < 0.5 ? 2*t*t : -1+(4-2*t)*t
+
+    function animateCounter(el: HTMLElement) {
+      const target = parseFloat(el.dataset.target || '0')
+      const decimals = parseInt(el.dataset.decimals || '0')
+      const duration = 1800
+      const start = performance.now()
+      function tick(now: number) {
+        const progress = Math.min((now - start) / duration, 1)
+        el.textContent = (target * ease(progress)).toFixed(decimals)
+        if (progress < 1) requestAnimationFrame(tick)
+        else el.textContent = target.toFixed(decimals)
+      }
+      requestAnimationFrame(tick)
+    }
+
+    const cntObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target as HTMLElement)
+          cntObs.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.4 })
+
+    counters.forEach(el => cntObs.observe(el))
+  }
+
+  // ─── TESTIMONIALS CAROUSEL ─────────────────────────────────────────────────
   let cur = 0
   const track = document.getElementById('testimonial-track')
   const dots = document.querySelectorAll('#t-dots button')
