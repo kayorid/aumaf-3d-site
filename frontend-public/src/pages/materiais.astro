@@ -1,0 +1,200 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+
+const materials = [
+  { cat: 'Termoplásticos', name: 'Nylon (PA)', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false },
+  { cat: 'Termoplásticos', name: 'ABS', tempMax: '100°C', flex: 'Rígido', app: 'Protótipos + peças funcionais', highlight: false },
+  { cat: 'Termoplásticos', name: 'Policarbonato (PC)', tempMax: '130°C', flex: 'Rígido', app: 'Alta resistência ao impacto', highlight: false },
+  { cat: 'Termoplásticos', name: 'PET-G', tempMax: '80°C', flex: 'Semi-rígido', app: 'Alimentício seguro', highlight: false },
+  { cat: 'Termoplásticos', name: 'Polipropileno (PP)', tempMax: '100°C', flex: 'Semi-rígido', app: 'Resistência química', highlight: false },
+  { cat: 'Termoplásticos', name: 'TPU', tempMax: '80°C', flex: 'Flexível', app: 'Borracha técnica, solas', highlight: false },
+  { cat: 'Alta Performance', name: 'PA CF15', tempMax: '180°C', flex: 'Rígido+Leve', app: 'Industrial severo', highlight: true },
+  { cat: 'Alta Performance', name: 'PET-G CF15', tempMax: '80°C', flex: 'Rígido', app: 'Estrutural leve', highlight: false },
+  { cat: 'Alta Performance', name: 'Tritan HT', tempMax: '95°C', flex: 'Rígido', app: 'Transparência + temperatura', highlight: false },
+  { cat: 'Alta Performance', name: 'PC (Policarbonato)', tempMax: '130°C', flex: 'Rígido', app: 'Impacto industrial', highlight: false },
+  { cat: 'Flexíveis', name: 'TPU Shore 95A', tempMax: '80°C', flex: 'Flex. médio', app: 'Juntas, vedações', highlight: false },
+  { cat: 'Flexíveis', name: 'Flex Shore 85A', tempMax: '70°C', flex: 'Alta flex.', app: 'Solas, grips, amortecedores', highlight: false },
+  { cat: 'Resinas', name: 'Resina Standard', tempMax: '60°C', flex: 'Rígido', app: 'Alta resolução SLA', highlight: false },
+  { cat: 'Resinas', name: 'Resina ABS', tempMax: '80°C', flex: 'Rígido', app: 'Mecânica + acabamento', highlight: false },
+  { cat: 'Resinas', name: 'Resina Cerâmica', tempMax: '+400°C', flex: 'Rígido', app: 'Temp. extrema, moldes', highlight: true },
+  { cat: 'Metal', name: 'BASF Ultrafuse 316L', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true },
+]
+---
+
+<Base title="Materiais" description="Catálogo completo de materiais para impressão 3D: termoplásticos, alta performance, resinas e metal. +20 materiais disponíveis.">
+  <Navbar currentPath="/materiais" />
+
+  <!-- Hero -->
+  <section class="bg-background pt-32 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+    <div class="max-w-[1440px] mx-auto px-edge relative z-10">
+      <div class="max-w-2xl">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Catálogo // Materiais</span>
+        <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+          Materiais de<br/>Primeira Linha.
+        </h1>
+        <p class="text-body-lg text-tertiary leading-relaxed mb-8">
+          20+ materiais certificados. A variedade nas propriedades dos polímeros e metais torna possível atender desde protótipos de conceito até peças de uso final em ambientes industriais severos.
+        </p>
+        <div class="flex items-center gap-4 text-code-data text-on-surface-variant">
+          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Termoplásticos</span>
+          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-on-surface"></span> Alta Performance</span>
+          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Resinas</span>
+          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error"></span> Metal</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter + Grid -->
+  <section class="bg-background py-section">
+    <div class="max-w-[1440px] mx-auto px-edge">
+
+      <!-- Filter pills -->
+      <div class="flex flex-wrap gap-2 mb-12 border-b border-white/8 pb-8">
+        {['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal'].map((cat, i) => (
+          <button
+            data-filter={cat === 'Todos' ? 'all' : cat}
+            class:list={['pill transition-all duration-200 hover:border-primary-container/50 hover:text-primary-container', i === 0 ? 'pill-active' : '']}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Materials grid -->
+      <div id="materials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+        {materials.map(mat => (
+          <div
+            data-cat={mat.cat}
+            class:list={[
+              'glass-panel p-6 rounded-sm group hover:-translate-y-1 transition-all duration-300 relative overflow-hidden',
+              mat.highlight ? 'border border-primary-container/20' : ''
+            ]}
+          >
+            {mat.highlight && (
+              <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/50 to-transparent"></div>
+            )}
+
+            <!-- Category badge -->
+            <div class="flex justify-between items-start mb-4">
+              <span class:list={[
+                'pill text-[10px]',
+                mat.cat === 'Metal' ? 'border-error/50 text-error' :
+                mat.cat === 'Alta Performance' ? 'pill-green' :
+                mat.cat === 'Flexíveis' ? 'border-tertiary/50 text-tertiary' :
+                mat.cat === 'Resinas' ? 'border-on-surface-variant/50 text-on-surface-variant' :
+                'border-white/20 text-on-surface-variant'
+              ]}>{mat.cat}</span>
+              {mat.highlight && <span class="text-label-caps text-primary-container text-[10px]">✦ DESTAQUE</span>}
+            </div>
+
+            <!-- Name -->
+            <h3 class="text-headline-md font-bold uppercase text-white mb-4 tracking-[0.02em] group-hover:text-gradient-green transition-all">{mat.name}</h3>
+
+            <!-- Specs -->
+            <div class="space-y-2 border-t border-white/8 pt-4">
+              <div class="flex justify-between">
+                <span class="text-code-data text-on-surface-variant">Temp. máx.</span>
+                <span class="text-code-data text-on-surface font-medium">{mat.tempMax}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-code-data text-on-surface-variant">Flexibilidade</span>
+                <span class="text-code-data text-on-surface font-medium">{mat.flex}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-code-data text-on-surface-variant">Aplicação</span>
+                <span class="text-code-data text-primary-container font-medium text-right max-w-[60%]">{mat.app}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Destaque Metal -->
+  <section class="bg-surface-low py-section border-y border-white/5">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Destaque // Metal</span>
+          <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">BASF Ultrafuse 316L</h2>
+          <p class="text-body-lg text-tertiary leading-relaxed mb-6">
+            Aço inoxidável 316L impresso em camadas. O filamento metálico é depositado em FDM e, após processo de sinterização em forno industrial, atinge as propriedades mecânicas do metal sólido. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas.
+          </p>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            {[
+              {label:'Temperatura',value:'800°C+'},
+              {label:'Densidade',value:'>95% do aço'},
+              {label:'Norma',value:'316L ASTM'},
+              {label:'Prazo',value:'15–20 dias'},
+            ].map(d => (
+              <div class="glass-panel p-4 rounded-sm">
+                <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-1">{d.label}</span>
+                <span class="text-body-md text-primary-container font-semibold">{d.value}</span>
+              </div>
+            ))}
+          </div>
+          <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+            Solicitar Orçamento em Metal
+          </a>
+        </div>
+        <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/5">
+          <div class="absolute inset-0 bg-tech-grid opacity-40"></div>
+          <div class="absolute inset-0" style="background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 70%);"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center">
+              <span class="text-[72px] font-black text-white/[0.04] leading-none tracking-tighter block">316L</span>
+              <span class="text-label-caps text-primary-container/50 uppercase tracking-[0.3em] text-[10px]">Aço Inox // Sinterizado</span>
+            </div>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4 text-code-data text-on-surface-variant text-[10px] flex justify-between">
+            <span>BASF ULTRAFUSE</span>
+            <span>ASTM 316L</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-background border-t border-primary-container/20 py-section">
+    <div class="max-w-[1440px] mx-auto px-edge text-center">
+      <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Não sabe qual material usar?</h2>
+      <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Nossa equipe técnica indica o material ideal para cada aplicação, temperatura, carga e custo.</p>
+      <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+        Falar com Especialista
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<script>
+  const filterBtns = document.querySelectorAll('[data-filter]')
+  const cards = document.querySelectorAll('[data-cat]')
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = (btn as HTMLElement).dataset.filter
+
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
+        b.classList.add('border-white/20', 'text-on-surface-variant')
+      })
+      btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
+      btn.classList.remove('border-white/20', 'text-on-surface-variant')
+
+      cards.forEach(card => {
+        const cat = (card as HTMLElement).dataset.cat
+        const show = filter === 'all' || cat === filter
+        ;(card as HTMLElement).style.display = show ? '' : 'none'
+      })
+    })
+  })
+</script>

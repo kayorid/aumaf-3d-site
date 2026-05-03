@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+
+const projects = [
+  { cat: 'Prototipagem', title: 'Suporte para Robô Industrial', mat: 'PA CF15', accent: true },
+  { cat: 'Metal', title: 'Flange em Aço Inox 316L', mat: 'BASF Ultrafuse 316L', accent: false },
+  { cat: 'Prototipagem', title: 'Encaixe para Fórmula SAE USP', mat: 'Nylon PA', accent: false },
+  { cat: 'Peças Funcionais', title: 'Garra Pneumática para Automação', mat: 'PC + TPU', accent: true },
+  { cat: 'Maquetes', title: 'Maquete Arquitetônica Residencial', mat: 'PLA / Resina', accent: false },
+  { cat: 'Metal', title: 'Conector Estrutural Aeronáutico', mat: 'Ultrafuse 316L', accent: false },
+  { cat: 'Peças Funcionais', title: 'Peça de Reposição para Empacotadora', mat: 'ABS Industrial', accent: false },
+  { cat: 'Prototipagem', title: 'Caixa de Eletrônica com Tampa', mat: 'PETG CF15', accent: false },
+  { cat: 'Resina', title: 'Painel de Controle em Resina ABS', mat: 'Resina ABS', accent: false },
+  { cat: 'Peças Funcionais', title: 'Bucha de Eixo com Rosca Interna', mat: 'Nylon + Fibra', accent: true },
+  { cat: 'Maquetes', title: 'Protótipo de Produto para Pitch', mat: 'PLA + Pintura', accent: false },
+  { cat: 'Resina', title: 'Implante Educacional Médico', mat: 'Resina Cerâmica', accent: false },
+]
+
+const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', 'Maquetes']
+---
+
+<Base title="Portfolio" description="Portfolio de projetos AUMAF 3D: peças funcionais, protótipos, metal, resina e maquetes. +500 projetos entregues.">
+  <Navbar currentPath="/portfolio" />
+
+  <!-- Hero minimalista -->
+  <section class="bg-background pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none"></div>
+    <div class="max-w-[1440px] mx-auto px-edge relative z-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Projetos // Realizações</span>
+          <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none">Portfolio.</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-[clamp(36px,5vw,56px)] font-black text-primary-container leading-none tracking-tighter">+500</span>
+          <span class="text-body-md text-tertiary leading-tight max-w-[120px]">projetos<br/>entregues</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <div class="bg-background border-b border-white/8 sticky top-20 z-40 backdrop-blur-nav">
+    <div class="max-w-[1440px] mx-auto px-edge py-4 flex flex-wrap gap-2">
+      {cats.map((cat, i) => (
+        <button
+          data-filter={cat === 'Todos' ? 'all' : cat}
+          class:list={['pill transition-all duration-200 hover:border-primary-container/50 hover:text-primary-container', i === 0 ? 'pill-active' : '']}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Grid masonry -->
+  <section class="bg-background py-section">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter" id="portfolio-grid">
+        {projects.map((p, i) => (
+          <article
+            data-cat={p.cat}
+            class="group relative overflow-hidden rounded-sm cursor-pointer"
+          >
+            <!-- Placeholder visual -->
+            <div class:list={[
+              'relative overflow-hidden aspect-[4/3]',
+              p.accent ? 'bg-gradient-to-br from-primary-container/15 to-surface-base' : 'bg-gradient-to-br from-surface-base to-surface-dim'
+            ]}>
+              <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+              <div class="absolute inset-0" style={`background:radial-gradient(circle at ${30 + i * 7}% ${40 + i * 3}%, rgba(97,197,79,0.05) 0%, transparent 60%);`}></div>
+
+              <!-- Geometric decoration -->
+              <div class="absolute inset-0 flex items-center justify-center opacity-[0.12] group-hover:opacity-[0.18] transition-opacity duration-500">
+                <svg viewBox="0 0 100 100" fill="none" class="w-24 h-24">
+                  {i % 4 === 0 && <polygon points="50,10 90,35 90,65 50,90 10,65 10,35" stroke="#61c54f" stroke-width="1.5" fill="none"/>}
+                  {i % 4 === 1 && <><rect x="20" y="20" width="60" height="60" stroke="#61c54f" stroke-width="1.5" fill="none"/><rect x="35" y="35" width="30" height="30" stroke="#61c54f" stroke-width="1" fill="none"/></>}
+                  {i % 4 === 2 && <><circle cx="50" cy="50" r="35" stroke="#61c54f" stroke-width="1.5" fill="none"/><circle cx="50" cy="50" r="18" stroke="#61c54f" stroke-width="1" fill="none"/></>}
+                  {i % 4 === 3 && <path d="M50,10 L90,50 L50,90 L10,50 Z M50,25 L75,50 L50,75 L25,50 Z" stroke="#61c54f" stroke-width="1.5" fill="none"/>}
+                  <circle cx="50" cy="50" r="2" fill="#61c54f"/>
+                </svg>
+              </div>
+
+              <!-- Hover overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest mb-3 block w-fit">{p.cat}</span>
+                  <h3 class="text-body-lg font-bold text-white uppercase tracking-[0.01em] mb-2">{p.title}</h3>
+                  <p class="text-code-data text-tertiary">Material: {p.mat}</p>
+                </div>
+              </div>
+
+              <!-- Material badge (always visible) -->
+              <div class="absolute top-4 left-4">
+                <span class="pill text-[10px]">{p.cat}</span>
+              </div>
+            </div>
+
+            <!-- Info below (visible always) -->
+            <div class="py-4">
+              <h3 class="text-body-md font-medium text-on-surface group-hover:text-white transition-colors mb-1">{p.title}</h3>
+              <p class="text-code-data text-tertiary">{p.mat}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- Load more hint -->
+      <div class="mt-16 text-center">
+        <p class="text-code-data text-on-surface-variant mb-6">Exibindo 12 de +500 projetos</p>
+        <a href="/contato" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+          Iniciar Seu Projeto
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<script>
+  const filterBtns = document.querySelectorAll('[data-filter]')
+  const cards = document.querySelectorAll('[data-cat]')
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = (btn as HTMLElement).dataset.filter
+
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
+        b.classList.add('border-white/20', 'text-on-surface-variant')
+      })
+      btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
+      btn.classList.remove('border-white/20', 'text-on-surface-variant')
+
+      cards.forEach(card => {
+        const cat = (card as HTMLElement).dataset.cat
+        const show = filter === 'all' || cat === filter
+        ;(card as HTMLElement).style.display = show ? '' : 'none'
+      })
+    })
+  })
+</script>

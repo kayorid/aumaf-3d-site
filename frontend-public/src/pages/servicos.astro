@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<Base title="Serviços" description="Prototipagem rápida, peças funcionais em metal e polímeros, modelagem 3D, engenharia reversa e peças de reposição. Tolerância ±0.05mm.">
+  <Navbar currentPath="/servicos" />
+
+  <!-- Hero Institucional (coffee-tech style: assimétrico) -->
+  <section class="min-h-[60vh] flex items-end bg-background pt-32 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-40 pointer-events-none"></div>
+    <div class="absolute inset-0" style="background:radial-gradient(ellipse at 80% 20%,rgba(97,197,79,0.05) 0%,transparent 60%);"></div>
+    <div class="max-w-[1440px] mx-auto px-edge w-full relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+        <div>
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Sistemas // Capacidades</span>
+          <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none">
+            Soluções de<br/>Manufatura<br/>Aditiva.
+          </h1>
+        </div>
+        <div class="md:pb-2">
+          <p class="text-body-lg text-tertiary leading-relaxed max-w-md">
+            Engenharia aditiva completa: do arquivo digital à peça funcional. Quatro serviços integrados para cada fase do desenvolvimento de produto.
+          </p>
+          <div class="flex items-center gap-3 mt-8">
+            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
+            <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Orçamento em até 24h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Separator -->
+  <div class="border-t border-white/5"></div>
+
+  <!-- Serviços Zigzag -->
+  <section class="bg-background py-section">
+    <div class="max-w-[1440px] mx-auto px-edge divide-y divide-white/5">
+      {[
+        {
+          id:'prototipagem',
+          num:'01',
+          title:'Prototipagem Rápida',
+          body:'Reduza o ciclo de desenvolvimento com protótipos funcionais entregues em dias. Ideal para validação de forma, encaixe e montagem antes da produção em série. Tecnologias FDM, SLA e SLS disponíveis conforme o nível de detalhe e material necessário.',
+          specs:['FDM / SLA / SLS','Entrega 24–72h','Geometria Complexa','Sem Molde'],
+          details:[
+            {label:'Prazo típico',value:'24–72h'},
+            {label:'Materiais',value:'PLA, ABS, PETG, Resina'},
+            {label:'Tolerância',value:'±0.1mm (FDM) / ±0.05mm (SLA)'},
+            {label:'Aplicação',value:'Validação de conceito'},
+          ],
+          reverse:false,
+        },
+        {
+          id:'funcionais',
+          num:'02',
+          title:'Peças Funcionais & Metal',
+          body:'Peças de reposição para máquinas, componentes para robôs e equipamentos industriais. Fabricadas sob demanda em plásticos de alta performance ou aço inoxidável via sinterização BASF Ultrafuse 316L. Sem molde, sem mínimo de quantidade.',
+          specs:['Metal 316L','PA CF15 / PEEK / Ultem','Alta Temperatura','+260°C'],
+          details:[
+            {label:'Prazo típico',value:'3–7 dias úteis'},
+            {label:'Metal prazo',value:'15–20 dias (sinterização)'},
+            {label:'Tolerância',value:'±0.05mm'},
+            {label:'Aplicação',value:'Uso final industrial'},
+          ],
+          reverse:true,
+        },
+        {
+          id:'modelagem',
+          num:'03',
+          title:'Modelagem 3D & Otimização DfAM',
+          body:'Nossa equipe converte desenhos técnicos, esboços ou especificações verbais em modelos 3D prontos para impressão, com otimização para manufatura aditiva (DfAM). Entregamos arquivos .STL, .STEP e .OBJ validados e prontos para produção.',
+          specs:['CAD Profissional','DfAM','Análise de Topologia','STEP / STL / OBJ'],
+          details:[
+            {label:'Entregável',value:'.STL / .STEP / .OBJ'},
+            {label:'Prazo',value:'Sob consulta'},
+            {label:'Inclui',value:'Análise de impressibilidade'},
+            {label:'Aplicação',value:'Projeto do zero ou conversão'},
+          ],
+          reverse:false,
+        },
+        {
+          id:'reposicao',
+          num:'04',
+          title:'Engenharia Reversa (Scanner 3D)',
+          body:'Capturamos peças físicas existentes com scanner 3D de alta resolução e geramos o modelo digital para replicação exata ou modificação de design. Ideal para peças descontinuadas pelo fabricante original ou componentes orgânicos complexos.',
+          specs:['Scanner 3D','Engenharia Reversa','Nuvem de Pontos','Réplica Exata'],
+          details:[
+            {label:'Tecnologia',value:'Scanner portátil HD'},
+            {label:'Precisão',value:'±0.02mm na captura'},
+            {label:'Entregável',value:'Modelo 3D + arquivo pronto'},
+            {label:'Aplicação',value:'Peças descontinuadas / orgânicas'},
+          ],
+          reverse:true,
+        },
+      ].map(service => (
+        <div id={service.id} class:list={['grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-20']}>
+          <div class:list={service.reverse ? 'lg:order-2' : ''}>
+            <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">[{service.num}]</span>
+            <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-5">{service.title}</h2>
+            <p class="text-body-lg text-tertiary leading-relaxed mb-6">{service.body}</p>
+            <div class="flex flex-wrap gap-2 mb-8">
+              {service.specs.map(s => <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/50 text-primary-container text-label-caps uppercase tracking-widest">{s}</span>)}
+            </div>
+            <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+              Solicitar este Serviço
+            </a>
+          </div>
+          <div class:list={service.reverse ? 'lg:order-1' : ''}>
+            <!-- Visual + data card -->
+            <div class="glass-panel p-8 rounded-sm border border-white/8">
+              <div class="grid grid-cols-2 gap-4">
+                {service.details.map(d => (
+                  <div class="border-b border-white/8 pb-4">
+                    <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-1">{d.label}</span>
+                    <span class="text-body-md text-on-surface font-medium">{d.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Como Funciona -->
+  <section class="bg-surface-low py-section">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="mb-16 border-b border-white/8 pb-10">
+        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">Processo</span>
+        <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Como Funciona</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {[
+          {n:'01',title:'Envio do Arquivo',body:'Envie .STL, .OBJ, .STEP ou descreva o projeto.'},
+          {n:'02',title:'Análise Técnica',body:'Revisamos viabilidade, material e processo.'},
+          {n:'03',title:'Orçamento',body:'Retornamos em até 24h com valor e prazo.'},
+          {n:'04',title:'Produção',body:'Impressão com monitoramento em tempo real.'},
+          {n:'05',title:'Controle de Qualidade',body:'Verificação dimensional antes do envio.'},
+          {n:'06',title:'Entrega & Suporte',body:'Envio nacional + suporte técnico pós-entrega.'},
+        ].map(step => (
+          <div class="glass-panel p-6 relative rounded-sm group hover:border-primary-container/20 transition-all duration-300">
+            <span class="text-[32px] font-black text-white/[0.06] leading-none block mb-3">{step.n}</span>
+            <span class="text-label-caps text-primary-container uppercase tracking-widest block mb-2">{step.n}</span>
+            <h3 class="text-body-md font-semibold text-white uppercase mb-2 tracking-[0.02em]">{step.title}</h3>
+            <p class="text-sm text-tertiary leading-relaxed">{step.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-background border-t border-primary-container/20 py-section">
+    <div class="max-w-[1440px] mx-auto px-edge text-center">
+      <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Inicie seu Projeto Agora</h2>
+      <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Envie seu arquivo ou descreva o projeto. Orçamento em até 24 horas.</p>
+      <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-effect-lg hover:bg-primary-dim transition-all duration-300">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">upload_file</span>
+        Solicitar Orçamento
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Base>

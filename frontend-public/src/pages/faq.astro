@@ -1,0 +1,203 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+
+const faqs = [
+  {
+    cat: 'Geral',
+    items: [
+      {
+        q: 'É possível imprimir uma única peça?',
+        a: 'Sim. A impressão 3D não depende de moldes, tornando viável desde peças únicas até pequenas séries. Não há mínimo de quantidade — atendemos desde um protótipo até centenas de unidades.',
+      },
+      {
+        q: 'Quanto custa uma peça impressa?',
+        a: 'O valor depende do material escolhido, geometria da peça e tempo de impressão. Entre em contato — analisamos seu projeto e retornamos com orçamento detalhado em até 24 horas, sem compromisso.',
+      },
+      {
+        q: 'Vocês atendem todo o Brasil?',
+        a: 'Sim. Atendemos clientes em todo o território nacional com envio via transportadora. Para clientes em São Carlos e região, oferecemos retirada presencial no Parque Tecnológico Damha II.',
+      },
+    ],
+  },
+  {
+    cat: 'Materiais',
+    items: [
+      {
+        q: 'O que posso imprimir com uma impressora 3D?',
+        a: 'Desde peças decorativas simples até protótipos industriais complexos, componentes mecânicos, peças para robôs, equipamentos hospitalares e estruturas aeroespaciais. O portfólio de aplicações é vasto.',
+      },
+      {
+        q: 'Vocês trabalham com impressão em metal?',
+        a: 'Sim. Utilizamos o material BASF Ultrafuse 316L para impressão de peças em aço inoxidável 316L. O processo envolve impressão FDM com filamento metálico seguido de processo de sinterização para atingir as propriedades mecânicas finais.',
+      },
+      {
+        q: 'Quais são os materiais disponíveis?',
+        a: 'Trabalhamos com mais de 20 materiais: termoplásticos convencionais (PLA, ABS, PETG, Nylon, PC, PP, TPU), materiais de alta performance (PA CF15, PEEK, Ultem, Tritan HT), resinas (ABS, cerâmica) e metal (BASF Ultrafuse 316L).',
+      },
+    ],
+  },
+  {
+    cat: 'Processos',
+    items: [
+      {
+        q: 'Qual a tolerância dimensional das peças?',
+        a: 'Em FDM industrial atingimos tolerância de ±0.05mm. Em SLA (resina), resolução de camada de 25–100 microns. SLS entrega peças sem necessidade de suporte com alta precisão e densidade.',
+      },
+      {
+        q: 'Como envio meu arquivo para orçamento?',
+        a: 'Aceitamos arquivos .STL, .OBJ, .STEP, .DXF e .PDF. Use o formulário em nosso site (com upload direto) ou envie para comercial@auma3d.com.br. Se não tiver o arquivo, descreva o projeto e nossa equipe de modelagem pode criar para você.',
+      },
+      {
+        q: 'Vocês fazem modelagem 3D também?',
+        a: 'Sim. Nossa equipe de engenharia transforma desenhos técnicos, esboços, fotos ou especificações verbais em modelos 3D prontos para impressão, com otimização DfAM (Design for Additive Manufacturing).',
+      },
+      {
+        q: 'O que é engenharia reversa? Como funciona?',
+        a: 'É o processo de digitalizar uma peça física existente para gerar seu modelo 3D. Usamos scanner 3D portátil de alta precisão. Ideal para replicar peças descontinuadas, peças orgânicas complexas ou quando não existe arquivo digital disponível.',
+      },
+    ],
+  },
+  {
+    cat: 'Entrega & Prazo',
+    items: [
+      {
+        q: 'Qual o prazo de entrega?',
+        a: 'Varia conforme material e quantidade. Protótipos simples em FDM: 24–72 horas. Peças funcionais em FDM: 3–7 dias úteis. Peças em metal (sinterização BASF): 15–20 dias. SLS e SLA variam conforme complexidade.',
+      },
+      {
+        q: 'Qual o prazo para receber um orçamento?',
+        a: 'Respondemos todos os orçamentos em até 24 horas úteis após o recebimento do arquivo ou descrição do projeto. Para projetos urgentes, entre em contato via WhatsApp para atendimento prioritário.',
+      },
+      {
+        q: 'Quais são os principais benefícios da impressão 3D para indústria?',
+        a: 'Produção sem molde (sem investimento inicial alto), personalização total de geometria e material, viabilidade de peças únicas ou pequenas séries, geometrias internas complexas impossíveis por usinagem, e redução significativa de prazo de desenvolvimento.',
+      },
+    ],
+  },
+]
+---
+
+<Base title="FAQ" description="Perguntas frequentes sobre impressão 3D, materiais, processos, prazo e entrega na AUMAF 3D.">
+  <Navbar currentPath="/faq" />
+
+  <!-- Hero (coffee-tech FAQ style) -->
+  <section class="bg-background pt-32 pb-20">
+    <div class="max-w-3xl mx-auto px-edge text-center">
+      <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-6">Suporte // Informações</span>
+      <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        Você Perguntou,<br/>
+        <span style="background:linear-gradient(135deg,#7ce268,#61c54f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Nós Respondemos.</span>
+      </h1>
+      <p class="text-body-lg text-tertiary">
+        Tudo que você precisa saber antes de iniciar seu projeto de impressão 3D.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filter pills -->
+  <div class="bg-background border-b border-white/8 sticky top-20 z-40 backdrop-blur-nav">
+    <div class="max-w-[1440px] mx-auto px-edge py-4 flex flex-wrap gap-2">
+      <button
+        class="pill pill-active transition-all duration-200"
+        data-cat="all"
+        id="filter-all"
+      >
+        Todas
+      </button>
+      {faqs.map(f => (
+        <button
+          class="pill transition-all duration-200 hover:border-primary-container/50 hover:text-primary-container"
+          data-cat={f.cat}
+        >
+          {f.cat}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- FAQ Accordions -->
+  <section class="bg-background py-section">
+    <div class="max-w-3xl mx-auto px-edge">
+      {faqs.map(group => (
+        <div data-group={group.cat} class="mb-16">
+          <h2 class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-6 border-b border-white/8 pb-4">{group.cat}</h2>
+          <div class="space-y-0">
+            {group.items.map((item) => (
+              <div class="accordion-item border-b border-white/8 last:border-b-0">
+                <button class="accordion-trigger group" onclick="toggleAccordion(this)">
+                  <span class="text-body-lg font-medium text-on-surface group-hover:text-white transition-colors pr-4 text-left">{item.q}</span>
+                  <span class="accordion-icon flex-shrink-0">
+                    <span class="material-symbols-outlined text-base leading-none">add</span>
+                  </span>
+                </button>
+                <div class="accordion-content">
+                  <p class="text-body-md text-tertiary leading-relaxed pb-6 pr-12">{item.a}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA ainda tem dúvidas -->
+  <section class="bg-surface-low border-t border-white/5 py-16">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <p class="text-headline-md font-bold uppercase text-white mb-2">Ainda tem dúvidas?</p>
+          <p class="text-body-md text-tertiary">Nossa equipe técnica está disponível para responder qualquer questão.</p>
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+            Falar com a Equipe
+          </a>
+          <a href="https://wa.me/5516992863412" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-white/20 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<script>
+  function toggleAccordion(btn: HTMLButtonElement) {
+    const item = btn.closest('.accordion-item')
+    const isOpen = item?.classList.contains('open')
+
+    // Close all
+    document.querySelectorAll('.accordion-item.open').forEach(el => el.classList.remove('open'))
+
+    // Open clicked (if not already open)
+    if (!isOpen) item?.classList.add('open')
+  }
+  (window as any).toggleAccordion = toggleAccordion
+
+  // Category filter
+  const filterBtns = document.querySelectorAll('[data-cat]')
+  const groups = document.querySelectorAll('[data-group]')
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = (btn as HTMLElement).dataset.cat
+
+      filterBtns.forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
+        b.classList.add('border-white/20', 'text-on-surface-variant')
+      })
+      btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
+      btn.classList.remove('border-white/20', 'text-on-surface-variant')
+
+      groups.forEach(g => {
+        const show = cat === 'all' || (g as HTMLElement).dataset.group === cat
+        ;(g as HTMLElement).style.display = show ? '' : 'none'
+      })
+    })
+  })
+</script>

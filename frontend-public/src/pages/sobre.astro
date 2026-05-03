@@ -1,0 +1,179 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<Base title="Sobre" description="A AUMAF 3D é uma empresa de manufatura aditiva industrial localizada no Parque Tecnológico Damha II, São Carlos – SP.">
+  <Navbar currentPath="/sobre" />
+
+  <!-- Hero Institucional assimétrico -->
+  <section class="bg-background min-h-[65vh] flex items-end pt-32 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-[0.04]">
+      <svg viewBox="0 0 600 800" fill="none" class="w-full h-full">
+        <polygon points="300,40 560,180 560,620 300,760 40,620 40,180" stroke="#61c54f" stroke-width="1" fill="none"/>
+        <polygon points="300,100 500,220 500,580 300,700 100,580 100,220" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+        <circle cx="300" cy="400" r="100" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+        <circle cx="300" cy="400" r="50" stroke="#61c54f" stroke-width="0.5" fill="none"/>
+        <circle cx="300" cy="400" r="5" fill="#61c54f"/>
+      </svg>
+    </div>
+    <div class="max-w-[1440px] mx-auto px-edge w-full relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-12 items-end">
+        <div class="md:col-span-3">
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Empresa // História</span>
+          <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none">
+            Sobre a<br/>AUMAF 3D.
+          </h1>
+        </div>
+        <div class="md:col-span-2 md:pb-2">
+          <p class="text-body-lg text-tertiary leading-relaxed">
+            São Carlos – SP. Parque Tecnológico Damha II. Vizinhos à USP e UFSCar. No coração do polo tecnológico do interior paulista.
+          </p>
+          <div class="mt-6 flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-primary-container glow-effect"></span>
+            <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Desde 2022 em produção</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Missão / Visão / Valores (zigzag) -->
+  <section class="bg-background py-section">
+    <div class="max-w-[1440px] mx-auto px-edge divide-y divide-white/5">
+      {[
+        {
+          num: '01',
+          title: 'Nossa Missão',
+          body: 'Tornar a manufatura aditiva de alta performance acessível a empresas de todos os portes — sem abrir mão da qualidade, precisão e atendimento técnico de excelência. Acreditamos que a impressão 3D é o futuro da produção industrial, e trabalhamos para que esse futuro seja acessível a todos.',
+          highlight: 'Qualidade + Acessibilidade',
+          reverse: false,
+        },
+        {
+          num: '02',
+          title: 'Nossa Visão',
+          body: 'Ser o parceiro de engenharia aditiva de referência no interior de São Paulo, acelerando a inovação de indústrias, startups e laboratórios de pesquisa. Conectar a precisão da manufatura digital com as necessidades reais de quem constrói o futuro.',
+          highlight: 'Hub de Inovação Regional',
+          reverse: true,
+        },
+        {
+          num: '03',
+          title: 'Nossos Valores',
+          body: 'Inovação contínua — buscamos sempre as tecnologias e materiais mais avançados. Qualidade comprovada — cada peça passa por controle dimensional antes de sair. Transparência — prazo e orçamento definidos antes do início. Parceria — não somos fornecedores, somos parceiros técnicos.',
+          highlight: 'Inovação + Qualidade + Transparência',
+          reverse: false,
+        },
+      ].map(item => (
+        <div class:list={['grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-20']}>
+          <div class:list={item.reverse ? 'lg:order-2' : ''}>
+            <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">[{item.num}]</span>
+            <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-5">{item.title}</h2>
+            <p class="text-body-lg text-tertiary leading-relaxed mb-6">{item.body}</p>
+          </div>
+          <div class:list={item.reverse ? 'lg:order-1' : ''}>
+            <div class="glass-panel p-10 rounded-sm" style="border:1px solid rgba(97,197,79,0.1);">
+              <div class="flex items-center justify-center h-32">
+                <p class="text-headline-md font-medium text-primary-container text-center leading-snug">{item.highlight}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Case: Fórmula SAE USP -->
+  <section class="bg-surface-low py-section border-y border-white/5">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="mb-12">
+        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">Case // Parceria</span>
+        <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Fórmula SAE — USP São Carlos</h2>
+      </div>
+      <div class="glass-panel rounded-sm p-10 border border-primary-container/15 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center">
+          <div class="lg:col-span-2">
+            <span class="pill-green mb-4 inline-block">Parceria Universitária · Jun 2024</span>
+            <p class="text-body-lg text-tertiary leading-relaxed">
+              A AUMAF 3D forneceu peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos na Fórmula SAE 2024. Componentes em Nylon PA e PET-G CF15 para suportes de suspensão, guias de cabo e elementos aerodinâmicos — com exigência de tolerância mínima e peso reduzido.
+            </p>
+          </div>
+          <div class="glass-panel rounded-sm p-6 space-y-4">
+            {[
+              {label:'Parceiro',value:'USP São Carlos'},
+              {label:'Evento',value:'Fórmula SAE 2024'},
+              {label:'Materiais',value:'PA / PET-G CF15'},
+              {label:'Aplicação',value:'Estrutural + Aerodinâmica'},
+            ].map(d => (
+              <div class="border-b border-white/8 pb-3 last:border-b-0 last:pb-0">
+                <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block text-[10px] mb-0.5">{d.label}</span>
+                <span class="text-body-md text-on-surface font-medium">{d.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Localização -->
+  <section class="bg-background py-section">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Localização // Endereço</span>
+          <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-6">São Carlos, SP.<br/>Polo Tecnológico.</h2>
+          <p class="text-body-lg text-tertiary leading-relaxed mb-8">
+            Localizada no Parque Tecnológico Damha II, a AUMAF 3D está inserida em um dos principais ecossistemas de inovação do Brasil. Próxima à USP, UFSCar e centenas de startups e empresas de base tecnológica.
+          </p>
+          <address class="not-italic space-y-4">
+            {[
+              {icon:'location_on',value:'Alameda Sinlioku Tanaka 202, Damha II\nSão Carlos – SP, 13565-261'},
+              {icon:'phone',value:'(16) 99286-3412',href:'https://wa.me/5516992863412'},
+              {icon:'mail',value:'comercial@auma3d.com.br',href:'mailto:comercial@auma3d.com.br'},
+              {icon:'schedule',value:'Segunda – Sexta, 08h–18h'},
+            ].map(info => (
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-primary-container text-xl mt-0.5" style="font-variation-settings:'FILL' 1;">{info.icon}</span>
+                <div>
+                  {info.href
+                    ? <a href={info.href} class="text-body-md text-on-surface hover:text-primary-container transition-colors whitespace-pre-line">{info.value}</a>
+                    : <p class="text-body-md text-on-surface whitespace-pre-line">{info.value}</p>
+                  }
+                </div>
+              </div>
+            ))}
+          </address>
+        </div>
+        <!-- Map placeholder -->
+        <div class="relative h-80 rounded-sm overflow-hidden bg-surface-base border border-white/5">
+          <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-3">
+            <span class="material-symbols-outlined text-primary-container text-4xl" style="font-variation-settings:'FILL' 1;">location_on</span>
+            <span class="text-body-md text-on-surface font-medium">Parque Tecnológico Damha II</span>
+            <span class="text-code-data text-tertiary">São Carlos – SP</span>
+            <a href="https://maps.google.com/?q=Alameda+Sinlioku+Tanaka+202+São+Carlos" target="_blank" rel="noopener noreferrer" class="mt-2 pill-green">
+              Abrir no Google Maps
+            </a>
+          </div>
+          <div class="absolute bottom-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest">-21.9766, -47.9064</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-surface-low border-t border-white/5 py-16">
+    <div class="max-w-[1440px] mx-auto px-edge text-center">
+      <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Vamos Trabalhar Juntos?</h2>
+      <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Conte-nos sobre seu projeto. Respondemos em até 24 horas.</p>
+      <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+        Entrar em Contato <span class="material-symbols-outlined text-base">arrow_forward</span>
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Base>

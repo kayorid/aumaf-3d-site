@@ -1,0 +1,229 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<Base title="Contato" description="Inicie seu projeto com a AUMAF 3D. Envie seu arquivo 3D e receba orçamento em até 24 horas. São Carlos – SP.">
+  <Navbar currentPath="/contato" />
+
+  <!-- Hero dark: headline esquerda + form direita (coffee-tech Contato) -->
+  <section class="min-h-screen bg-background pt-28 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute inset-0" style="background:radial-gradient(ellipse at 0% 60%,rgba(97,197,79,0.05) 0%,transparent 55%);"></div>
+
+    <div class="max-w-[1440px] mx-auto px-edge relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+        <!-- Esquerda: headline + info -->
+        <div class="pt-8">
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-6">Iniciar Projeto</span>
+          <h1 class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-8">
+            Inicie Seu<br/>Projeto<br/><span style="background:linear-gradient(135deg,#7ce268,#61c54f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Agora.</span>
+          </h1>
+          <p class="text-body-lg text-tertiary leading-relaxed max-w-sm mb-12">
+            Nossa equipe analisa seu arquivo em até 24 horas e retorna com orçamento detalhado, prazo definido e indicação do melhor material para sua aplicação.
+          </p>
+
+          <!-- Info cards -->
+          <div class="space-y-4">
+            {[
+              {icon:'location_on',label:'Endereço',value:'Alameda Sinlioku Tanaka 202\nParque Tecnológico Damha II\nSão Carlos – SP'},
+              {icon:'phone',label:'WhatsApp',value:'(16) 99286-3412',href:'https://wa.me/5516992863412'},
+              {icon:'mail',label:'Email',value:'comercial@auma3d.com.br',href:'mailto:comercial@auma3d.com.br'},
+              {icon:'schedule',label:'Horário',value:'Segunda – Sexta, 08h–18h'},
+            ].map(info => (
+              <div class="flex items-start gap-4 p-5 glass-panel rounded-sm group hover:border-primary-container/20 transition-all duration-300">
+                <span class="material-symbols-outlined text-primary-container text-xl mt-0.5" style="font-variation-settings:'FILL' 1;">{info.icon}</span>
+                <div>
+                  <span class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-1">{info.label}</span>
+                  {info.href
+                    ? <a href={info.href} class="text-body-md text-on-surface hover:text-primary-container transition-colors" target={info.href.startsWith('https') ? '_blank' : undefined}>{info.value}</a>
+                    : <p class="text-body-md text-on-surface whitespace-pre-line">{info.value}</p>
+                  }
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Direita: form -->
+        <div class="glass-panel rounded-sm p-8 md:p-10 border border-white/8">
+          <div class="flex items-center gap-3 mb-8 pb-6 border-b border-white/8">
+            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect"></span>
+            <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Formulário de Projeto</span>
+          </div>
+
+          <form id="contact-form" class="space-y-8" novalidate>
+            <!-- Nome + Sobrenome -->
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Nome</label>
+                <input type="text" name="nome" required placeholder="João" class="input-underline" />
+              </div>
+              <div>
+                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Sobrenome</label>
+                <input type="text" name="sobrenome" required placeholder="Silva" class="input-underline" />
+              </div>
+            </div>
+
+            <!-- Email + Telefone -->
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Email</label>
+                <input type="email" name="email" required placeholder="joao@empresa.com" class="input-underline" />
+              </div>
+              <div>
+                <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Telefone / WhatsApp</label>
+                <input type="tel" name="telefone" placeholder="(16) 99999-9999" class="input-underline" />
+              </div>
+            </div>
+
+            <!-- Empresa -->
+            <div>
+              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Empresa</label>
+              <input type="text" name="empresa" placeholder="Nome da empresa (opcional)" class="input-underline" />
+            </div>
+
+            <!-- Assunto -->
+            <div>
+              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Tipo de Projeto</label>
+              <div class="flex flex-wrap gap-2" id="subject-pills">
+                {['Prototipagem','Peça Funcional','Metal','Modelagem 3D','Engenharia Reversa','Outro'].map((s, i) => (
+                  <button
+                    type="button"
+                    data-value={s}
+                    class:list={['pill transition-all duration-200 hover:border-primary-container/70 cursor-pointer', i === 0 ? 'pill-active' : '']}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+              <input type="hidden" name="assunto" value="Prototipagem" id="assunto-hidden" />
+            </div>
+
+            <!-- Mensagem -->
+            <div>
+              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Descreva o Projeto</label>
+              <textarea
+                name="mensagem"
+                rows="4"
+                placeholder="Descreva a peça, material desejado, quantidade e prazo..."
+                class="input-underline resize-none w-full"
+              ></textarea>
+            </div>
+
+            <!-- Upload de arquivo -->
+            <div>
+              <label class="text-label-caps text-on-surface-variant uppercase tracking-widest block mb-2">Arquivo do Projeto (opcional)</label>
+              <div
+                id="drop-zone"
+                class="border border-dashed border-white/20 rounded-sm p-8 text-center hover:border-primary-container/50 transition-all duration-300 cursor-pointer group"
+              >
+                <span class="material-symbols-outlined text-3xl text-white/30 group-hover:text-primary-container transition-colors block mb-3">upload_file</span>
+                <p class="text-body-md text-on-surface-variant mb-1">Arraste ou clique para fazer upload</p>
+                <p class="text-code-data text-tertiary">.STL .OBJ .STEP .PDF .DXF — máx. 15MB</p>
+                <input type="file" id="file-input" name="arquivo" accept=".stl,.obj,.step,.stp,.pdf,.dxf" class="hidden" />
+              </div>
+              <p id="file-name" class="text-code-data text-primary-container mt-2 hidden"></p>
+            </div>
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              class="w-full inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300"
+            >
+              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
+              Enviar Projeto
+            </button>
+
+            <p class="text-code-data text-tertiary text-center">Retornamos em até 24 horas úteis.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp direto -->
+  <section class="bg-surface-low py-16 border-t border-white/5">
+    <div class="max-w-[1440px] mx-auto px-edge">
+      <div class="glass-panel rounded-sm p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-sm bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          </div>
+          <div>
+            <p class="text-body-md font-semibold text-white">Prefere pelo WhatsApp?</p>
+            <p class="text-sm text-tertiary">Fale diretamente com nossa equipe técnica agora.</p>
+          </div>
+        </div>
+        <a
+          href="https://wa.me/5516992863412?text=Olá! Gostaria de solicitar um orçamento para impressão 3D."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 border border-[#25D366]/30 text-[#25D366] text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 whitespace-nowrap"
+        >
+          Abrir WhatsApp
+          <span class="material-symbols-outlined text-base">open_in_new</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<script>
+  // Subject pill selector
+  const pills = document.querySelectorAll('#subject-pills button')
+  const hiddenInput = document.getElementById('assunto-hidden') as HTMLInputElement
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => {
+        p.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary-container')
+        p.classList.add('border-white/20', 'text-on-surface-variant')
+      })
+      pill.classList.add('bg-primary-container', 'text-on-primary', 'border-primary-container')
+      pill.classList.remove('border-white/20', 'text-on-surface-variant')
+      if (hiddenInput) hiddenInput.value = (pill as HTMLButtonElement).dataset.value || ''
+    })
+  })
+
+  // File drop zone
+  const dropZone = document.getElementById('drop-zone')
+  const fileInput = document.getElementById('file-input') as HTMLInputElement
+  const fileName = document.getElementById('file-name')
+
+  dropZone?.addEventListener('click', () => fileInput?.click())
+
+  dropZone?.addEventListener('dragover', (e) => {
+    e.preventDefault()
+    dropZone.classList.add('border-primary-container/50')
+  })
+
+  dropZone?.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-primary-container/50')
+  })
+
+  dropZone?.addEventListener('drop', (e) => {
+    e.preventDefault()
+    dropZone.classList.remove('border-primary-container/50')
+    const files = (e as DragEvent).dataTransfer?.files
+    if (files?.length && fileInput) {
+      fileInput.files = files
+      showFileName(files[0].name)
+    }
+  })
+
+  fileInput?.addEventListener('change', () => {
+    if (fileInput.files?.[0]) showFileName(fileInput.files[0].name)
+  })
+
+  function showFileName(name: string) {
+    if (fileName) {
+      fileName.textContent = `✓ ${name}`
+      fileName.classList.remove('hidden')
+    }
+  }
+</script>
