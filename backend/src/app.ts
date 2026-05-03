@@ -18,6 +18,7 @@ import { metricsRoutes } from './routes/metrics.routes'
 import { publicRoutes } from './routes/public.routes'
 import { settingsRoutes } from './routes/settings.routes'
 import { healthRoutes } from './routes/health.routes'
+import { botyioWebhookRoutes } from './routes/botyio-webhook.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -41,6 +42,15 @@ export function createApp() {
   app.use(hpp())
   app.use(globalLimiter)
   app.use(cookieParser())
+
+  // Webhook Botyio: precisa de raw body para validação HMAC-SHA256.
+  // DEVE ficar antes de express.json() — depois o body já estaria parseado.
+  app.use(
+    '/api/v1/leads/botyio-status',
+    express.raw({ type: 'application/json', limit: '512kb' }),
+    botyioWebhookRoutes,
+  )
+
   app.use(express.json({ limit: '5mb' }))
   app.use(pinoHttp({ logger }))
 

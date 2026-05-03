@@ -46,8 +46,11 @@ const envSchema = z.object({
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().default('gemini-2.0-flash-exp'),
 
-  // Botyo (futuro)
-  BOTYO_WEBHOOK_URL: z.string().url().or(z.literal('')).optional(),
+  // Botyio — WhatsApp lead integration
+  BOTYIO_BASE_URL: z.string().url().default('https://api.botyio.com'),
+  BOTYIO_API_KEY: z.string().optional(),
+  BOTYIO_WEBHOOK_SECRET: z.string().optional(),
+  BOTYIO_ENABLED: z.enum(['true', 'false']).default('false'),
 
   // Email (notificação de leads ao admin)
   ADMIN_NOTIFICATION_EMAIL: z.string().email().optional(),

@@ -76,15 +76,44 @@ model Post {
 }
 
 model Lead {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  message   String?
-  source    String?
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  message     String?
+  source      String?
+  createdAt   DateTime @default(now())
 
+  // UTM tracking
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+  referrer    String?
+  landingPage String?
+
+  // Botyio sync
+  botyoLeadId     String?
+  botyoStatus     String?   @default("pending")
+  botyoQueuedAt   DateTime?
+  botyoSentAt     DateTime?
+  botyoFailReason String?   @db.Text
+
+  @@index([botyoLeadId])
+  @@index([botyoStatus])
   @@map("leads")
+}
+
+model BotyoWebhookDelivery {
+  id         String   @id @default(cuid())
+  deliveryId String   @unique
+  event      String
+  payload    Json
+  receivedAt DateTime @default(now())
+
+  @@index([receivedAt])
+  @@map("botyo_webhook_deliveries")
 }
 
 model Setting {
