@@ -8,7 +8,9 @@
 
 ## Em andamento
 
-_Nenhuma spec ativa._
+| Feature | Fase | Status | Pasta |
+|---------|------|--------|-------|
+| vps-provisioning-cicd | Specify → **Clarify** | Aguardando respostas em §8 do `requirements.md` (12 perguntas) | [pasta](_active/2026-05-04-vps-provisioning-cicd/) |
 
 ## Recém concluídas
 

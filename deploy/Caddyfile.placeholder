@@ -1,0 +1,16 @@
+{
+	auto_https off
+	log {
+		output file /var/log/caddy/caddy.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+		format json
+	}
+}
+
+:80 {
+	respond "AUMAF 3D — server provisioned, awaiting application deploy and CF API token (F2.5)" 200
+	header Cache-Control "no-store"
+	header Content-Type "text/plain; charset=utf-8"
+}

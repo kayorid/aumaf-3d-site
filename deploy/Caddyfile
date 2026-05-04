@@ -1,0 +1,89 @@
+{
+	email kayocdi@gmail.com
+	acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+
+	log {
+		output file /var/log/caddy/caddy.log {
+			roll_size 50mb
+			roll_keep 10
+			roll_keep_for 720h
+		}
+		format json
+		level INFO
+	}
+}
+
+(security_headers) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+		-Server
+	}
+}
+
+aumaf.kayoridolfi.ai {
+	import security_headers
+	encode br gzip
+
+	@hashed_assets path_regexp hashed ^/_astro/.+\.[a-f0-9]{8,}\..+$
+	header @hashed_assets Cache-Control "public, max-age=31536000, immutable"
+
+	reverse_proxy 127.0.0.1:4321 {
+		health_uri /
+		health_interval 30s
+		health_timeout 5s
+	}
+
+	log {
+		output file /var/log/caddy/aumaf-public.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
+
+admin-aumaf.kayoridolfi.ai {
+	import security_headers
+	encode br gzip
+
+	@hashed_assets path_regexp hashed ^/assets/.+\.[a-f0-9]{8,}\..+$
+	header @hashed_assets Cache-Control "public, max-age=31536000, immutable"
+
+	reverse_proxy 127.0.0.1:5174 {
+		health_uri /
+		health_interval 60s
+		health_timeout 5s
+	}
+
+	log {
+		output file /var/log/caddy/aumaf-admin.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
+
+api-aumaf.kayoridolfi.ai {
+	import security_headers
+	encode gzip
+
+	reverse_proxy 127.0.0.1:3000 {
+		health_uri /health
+		health_interval 15s
+		health_timeout 5s
+		transport http {
+			keepalive 60s
+			keepalive_idle_conns 16
+		}
+	}
+
+	log {
+		output file /var/log/caddy/aumaf-api.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
