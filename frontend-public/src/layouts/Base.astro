@@ -155,6 +155,17 @@ const {
       <slot />
     </main>
 
+    <!-- prefers-reduced-motion: pausa vídeos com autoplay (mantém o frame visível). -->
+    <script is:inline>
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('video[autoplay]').forEach((v) => {
+            try { v.removeAttribute('autoplay'); v.pause(); } catch {}
+          })
+        })
+      }
+    </script>
+
     <!-- FAB: scroll to top -->
     <button
       id="fab-top"
