@@ -7,6 +7,7 @@ import { COMPANY } from '../../lib/company'
 import { blogPostingSchema } from '../../lib/schemas'
 import { fetchPublicPost, fetchPublicPosts } from '../../lib/api'
 import { renderPostContent, formatPostDateLong } from '../../lib/render-post'
+import { resolveCoverImage } from '../../lib/blog-defaults'
 
 const slug = Astro.params.slug
 if (!slug) return Astro.redirect('/404')
@@ -15,9 +16,8 @@ const fresh = await fetchPublicPost(slug)
 if (!fresh) return Astro.redirect('/404')
 
 const url = new URL(Astro.url.pathname, Astro.site).toString()
-const ogImg = fresh.coverImageUrl
-  ? (fresh.coverImageUrl.startsWith('http') ? fresh.coverImageUrl : `${COMPANY.url}${fresh.coverImageUrl}`)
-  : COMPANY.ogImageDefault
+const coverSrc = resolveCoverImage(fresh.coverImageUrl, fresh.category)
+const ogImg = coverSrc.startsWith('http') ? coverSrc : `${COMPANY.url}${coverSrc}`
 
 const author = fresh.author?.name ?? 'Equipe AUMAF 3D'
 const sectionName = fresh.category?.name ?? 'Blog'
@@ -50,7 +50,7 @@ const relatedFinal = related.length >= 2 ? related : allPosts.filter((p) => p.sl
   description={fresh.metaDescription ?? fresh.excerpt ?? ''}
   ogImage={ogImg}
   ogType="article"
-  preloadImage={fresh.coverImageUrl ?? undefined}
+  preloadImage={coverSrc}
   article={{ datePublished: dateIso, author, section: sectionName }}
   breadcrumb={[{ name: 'Blog', url: '/blog' }, { name: fresh.title, url: Astro.url.pathname }]}
   schemas={schemas}
@@ -90,31 +90,19 @@ const relatedFinal = related.length >= 2 ? related : allPosts.filter((p) => p.sl
   <!-- Cover -->
   <div class="bg-background pb-16">
     <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12">
-      <div class="relative rounded-sm overflow-hidden bg-gradient-to-br from-primary-container/10 to-surface-base border border-white/8 aspect-[16/9]">
-        {fresh.coverImageUrl ? (
-          <img
-            src={fresh.coverImageUrl}
-            alt={`Imagem de capa: ${fresh.title}`}
-            width="1280"
-            height="720"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-            class="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <>
-            <div class="absolute inset-0 bg-tech-grid opacity-40" aria-hidden="true"></div>
-            <div class="absolute inset-0 flex items-center justify-center opacity-15" aria-hidden="true">
-              <svg viewBox="0 0 160 160" fill="none" class="w-48 h-48" focusable="false">
-                <polygon points="80,8 148,44 148,116 80,152 12,116 12,44" stroke="#61c54f" stroke-width="1.5" fill="none"/>
-                <polygon points="80,28 128,56 128,104 80,132 32,104 32,56" stroke="#61c54f" stroke-width="0.5" fill="none"/>
-                <circle cx="80" cy="80" r="24" stroke="#61c54f" stroke-width="1" fill="none"/>
-                <circle cx="80" cy="80" r="4" fill="#61c54f"/>
-              </svg>
-            </div>
-          </>
-        )}
+      <div class="relative rounded-sm overflow-hidden bg-surface-high border border-white/8 aspect-[16/9]">
+        <img
+          src={coverSrc}
+          alt={`Imagem de capa: ${fresh.title}`}
+          width="1280"
+          height="720"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.4) 100%);"></div>
         <div class="absolute bottom-4 left-4">
           <span class="pill-active">{sectionName}</span>
         </div>
@@ -208,12 +196,9 @@ const relatedFinal = related.length >= 2 ? related : allPosts.filter((p) => p.sl
             <li>
               <article>
                 <a href={`/blog/${rp.slug}`} class="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
-                  <div class="relative aspect-[5/3] rounded-sm overflow-hidden bg-gradient-to-br from-surface-base to-surface-dim mb-3">
-                    {rp.coverImageUrl ? (
-                      <img src={rp.coverImageUrl} alt={`Capa: ${rp.title}`} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover" />
-                    ) : (
-                      <div class="absolute inset-0 bg-tech-grid opacity-30" aria-hidden="true"></div>
-                    )}
+                  <div class="relative aspect-[5/3] rounded-sm overflow-hidden bg-surface-high mb-3">
+                    <img src={resolveCoverImage(rp.coverImageUrl, rp.category)} alt={`Capa: ${rp.title}`} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
                     {rp.category && (
                       <div class="absolute top-3 left-3">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full border border-primary-container/60 text-primary-container text-[10px] uppercase tracking-widest">{rp.category.name}</span>
