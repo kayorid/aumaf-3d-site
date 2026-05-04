@@ -25,9 +25,21 @@ const homeSchemas = [
        HERO — 2 colunas: conteúdo + painel de mídia
        ============================================= -->
   <section class="relative min-h-screen flex items-center overflow-hidden bg-background">
-    <!-- Textura circuit + grid combinados -->
-    <div class="absolute inset-0 bg-tech-grid pointer-events-none opacity-40"></div>
-    <div class="absolute inset-0 bg-circuit pointer-events-none opacity-60"></div>
+    <!-- Background AI: hexmesh neon (cobre toda a viewport, atrás dos overlays) -->
+    <img
+      src="/images/hero-bg-hexmesh.webp"
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover opacity-55 pointer-events-none"
+      width="1584"
+      height="672"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+    <!-- Textura circuit + grid combinados (preservados sobre o background) -->
+    <div class="absolute inset-0 bg-tech-grid pointer-events-none opacity-25 mix-blend-overlay"></div>
+    <div class="absolute inset-0 bg-circuit pointer-events-none opacity-40 mix-blend-overlay"></div>
 
     <!-- Glow 1: halo central difuso (intensificado) -->
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(97,197,79,0.11) 0%,transparent 65%);"></div>
@@ -66,8 +78,8 @@ const homeSchemas = [
           </div>
 
           <h1 class="text-display-xl font-bold text-white text-glow-white uppercase leading-none tracking-[-0.04em] mb-6 opacity-0 animate-fade-up" style="animation-delay:100ms;animation-fill-mode:forwards;">
-            Zero-Error<br/>
-            <span class="text-gradient-glow">Precision.</span>
+            Tolerância Zero.<br/>
+            <span class="text-gradient-glow">Precisão Total.</span>
           </h1>
 
           <p class="text-body-lg text-tertiary max-w-lg leading-relaxed mb-10 opacity-0 animate-fade-up" style="animation-delay:250ms;animation-fill-mode:forwards;">
@@ -113,22 +125,27 @@ const homeSchemas = [
         <div class="hidden lg:flex flex-col gap-4 opacity-0 animate-fade-up" style="animation-delay:300ms;animation-fill-mode:forwards;">
           <!-- VIDEO_HERO: slot de vídeo principal -->
           <div class="relative aspect-video rounded-sm overflow-hidden bg-surface-base border border-white/8 group" style="box-shadow:0 0 60px rgba(0,0,0,0.8),0 0 30px rgba(97,197,79,0.05);">
-            <!--
-              VIDEO_HERO — Quando o vídeo final estiver disponível, substituir o <img> abaixo por:
-              <video class="absolute inset-0 w-full h-full object-cover" poster="/images/hero-3d-printing.webp" autoplay loop muted playsinline>
-                <source src="/videos/hero-printing.mp4" type="video/mp4" />
-              </video>
-            -->
-            <img
-              src="/images/hero-3d-printing.webp"
-              alt="Impressora 3D FDM industrial em operação com glow verde AUMAF"
+            <video
               class="absolute inset-0 w-full h-full object-cover"
-              width="2752"
-              height="1536"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-            />
+              poster="/images/hero-fdm-extrusion.webp"
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              aria-label="Bico extrusor FDM em ação com glow verde AUMAF — depositando filamento em peça com geometria treliçada"
+            >
+              <source src="/videos/hero-fdm-extrusion.mp4" type="video/mp4" />
+              <img
+                src="/images/hero-fdm-extrusion.webp"
+                alt="Bico extrusor FDM em ação com glow verde AUMAF — depositando filamento em peça com geometria treliçada"
+                class="absolute inset-0 w-full h-full object-cover"
+                width="1376"
+                height="768"
+                loading="eager"
+                decoding="async"
+              />
+            </video>
             <div class="absolute inset-0 bg-tech-grid opacity-20 mix-blend-overlay"></div>
             <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 40%,rgba(97,197,79,0.08) 0%,transparent 65%),linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.45) 100%);"></div>
 

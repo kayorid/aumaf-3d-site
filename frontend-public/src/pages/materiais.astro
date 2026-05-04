@@ -212,16 +212,27 @@ const schemas = [
             Solicitar orçamento de peça em metal 316L
           </a>
         </div>
-        <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/8">
-          <div class="absolute inset-0 bg-tech-grid opacity-40" aria-hidden="true"></div>
-          <div class="absolute inset-0" aria-hidden="true" style="background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 70%);"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-center">
-              <span class="text-[72px] font-black text-white/[0.06] leading-none tracking-tighter block" aria-hidden="true">316L</span>
-              <span class="text-label-caps text-primary-container uppercase tracking-[0.3em] text-[10px]">Aço Inox // Sinterizado</span>
-            </div>
+        <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/8 group/hero">
+          <img
+            src="/images/mat-17-ultrafuse-316l.webp"
+            alt="Peça impressa em aço inoxidável BASF Ultrafuse 316L sinterizado — vista aproximada"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/hero:scale-[1.03]"
+            width="1376"
+            height="768"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+          <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 70%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.55) 100%);"></div>
+          <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/40" aria-hidden="true"></div>
+          <div class="absolute top-3 right-3 w-3 h-3 border-t border-r border-primary-container/40" aria-hidden="true"></div>
+          <div class="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-primary-container/40" aria-hidden="true"></div>
+          <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/40" aria-hidden="true"></div>
+          <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/25 to-transparent animate-scan-line" aria-hidden="true"></div>
+          <div class="absolute top-4 right-4">
+            <span class="pill-green text-[10px]">Aço Inox · Sinterizado</span>
           </div>
-          <div class="absolute bottom-4 left-4 right-4 text-code-data text-on-surface-variant text-[10px] flex justify-between">
+          <div class="absolute bottom-4 left-4 right-4 text-code-data text-on-surface-variant text-[10px] flex justify-between bg-black/40 backdrop-blur-sm rounded-sm px-3 py-1.5">
             <span>BASF ULTRAFUSE</span>
             <span>ASTM 316L</span>
           </div>

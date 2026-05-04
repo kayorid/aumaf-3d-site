@@ -29,9 +29,21 @@ const schemas = [
 
   <!-- Hero Institucional assimétrico -->
   <section class="bg-background min-h-[65vh] flex items-end pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-sobre">
-    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
+    <img
+      src="/images/sobre-hero-hexmesh.webp"
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
+      width="1584"
+      height="672"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+    <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
     <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 50% at 70% 10%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
     <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 35% 40% at 5% 90%,rgba(97,197,79,0.04) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.35) 50%,rgba(0,0,0,0.85) 100%);"></div>
     <div class="absolute bottom-0 inset-x-0 h-16 pointer-events-none" aria-hidden="true" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.6));"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge w-full relative z-10">
@@ -69,6 +81,8 @@ const schemas = [
             title: 'Nossa Missão',
             body: 'Tornar a manufatura aditiva de alta performance acessível a empresas de todos os portes — sem abrir mão da qualidade, precisão e atendimento técnico de excelência. Acreditamos que a impressão 3D é o futuro da produção industrial, e trabalhamos para que esse futuro seja acessível a todos.',
             highlight: 'Qualidade + Acessibilidade',
+            image: '/images/sobre-missao-qualidade.webp',
+            imageAlt: 'Engenheiro AUMAF inspecionando peça impressa em 3D com paquímetro digital',
             reverse: false,
           },
           {
@@ -76,6 +90,8 @@ const schemas = [
             title: 'Nossa Visão',
             body: 'Ser o parceiro de engenharia aditiva de referência no interior de São Paulo, acelerando a inovação de indústrias, startups e laboratórios de pesquisa. Conectar a precisão da manufatura digital com as necessidades reais de quem constrói o futuro.',
             highlight: 'Hub de Inovação Regional',
+            image: '/images/sobre-visao-hub.webp',
+            imageAlt: 'Parque Tecnológico Damha II em São Carlos — fachada do hub de inovação onde a AUMAF está instalada',
             reverse: true,
           },
           {
@@ -83,6 +99,8 @@ const schemas = [
             title: 'Nossos Valores',
             body: 'Inovação contínua — buscamos sempre as tecnologias e materiais mais avançados. Qualidade comprovada — cada peça passa por controle dimensional antes de sair. Transparência — prazo e orçamento definidos antes do início. Parceria — não somos fornecedores, somos parceiros técnicos.',
             highlight: 'Inovação + Qualidade + Transparência',
+            image: '/images/sobre-valores-bancada.webp',
+            imageAlt: 'Bancada AUMAF com peças impressas, paquímetro, ordem de produção e checklist de qualidade',
             reverse: false,
           },
         ].map((item, i) => (
@@ -93,9 +111,24 @@ const schemas = [
               <dd class="text-body-lg text-tertiary leading-relaxed mb-6">{item.body}</dd>
             </div>
             <div class:list={item.reverse ? 'lg:order-1' : ''}>
-              <div class="glass-panel card-hover-glow p-10 rounded-sm" style="border:1px solid rgba(97,197,79,0.1);">
-                <div class="flex items-center justify-center h-32">
-                  <p class="text-headline-md font-medium text-primary-container text-center leading-snug">{item.highlight}</p>
+              <div class="relative aspect-[4/3] rounded-sm overflow-hidden bg-surface-base border border-primary-container/15 group/mvv" style="box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+                <img
+                  src={item.image}
+                  alt={item.imageAlt}
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/mvv:scale-[1.04]"
+                  width="1200"
+                  height="896"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(circle at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 70%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.65) 100%);"></div>
+                <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute top-3 right-3 w-3 h-3 border-t border-r border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
+                  <p class="text-headline-md font-medium text-primary-container leading-snug">{item.highlight}</p>
                 </div>
               </div>
             </div>
@@ -221,48 +254,6 @@ const schemas = [
           </a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Equipe -->
-  <section class="bg-surface-low py-section border-t border-white/5" aria-labelledby="equipe-heading">
-    <div class="max-w-[1600px] mx-auto px-edge">
-      <header class="mb-12 border-b border-white/8 pb-8">
-        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">Time // Pessoas por trás</span>
-        <h2 id="equipe-heading" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Equipe AUMAF 3D</h2>
-        <p class="text-body-md text-tertiary leading-relaxed mt-4 max-w-xl">Engenharia, operação e atendimento técnico — pessoas reais cuidando de cada projeto, do orçamento à entrega.</p>
-      </header>
-      <ul role="list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        {[
-          { slug: 'raissa-ninelli',  name: 'Raissa Ninelli',  role: 'Operações & Atendimento' },
-          { slug: 'thiago-gerotto',  name: 'Thiago Gerotto',  role: 'Engenharia & Produção' },
-          { slug: 'vitor-goncalez',  name: 'Vitor Gonçalez',  role: 'Engenharia & DfAM' },
-        ].map((m) => (
-          <li>
-            <article class="glass-panel rounded-sm overflow-hidden border border-white/8 hover:border-primary-container/25 transition-all duration-300 group">
-              <div class="relative aspect-[4/5] overflow-hidden bg-surface-base">
-                <img
-                  src={`/images/${m.slug}.avif`}
-                  alt={`${m.name} — ${m.role} na AUMAF 3D`}
-                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                  width="800"
-                  height="1000"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
-                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,0.65) 100%);"></div>
-                <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/40" aria-hidden="true"></div>
-                <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/40" aria-hidden="true"></div>
-              </div>
-              <div class="p-6">
-                <h3 class="text-headline-md font-bold uppercase text-white tracking-[0.01em]">{m.name}</h3>
-                <p class="text-code-data text-primary-container uppercase tracking-widest text-[11px] mt-1">{m.role}</p>
-              </div>
-            </article>
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
