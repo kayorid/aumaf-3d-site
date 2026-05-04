@@ -1,8 +1,8 @@
 # Status — Geração de Imagens AI (Higgsfield)
 
-**Fase atual**: clarify
-**Última atualização**: 2026-05-03 21:15 GMT-3
-**Próximo passo concreto**: Kayo responder as 6 perguntas em `requirements.md` §10 [CLARIFY-A..F] para destravar a fase plan→tasks de cada lote.
+**Fase atual**: validate (concluída)
+**Última atualização**: 2026-05-04 GMT-3
+**Próximo passo concreto**: Retrospective + arquivamento em `_completed/`.
 
 ---
 
@@ -17,16 +17,11 @@
 
 ## Perguntas em aberto
 
-- [ ] [CLARIFY-A] `/v2/index.astro` — reaproveitar 5 imagens do `/` ou gerar variantes específicas? (Custo: 6 imagens vs 0)
-- [ ] [CLARIFY-B] `sobre.astro` — Map placeholder vira embed real do Google Maps OU imagem aérea AI? (Recomendado: Maps real)
-- [ ] [CLARIFY-C] Blog defaults — quantas categorias mapear? Listar categorias atuais no banco para basear a decisão.
-- [ ] [CLARIFY-D] AVIFs orfãos da equipe (`raissa-ninelli`, `thiago-gerotto`, `vitor-goncalez`, `SAE-formula`) — integrar em `sobre.astro` (criando seção equipe nova) ou deletar?
-- [ ] [CLARIFY-E] Template de prompt para 16 materiais — adaptar (foco em "amostra de material") ou manter (template industrial atual)?
-- [ ] [CLARIFY-F] `sls-laser` — cena distinta (powder bed + laser real) ou variação visual de `metal-parts`?
+> Todas as 6 resolvidas em 2026-05-04 — ver `requirements.md` §11.
 
 ## Blockers
 
-- **Único blocker ativo**: as 6 perguntas de Clarify acima. Sem elas, não dá para abrir tasks de Lote A/C/D/E sem suposição arriscada. Lote B (portfolio) pode prosseguir sem clarify — é o caminho mais rápido para começar a entregar.
+- **Nenhum**. Saldo Higgsfield OK (2.455 créditos), 6 clarifications respondidas, 7 categorias do blog mapeadas no seed.
 
 ## Descobertas (fora de escopo planejado)
 
@@ -38,16 +33,16 @@
 
 | Critério | Evidência | Status |
 |----------|-----------|--------|
-| R1 (index 6 slots) | _pendente_ | ❌ pendente |
-| R2 (v2 7 slots) | _pendente_ | ❌ pendente |
-| R3 (portfolio 12) | _pendente_ | ❌ pendente |
-| R4 (materiais 16) | _pendente_ | ❌ pendente |
-| R5 (blog defaults) | _pendente_ | ❌ pendente |
-| R6 (paridade webp/png) | _pendente_ | ❌ pendente |
-| R7 (`<video poster>` preservado) | _pendente_ | ❌ pendente |
-| R8 (slots antes de imagens) | _pendente_ | ❌ pendente |
-| R9 (sem layout shift no fail) | _pendente_ | ❌ pendente |
-| R10 (saldo Higgsfield ≥100) | _pendente_ | ❌ pendente |
+| R1 (index slot sls-laser) | `index.astro` linha ~558 com `<img src="/images/sls-laser.webp">`; build `/index.html` OK | ✅ |
+| R2 (v2 fechamento) | `v2/index.astro` 4 capabilities reaproveitam `/images/cap-*.webp` + `sls-laser` no slot SLS + `v2-highlight-fdm-sla-sls.webp` no featured blog; build `/v2/index.html` OK | ✅ |
+| R3 (portfolio 12) | 12 webps `port-01..12-*` aplicados no loop de `portfolio.astro`; build `/portfolio/index.html` OK | ✅ |
+| R4 (materiais 17, escopo expandido de 16→17) | 17 webps `mat-01..17-*` aplicados em `materiais.astro` com prompt-template adaptado por material (filamento/peça/amostra) | ✅ |
+| R5 (blog defaults) | `src/lib/blog-defaults.ts` criado com `resolveCoverImage()`; 7 categorias do seed mapeadas + 1 fallback genérico; aplicado em `blog/index.astro` (featured + grid) e `blog/[slug].astro` (hero, ogImage, related) | ✅ |
+| R6 (paridade webp/png) | 44 webps em `frontend-public/public/images/` ↔ 44 PNGs em `assets/generated/images/` | ✅ 44↔44 |
+| R7 (`<video poster>` preservado) | Comentários `<video poster={image}>` mantidos em todos os slots originalmente de vídeo (index `VIDEO_SLS`, capabilities x4, v2 idem) | ✅ |
+| R8 (slots antes de imagens) | Slots `<img>` adicionados no markup ANTES da geração para portfolio (12) e materiais (17) — pipeline grafou ordem em tasks.md | ✅ |
+| R9 (sem layout shift no fail) | Todos os `<img>` têm `width`/`height` reais e containers `aspect-[…]`; build sem warnings de CLS | ✅ |
+| R10 (saldo Higgsfield ≥100) | Saldo inicial 2.455 → final 2.377 (consumo de ~78 créditos para 39 imagens novas: 2 lote A + 12 B + 17 C + 8 D = 39) | ✅ |
 
 ## Métricas pós-feature (preenchido na fase Retrospective)
 
@@ -69,3 +64,5 @@
 | 2026-05-03 21:13 | plan | Claude | design.md preenchido; 5 lotes independentes; pipeline reaproveitando padrão validado em PR#8 |
 | 2026-05-03 21:14 | tasks | Claude | tasks.md com ~50 tarefas distribuídas em Lote 0 + A + B + C + D + E + Validation + Closure |
 | 2026-05-03 21:15 | clarify | _aguardando Kayo_ | 6 perguntas pendentes — bloqueio explícito antes de avançar para implement |
+| 2026-05-04 | implement | Claude (autorização autônoma do Kayo) | Kayo autorizou avançar com melhores decisões; 6 clarifications resolvidas (ver requirements §11); saldo OK |
+| 2026-05-04 | validate | Claude | 39 imagens AI geradas (2A + 12B + 17C + 8D) + Maps embed + seção Equipe (E); build limpo; paridade 44↔44; 10/10 critérios EARS satisfeitos |

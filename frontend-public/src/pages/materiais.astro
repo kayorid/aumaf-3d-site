@@ -7,23 +7,23 @@ import Breadcrumb from '../components/Breadcrumb.astro'
 import { itemListSchema } from '../lib/schemas'
 
 const materials = [
-  { cat: 'Termoplásticos',   name: 'Nylon (PA)',           tempMax: '120°C',  flex: 'Semi-rígido', app: 'Mecânica geral',                  highlight: false },
-  { cat: 'Termoplásticos',   name: 'ABS',                  tempMax: '100°C',  flex: 'Rígido',      app: 'Protótipos + peças funcionais',   highlight: false },
-  { cat: 'Termoplásticos',   name: 'Policarbonato (PC)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Alta resistência ao impacto',     highlight: false },
-  { cat: 'Termoplásticos',   name: 'PET-G',                tempMax: '80°C',   flex: 'Semi-rígido', app: 'Alimentício seguro',              highlight: false },
-  { cat: 'Termoplásticos',   name: 'Polipropileno (PP)',   tempMax: '100°C',  flex: 'Semi-rígido', app: 'Resistência química',             highlight: false },
-  { cat: 'Termoplásticos',   name: 'TPU',                  tempMax: '80°C',   flex: 'Flexível',    app: 'Borracha técnica, solas',         highlight: false },
-  { cat: 'Termoplásticos',   name: 'PVA',                  tempMax: '60°C',   flex: 'Solúvel',     app: 'Suporte solúvel em água',         highlight: false },
-  { cat: 'Alta Performance', name: 'PA CF15',              tempMax: '180°C',  flex: 'Rígido+Leve', app: 'Industrial severo',               highlight: true },
-  { cat: 'Alta Performance', name: 'PET-G CF15',           tempMax: '80°C',   flex: 'Rígido',      app: 'Estrutural leve',                 highlight: false },
-  { cat: 'Alta Performance', name: 'Tritan HT',            tempMax: '95°C',   flex: 'Rígido',      app: 'Transparência + temperatura',     highlight: false },
-  { cat: 'Alta Performance', name: 'PC (Policarbonato)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Impacto industrial',              highlight: false },
-  { cat: 'Flexíveis',        name: 'TPU Shore 95A',        tempMax: '80°C',   flex: 'Flex. médio', app: 'Juntas, vedações',                highlight: false },
-  { cat: 'Flexíveis',        name: 'Flex Shore 85A',       tempMax: '70°C',   flex: 'Alta flex.',  app: 'Solas, grips, amortecedores',     highlight: false },
-  { cat: 'Resinas',          name: 'Resina Standard',      tempMax: '60°C',   flex: 'Rígido',      app: 'Alta resolução SLA',              highlight: false },
-  { cat: 'Resinas',          name: 'Resina ABS',           tempMax: '80°C',   flex: 'Rígido',      app: 'Mecânica + acabamento',           highlight: false },
-  { cat: 'Resinas',          name: 'Resina Cerâmica',      tempMax: '+400°C', flex: 'Rígido',      app: 'Temp. extrema, moldes',           highlight: true },
-  { cat: 'Metal',            name: 'BASF Ultrafuse 316L',  tempMax: '800°C+', flex: 'Aço Inox',    app: 'Componentes metálicos finais',    highlight: true },
+  { slug: 'mat-01-nylon-pa',         cat: 'Termoplásticos',   name: 'Nylon (PA)',           tempMax: '120°C',  flex: 'Semi-rígido', app: 'Mecânica geral',                  highlight: false },
+  { slug: 'mat-02-abs',              cat: 'Termoplásticos',   name: 'ABS',                  tempMax: '100°C',  flex: 'Rígido',      app: 'Protótipos + peças funcionais',   highlight: false },
+  { slug: 'mat-03-pc',               cat: 'Termoplásticos',   name: 'Policarbonato (PC)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Alta resistência ao impacto',     highlight: false },
+  { slug: 'mat-04-petg',             cat: 'Termoplásticos',   name: 'PET-G',                tempMax: '80°C',   flex: 'Semi-rígido', app: 'Alimentício seguro',              highlight: false },
+  { slug: 'mat-05-pp',               cat: 'Termoplásticos',   name: 'Polipropileno (PP)',   tempMax: '100°C',  flex: 'Semi-rígido', app: 'Resistência química',             highlight: false },
+  { slug: 'mat-06-tpu',              cat: 'Termoplásticos',   name: 'TPU',                  tempMax: '80°C',   flex: 'Flexível',    app: 'Borracha técnica, solas',         highlight: false },
+  { slug: 'mat-07-pva',              cat: 'Termoplásticos',   name: 'PVA',                  tempMax: '60°C',   flex: 'Solúvel',     app: 'Suporte solúvel em água',         highlight: false },
+  { slug: 'mat-08-pa-cf15',          cat: 'Alta Performance', name: 'PA CF15',              tempMax: '180°C',  flex: 'Rígido+Leve', app: 'Industrial severo',               highlight: true  },
+  { slug: 'mat-09-petg-cf15',        cat: 'Alta Performance', name: 'PET-G CF15',           tempMax: '80°C',   flex: 'Rígido',      app: 'Estrutural leve',                 highlight: false },
+  { slug: 'mat-10-tritan-ht',        cat: 'Alta Performance', name: 'Tritan HT',            tempMax: '95°C',   flex: 'Rígido',      app: 'Transparência + temperatura',     highlight: false },
+  { slug: 'mat-11-pc-perf',          cat: 'Alta Performance', name: 'PC (Policarbonato)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Impacto industrial',              highlight: false },
+  { slug: 'mat-12-tpu-shore-95a',    cat: 'Flexíveis',        name: 'TPU Shore 95A',        tempMax: '80°C',   flex: 'Flex. médio', app: 'Juntas, vedações',                highlight: false },
+  { slug: 'mat-13-flex-shore-85a',   cat: 'Flexíveis',        name: 'Flex Shore 85A',       tempMax: '70°C',   flex: 'Alta flex.',  app: 'Solas, grips, amortecedores',     highlight: false },
+  { slug: 'mat-14-resina-standard',  cat: 'Resinas',          name: 'Resina Standard',      tempMax: '60°C',   flex: 'Rígido',      app: 'Alta resolução SLA',              highlight: false },
+  { slug: 'mat-15-resina-abs',       cat: 'Resinas',          name: 'Resina ABS',           tempMax: '80°C',   flex: 'Rígido',      app: 'Mecânica + acabamento',           highlight: false },
+  { slug: 'mat-16-resina-ceramica',  cat: 'Resinas',          name: 'Resina Cerâmica',      tempMax: '+400°C', flex: 'Rígido',      app: 'Temp. extrema, moldes',           highlight: true  },
+  { slug: 'mat-17-ultrafuse-316l',   cat: 'Metal',            name: 'BASF Ultrafuse 316L',  tempMax: '800°C+', flex: 'Aço Inox',    app: 'Componentes metálicos finais',    highlight: true  },
 ]
 
 const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal']
@@ -117,8 +117,22 @@ const schemas = [
               aria-labelledby={`mat-${mat.name.replace(/\s+/g, '-').toLowerCase()}`}
             >
               {mat.highlight && (
-                <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/50 to-transparent" aria-hidden="true"></div>
+                <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/50 to-transparent z-10" aria-hidden="true"></div>
               )}
+
+              <div class="relative -mx-6 -mt-6 mb-5 aspect-[16/9] overflow-hidden border-b border-white/8 bg-surface-base">
+                <img
+                  src={`/images/${mat.slug}.webp`}
+                  alt={`Amostra de ${mat.name} — ${mat.app}`}
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  width="1376"
+                  height="768"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(11,11,11,0.85) 100%);"></div>
+              </div>
 
               <div class="flex justify-between items-start mb-4">
                 <span class:list={[

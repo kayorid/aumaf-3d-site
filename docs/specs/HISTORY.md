@@ -4,6 +4,21 @@
 
 ---
 
+## 2026-05-04 — Geração de Imagens AI (Higgsfield)
+
+**Spec**: [_completed/2026-05-03-ai-image-generation/](_completed/2026-05-03-ai-image-generation/)
+
+39 imagens AI fotorrealistas verde-AUMAF entregues via Higgsfield (`nano_banana_2`), distribuídas em 5 lotes:
+- **Lote A**: `sls-laser` em `/` e `/v2` + `v2-highlight-fdm-sla-sls` no featured do blog em `/v2`; capabilities do `/v2` reaproveitam as 4 imagens do `/`.
+- **Lote B**: 12 capas de portfolio (`port-01..12`) com prompt-template adaptado por projeto.
+- **Lote C**: 17 amostras de material (`mat-01..17`) com prompt variando por contexto (filamento/peça/amostra).
+- **Lote D**: 7 capas categóricas + 1 fallback genérico para o blog, expostas via `src/lib/blog-defaults.ts` (`resolveCoverImage`); aplicado em `blog/index.astro` (featured + grid) e `blog/[slug].astro` (hero, ogImage, related).
+- **Lote E** (sem AI): Google Maps iframe real em `sobre.astro` (com filtro CSS dark) + nova seção "Equipe AUMAF 3D" reaproveitando os 4 AVIFs orfãos (Raissa, Thiago, Vitor + `SAE-formula` no hero do case Fórmula SAE).
+
+**Resultados**: 0 slots HUD-placeholder ativos; 0 páginas sem imagem; 44 webps ↔ 44 PNGs (paridade R6); saldo Higgsfield 2.455 → 2.377 (~78 créditos consumidos); build limpo; 10/10 critérios EARS satisfeitos.
+
+---
+
 ## 2026-05-02 — Q1: Site Público Navegável + Design System
 
 **Commit**: `bb9269e`  

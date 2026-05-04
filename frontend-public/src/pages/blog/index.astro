@@ -7,6 +7,7 @@ import { COMPANY } from '../../lib/company'
 import { itemListSchema } from '../../lib/schemas'
 import { fetchPublicPosts } from '../../lib/api'
 import { formatPostDateShort } from '../../lib/render-post'
+import { resolveCoverImage } from '../../lib/blog-defaults'
 
 // Carrega todos os posts publicados em build time
 const { data: posts } = await fetchPublicPosts({ pageSize: 50 })
@@ -78,35 +79,18 @@ const lastUpdate = posts[0]?.publishedAt ?? new Date().toISOString()
             <div class="glass-panel rounded-sm overflow-hidden border border-primary-container/15 relative hover:border-primary-container/40 transition-all duration-300">
               <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent" aria-hidden="true"></div>
               <div class="grid grid-cols-1 lg:grid-cols-5">
-                <div class="lg:col-span-3 relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-br from-primary-container/10 via-surface-high to-surface-base overflow-hidden">
-                  {featured.coverImageUrl ? (
-                    <img
-                      src={featured.coverImageUrl}
-                      alt={`Capa: ${featured.title}`}
-                      width="1280"
-                      height="720"
-                      loading="lazy"
-                      decoding="async"
-                      class="absolute inset-0 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <>
-                      <div class="absolute inset-0 bg-tech-grid opacity-40" aria-hidden="true"></div>
-                      <div class="absolute inset-0" aria-hidden="true" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
-                      <div class="absolute inset-0 flex items-center justify-center opacity-20" aria-hidden="true">
-                        <svg viewBox="0 0 200 200" fill="none" class="w-48 h-48" focusable="false">
-                          <rect x="20" y="20" width="160" height="160" stroke="#61c54f" stroke-width="0.5"/>
-                          <rect x="50" y="50" width="100" height="100" stroke="#61c54f" stroke-width="0.5"/>
-                          <rect x="80" y="80" width="40" height="40" stroke="#61c54f" stroke-width="1" fill="rgba(97,197,79,0.05)"/>
-                          <line x1="20" y1="100" x2="180" y2="100" stroke="#61c54f" stroke-width="0.3"/>
-                          <line x1="100" y1="20" x2="100" y2="180" stroke="#61c54f" stroke-width="0.3"/>
-                          <circle cx="100" cy="100" r="8" fill="#61c54f" opacity="0.6"/>
-                          <circle cx="100" cy="100" r="20" stroke="#61c54f" stroke-width="0.5"/>
-                          <circle cx="100" cy="100" r="40" stroke="#61c54f" stroke-width="0.3"/>
-                        </svg>
-                      </div>
-                    </>
-                  )}
+                <div class="lg:col-span-3 relative h-64 lg:h-auto min-h-[300px] bg-surface-high overflow-hidden">
+                  <img
+                    src={resolveCoverImage(featured.coverImageUrl, featured.category)}
+                    alt={`Capa: ${featured.title}`}
+                    width="1280"
+                    height="720"
+                    loading="lazy"
+                    decoding="async"
+                    class="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                  <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.08) 0%,transparent 65%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.45) 100%);"></div>
                   <div class="absolute top-4 left-4">
                     <span class="pill-active">Destaque</span>
                   </div>
@@ -154,26 +138,18 @@ const lastUpdate = posts[0]?.publishedAt ?? new Date().toISOString()
           <li>
             <article class="h-full">
               <a href={`/blog/${post.slug}`} class="group cursor-pointer block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm">
-                <div class="relative aspect-[4/3] rounded-sm overflow-hidden bg-gradient-to-br from-surface-high to-surface-base mb-5 border border-white/8 hover:border-primary-container/30 transition-all duration-300">
-                  {post.coverImageUrl ? (
-                    <img
-                      src={post.coverImageUrl}
-                      alt={`Capa do artigo: ${post.title}`}
-                      width="640"
-                      height="480"
-                      loading="lazy"
-                      decoding="async"
-                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <>
-                      <div class="absolute inset-0 bg-tech-grid opacity-25" aria-hidden="true"></div>
-                      <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-30 transition-opacity duration-300" aria-hidden="true">
-                        <span class="material-symbols-outlined text-5xl text-primary-container">description</span>
-                      </div>
-                    </>
-                  )}
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
+                <div class="relative aspect-[4/3] rounded-sm overflow-hidden bg-surface-high mb-5 border border-white/8 hover:border-primary-container/30 transition-all duration-300">
+                  <img
+                    src={resolveCoverImage(post.coverImageUrl, post.category)}
+                    alt={`Capa do artigo: ${post.title}`}
+                    width="640"
+                    height="480"
+                    loading="lazy"
+                    decoding="async"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
                   {post.category && (
                     <div class="absolute top-4 left-4">
                       <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest text-[10px]">{post.category.name}</span>

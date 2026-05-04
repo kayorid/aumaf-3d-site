@@ -558,36 +558,22 @@ const homeSchemas = [
           <!-- VIDEO_SLS -->
           <div class="relative h-60 lg:h-72 rounded-sm overflow-hidden bg-surface-high border border-white/8 group/sls" style="box-shadow:0 20px 60px rgba(0,0,0,0.5);">
             <!--
-              VIDEO_SLS — substituir pelo vídeo real do laser SLS:
-              <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+              VIDEO_SLS — Quando o vídeo final estiver disponível, substituir o <img> abaixo por:
+              <video class="absolute inset-0 w-full h-full object-cover" poster="/images/sls-laser.webp" autoplay loop muted playsinline>
                 <source src="/videos/sls-laser.mp4" type="video/mp4" />
               </video>
             -->
-            <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
-            <div class="absolute inset-0" style="background:radial-gradient(circle at 50% 40%,rgba(97,197,79,0.08) 0%,transparent 65%);"></div>
-
-            <!-- SVG decorativo do laser -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none">
-              <svg viewBox="0 0 120 120" fill="none" class="w-32 h-32">
-                <rect x="10" y="10" width="100" height="100" stroke="#61c54f" stroke-width="0.6"/>
-                <rect x="30" y="30" width="60" height="60" stroke="#61c54f" stroke-width="0.4"/>
-                <line x1="10" y1="60" x2="110" y2="60" stroke="#61c54f" stroke-width="0.3"/>
-                <line x1="60" y1="10" x2="60" y2="110" stroke="#61c54f" stroke-width="0.3"/>
-                <circle cx="60" cy="60" r="10" stroke="#61c54f" stroke-width="0.8" fill="rgba(97,197,79,0.15)"/>
-                <circle cx="60" cy="60" r="3" fill="#61c54f"/>
-                <!-- Raios do laser -->
-                <line x1="60" y1="10" x2="60" y2="50" stroke="#61c54f" stroke-width="1.5" opacity="0.6"/>
-                <line x1="45" y1="25" x2="55" y2="55" stroke="#61c54f" stroke-width="0.8" opacity="0.4"/>
-                <line x1="75" y1="25" x2="65" y2="55" stroke="#61c54f" stroke-width="0.8" opacity="0.4"/>
-              </svg>
-            </div>
-
-            <!-- Play -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-14 h-14 rounded-full border border-primary-container/30 flex items-center justify-center bg-black/40 backdrop-blur-sm group-hover/sls:border-primary-container/60 transition-colors duration-300">
-                <span class="material-symbols-outlined text-primary-container/60 text-2xl group-hover/sls:text-primary-container/90 transition-colors" style="font-variation-settings:'FILL' 1;">play_circle</span>
-              </div>
-            </div>
+            <img
+              src="/images/sls-laser.webp"
+              alt="Laser SLS sinterizando peça em pó de nylon — vista aproximada do leito de pó"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/sls:scale-[1.03]"
+              width="1376"
+              height="768"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none"></div>
+            <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(circle at 50% 40%,rgba(97,197,79,0.06) 0%,transparent 60%),linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.5) 100%);"></div>
 
             <div class="absolute top-3 right-3 text-label-caps text-primary-container/30 text-[9px] tracking-widest uppercase font-mono">VIDEO_SLS</div>
             <div class="absolute bottom-3 left-3"><span class="pill-green text-[9px]">Laser Head Active</span></div>

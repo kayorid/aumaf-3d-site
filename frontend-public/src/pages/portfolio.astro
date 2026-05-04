@@ -7,18 +7,18 @@ import Breadcrumb from '../components/Breadcrumb.astro'
 import { itemListSchema } from '../lib/schemas'
 
 const projects = [
-  { cat: 'Prototipagem',     title: 'Suporte para Robô Industrial',          mat: 'PA CF15',                 accent: true },
-  { cat: 'Metal',            title: 'Flange em Aço Inox 316L',               mat: 'BASF Ultrafuse 316L',     accent: false },
-  { cat: 'Prototipagem',     title: 'Encaixe para Fórmula SAE USP',          mat: 'Nylon PA',                accent: false },
-  { cat: 'Peças Funcionais', title: 'Garra Pneumática para Automação',       mat: 'PC + TPU',                accent: true },
-  { cat: 'Maquetes',         title: 'Maquete Arquitetônica Residencial',     mat: 'PLA / Resina',            accent: false },
-  { cat: 'Metal',            title: 'Conector Estrutural Aeronáutico',       mat: 'Ultrafuse 316L',          accent: false },
-  { cat: 'Peças Funcionais', title: 'Peça de Reposição para Empacotadora',   mat: 'ABS Industrial',          accent: false },
-  { cat: 'Prototipagem',     title: 'Caixa de Eletrônica com Tampa',         mat: 'PETG CF15',               accent: false },
-  { cat: 'Resina',           title: 'Painel de Controle em Resina ABS',      mat: 'Resina ABS',              accent: false },
-  { cat: 'Peças Funcionais', title: 'Bucha de Eixo com Rosca Interna',       mat: 'Nylon + Fibra',           accent: true },
-  { cat: 'Maquetes',         title: 'Protótipo de Produto para Pitch',       mat: 'PLA + Pintura',           accent: false },
-  { cat: 'Resina',           title: 'Implante Educacional Médico',           mat: 'Resina Cerâmica',         accent: false },
+  { slug: 'port-01-suporte-robo',         cat: 'Prototipagem',     title: 'Suporte para Robô Industrial',          mat: 'PA CF15',                 accent: true  },
+  { slug: 'port-02-flange-316l',          cat: 'Metal',            title: 'Flange em Aço Inox 316L',               mat: 'BASF Ultrafuse 316L',     accent: false },
+  { slug: 'port-03-encaixe-sae',          cat: 'Prototipagem',     title: 'Encaixe para Fórmula SAE USP',          mat: 'Nylon PA',                accent: false },
+  { slug: 'port-04-garra-pneumatica',     cat: 'Peças Funcionais', title: 'Garra Pneumática para Automação',       mat: 'PC + TPU',                accent: true  },
+  { slug: 'port-05-maquete-residencial',  cat: 'Maquetes',         title: 'Maquete Arquitetônica Residencial',     mat: 'PLA / Resina',            accent: false },
+  { slug: 'port-06-conector-aeronautico', cat: 'Metal',            title: 'Conector Estrutural Aeronáutico',       mat: 'Ultrafuse 316L',          accent: false },
+  { slug: 'port-07-empacotadora',         cat: 'Peças Funcionais', title: 'Peça de Reposição para Empacotadora',   mat: 'ABS Industrial',          accent: false },
+  { slug: 'port-08-caixa-eletronica',     cat: 'Prototipagem',     title: 'Caixa de Eletrônica com Tampa',         mat: 'PETG CF15',               accent: false },
+  { slug: 'port-09-painel-resina',        cat: 'Resina',           title: 'Painel de Controle em Resina ABS',      mat: 'Resina ABS',              accent: false },
+  { slug: 'port-10-bucha-eixo',           cat: 'Peças Funcionais', title: 'Bucha de Eixo com Rosca Interna',       mat: 'Nylon + Fibra',           accent: true  },
+  { slug: 'port-11-prototipo-pitch',      cat: 'Maquetes',         title: 'Protótipo de Produto para Pitch',       mat: 'PLA + Pintura',           accent: false },
+  { slug: 'port-12-implante-medico',      cat: 'Resina',           title: 'Implante Educacional Médico',           mat: 'Resina Cerâmica',         accent: false },
 ]
 
 const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', 'Maquetes']
@@ -105,18 +105,17 @@ const schemas = [
                 'relative overflow-hidden aspect-[4/3]',
                 p.accent ? 'bg-gradient-to-br from-primary-container/15 to-surface-base' : 'bg-gradient-to-br from-surface-base to-surface-dim',
               ]}>
-                <div class="absolute inset-0 bg-tech-grid opacity-30" aria-hidden="true"></div>
-                <div class="absolute inset-0" aria-hidden="true" style={`background:radial-gradient(circle at ${30 + i * 7}% ${40 + i * 3}%, rgba(97,197,79,0.05) 0%, transparent 60%);`}></div>
-
-                <div class="absolute inset-0 flex items-center justify-center opacity-[0.12] group-hover:opacity-[0.18] transition-opacity duration-500" aria-hidden="true">
-                  <svg viewBox="0 0 100 100" fill="none" class="w-24 h-24" focusable="false">
-                    {i % 4 === 0 && <polygon points="50,10 90,35 90,65 50,90 10,65 10,35" stroke="#61c54f" stroke-width="1.5" fill="none"/>}
-                    {i % 4 === 1 && <><rect x="20" y="20" width="60" height="60" stroke="#61c54f" stroke-width="1.5" fill="none"/><rect x="35" y="35" width="30" height="30" stroke="#61c54f" stroke-width="1" fill="none"/></>}
-                    {i % 4 === 2 && <><circle cx="50" cy="50" r="35" stroke="#61c54f" stroke-width="1.5" fill="none"/><circle cx="50" cy="50" r="18" stroke="#61c54f" stroke-width="1" fill="none"/></>}
-                    {i % 4 === 3 && <path d="M50,10 L90,50 L50,90 L10,50 Z M50,25 L75,50 L50,75 L25,50 Z" stroke="#61c54f" stroke-width="1.5" fill="none"/>}
-                    <circle cx="50" cy="50" r="2" fill="#61c54f"/>
-                  </svg>
-                </div>
+                <img
+                  src={`/images/${p.slug}.webp`}
+                  alt={`${p.title} — peça impressa em ${p.mat}`}
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  width="1376"
+                  height="1032"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style={`background:radial-gradient(circle at ${30 + i * 7}% ${40 + i * 3}%, rgba(97,197,79,0.06) 0%, transparent 60%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.45) 100%);`}></div>
 
                 <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                   <div class="absolute bottom-0 left-0 right-0 p-6">

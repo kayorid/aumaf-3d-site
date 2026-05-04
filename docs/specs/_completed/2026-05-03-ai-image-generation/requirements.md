@@ -109,12 +109,12 @@ Eliminar 100% dos placeholders visuais do site público até o final desta featu
 
 | Data | Pergunta | Opções | Decisão | Razão |
 |------|----------|--------|---------|-------|
-| - | A — v2 imagens | Reaproveitar / Gerar variantes | _pendente_ | _pendente_ |
-| - | B — sobre.astro mapa | Embed Maps / Imagem aérea AI | _pendente_ | _pendente_ |
-| - | C — Blog defaults | 4 categorias / 6 categorias | _pendente_ | _pendente_ |
-| - | D — AVIFs equipe | Integrar / Deletar | _pendente_ | _pendente_ |
-| - | E — Template materiais | Adaptar / Manter | _pendente_ | _pendente_ |
-| - | F — sls-laser | Distinta / Reaproveitar | _pendente_ | _pendente_ |
+| 2026-05-04 | A — v2 imagens | Reaproveitar / Gerar variantes | **Reaproveitar 5 do `/` + 1 variante (`v2-highlight`)** | Economiza créditos; v2 é variação de layout, não de mensagem. Único asset novo é o highlight visual diferenciador. |
+| 2026-05-04 | B — sobre.astro mapa | Embed Maps / Imagem aérea AI | **Google Maps embed real** | Mais útil ao lead (rota navegável), zero custo, sem risco de "fake aerial" mal calibrada. |
+| 2026-05-04 | C — Blog defaults | 4 categorias / 6 categorias | **7 categorias do seed + 1 fallback genérico = 8 capas** | Banco já tem 7 categorias seedadas (Guia Técnico, Materiais, Case Study, Engenharia, Parceria, Inovação, Tutorial). Cobertura completa + fallback para futuros sem default. |
+| 2026-05-04 | D — AVIFs equipe | Integrar / Deletar | **Integrar em seção Equipe** | Humaniza `sobre.astro`; fotos já existem (custo zero); reforça presença da AUMAF como time real, não anônimo. |
+| 2026-05-04 | E — Template materiais | Adaptar / Manter | **Adaptar para "amostra de material"** | PLA, PEEK, resina, metal são visualmente distintos; template industrial geraria 16 cenas iguais. Variar contexto (filamento em rolo / peça impressa / amostra de cor). |
+| 2026-05-04 | F — sls-laser | Distinta / Reaproveitar | **Cena distinta (powder bed + laser)** | SLS é a tecnologia mais "wow" da AUMAF; merece cena dedicada — diferencia visualmente das outras 4 capabilities. |
 
 ## 12. Links
 
