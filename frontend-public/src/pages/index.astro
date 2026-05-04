@@ -449,12 +449,6 @@ const homeSchemas = [
             <!-- Video container -->
             <div class:list={item.reverse ? 'lg:order-1' : ''}>
               <div class="relative aspect-square max-w-md mx-auto rounded-sm overflow-hidden bg-surface-base border border-white/8 group/media" style="box-shadow:0 20px 60px rgba(0,0,0,0.6);">
-                <!--
-                  {item.videoId} — Quando o vídeo final estiver disponível, substituir o <img> abaixo por:
-                  <video class="absolute inset-0 w-full h-full object-cover" poster={item.image} autoplay loop muted playsinline>
-                    <source src={`/videos/${item.videoFile}`} type="video/mp4" />
-                  </video>
-                -->
                 <img
                   src={item.image}
                   alt={item.videoLabel}
@@ -574,12 +568,6 @@ const homeSchemas = [
 
           <!-- VIDEO_SLS -->
           <div class="relative h-60 lg:h-72 rounded-sm overflow-hidden bg-surface-high border border-white/8 group/sls" style="box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-            <!--
-              VIDEO_SLS — Quando o vídeo final estiver disponível, substituir o <img> abaixo por:
-              <video class="absolute inset-0 w-full h-full object-cover" poster="/images/sls-laser.webp" autoplay loop muted playsinline>
-                <source src="/videos/sls-laser.mp4" type="video/mp4" />
-              </video>
-            -->
             <img
               src="/images/sls-laser.webp"
               alt="Laser SLS sinterizando peça em pó de nylon — vista aproximada do leito de pó"
