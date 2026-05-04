@@ -2,18 +2,21 @@
 
 > Visão de portfólio das specs deste projeto. Regenerado por `scripts/update_index.py`.
 
-**Última atualização**: 2026-05-03 16:45
+**Última atualização**: 2026-05-03 21:15
 
 ---
 
 ## Em andamento
 
-_Nenhuma._ Todas as iterações Q1+Q2+Q3 (foundation) estão fechadas.
+| Feature | Fase | Pasta | Próximo passo |
+|---------|------|-------|---------------|
+| ai-image-generation | clarify | [_active/2026-05-03-ai-image-generation](_active/2026-05-03-ai-image-generation/) | Kayo responder 6 perguntas em `requirements.md` §10 antes de iniciar Lote A/B/C/D/E |
 
 ## Recém concluídas
 
 | Feature | Concluída em | Retrospectiva |
 |---------|--------------|---------------|
+| botyio-integration (Lead Capture WhatsApp) | 2026-05-03 | [PR #7](https://github.com/kayorid/aumaf-3d-site/pull/7) — código mergeado, aguarda credenciais para ativar |
 | q3-foundation (BullMQ + Storybook + QA + Ops) | 2026-05-03 | [retro](_completed/2026-05-03-q3-foundation/retrospective.md) |
 | frontend-public-uxa11y-seo-geo | 2026-05-03 | [pasta](_completed/2026-05-03-frontend-public-uxa11y-seo-geo/) |
 | q2-blog-backoffice | 2026-05-03 | [pasta](_completed/2026-05-02-q2-blog-backoffice/) |
@@ -23,7 +26,7 @@ _Nenhuma._ Todas as iterações Q1+Q2+Q3 (foundation) estão fechadas.
 
 | Feature | Por que aguarda |
 |---------|-----------------|
-| botyo-integration | API Botyo em construção pela contraparte; spec de contrato em `docs/integrations/botyo-lead-journey.md`; fundação BullMQ já entregue em q3-foundation |
+| botyio-ativação | Código mergeado; aguarda `BOTYIO_API_KEY` + `BOTYIO_WEBHOOK_SECRET` + aprovação template WhatsApp na Meta |
 | deploy-pipeline | Provider de produção a fixar com AUMAF (Vercel? Railway? Render?) |
 
 ## Constituição
