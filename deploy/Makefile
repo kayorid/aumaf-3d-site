@@ -1,8 +1,9 @@
 .PHONY: help deploy logs status restart rollback backup-snapshot pull migrate up down restart-backend caddy-reload caddy-test
 
-DEPLOY_DIR := /srv/aumaf/compose
-ENV_FILE   := /srv/aumaf/env/.env.production
-COMPOSE    := docker compose --env-file $(ENV_FILE)
+DEPLOY_DIR  := /srv/aumaf/compose
+ENV_FILE    := /srv/aumaf/env/.env.production
+COMPOSE_FILE := docker-compose.production.yml
+COMPOSE     := docker compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE)
 
 help:
 	@echo "AUMAF 3D — production make targets"
