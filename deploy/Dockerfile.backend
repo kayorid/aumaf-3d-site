@@ -29,6 +29,8 @@ COPY --from=build --chown=app:app /app/package.json /app/package-lock.json ./
 COPY --from=build --chown=app:app /app/backend/package.json backend/package.json
 COPY --from=build --chown=app:app /app/backend/dist backend/dist
 COPY --from=build --chown=app:app /app/backend/prisma backend/prisma
+COPY --from=build --chown=app:app /app/backend/scripts backend/scripts
+COPY --from=build --chown=app:app /app/backend/src backend/src
 COPY --from=build --chown=app:app /app/packages/shared/dist packages/shared/dist
 COPY --from=build --chown=app:app /app/packages/shared/package.json packages/shared/package.json
 
