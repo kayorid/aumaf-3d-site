@@ -45,6 +45,22 @@ jobs:
       REDIS_URL: redis://localhost:6379
       JWT_SECRET: ci-test-secret-aumaf-3d-do-not-use-in-prod-XXXXXXXX
       NODE_ENV: test
+      ADMIN_EMAIL: ci@aumaf.test
+      ADMIN_PASSWORD: ci-admin-password
+      ADMIN_NAME: Admin CI
+      FRONTEND_ADMIN_URL: http://localhost:5174
+      FRONTEND_PUBLIC_URL: http://localhost:4321
+      BACKEND_URL: http://localhost:3000
+      STORAGE_DRIVER: fs
+      S3_ENDPOINT: http://localhost:9000
+      S3_PUBLIC_URL: http://localhost:9000
+      S3_ACCESS_KEY: ci-key
+      S3_SECRET_KEY: ci-secret
+      S3_BUCKET: aumaf-blog-images
+      AI_PROVIDER: anthropic
+      LOG_FORMAT: text
+      EMAIL_TRANSPORT: stub
+      BOTYIO_ENABLED: 'false'
 
     steps:
       - uses: actions/checkout@v4
