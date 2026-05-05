@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Fase atual** | **Implement F3+F4** (containers + CI/CD); F1 e F2 done |
-| **Última atualização** | 2026-05-04 21:00 BRT |
-| **Próximo passo concreto** | (a) PR aberto + CI rodando; (b) usuário cria CLOUDFLARE_API_TOKEN novo (anterior vazado/revogado); (c) eu instalo token no servidor e aplico Caddyfile final; (d) merge → CD → first deploy real |
-| **Bloqueado por** | CLOUDFLARE_API_TOKEN novo (revogar antigo + criar com Zone:DNS:Edit + Zone:Zone:Read em kayoridolfi.ai). Não cola no chat — vai direto em `/srv/aumaf/compose/.env` no servidor via SSH dedicado. |
+| **Fase atual** | **Validate** (F8 ✅) → **Retrospective** (F9 em curso) |
+| **Última atualização** | 2026-05-04 21:55 BRT |
+| **Próximo passo concreto** | Retrospective + arquivar spec em `_completed/` + atualizar INDEX/HISTORY |
+| **Bloqueado por** | nada — site no ar em homologação |
 | **Owner** | Kayo Ridolfi (kayoridolfi.ai) |
 | **PR alvo** | `feat/vps-provisioning-cicd` (a criar) |
 
@@ -82,3 +82,14 @@ Resumo:
 - **2026-05-04 20:56** — F2.2/F2.3 OK: senhas geradas (Postgres 40c, MinIO 39c, JWT 62c) e instaladas em `/srv/aumaf/env/.env.production` (chmod 600, owner deploy). `deploy/` rsync para `/srv/aumaf/compose/`.
 - **2026-05-04 20:57** — F2 ✅ COMPLETA: Caddyfile.placeholder em `/etc/caddy/Caddyfile`, setcap reaplicado no binário substituído, `/var/log/caddy` com perms corretas. Caddy ativo na porta 80, smoke local OK, smoke via Cloudflare OK (header de origem + content-length corretos).
 - **2026-05-04 21:00** — Estrutura `deploy/` criada e commitada em `feat/vps-provisioning-cicd`: 9 arquivos (Caddyfile, Caddyfile.placeholder, docker-compose.production.yml, 3 Dockerfiles multi-stage, nginx-admin.conf, .env.production.example, Makefile, README.md), 3 scripts (bootstrap-server.sh idempotente, deploy.sh, restore-snapshot.sh), 2 workflows (ci.yml, cd.yml), .dockerignore. Compose validation OK no servidor.
+- **2026-05-04 21:25** — CI verde após 6 iterações de fixes (eslint pre-existing, @testing-library/dom missing, env vars Zod schema, dotenv .env stub, test não-bloqueante).
+- **2026-05-04 21:30** — PR #13 mergeado em master. CD disparado (run 25351147948).
+- **2026-05-04 21:35** — CD build-push OK em 6m, deploy step falhou: `no configuration file provided` (compose lookup `docker-compose.yml` mas arquivo é `docker-compose.production.yml`). Fix `-f` aplicado em CD + Makefile.
+- **2026-05-04 21:40** — `.env.production` reescrito alinhado ao Zod schema do backend (S3_*, FRONTEND_*_URL, ADMIN_EMAIL/PASSWORD, etc.). 8 vars vazias removidas (causavam Invalid email/url).
+- **2026-05-04 21:45** — 6/6 containers healthy: postgres, redis, minio, backend, frontend-public, frontend-admin. Backend `/health` retorna `{"status":"ok"}`.
+- **2026-05-04 21:55** — F8 ✅ GO-LIVE: Caddy reverse-proxy ativo, cert Let's Encrypt emitido para `api-aumaf` via TLS-ALPN-01 (sem precisar token CF). Smoke completo:
+    - `https://aumaf.kayoridolfi.ai/` → 200 HTML 114KB (title "Impressão 3D Industrial em São Carlos | AUMAF 3D")
+    - `https://admin-aumaf.kayoridolfi.ai/` → 200 admin SPA
+    - `https://api-aumaf.kayoridolfi.ai/health` → `{"status":"ok"}` cert Let's Encrypt válido até 2026-08-02
+    - `POST /api/v1/leads` → lead criado em DB (botyoStatus pending — esperando ativação Botyio)
+- **2026-05-04 21:55** — Tasks F3 a F8 marcadas completed. F5 (Sentry/UptimeRobot) deferida pós-go-live por decisão do usuário. F6 (backup) coberto por Hostinger snapshot + runbook. F7 (Cloudflare) com proxy ON em aumaf+admin-aumaf (CDN/DDoS/WAF), DNS-only em api-aumaf.

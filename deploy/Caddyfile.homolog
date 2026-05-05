@@ -1,0 +1,93 @@
+{
+	email kayocdi@gmail.com
+
+	log {
+		output file /var/log/caddy/caddy.log {
+			roll_size 50mb
+			roll_keep 10
+		}
+		format json
+		level INFO
+	}
+
+	servers {
+		trusted_proxies static private_ranges 173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 141.101.64.0/18 108.162.192.0/18 190.93.240.0/20 188.114.96.0/20 197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13 104.24.0.0/14 172.64.0.0/13 131.0.72.0/22
+	}
+}
+
+(security_headers) {
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+		-Server
+	}
+}
+
+# Frontend público — Astro 5 SSR (homologação HTTP, CF Flexible)
+http://aumaf.kayoridolfi.ai {
+	import security_headers
+	encode gzip
+
+	@hashed_assets path_regexp hashed ^/_astro/.+\.[a-f0-9]{8,}\..+$
+	header @hashed_assets Cache-Control "public, max-age=31536000, immutable"
+
+	reverse_proxy 127.0.0.1:4321 {
+		health_uri /
+		health_interval 30s
+		health_timeout 5s
+	}
+
+	log {
+		output file /var/log/caddy/aumaf-public.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
+
+# Backoffice — Vite/React static + nginx (homologação HTTP, CF Flexible)
+http://admin-aumaf.kayoridolfi.ai {
+	import security_headers
+	encode gzip
+
+	@hashed_assets path_regexp hashed ^/assets/.+\.[a-f0-9]{8,}\..+$
+	header @hashed_assets Cache-Control "public, max-age=31536000, immutable"
+
+	reverse_proxy 127.0.0.1:5174 {
+		health_uri /
+		health_interval 60s
+		health_timeout 5s
+	}
+
+	log {
+		output file /var/log/caddy/aumaf-admin.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
+
+# API — DNS-only no CF (visitante conecta direto na VPS), Caddy emite TLS via HTTP-01
+api-aumaf.kayoridolfi.ai {
+	import security_headers
+	encode gzip
+
+	reverse_proxy 127.0.0.1:3000 {
+		health_uri /health
+		health_interval 15s
+		health_timeout 5s
+		transport http {
+			keepalive 60s
+			keepalive_idle_conns 16
+		}
+	}
+
+	log {
+		output file /var/log/caddy/aumaf-api.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
