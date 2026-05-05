@@ -73,6 +73,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Bootstrap backend/.env from example (CI-only)
+        run: |
+          cp backend/.env.example backend/.env
+          sed -i 's|^JWT_SECRET=.*|JWT_SECRET=ci-test-secret-aumaf-3d-do-not-use-in-prod-XXXXXXXX|' backend/.env
+          sed -i 's|^DATABASE_URL=.*|DATABASE_URL=postgresql://aumaf:aumaf123@localhost:5432/aumaf_test|' backend/.env
+
       - name: Generate Prisma client
         run: cd backend && npx prisma generate
 
