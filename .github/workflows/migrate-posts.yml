@@ -1,0 +1,47 @@
+name: Migrate Posts (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Digite "MIGRATE" para confirmar'
+        required: true
+        type: string
+
+concurrency:
+  group: migrate-posts
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: github.event.inputs.confirm == 'MIGRATE'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Sync frontend-public/public/images to backend container
+        run: |
+          tar czf - -C frontend-public/public images | \
+            ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+              'sudo docker exec -u root -i aumaf-prod-backend-1 \
+                sh -c "mkdir -p /app/frontend-public/public && cd /app/frontend-public/public && tar xzf -"'
+
+      - name: Run migrate-posts
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            'sudo docker exec aumaf-prod-backend-1 \
+              sh -c "cd /app/backend && npx -y tsx scripts/migrate-posts/index.ts"'
+
+      - name: Verify
+        run: |
+          TOTAL=$(curl -fsS https://api-aumaf.kayoridolfi.ai/api/v1/public/posts | grep -oE '"total":[0-9]+' | head -1)
+          echo "Posts publicados: $TOTAL"
+          [ "$TOTAL" = '"total":6' ] && echo "OK 6/6 posts" || echo "ATENCAO esperava 6 posts"

@@ -109,14 +109,38 @@ jobs:
           docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production up -d --remove-orphans
           docker image prune -af --filter 'until=168h'
 
+          # Smoke local (interno, antes de validar via DNS público)
           for i in 1 2 3 4 5 6 7 8 9 10; do
             if curl -fsS http://127.0.0.1:3000/health > /dev/null; then
-              echo "DEPLOY_OK"
-              exit 0
+              echo "BACKEND_HEALTHY"
+              break
             fi
             sleep 6
+            if [ "\$i" = "10" ]; then
+              echo "DEPLOY_FAILED — backend not healthy"
+              docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production logs --tail=80 backend
+              exit 1
+            fi
           done
-          echo "DEPLOY_FAILED — backend not healthy"
-          docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production logs --tail=80 backend
-          exit 1
+          curl -fsS -m 5 http://127.0.0.1:4321/ > /dev/null && echo "FRONTEND_PUBLIC_HEALTHY" || { echo "FRONTEND_PUBLIC_FAIL"; exit 1; }
+          curl -fsS -m 5 http://127.0.0.1:5174/ > /dev/null && echo "FRONTEND_ADMIN_HEALTHY" || { echo "FRONTEND_ADMIN_FAIL"; exit 1; }
+          echo "DEPLOY_OK"
           EOF
+
+      - name: Smoke público (HTTPS via Cloudflare/Caddy)
+        run: |
+          set -e
+          for url in https://aumaf.kayoridolfi.ai/ \
+                     https://admin-aumaf.kayoridolfi.ai/ \
+                     https://api-aumaf.kayoridolfi.ai/health; do
+            echo "Smoke $url"
+            for attempt in 1 2 3; do
+              if curl -fsS -m 10 "$url" > /dev/null; then
+                echo "  OK"
+                break
+              fi
+              sleep 5
+              [ $attempt = 3 ] && { echo "  FAIL"; exit 1; }
+            done
+          done
+          echo "PUBLIC_SMOKE_OK"

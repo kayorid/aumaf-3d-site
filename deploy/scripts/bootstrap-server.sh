@@ -173,5 +173,18 @@ echo "==> /srv/aumaf"
 mkdir -p /srv/aumaf/{compose,env,backups,letsencrypt,caddy-data,caddy-config,backups/manual}
 chown -R deploy:deploy /srv/aumaf
 
+echo "==> setcap caddy (binding :80/:443 sem ser root)"
+setcap 'cap_net_bind_service=+ep' /usr/bin/caddy
+
+echo "==> /var/log/caddy ownership"
+mkdir -p /var/log/caddy
+chown -R caddy:caddy /var/log/caddy
+chmod 755 /var/log/caddy
+
 echo "==> bootstrap done"
-echo "Next: configure /etc/caddy/Caddyfile + /etc/caddy/cloudflare.env (CLOUDFLARE_API_TOKEN), then 'systemctl start caddy'"
+echo "Next steps:"
+echo "  1. Instalar /etc/caddy/Caddyfile (cópia de deploy/Caddyfile.homolog ou deploy/Caddyfile)"
+echo "  2. Se Caddyfile final (DNS-01): criar /etc/caddy/cloudflare.env com CLOUDFLARE_API_TOKEN (chmod 600 owner=caddy)"
+echo "  3. Instalar /srv/aumaf/env/.env.production (chmod 600 owner=deploy)"
+echo "  4. systemctl start caddy"
+echo "  5. cd /srv/aumaf/compose && docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production up -d"
