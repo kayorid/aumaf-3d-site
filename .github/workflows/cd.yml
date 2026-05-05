@@ -1,0 +1,122 @@
+name: CD
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-prod
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_BASE: ghcr.io/${{ github.repository }}
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      sha: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/Dockerfile.backend
+          push: true
+          tags: |
+            ${{ env.IMAGE_BASE }}/backend:${{ github.sha }}
+            ${{ env.IMAGE_BASE }}/backend:latest
+          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}/backend:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}/backend:buildcache,mode=max
+
+      - name: Build & push frontend-public
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/Dockerfile.frontend-public
+          push: true
+          tags: |
+            ${{ env.IMAGE_BASE }}/frontend-public:${{ github.sha }}
+            ${{ env.IMAGE_BASE }}/frontend-public:latest
+          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}/frontend-public:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}/frontend-public:buildcache,mode=max
+
+      - name: Build & push frontend-admin
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/Dockerfile.frontend-admin
+          push: true
+          build-args: |
+            VITE_API_URL=https://api-aumaf.kayoridolfi.ai/api/v1
+          tags: |
+            ${{ env.IMAGE_BASE }}/frontend-admin:${{ github.sha }}
+            ${{ env.IMAGE_BASE }}/frontend-admin:latest
+          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}/frontend-admin:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}/frontend-admin:buildcache,mode=max
+
+  deploy:
+    needs: build-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Sync compose + scripts to server
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }}" \
+            --exclude '.env*' \
+            deploy/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/srv/aumaf/compose/
+
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s <<EOF
+          set -euo pipefail
+          export IMAGE_BACKEND=ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+          export IMAGE_FRONTEND_PUBLIC=ghcr.io/${{ github.repository }}/frontend-public:${{ github.sha }}
+          export IMAGE_FRONTEND_ADMIN=ghcr.io/${{ github.repository }}/frontend-admin:${{ github.sha }}
+
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+          cd /srv/aumaf/compose
+          docker compose --env-file /srv/aumaf/env/.env.production pull
+          docker compose --env-file /srv/aumaf/env/.env.production run --rm backend-migrate
+          docker compose --env-file /srv/aumaf/env/.env.production up -d --remove-orphans
+          docker image prune -af --filter 'until=168h'
+
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS http://127.0.0.1:3000/health > /dev/null; then
+              echo "DEPLOY_OK"
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "DEPLOY_FAILED — backend not healthy"
+          docker compose --env-file /srv/aumaf/env/.env.production logs --tail=80 backend
+          exit 1
+          EOF

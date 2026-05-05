@@ -1,0 +1,39 @@
+# syntax=docker/dockerfile:1.6
+
+FROM node:18-alpine AS base
+RUN apk add --no-cache libc6-compat tini wget
+WORKDIR /app
+
+FROM base AS deps
+COPY package.json package-lock.json ./
+COPY backend/package.json backend/package.json
+COPY frontend-public/package.json frontend-public/package.json
+COPY frontend-admin/package.json frontend-admin/package.json
+COPY packages/shared/package.json packages/shared/package.json
+RUN npm ci
+
+FROM deps AS build
+COPY turbo.json ./
+COPY packages/shared packages/shared
+COPY frontend-public frontend-public
+RUN npm run build --workspace=@aumaf/shared
+RUN cd frontend-public && npm run build
+
+FROM base AS runtime
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=4321
+RUN addgroup -S app && adduser -S app -G app
+
+COPY --from=build --chown=app:app /app/node_modules node_modules
+COPY --from=build --chown=app:app /app/package.json /app/package-lock.json ./
+COPY --from=build --chown=app:app /app/frontend-public/package.json frontend-public/package.json
+COPY --from=build --chown=app:app /app/frontend-public/dist frontend-public/dist
+COPY --from=build --chown=app:app /app/packages/shared/dist packages/shared/dist
+COPY --from=build --chown=app:app /app/packages/shared/package.json packages/shared/package.json
+
+USER app
+WORKDIR /app/frontend-public
+EXPOSE 4321
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 --start-period=30s \
+  CMD wget -qO- http://localhost:4321/ || exit 1
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "dist/server/entry.mjs"]
