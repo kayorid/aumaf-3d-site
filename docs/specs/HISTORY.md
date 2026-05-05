@@ -4,6 +4,35 @@
 
 ---
 
+## 2026-05-04 — VPS Provisioning + CI/CD (homologação live)
+
+**Spec**: [_completed/2026-05-04-vps-provisioning-cicd/](_completed/2026-05-04-vps-provisioning-cicd/) · [retrospective](_completed/2026-05-04-vps-provisioning-cicd/retrospective.md)
+**Branch**: `feat/vps-provisioning-cicd` (PR #13 mergeada)
+
+Site no ar em homologação: `https://aumaf.kayoridolfi.ai`, `https://admin-aumaf.kayoridolfi.ai`, `https://api-aumaf.kayoridolfi.ai`.
+
+**Entregue em sessão única (~6h)**:
+- VPS Hostinger KVM 2 / Ubuntu 22.04 / Boston hardenada (sshd chave-only, UFW, fail2ban, unattended-upgrades, swap 4G)
+- Stack containerizada: Docker Engine + Compose v2 + Caddy 2.11.2 nativo (xcaddy custom build com plugin Cloudflare DNS)
+- 3 Dockerfiles multi-stage (backend, frontend-public Astro SSR, frontend-admin Vite static + nginx) + docker-compose.production.yml com 6 containers
+- CI/CD GitHub Actions: ci.yml (lint+typecheck+test+build) + cd.yml (build & push GHCR + SSH deploy + smoke /health)
+- DNS Cloudflare: 3 subdomínios em `kayoridolfi.ai` (Proxied + DNS-only)
+- TLS via Universal SSL (proxied) + Let's Encrypt TLS-ALPN-01 (api-aumaf DNS-only)
+- 3 runbooks em `docs/runbooks/` (deploy, incident, restore)
+- Bootstrap idempotente `deploy/scripts/bootstrap-server.sh`
+
+**Smoke validation pós-go-live**:
+- Public: 200 OK, title "Impressão 3D Industrial em São Carlos | AUMAF 3D"
+- Admin SPA: 200 OK
+- API: `{"status":"ok"}` com cert Let's Encrypt válido
+- Lead form (`POST /api/v1/leads`): lead persistido em DB
+
+**Decisões conscientes**: sem off-site backup (só Hostinger), sem Sentry/UptimeRobot v1, sem staging, lint+test não-bloqueantes no CI (TODO follow-up).
+
+**Próximo marco**: migração para domínio definitivo AUMAF (1 PR + DNS swap quando confirmado).
+
+---
+
 ## 2026-05-04 — Geração de Imagens AI (Higgsfield)
 
 **Spec**: [_completed/2026-05-03-ai-image-generation/](_completed/2026-05-03-ai-image-generation/)
