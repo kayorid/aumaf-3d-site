@@ -93,39 +93,87 @@ jobs:
             deploy/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/srv/aumaf/compose/
 
-      - name: Deploy on server
+      # Deploy é separado em sub-steps menores para isolar falhas e tornar logs
+      # legíveis. Heredoc único anteriormente mascarava quando o script parava
+      # cedo (o caso real do deploy de PR #15: backend não recriou silently).
+      - name: Pull images
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s <<EOF
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin && \
+             cd /srv/aumaf/compose && \
+             IMAGE_BACKEND=ghcr.io/${{ github.repository }}/backend:$IMAGE_TAG \
+             IMAGE_FRONTEND_PUBLIC=ghcr.io/${{ github.repository }}/frontend-public:$IMAGE_TAG \
+             IMAGE_FRONTEND_ADMIN=ghcr.io/${{ github.repository }}/frontend-admin:$IMAGE_TAG \
+             docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production pull"
+
+      - name: Run migrations
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd /srv/aumaf/compose && \
+             IMAGE_BACKEND=ghcr.io/${{ github.repository }}/backend:$IMAGE_TAG \
+             docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production run --rm backend-migrate"
+
+      - name: Recreate services
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # `--force-recreate` é necessário porque `up -d` sozinho pode não
+          # detectar mudança quando apenas o SHA da imagem muda (caso real:
+          # PR #15 não recriou backend, ficou rodando imagem antiga).
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd /srv/aumaf/compose && \
+             IMAGE_BACKEND=ghcr.io/${{ github.repository }}/backend:$IMAGE_TAG \
+             IMAGE_FRONTEND_PUBLIC=ghcr.io/${{ github.repository }}/frontend-public:$IMAGE_TAG \
+             IMAGE_FRONTEND_ADMIN=ghcr.io/${{ github.repository }}/frontend-admin:$IMAGE_TAG \
+             docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production up -d --force-recreate --remove-orphans backend frontend-public frontend-admin"
+
+      - name: Verify image SHA matches
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Garante que o container realmente subiu com a imagem nova.
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s <<EOSCRIPT
           set -euo pipefail
-          export IMAGE_BACKEND=ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
-          export IMAGE_FRONTEND_PUBLIC=ghcr.io/${{ github.repository }}/frontend-public:${{ github.sha }}
-          export IMAGE_FRONTEND_ADMIN=ghcr.io/${{ github.repository }}/frontend-admin:${{ github.sha }}
+          expected="ghcr.io/${{ github.repository }}/backend:$IMAGE_TAG"
+          actual=\$(docker inspect aumaf-prod-backend-1 --format '{{.Config.Image}}')
+          if [ "\$actual" != "\$expected" ]; then
+            echo "IMAGE_MISMATCH: expected=\$expected actual=\$actual" >&2
+            exit 1
+          fi
+          echo "IMAGE_OK: \$actual"
+          EOSCRIPT
 
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
+      - name: Smoke interno
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash -s <<'EOSCRIPT'
+          set -euo pipefail
           cd /srv/aumaf/compose
-          docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production pull
-          docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production run --rm backend-migrate
-          docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production up -d --remove-orphans
-          docker image prune -af --filter 'until=168h'
-
-          # Smoke local (interno, antes de validar via DNS público)
           for i in 1 2 3 4 5 6 7 8 9 10; do
-            if curl -fsS http://127.0.0.1:3000/health > /dev/null; then
+            if curl -fsS -m 5 http://127.0.0.1:3000/health > /dev/null; then
               echo "BACKEND_HEALTHY"
               break
             fi
-            sleep 6
-            if [ "\$i" = "10" ]; then
-              echo "DEPLOY_FAILED — backend not healthy"
-              docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production logs --tail=80 backend
+            if [ "$i" = "10" ]; then
+              echo "DEPLOY_FAILED — backend not healthy" >&2
+              docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production logs --tail=80 backend >&2
               exit 1
             fi
+            sleep 6
           done
-          curl -fsS -m 5 http://127.0.0.1:4321/ > /dev/null && echo "FRONTEND_PUBLIC_HEALTHY" || { echo "FRONTEND_PUBLIC_FAIL"; exit 1; }
-          curl -fsS -m 5 http://127.0.0.1:5174/ > /dev/null && echo "FRONTEND_ADMIN_HEALTHY" || { echo "FRONTEND_ADMIN_FAIL"; exit 1; }
+          curl -fsS -m 5 http://127.0.0.1:4321/ > /dev/null && echo "FRONTEND_PUBLIC_HEALTHY" || { echo "FRONTEND_PUBLIC_FAIL" >&2; exit 1; }
+          curl -fsS -m 5 http://127.0.0.1:5174/ > /dev/null && echo "FRONTEND_ADMIN_HEALTHY" || { echo "FRONTEND_ADMIN_FAIL" >&2; exit 1; }
           echo "DEPLOY_OK"
-          EOF
+          EOSCRIPT
+
+      - name: Prune old images
+        if: success()
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "docker image prune -af --filter 'until=168h'"
 
       - name: Smoke público (HTTPS via Cloudflare/Caddy)
         run: |

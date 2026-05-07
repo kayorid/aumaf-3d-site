@@ -8,17 +8,26 @@
 
 ## 1. Provisionamento inicial (uma vez por VPS)
 
+> ⚠️ **Owner crítico**: o container backend roda como user não-root `app` (uid 100, gid 101). A master key precisa ser legível por esse uid — não basta `chown deploy:deploy`. Use `chown 100:101`.
+
 ```bash
-# Como deploy@vps (NÃO usar root):
+# Como deploy@vps:
 sudo install -d -m 0755 -o deploy -g deploy /etc/aumaf
 sudo openssl rand -out /etc/aumaf/master.key 32
-sudo chown deploy:deploy /etc/aumaf/master.key
+# Owner = uid:gid do user 'app' DENTRO do container backend (não do host).
+sudo chown 100:101 /etc/aumaf/master.key
 sudo chmod 400 /etc/aumaf/master.key
 
 # Verificação
-ls -la /etc/aumaf/master.key  # esperado: -r-------- 1 deploy deploy 32 ...
+ls -la /etc/aumaf/master.key  # esperado: -r-------- 1 100 101 32 ...
 file /etc/aumaf/master.key    # esperado: data (binário)
+
+# Se ainda não souber qual uid:gid o container usa, descubra com:
+sudo docker run --rm --entrypoint=id <imagem-backend>
+# ou inspecione: sudo docker inspect aumaf-prod-backend-1 --format '{{.Config.User}}'
 ```
+
+**Por que não `chown deploy:deploy`**: o uid `deploy` (1001 no host) NÃO existe dentro do container. Quando o backend (rodando como uid 100) tenta abrir o arquivo, recebe `EACCES: permission denied` mesmo com `chmod 400`, e o processo encerra com `[FATAL] master key indisponível em produção` (R11). Aprendido na hard way no PR #15.
 
 > ⚠️ **Backup off-server obrigatório.** Salve uma cópia criptografada em local seguro (1Password, Bitwarden, ou arquivo GPG-encrypted em outro server). Sem essa key, **todos os secrets em `integration_secrets` ficam inacessíveis** — recuperação só por re-cadastro manual.
 
@@ -61,7 +70,7 @@ docker compose stop backend
 
 # 2) Gere a key NOVA em paralelo (não sobrescreva ainda)
 sudo openssl rand -out /etc/aumaf/master.key.new 32
-sudo chmod 400 /etc/aumaf/master.key.new && sudo chown deploy:deploy /etc/aumaf/master.key.new
+sudo chmod 400 /etc/aumaf/master.key.new && sudo chown 100:101 /etc/aumaf/master.key.new
 
 # 3) Rode um script de migração (a escrever quando for necessário) que:
 #    - decifra com a key antiga (/etc/aumaf/master.key)
@@ -84,7 +93,7 @@ docker compose logs --tail=20 backend  # validar que decifragem ok
 ```bash
 # Na VPS nova:
 gpg --decrypt master-aumaf.key.gpg | sudo tee /etc/aumaf/master.key > /dev/null
-sudo chmod 400 /etc/aumaf/master.key && sudo chown deploy:deploy /etc/aumaf/master.key
+sudo chmod 400 /etc/aumaf/master.key && sudo chown 100:101 /etc/aumaf/master.key
 # Restaure também o backup do Postgres (já contém o ciphertext)
 # Backend deve voltar a operar normalmente
 ```

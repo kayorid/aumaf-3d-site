@@ -16,7 +16,7 @@ A feature `botyio-config-ui` exige que essas credenciais virem dinâmicas via UI
 
 1. **Criptografia em repouso com AES-256-GCM nativo** (`node:crypto`), sem nova dependência. GCM provê confidencialidade + integridade (authTag). IV de 12 bytes randomizado por valor.
 
-2. **Master key em arquivo separado** `/etc/aumaf/master.key` (32 bytes binários, `chmod 400`, owner `deploy:deploy`), montada como volume read-only no container backend (`/etc/aumaf/master.key:/etc/aumaf/master.key:ro`). **Não** vive no `.env` nem no banco — atende defesa em profundidade: vazar o `.env.production` ou um backup do DB isoladamente não é suficiente para decifrar.
+2. **Master key em arquivo separado** `/etc/aumaf/master.key` (32 bytes binários, `chmod 400`, owner = uid:gid do user `app` no container backend, atualmente `100:101` — **não** `deploy:deploy` do host, senão o backend recusa subir com `EACCES`), montada como volume read-only no container backend (`/etc/aumaf/master.key:/etc/aumaf/master.key:ro`). **Não** vive no `.env` nem no banco — atende defesa em profundidade: vazar o `.env.production` ou um backup do DB isoladamente não é suficiente para decifrar.
 
 3. **Modelo de dados genérico** — tabela `integration_secrets(provider, key, ciphertext, iv, authTag, isSensitive, lastFour, updatedBy, updatedAt)`. Evita N tabelas para N integrações; estrutura reusável para GA4/Pixel/SMTP futuros sem nova migration.
 
