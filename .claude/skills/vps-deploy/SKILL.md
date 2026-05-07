@@ -129,12 +129,14 @@ A partir de 2026-05-06 (ADR-002), o backend exige `/etc/aumaf/master.key` para d
 
 ```bash
 # 1ª vez (provisioning):
+# IMPORTANTE: chown 100:101 (uid:gid do user 'app' DENTRO do container backend),
+# NÃO chown deploy:deploy. Senão o backend recusa subir com EACCES.
 ssh deploy@2.24.72.8 'sudo install -d -m 0755 -o deploy -g deploy /etc/aumaf && \
   sudo openssl rand -out /etc/aumaf/master.key 32 && \
-  sudo chown deploy:deploy /etc/aumaf/master.key && \
+  sudo chown 100:101 /etc/aumaf/master.key && \
   sudo chmod 400 /etc/aumaf/master.key'
 
-# Verificação (deve retornar permissão 400 e tamanho 32 bytes):
+# Verificação (deve retornar -r-------- 100 101, tamanho 32 bytes):
 ssh deploy@2.24.72.8 'ls -la /etc/aumaf/master.key && stat -c "%s bytes" /etc/aumaf/master.key'
 
 # Backup off-server obrigatório (cifra com GPG e salva em 1Password):
