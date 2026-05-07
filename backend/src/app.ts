@@ -19,6 +19,7 @@ import { publicRoutes } from './routes/public.routes'
 import { settingsRoutes } from './routes/settings.routes'
 import { healthRoutes } from './routes/health.routes'
 import { botyioWebhookRoutes } from './routes/botyio-webhook.routes'
+import { adminIntegrationRoutes } from './routes/admin-integration.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -68,6 +69,7 @@ export function createApp() {
   app.use('/api/v1/ai', aiRoutes)
   app.use('/api/v1/metrics', metricsRoutes)
   app.use('/api/v1/settings', settingsRoutes)
+  app.use('/api/v1/admin/integrations', adminIntegrationRoutes)
 
   app.use((_req, res) => {
     res.status(404).json({ status: 'error', code: 'NOT_FOUND', message: 'Not found' })

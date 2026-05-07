@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags } from 'lucide-react'
+import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface NavItem {
@@ -16,7 +16,8 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/categories',label: 'Categorias', icon: Tags,            number: '03' },
   { to: '/leads',     label: 'Leads',      icon: Users,           number: '04' },
   { to: '/settings',  label: 'Settings',   icon: Settings,        number: '05' },
-  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '06', disabled: true },
+  { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '06' },
+  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '07', disabled: true },
 ]
 
 export function Sidebar() {

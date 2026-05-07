@@ -1,6 +1,5 @@
 import { syncLeadToBotyo, applyBotyoEvent, BotyoRetryableError } from './botyio.service'
 import { prisma } from '../lib/prisma'
-import { env } from '../config/env'
 
 jest.mock('../lib/prisma', () => ({
   prisma: {
@@ -10,7 +9,31 @@ jest.mock('../lib/prisma', () => ({
   },
 }))
 
+jest.mock('./integration-config.service', () => ({
+  getBotyioConfig: jest.fn(),
+  BOTYIO_PROVIDER: 'botyio',
+  BOTYIO_KEYS: {
+    BASE_URL: 'BASE_URL',
+    API_KEY: 'API_KEY',
+    WEBHOOK_SECRET: 'WEBHOOK_SECRET',
+    ENABLED: 'ENABLED',
+  },
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { getBotyioConfig } = require('./integration-config.service')
+const mockGetConfig = getBotyioConfig as jest.Mock
 const mockUpdate = prisma.lead.update as jest.Mock
+
+function setBotyioConfig(overrides: Partial<{ enabled: boolean; apiKey: string | null; baseUrl: string }> = {}) {
+  mockGetConfig.mockResolvedValue({
+    enabled: overrides.enabled ?? true,
+    baseUrl: overrides.baseUrl ?? 'https://api.botyio.com',
+    apiKey: overrides.apiKey ?? 'bty_lds_testkey',
+    webhookSecret: 'whsec_testsecret',
+    meta: {},
+  })
+}
 
 const baseLead = {
   id: 'lead_test_001',
@@ -34,13 +57,9 @@ const baseLead = {
   botyoFailReason: null,
 } as const
 
-const originalEnv = { ...process.env }
-
 beforeEach(() => {
   jest.clearAllMocks()
-  ;(env as Record<string, unknown>).BOTYIO_ENABLED = 'true'
-  ;(env as Record<string, unknown>).BOTYIO_API_KEY = 'bty_lds_testkey'
-  ;(env as Record<string, unknown>).BOTYIO_BASE_URL = 'https://api.botyio.com'
+  setBotyioConfig()
 })
 
 afterEach(() => {
@@ -49,7 +68,7 @@ afterEach(() => {
 
 describe('syncLeadToBotyo', () => {
   it('retorna sem fazer fetch quando BOTYIO_ENABLED=false', async () => {
-    ;(env as Record<string, unknown>).BOTYIO_ENABLED = 'false'
+    setBotyioConfig({ enabled: false })
     const fetchSpy = jest.spyOn(global, 'fetch')
 
     await syncLeadToBotyo(baseLead as any)

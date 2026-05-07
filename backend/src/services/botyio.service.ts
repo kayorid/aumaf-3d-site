@@ -1,8 +1,8 @@
 import type { Lead } from '@prisma/client'
 import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
-import { env } from '../config/env'
 import { normalizePhoneBR } from '../lib/phone'
+import { getBotyioConfig } from './integration-config.service'
 
 export class BotyoRetryableError extends Error {
   constructor(
@@ -63,13 +63,15 @@ function buildPayload(lead: Lead) {
 }
 
 export async function syncLeadToBotyo(lead: Lead): Promise<void> {
-  if (env.BOTYIO_ENABLED !== 'true') {
+  const config = await getBotyioConfig()
+
+  if (!config.enabled) {
     logger.debug({ leadId: lead.id }, 'Botyio disabled — skip sync')
     return
   }
 
-  if (!env.BOTYIO_API_KEY) {
-    logger.warn({ leadId: lead.id }, 'BOTYIO_API_KEY not set — skip sync')
+  if (!config.apiKey) {
+    logger.warn({ leadId: lead.id }, 'Botyio API key not set — skip sync')
     return
   }
 
@@ -77,11 +79,11 @@ export async function syncLeadToBotyo(lead: Lead): Promise<void> {
 
   let res: Response
   try {
-    res = await fetch(`${env.BOTYIO_BASE_URL}/v1/leads`, {
+    res = await fetch(`${config.baseUrl.replace(/\/$/, '')}/v1/leads`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': env.BOTYIO_API_KEY,
+        'X-API-Key': config.apiKey,
         'X-Idempotency-Key': lead.id,
       },
       body: JSON.stringify(payload),

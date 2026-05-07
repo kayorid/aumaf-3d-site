@@ -75,8 +75,17 @@ services:
     restart: unless-stopped
     networks: [aumaf_internal]
     env_file: ../env/.env.production
+    environment:
+      MASTER_KEY_PATH: /etc/aumaf/master.key
     ports:
       - "127.0.0.1:3000:3000"
+    volumes:
+      # Master key para criptografia de integration_secrets (AES-256-GCM).
+      # Gerada manualmente na VPS:
+      #   openssl rand -out /etc/aumaf/master.key 32
+      #   chown deploy:deploy /etc/aumaf/master.key && chmod 400 /etc/aumaf/master.key
+      # Se ausente em produção, o backend RECUSA subir (process.exit 1).
+      - /etc/aumaf/master.key:/etc/aumaf/master.key:ro
     depends_on:
       postgres:
         condition: service_healthy

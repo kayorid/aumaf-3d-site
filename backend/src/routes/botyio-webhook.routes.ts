@@ -2,8 +2,8 @@ import { Router } from 'express'
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
-import { env } from '../config/env'
 import { applyBotyoEvent, type BotyoWebhookEvent } from '../services/botyio.service'
+import { getBotyioConfig } from '../services/integration-config.service'
 
 export const botyioWebhookRoutes = Router()
 
@@ -15,9 +15,10 @@ botyioWebhookRoutes.post('/', async (req, res) => {
     return res.sendStatus(401)
   }
 
-  const secret = env.BOTYIO_WEBHOOK_SECRET
+  const config = await getBotyioConfig()
+  const secret = config.webhookSecret
   if (!secret) {
-    logger.error('BOTYIO_WEBHOOK_SECRET not configured')
+    logger.error('Botyio webhook secret not configured (verifique /admin/integrations/botyio)')
     return res.sendStatus(500)
   }
 

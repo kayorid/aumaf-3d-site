@@ -116,6 +116,24 @@ model BotyoWebhookDelivery {
   @@map("botyo_webhook_deliveries")
 }
 
+model IntegrationSecret {
+  id          String   @id @default(cuid())
+  provider    String
+  key         String
+  ciphertext  Bytes
+  iv          Bytes
+  authTag     Bytes
+  isSensitive Boolean  @default(true)
+  lastFour    String?
+  updatedBy   String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@unique([provider, key])
+  @@index([provider])
+  @@map("integration_secrets")
+}
+
 model Setting {
   id                  String   @id @default(cuid())
   siteName            String   @default("AUMAF 3D")
