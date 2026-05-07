@@ -43,13 +43,26 @@ Migração das 4 envs Botyio (`API_KEY`, `WEBHOOK_SECRET`, `BASE_URL`, `ENABLED`
 - O webhook secret também precisava virar dinâmico — não estava na spec inicial mas seguiu naturalmente do refactor do `getBotyioConfig`. Bom catch acidental.
 - Existem hangs de Jest com Redis abertos em vários testes pré-existentes (não só nos novos). Worth investigar em outro momento.
 
-## Pendências operacionais (HERDADAS — não bloqueiam o merge)
+## Hotfixes aplicados após o merge da feature (mesmo dia)
 
-1. **Provisionar master key na VPS** antes do próximo deploy de backend (`docs/runbooks/integration-secrets-master-key.md` §1)
-2. **Backup off-server da master key** (GPG → 1Password)
-3. **Avisar Botyio** para trocar `callback_url` do Source para `https://api.aumaf.kayoridolfi.ai/api/v1/leads/botyio-status`
-4. **Rodar Playwright E2E** com infra completa (`integrations.spec.ts`)
-5. **Backups do banco** passam a conter ciphertext — atualizar runbook `production-restore.md` para enfatizar sensibilidade
+A feature foi entregue em **3 PRs sucessivos** porque o deploy real expôs problemas que os testes locais não pegaram:
+
+### PR #16 — `fix(deploy): force-recreate no CD + corrigir owner master key`
+1. **Bug do CD: `up -d` silent skip.** O step `Deploy on server` era um heredoc gigante de ~30 linhas. Ele terminou silenciosamente após `MIGRATIONS_OK` no deploy do PR #15 — sem rodar `up -d`, sem smoke interno. Resultado: backend continuou rodando imagem antiga em prod até detecção manual. **Fix**: refatorado em 6 sub-steps GHA menores e legíveis (Pull / Run migrations / Recreate services / **Verify image SHA matches** / Smoke interno / Prune). Adicionado `--force-recreate` em `up -d` + novo gate `Verify image SHA matches` que aborta o deploy se o container não estiver rodando a imagem esperada.
+2. **EACCES no boot da master key.** O container backend roda como user não-root `app` (uid 100, gid 101 — descoberto via `docker inspect`). O runbook recomendava `chown deploy:deploy` (uid 1001 do host), mas esse uid não existe dentro do container — backend recebe `EACCES: permission denied` ao abrir `/etc/aumaf/master.key` e morre com `[FATAL] master key indisponível em produção` (R11). **Fix**: `chown 100:101`. Atualizado runbook, ADR-002, skill `vps-deploy` §5b e comentário em `docker-compose.production.yml`.
+
+### PR #17 — `fix(cd): smoke público tolerante a warm-up de force-recreate`
+3. **Smoke público falhou pós-`--force-recreate`.** Como o force-recreate reinicia os 3 serviços simultaneamente (warm-up de TLS + Astro SSR cold start + Cloudflare cache priming), ~30s. Smoke anterior tinha 3 tentativas × 5s = 15s tolerância — insuficiente. **Fix**: sleep inicial 8s + 8 tentativas × 8s = ~72s tolerância.
+
+**Lição arquitetural**: heredocs SSH gigantes em GHA workflows mascaram falhas. Sub-steps menores são essenciais para observabilidade.
+
+## Pendências operacionais (apenas dependências externas — não bloqueiam)
+
+1. **Cadastrar `API_KEY` e `WEBHOOK_SECRET` via UI** em https://admin-aumaf.kayoridolfi.ai/integrations/botyio (depende das credenciais reais da Botyio)
+2. **Backup off-server da master key** (GPG → 1Password, passphrase só do Kayo)
+3. **Avisar Botyio** para trocar `callback_url` do Source para `https://api-aumaf.kayoridolfi.ai/api/v1/leads/botyio-status`
+4. **Rodar Playwright E2E** com infra completa (`frontend-admin/e2e/integrations.spec.ts`)
+5. **Backups do banco** passam a conter ciphertext — atualizar runbook `production-restore.md` para enfatizar sensibilidade (PR futuro pequeno)
 
 ## Métricas pós-feature (ver `status.md`)
 

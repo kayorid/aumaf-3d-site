@@ -22,7 +22,13 @@
 
 **Cobertura:** Backend Jest 97/97 (28 novos) · Frontend Vitest 45/45 (10 novos)
 
-**Pendências operacionais:** provisionar master key na VPS + backup off-server (GPG → 1Password); avisar Botyio para trocar callback_url; rodar Playwright E2E com infra completa.
+**Hotfixes aplicados após o merge da feature (mesmo dia):**
+- **PR #16** `fix(deploy)`: refatorou o step `Deploy on server` em 6 sub-steps GHA menores (Pull / Run migrations / Recreate services / **Verify image SHA matches** / Smoke interno / Prune); adicionou `--force-recreate` para destravar o silent skip de `up -d`; corrigiu owner da master key para `chown 100:101` (uid:gid do user `app` no container) — `chown deploy:deploy` causava EACCES no boot.
+- **PR #17** `fix(cd)`: aumentou tolerância do smoke público para 72s (sleep 8s + 8 tentativas × 8s) compensando o warm-up agora maior do `--force-recreate`.
+
+**Estado final em prod** (master = `1dee432`): CD novo verde end-to-end (run 25471618707); 6/6 services healthy; smokes 200; 2 rows em `integration_secrets` (BASE_URL + ENABLED) populadas pelo bootstrap.
+
+**Pendências (dependências externas, não bloqueiam):** cadastrar API_KEY + WEBHOOK_SECRET via UI; backup off-server da master key (GPG → 1Password); avisar Botyio para trocar `callback_url` para `https://api-aumaf.kayoridolfi.ai/api/v1/leads/botyio-status`; rodar Playwright E2E localmente.
 
 ---
 
