@@ -177,18 +177,25 @@ jobs:
 
       - name: Smoke público (HTTPS via Cloudflare/Caddy)
         run: |
+          # Como `--force-recreate` reinicia todos os serviços, dá uma janela
+          # inicial de warm-up antes do smoke público (Cloudflare cache + TLS
+          # handshake + Astro SSR cold start). 8 tentativas × 8s = ~64s tolerância.
           set -e
+          sleep 8
           for url in https://aumaf.kayoridolfi.ai/ \
                      https://admin-aumaf.kayoridolfi.ai/ \
                      https://api-aumaf.kayoridolfi.ai/health; do
             echo "Smoke $url"
-            for attempt in 1 2 3; do
+            for attempt in 1 2 3 4 5 6 7 8; do
               if curl -fsS -m 10 "$url" > /dev/null; then
-                echo "  OK"
+                echo "  OK (attempt $attempt)"
                 break
               fi
-              sleep 5
-              [ $attempt = 3 ] && { echo "  FAIL"; exit 1; }
+              if [ "$attempt" = "8" ]; then
+                echo "  FAIL após 8 tentativas"
+                exit 1
+              fi
+              sleep 8
             done
           done
           echo "PUBLIC_SMOKE_OK"
