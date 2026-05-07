@@ -64,6 +64,10 @@ const envSchema = z.object({
 
   // Cache warm-up
   PUBLIC_BLOG_BASE_URL: z.string().url().optional(),
+
+  // Integration secrets — encryption at rest
+  MASTER_KEY_PATH: z.string().default('/etc/aumaf/master.key'),
+  MASTER_ENCRYPTION_KEY: z.string().optional(), // base64 32 bytes — apenas dev/test
 })
 
 const parsed = envSchema.safeParse(process.env)

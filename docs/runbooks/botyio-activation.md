@@ -1,5 +1,7 @@
 # Runbook — Ativação Botyio em Produção
 
+> 🆕 **Atualizado em 2026-05-06**: a partir da feature `botyio-config-ui` (ADR-002), as credenciais são editáveis via `/admin/integrations/botyio` no backoffice. O passo 4 deste runbook (4 envs no servidor) ainda funciona como **bootstrap inicial**, mas em operação contínua a rotação acontece pela UI. Antes do primeiro deploy, garanta que `/etc/aumaf/master.key` exista — veja `docs/runbooks/integration-secrets-master-key.md`.
+
 **Pré-requisitos:**
 - VPS com backend AUMAF 3D rodando, acessível via HTTPS no domínio público (ex: `https://aumaf-3d.com.br`)
 - Source `siteaumaf3d` criada no painel Botyio (já feito — ver screenshot na sessão de 2026-05-03)

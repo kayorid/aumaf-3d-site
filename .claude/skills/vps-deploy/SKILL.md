@@ -123,6 +123,29 @@ EOF
 
 ⚠️ **Vars em Zod schema do backend NÃO podem ficar vazias se forem `email()` ou `url()`** — Zod rejeita `''` (não considera optional). Solução: REMOVER a linha em vez de deixar `VAR=`.
 
+### 5b. Provisionar / verificar master key de integration secrets
+
+A partir de 2026-05-06 (ADR-002), o backend exige `/etc/aumaf/master.key` para decifrar `integration_secrets` (Botyio API key, webhook secret, etc.). Sem o arquivo, **o backend recusa subir em produção**.
+
+```bash
+# 1ª vez (provisioning):
+ssh deploy@2.24.72.8 'sudo install -d -m 0755 -o deploy -g deploy /etc/aumaf && \
+  sudo openssl rand -out /etc/aumaf/master.key 32 && \
+  sudo chown deploy:deploy /etc/aumaf/master.key && \
+  sudo chmod 400 /etc/aumaf/master.key'
+
+# Verificação (deve retornar permissão 400 e tamanho 32 bytes):
+ssh deploy@2.24.72.8 'ls -la /etc/aumaf/master.key && stat -c "%s bytes" /etc/aumaf/master.key'
+
+# Backup off-server obrigatório (cifra com GPG e salva em 1Password):
+ssh deploy@2.24.72.8 'sudo gpg --symmetric --cipher-algo AES256 -o /tmp/master-aumaf.key.gpg /etc/aumaf/master.key'
+scp deploy@2.24.72.8:/tmp/master-aumaf.key.gpg ~/Downloads/  # mover para 1Password e deletar daqui
+```
+
+⚠️ **Sem backup off-server, perda da master key = perda das credenciais Botyio em DB**. Recuperação só por re-cadastro na origem.
+
+Runbook completo: `docs/runbooks/integration-secrets-master-key.md`.
+
 ### 6. Rollback de versão
 
 ```bash

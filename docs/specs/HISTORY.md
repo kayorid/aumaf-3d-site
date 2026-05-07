@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-05-06 — Botyio Config UI (credenciais dinâmicas + cripto AES-256-GCM)
+
+**Spec**: [_completed/2026-05-06-botyio-config-ui/](_completed/2026-05-06-botyio-config-ui/) · [retrospective](_completed/2026-05-06-botyio-config-ui/retrospective.md)
+**Branch**: `feat/botyio-config-ui`
+**ADR**: [ADR-002](../decisions/ADR-002-integration-secrets-encryption.md)
+
+**Entregue:**
+- Tabela genérica `integration_secrets(provider, key, ciphertext, iv, authTag)` — reusável para GA4/Pixel/SMTP
+- AES-256-GCM nativo + master key em `/etc/aumaf/master.key` (separada do banco)
+- Service `integration-config.service` com cache + Redis Pub/Sub (`integration-secret:invalidate`)
+- 4 rotas admin (`GET/PUT/POST test/GET deliveries`) com requireRole('ADMIN')
+- Página `/integrations/botyio` no backoffice com SecretField mascarado, CallbackUrl + copy, "Testar conexão", histórico de webhooks
+- Audit log estruturado (Pino + Sentry, tag `audit:integration-secret`) + redaction de paths sensíveis
+- Bootstrap idempotente: env continua como fallback no primeiro boot
+- Storybook: 3 stories novas; Playwright spec criado
+
+**Cobertura:** Backend Jest 97/97 (28 novos) · Frontend Vitest 45/45 (10 novos)
+
+**Pendências operacionais:** provisionar master key na VPS + backup off-server (GPG → 1Password); avisar Botyio para trocar callback_url; rodar Playwright E2E com infra completa.
+
+---
+
 ## 2026-05-04 — VPS Provisioning + CI/CD (homologação live)
 
 **Spec**: [_completed/2026-05-04-vps-provisioning-cicd/](_completed/2026-05-04-vps-provisioning-cicd/) · [retrospective](_completed/2026-05-04-vps-provisioning-cicd/retrospective.md)

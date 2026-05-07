@@ -22,6 +22,17 @@ jest.mock('../services/botyio.service', () => ({
   applyBotyoEvent: jest.fn(),
 }))
 
+jest.mock('../services/integration-config.service', () => ({
+  getBotyioConfig: jest.fn(),
+  ensurePubSubSubscribed: jest.fn().mockResolvedValue(undefined),
+  invalidateLocalCache: jest.fn(),
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const integrationConfig = require('../services/integration-config.service') as {
+  getBotyioConfig: jest.Mock
+}
+
 const mockFindUnique = prisma.botyoWebhookDelivery.findUnique as jest.Mock
 const mockCreate = prisma.botyoWebhookDelivery.create as jest.Mock
 const mockApply = botyioService.applyBotyoEvent as jest.Mock
@@ -42,6 +53,13 @@ const validEvent = {
 beforeEach(() => {
   jest.clearAllMocks()
   ;(env as Record<string, unknown>).BOTYIO_WEBHOOK_SECRET = WEBHOOK_SECRET
+  integrationConfig.getBotyioConfig.mockResolvedValue({
+    enabled: true,
+    baseUrl: 'https://api.botyio.com',
+    apiKey: 'bty_lds_testkey',
+    webhookSecret: WEBHOOK_SECRET,
+    meta: {},
+  })
   mockFindUnique.mockResolvedValue(null)
   mockCreate.mockResolvedValue({})
   mockApply.mockResolvedValue(undefined)
