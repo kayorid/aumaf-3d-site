@@ -27,12 +27,33 @@ model User {
   password  String
   role      UserRole @default(EDITOR)
   active    Boolean  @default(true)
+  phone     String?
+  avatarUrl String?
+  mustChangePassword Boolean @default(false)
+  lastLoginAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts Post[] @relation("AuthorPosts")
+  posts       Post[]           @relation("AuthorPosts")
+  leadNotes   LeadNote[]       @relation("LeadNotesAuthor")
+  permissions UserPermission[]
 
   @@map("users")
+}
+
+model UserPermission {
+  id        String   @id @default(cuid())
+  userId    String
+  feature   String
+  action    String
+  granted   Boolean
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, feature, action])
+  @@index([userId])
+  @@map("user_permissions")
 }
 
 model Category {
@@ -84,6 +105,10 @@ model Lead {
   source      String?
   createdAt   DateTime @default(now())
 
+  // Soft delete
+  deletedAt   DateTime?
+  deletedBy   String?
+
   // UTM tracking
   utmSource   String?
   utmMedium   String?
@@ -100,9 +125,27 @@ model Lead {
   botyoSentAt     DateTime?
   botyoFailReason String?   @db.Text
 
+  notes LeadNote[]
+
   @@index([botyoLeadId])
   @@index([botyoStatus])
+  @@index([deletedAt])
   @@map("leads")
+}
+
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lead   Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author User @relation("LeadNotesAuthor", fields: [authorId], references: [id])
+
+  @@index([leadId, createdAt(sort: Desc)])
+  @@map("lead_notes")
 }
 
 model BotyoWebhookDelivery {

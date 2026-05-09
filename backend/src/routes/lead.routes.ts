@@ -1,7 +1,13 @@
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { CreateLeadSchema, LeadFilterQuerySchema } from '@aumaf/shared'
+import {
+  CreateLeadSchema,
+  LeadFilterQuerySchema,
+  CreateLeadNoteSchema,
+  UpdateLeadNoteSchema,
+} from '@aumaf/shared'
 import { requireAuth, requireRole } from '../middlewares/require-auth'
+import { httpErrors } from '../lib/http-error'
 import * as leadService from '../services/lead.service'
 
 const publicLimiter = rateLimit({
@@ -83,6 +89,66 @@ leadRoutes.get('/export.csv', requireAuth, requireRole('ADMIN', 'MARKETING'), as
     res.setHeader('Content-Type', 'text/csv; charset=utf-8')
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
     res.send(csv)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Detalhe + soft delete + notas
+// ─────────────────────────────────────────────────────────────────────────────
+
+leadRoutes.get('/:id', requireAuth, requireRole('ADMIN', 'MARKETING'), async (req, res, next) => {
+  try {
+    const lead = await leadService.getLeadById(req.params.id)
+    res.json({ status: 'ok', data: lead })
+  } catch (err) {
+    next(err)
+  }
+})
+
+leadRoutes.delete('/:id', requireAuth, requireRole('ADMIN'), async (req, res, next) => {
+  try {
+    if (!req.user) throw httpErrors.unauthorized()
+    await leadService.softDeleteLead(req.params.id, req.user.id)
+    res.json({ status: 'ok' })
+  } catch (err) {
+    next(err)
+  }
+})
+
+leadRoutes.post('/:id/notes', requireAuth, requireRole('ADMIN', 'MARKETING'), async (req, res, next) => {
+  try {
+    if (!req.user) throw httpErrors.unauthorized()
+    const input = CreateLeadNoteSchema.parse(req.body)
+    const note = await leadService.addLeadNote(req.params.id, req.user.id, input.body)
+    res.status(201).json({ status: 'ok', data: note })
+  } catch (err) {
+    next(err)
+  }
+})
+
+leadRoutes.patch('/:id/notes/:noteId', requireAuth, requireRole('ADMIN', 'MARKETING'), async (req, res, next) => {
+  try {
+    if (!req.user) throw httpErrors.unauthorized()
+    const input = UpdateLeadNoteSchema.parse(req.body)
+    const note = await leadService.updateLeadNote(
+      req.params.noteId,
+      req.user.id,
+      req.user.role === 'ADMIN',
+      input.body,
+    )
+    res.json({ status: 'ok', data: note })
+  } catch (err) {
+    next(err)
+  }
+})
+
+leadRoutes.delete('/:id/notes/:noteId', requireAuth, requireRole('ADMIN', 'MARKETING'), async (req, res, next) => {
+  try {
+    if (!req.user) throw httpErrors.unauthorized()
+    await leadService.deleteLeadNote(req.params.noteId, req.user.id, req.user.role === 'ADMIN')
+    res.json({ status: 'ok' })
   } catch (err) {
     next(err)
   }

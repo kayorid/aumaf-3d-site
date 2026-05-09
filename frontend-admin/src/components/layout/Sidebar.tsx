@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook } from 'lucide-react'
+import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { usePermissions } from '@/features/users/hooks/usePermissions'
 
 interface NavItem {
   to: string
@@ -8,16 +9,18 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>
   number: string
   disabled?: boolean
+  feature?: string
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: '/dashboard', label: 'Dashboard',  icon: LayoutDashboard, number: '01' },
-  { to: '/posts',     label: 'Posts',      icon: FileText,        number: '02' },
-  { to: '/categories',label: 'Categorias', icon: Tags,            number: '03' },
-  { to: '/leads',     label: 'Leads',      icon: Users,           number: '04' },
-  { to: '/settings',  label: 'Settings',   icon: Settings,        number: '05' },
-  { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '06' },
-  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '07', disabled: true },
+  { to: '/dashboard', label: 'Dashboard',  icon: LayoutDashboard, number: '01', feature: 'dashboard' },
+  { to: '/posts',     label: 'Posts',      icon: FileText,        number: '02', feature: 'posts' },
+  { to: '/categories',label: 'Categorias', icon: Tags,            number: '03', feature: 'categories' },
+  { to: '/leads',     label: 'Leads',      icon: Users,           number: '04', feature: 'leads' },
+  { to: '/settings',  label: 'Settings',   icon: Settings,        number: '05', feature: 'settings' },
+  { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '06', feature: 'botyio' },
+  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '07', feature: 'media', disabled: true },
+  { to: '/usuarios',  label: 'Usuários',   icon: ShieldCheck,     number: '08', feature: 'users' },
 ]
 
 export function Sidebar() {
@@ -56,11 +59,7 @@ export function Sidebar() {
       </div>
 
       {/* Nav items */}
-      <nav className="flex flex-col px-3" aria-label="Principal">
-        {NAV_ITEMS.map((item) => (
-          <SidebarItem key={item.to} item={item} />
-        ))}
-      </nav>
+      <SidebarNav />
 
       {/* Footer */}
       <div className="mt-auto px-6 pb-6 pt-6 border-t border-white/8">
@@ -72,6 +71,22 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+  )
+}
+
+function SidebarNav() {
+  const { can, isLoading } = usePermissions()
+  const visible = NAV_ITEMS.filter((item) => {
+    if (isLoading) return true
+    if (!item.feature) return true
+    return can(item.feature, 'view')
+  })
+  return (
+    <nav className="flex flex-col px-3" aria-label="Principal">
+      {visible.map((item) => (
+        <SidebarItem key={item.to} item={item} />
+      ))}
+    </nav>
   )
 }
 

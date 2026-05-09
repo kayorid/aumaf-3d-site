@@ -54,6 +54,32 @@ export const LeadFilterQuerySchema = z.object({
 })
 export type LeadFilterQuery = z.infer<typeof LeadFilterQuerySchema>
 
+export const LeadNoteDtoSchema = z.object({
+  id: z.string(),
+  leadId: z.string(),
+  authorId: z.string(),
+  authorName: z.string().nullable(),
+  body: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+})
+export type LeadNoteDto = z.infer<typeof LeadNoteDtoSchema>
+
+export const LeadDetailDtoSchema = LeadDtoSchema.extend({
+  notes: z.array(LeadNoteDtoSchema),
+})
+export type LeadDetailDto = z.infer<typeof LeadDetailDtoSchema>
+
+export const CreateLeadNoteSchema = z.object({
+  body: z.string().min(1).max(5000),
+})
+export type CreateLeadNoteInput = z.infer<typeof CreateLeadNoteSchema>
+
+export const UpdateLeadNoteSchema = z.object({
+  body: z.string().min(1).max(5000),
+})
+export type UpdateLeadNoteInput = z.infer<typeof UpdateLeadNoteSchema>
+
 export const LeadListResponseSchema = z.object({
   data: z.array(LeadDtoSchema),
   pagination: z.object({

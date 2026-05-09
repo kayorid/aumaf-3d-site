@@ -5,12 +5,14 @@ import { Download, Mail, MessageCircle, Phone, Search, Users, X } from 'lucide-r
 import type { LeadFilterQuery } from '@aumaf/shared'
 import { useLeads, useLeadSources } from '../api/use-leads'
 import { leadsApi } from '../api/leads.api'
+import { LeadDrawer } from '../components/LeadDrawer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 
 export function LeadsListPage() {
   const [filters, setFilters] = useState<Partial<LeadFilterQuery>>({ page: 1, pageSize: 20 })
+  const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null)
   const { data, isLoading, isError, error } = useLeads(filters)
   const sources = useLeadSources()
 
@@ -134,7 +136,20 @@ export function LeadsListPage() {
               </thead>
               <tbody>
                 {data?.data.map((lead) => (
-                  <tr key={lead.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                  <tr
+                    key={lead.id}
+                    className="border-b border-white/5 hover:bg-white/[0.03] transition-colors cursor-pointer"
+                    onClick={() => setSelectedLeadId(lead.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        setSelectedLeadId(lead.id)
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Abrir detalhes do lead ${lead.name}`}
+                  >
                     <td className="px-6 py-3.5">
                       <div className="font-medium text-on-surface">{lead.name}</div>
                       {lead.message && (
@@ -145,11 +160,19 @@ export function LeadsListPage() {
                     </td>
                     <td className="px-6 py-3.5 hidden md:table-cell">
                       <div className="space-y-1">
-                        <a href={`mailto:${lead.email}`} className="text-[12px] text-on-surface-variant hover:text-primary-container transition-colors flex items-center gap-1.5">
+                        <a
+                          href={`mailto:${lead.email}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[12px] text-on-surface-variant hover:text-primary-container transition-colors flex items-center gap-1.5"
+                        >
                           <Mail className="size-3" /> {lead.email}
                         </a>
                         {lead.phone && (
-                          <a href={`tel:${lead.phone}`} className="text-[12px] text-on-surface-variant hover:text-primary-container transition-colors flex items-center gap-1.5">
+                          <a
+                            href={`tel:${lead.phone}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[12px] text-on-surface-variant hover:text-primary-container transition-colors flex items-center gap-1.5"
+                          >
                             <Phone className="size-3" /> {lead.phone}
                           </a>
                         )}
@@ -173,6 +196,7 @@ export function LeadsListPage() {
                           href={`https://wa.me/${lead.phone.replace(/\D/g, '')}`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="inline-flex items-center gap-1 text-[11px] text-primary-container hover:underline"
                         >
                           <MessageCircle className="size-3" /> WhatsApp
@@ -212,6 +236,8 @@ export function LeadsListPage() {
           </div>
         )}
       </div>
+
+      <LeadDrawer leadId={selectedLeadId} onClose={() => setSelectedLeadId(null)} />
     </div>
   )
 }

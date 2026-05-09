@@ -67,11 +67,10 @@ export function Topbar() {
                   </div>
                 </div>
                 <DropdownMenu.Item
-                  disabled
-                  className="flex items-center gap-2 px-3 py-2 text-[11px] uppercase tracking-[0.15em] text-on-surface-variant/40 cursor-not-allowed"
+                  onSelect={() => navigate('/perfil')}
+                  className="flex items-center gap-2 px-3 py-2 text-[11px] uppercase tracking-[0.15em] text-on-surface-variant hover:bg-white/5 hover:text-on-surface cursor-pointer focus:outline-none focus:bg-white/5"
                 >
                   <User className="size-3.5" /> Perfil
-                  <span className="ml-auto text-[9px] tracking-[0.2em]">soon</span>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onSelect={handleLogout}
