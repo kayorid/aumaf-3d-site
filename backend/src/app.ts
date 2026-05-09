@@ -10,6 +10,7 @@ import { logger } from './config/logger'
 import { errorHandler } from './middlewares/error-handler'
 import { authRoutes } from './routes/auth.routes'
 import { meRoutes } from './routes/me.routes'
+import { userRoutes, permissionsRoutes } from './routes/user.routes'
 import { postRoutes } from './routes/post.routes'
 import { categoryRoutes } from './routes/category.routes'
 import { uploadRoutes } from './routes/upload.routes'
@@ -64,6 +65,8 @@ export function createApp() {
   app.use('/api/v1/public', publicRoutes)
   app.use('/api/v1/auth', authRoutes)
   app.use('/api/v1/me', meRoutes)
+  app.use('/api/v1/users', userRoutes)
+  app.use('/api/v1/permissions', permissionsRoutes)
   app.use('/api/v1/posts', postRoutes)
   app.use('/api/v1/categories', categoryRoutes)
   app.use('/api/v1/uploads', uploadRoutes)
