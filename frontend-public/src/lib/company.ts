@@ -39,6 +39,7 @@ export const COMPANY = {
   socials: {
     instagram: 'https://www.instagram.com/aumaf3d',
     linkedin: 'https://www.linkedin.com/company/aumaf3d',
+    facebook: 'https://www.facebook.com/aumaf3d/',
   },
   serviceAreaCountry: 'BR',
   industries: [

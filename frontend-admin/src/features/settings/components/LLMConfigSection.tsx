@@ -12,7 +12,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select } from '@/components/ui/select'
+import { SelectStyled } from '@/components/ui/select-styled'
 import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
@@ -27,6 +27,33 @@ const PROVIDER_PLACEHOLDERS: Record<AIProviderName, { key: string; model: string
   openai: { key: 'sk-proj-...', model: 'gpt-4o-mini' },
   anthropic: { key: 'sk-ant-...', model: 'claude-sonnet-4-6' },
   gemini: { key: 'AIza...', model: 'gemini-2.0-flash-exp' },
+}
+
+const CUSTOM_MODEL_VALUE = '__custom__'
+
+const PROVIDER_MODELS: Record<AIProviderName, Array<{ value: string; label: string; hint?: string }>> = {
+  openai: [
+    { value: 'gpt-4o-mini', label: 'gpt-4o-mini', hint: 'rápido · barato (padrão)' },
+    { value: 'gpt-4o', label: 'gpt-4o', hint: 'multimodal · qualidade' },
+    { value: 'gpt-4.1', label: 'gpt-4.1', hint: 'flagship 2025' },
+    { value: 'gpt-4.1-mini', label: 'gpt-4.1-mini', hint: 'flagship rápido' },
+    { value: 'gpt-4-turbo', label: 'gpt-4-turbo' },
+    { value: 'o3-mini', label: 'o3-mini', hint: 'reasoning · rápido' },
+    { value: 'o1-mini', label: 'o1-mini', hint: 'reasoning' },
+  ],
+  anthropic: [
+    { value: 'claude-opus-4-7', label: 'claude-opus-4-7', hint: 'flagship · 1M ctx' },
+    { value: 'claude-sonnet-4-6', label: 'claude-sonnet-4-6', hint: 'recomendado (padrão)' },
+    { value: 'claude-haiku-4-5', label: 'claude-haiku-4-5', hint: 'rápido · barato' },
+    { value: 'claude-opus-4-6', label: 'claude-opus-4-6' },
+    { value: 'claude-3-5-sonnet-20241022', label: 'claude-3-5-sonnet-20241022', hint: 'legacy' },
+  ],
+  gemini: [
+    { value: 'gemini-2.0-flash-exp', label: 'gemini-2.0-flash-exp', hint: 'recomendado (padrão)' },
+    { value: 'gemini-1.5-pro', label: 'gemini-1.5-pro', hint: 'qualidade' },
+    { value: 'gemini-1.5-flash', label: 'gemini-1.5-flash', hint: 'rápido' },
+    { value: 'gemini-1.0-pro', label: 'gemini-1.0-pro', hint: 'legacy' },
+  ],
 }
 
 interface FormState {
@@ -128,15 +155,16 @@ export function LLMConfigSection() {
           <Label htmlFor="default-provider" className="block">
             Qual provedor usar quando o painel de IA não especifica
           </Label>
-          <Select
+          <SelectStyled<AIProviderName>
             id="default-provider"
             value={current.defaultProvider}
-            onChange={(e) => set('defaultProvider', e.target.value as AIProviderName)}
-          >
-            <option value="openai">{PROVIDER_LABELS.openai}</option>
-            <option value="anthropic">{PROVIDER_LABELS.anthropic}</option>
-            <option value="gemini">{PROVIDER_LABELS.gemini}</option>
-          </Select>
+            onValueChange={(v) => set('defaultProvider', v)}
+            options={[
+              { value: 'openai', label: PROVIDER_LABELS.openai },
+              { value: 'anthropic', label: PROVIDER_LABELS.anthropic },
+              { value: 'gemini', label: PROVIDER_LABELS.gemini },
+            ]}
+          />
           <p className="text-[10px] text-on-surface-variant/70">
             Usado quando o redator escolhe "Padrão (env)" no painel IA do editor de posts.
           </p>
@@ -189,27 +217,20 @@ export function LLMConfigSection() {
               }
             />
 
-            <div className="space-y-1.5">
-              <Label htmlFor={`model-${p}`} className="block">Modelo padrão</Label>
-              <Input
-                id={`model-${p}`}
-                placeholder={PROVIDER_PLACEHOLDERS[p].model}
-                value={
-                  p === 'openai' ? current.openaiModel
-                  : p === 'anthropic' ? current.anthropicModel
-                  : current.geminiModel
-                }
-                onChange={(e) =>
-                  set(
-                    p === 'openai' ? 'openaiModel' : p === 'anthropic' ? 'anthropicModel' : 'geminiModel',
-                    e.target.value,
-                  )
-                }
-              />
-              <p className="text-[10px] text-on-surface-variant/70">
-                Deixe vazio para usar o padrão do servidor ({PROVIDER_PLACEHOLDERS[p].model}).
-              </p>
-            </div>
+            <ModelPicker
+              provider={p}
+              value={
+                p === 'openai' ? current.openaiModel
+                : p === 'anthropic' ? current.anthropicModel
+                : current.geminiModel
+              }
+              onChange={(v) =>
+                set(
+                  p === 'openai' ? 'openaiModel' : p === 'anthropic' ? 'anthropicModel' : 'geminiModel',
+                  v,
+                )
+              }
+            />
 
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <Button
@@ -242,6 +263,80 @@ export function LLMConfigSection() {
           {update.isPending ? 'Salvando…' : 'Salvar alterações'}
         </Button>
       </div>
+    </div>
+  )
+}
+
+function ModelPicker({
+  provider,
+  value,
+  onChange,
+}: {
+  provider: AIProviderName
+  value: string
+  onChange: (v: string) => void
+}) {
+  const models = PROVIDER_MODELS[provider]
+  const known = models.some((m) => m.value === value)
+  const [customMode, setCustomMode] = useState(value !== '' && !known)
+  const selectValue = customMode ? CUSTOM_MODEL_VALUE : value || ''
+  const placeholder = PROVIDER_PLACEHOLDERS[provider].model
+
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={`model-${provider}`} className="block">
+        Modelo padrão
+      </Label>
+      <SelectStyled<string>
+        id={`model-${provider}`}
+        value={selectValue}
+        placeholder={`Padrão do servidor (${placeholder})`}
+        onValueChange={(v) => {
+          if (v === CUSTOM_MODEL_VALUE) {
+            setCustomMode(true)
+            onChange('')
+          } else {
+            setCustomMode(false)
+            onChange(v)
+          }
+        }}
+        options={[
+          ...models.map((m) => ({
+            value: m.value,
+            label: (
+              <span className="flex flex-col gap-0.5">
+                <span className="font-mono text-[12px]">{m.label}</span>
+                {m.hint && (
+                  <span className="text-[10px] text-on-surface-variant/70 normal-case">
+                    {m.hint}
+                  </span>
+                )}
+              </span>
+            ),
+          })),
+          {
+            value: CUSTOM_MODEL_VALUE,
+            label: (
+              <span className="text-[11px] uppercase tracking-[0.18em] text-on-surface-variant">
+                Outro (digitar manualmente)
+              </span>
+            ),
+          },
+        ]}
+      />
+      {customMode && (
+        <Input
+          id={`model-${provider}-custom`}
+          autoFocus
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="font-mono text-[12px]"
+        />
+      )}
+      <p className="text-[10px] text-on-surface-variant/70">
+        Deixe sem selecionar para usar o padrão do servidor ({placeholder}).
+      </p>
     </div>
   )
 }
