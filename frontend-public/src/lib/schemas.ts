@@ -39,6 +39,7 @@ export function organizationSchema() {
     sameAs: [
       COMPANY.socials.instagram,
       COMPANY.socials.linkedin,
+      COMPANY.socials.facebook,
     ],
     contactPoint: {
       '@type': 'ContactPoint',
