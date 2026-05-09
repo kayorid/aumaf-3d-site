@@ -3,32 +3,25 @@ import { env } from '../../../config/env'
 import { httpErrors } from '../../../lib/http-error'
 import { SYSTEM_PROMPT_PT_BR, buildUserPrompt } from '../prompts/blog-post.prompt'
 import { parseProviderJson } from '../parse-output'
-import type { AIProvider, ProviderInput, ProviderOutput } from '../provider.interface'
+import type { AIProvider, ProviderCredentials, ProviderInput, ProviderOutput } from '../provider.interface'
 
 export class AnthropicProvider implements AIProvider {
   readonly name = 'anthropic' as const
   readonly defaultModel = env.ANTHROPIC_MODEL
 
-  private client: Anthropic | null = null
-
-  private getClient(): Anthropic {
-    if (!env.ANTHROPIC_API_KEY) {
-      throw httpErrors.badRequest('AI_KEY_MISSING', 'ANTHROPIC_API_KEY não configurada')
+  async generatePost(input: ProviderInput, creds?: ProviderCredentials): Promise<ProviderOutput> {
+    const apiKey = creds?.apiKey || env.ANTHROPIC_API_KEY
+    if (!apiKey) {
+      throw httpErrors.badRequest('AI_KEY_MISSING', 'ANTHROPIC_API_KEY não configurada (use Settings → Integrações → IA)')
     }
-    if (!this.client) {
-      this.client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, timeout: 90_000 })
-    }
-    return this.client
-  }
-
-  async generatePost(input: ProviderInput): Promise<ProviderOutput> {
-    const client = this.getClient()
+    const model = creds?.model || this.defaultModel
+    const client = new Anthropic({ apiKey, timeout: 90_000 })
     const userPrompt = buildUserPrompt(input)
 
     let response: Awaited<ReturnType<typeof client.messages.create>>
     try {
       response = await client.messages.create({
-        model: this.defaultModel,
+        model,
         max_tokens: 8000,
         system: [
           {

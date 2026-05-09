@@ -11,6 +11,7 @@ import { UsersListPage } from '@/features/users/pages/UsersListPage'
 import { UserDetailPage } from '@/features/users/pages/UserDetailPage'
 import { SettingsPage } from '@/features/settings/pages/SettingsPage'
 import { BotyioConfigPage } from '@/features/integrations/pages/BotyioConfigPage'
+import { MediaLibraryPage } from '@/features/media/pages/MediaLibraryPage'
 import { CategoriesPage } from '@/features/categories/pages/CategoriesPage'
 import { NotFoundPage } from '@/components/layout/NotFoundPage'
 
@@ -34,6 +35,7 @@ export const router = createBrowserRouter([
           { path: '/usuarios/:id', element: <UserDetailPage /> },
           { path: '/settings', element: <SettingsPage /> },
           { path: '/integrations/botyio', element: <BotyioConfigPage /> },
+          { path: '/media', element: <MediaLibraryPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

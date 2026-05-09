@@ -3,32 +3,25 @@ import { env } from '../../../config/env'
 import { httpErrors } from '../../../lib/http-error'
 import { SYSTEM_PROMPT_PT_BR, buildUserPrompt } from '../prompts/blog-post.prompt'
 import { parseProviderJson } from '../parse-output'
-import type { AIProvider, ProviderInput, ProviderOutput } from '../provider.interface'
+import type { AIProvider, ProviderCredentials, ProviderInput, ProviderOutput } from '../provider.interface'
 
 export class GeminiProvider implements AIProvider {
   readonly name = 'gemini' as const
   readonly defaultModel = env.GEMINI_MODEL
 
-  private client: GoogleGenAI | null = null
-
-  private getClient(): GoogleGenAI {
-    if (!env.GEMINI_API_KEY) {
-      throw httpErrors.badRequest('AI_KEY_MISSING', 'GEMINI_API_KEY não configurada')
+  async generatePost(input: ProviderInput, creds?: ProviderCredentials): Promise<ProviderOutput> {
+    const apiKey = creds?.apiKey || env.GEMINI_API_KEY
+    if (!apiKey) {
+      throw httpErrors.badRequest('AI_KEY_MISSING', 'GEMINI_API_KEY não configurada (use Settings → Integrações → IA)')
     }
-    if (!this.client) {
-      this.client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY })
-    }
-    return this.client
-  }
-
-  async generatePost(input: ProviderInput): Promise<ProviderOutput> {
-    const client = this.getClient()
+    const model = creds?.model || this.defaultModel
+    const client = new GoogleGenAI({ apiKey })
     const userPrompt = buildUserPrompt(input)
 
     let response
     try {
       response = await client.models.generateContent({
-        model: this.defaultModel,
+        model,
         contents: userPrompt,
         config: {
           systemInstruction: SYSTEM_PROMPT_PT_BR,
@@ -48,7 +41,7 @@ export class GeminiProvider implements AIProvider {
 
     return {
       ...parsed,
-      model: this.defaultModel,
+      model,
       usage: {
         inputTokens: response.usageMetadata?.promptTokenCount ?? 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount ?? 0,

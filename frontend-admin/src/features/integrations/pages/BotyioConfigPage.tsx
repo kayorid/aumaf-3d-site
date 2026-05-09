@@ -149,8 +149,8 @@ export function BotyioConfigPage() {
             <h2 className="text-[11px] uppercase tracking-[0.2em] text-on-surface">Credenciais</h2>
           </header>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="enabled-toggle">Estado da integração</Label>
+          <div className="space-y-3">
+            <Label htmlFor="enabled-toggle" className="block">Estado da integração</Label>
             <Controller
               control={form.control}
               name="enabled"

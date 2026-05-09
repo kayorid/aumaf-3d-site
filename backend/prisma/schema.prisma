@@ -34,9 +34,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts       Post[]           @relation("AuthorPosts")
-  leadNotes   LeadNote[]       @relation("LeadNotesAuthor")
-  permissions UserPermission[]
+  posts        Post[]           @relation("AuthorPosts")
+  leadNotes    LeadNote[]       @relation("LeadNotesAuthor")
+  permissions  UserPermission[]
+  mediaAssets  MediaAsset[]     @relation("MediaCreator")
 
   @@map("users")
 }
@@ -175,6 +176,26 @@ model IntegrationSecret {
   @@unique([provider, key])
   @@index([provider])
   @@map("integration_secrets")
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  key          String   @unique
+  url          String
+  contentType  String
+  size         Int
+  width        Int?
+  height       Int?
+  originalName String
+  alt          String?
+  createdById  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  createdBy User? @relation("MediaCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([createdAt(sort: Desc)])
+  @@map("media_assets")
 }
 
 model Setting {
