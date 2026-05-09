@@ -8,16 +8,24 @@ import { usePosts, useDeletePost } from '../api/use-posts'
 import { PostStatusBadge } from '../components/PostStatusBadge'
 import { PostFilters } from '../components/PostFilters'
 import { Button } from '@/components/ui/button'
+import { useConfirm } from '@/components/ui/confirm-dialog'
 import type { PostListQuery } from '@aumaf/shared'
 
 export function PostsListPage() {
   const navigate = useNavigate()
+  const confirm = useConfirm()
   const [query, setQuery] = useState<Partial<PostListQuery>>({ page: 1, pageSize: 20 })
   const { data, isLoading, isFetching, isError, error } = usePosts(query)
   const deletePost = useDeletePost()
 
   const handleDelete = async (id: string, title: string) => {
-    if (!window.confirm(`Excluir o post "${title}"? Esta ação não pode ser desfeita.`)) return
+    const ok = await confirm({
+      title: 'Excluir post',
+      description: `Excluir o post "${title}"? Esta ação não pode ser desfeita.`,
+      confirmLabel: 'Excluir',
+      variant: 'danger',
+    })
+    if (!ok) return
     try {
       await deletePost.mutateAsync(id)
       toast.success('Post excluído')

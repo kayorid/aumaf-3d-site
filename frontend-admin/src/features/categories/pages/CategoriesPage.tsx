@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useConfirm } from '@/components/ui/confirm-dialog'
 import type { CategoryDtoWithCount } from '@aumaf/shared'
 import { ApiError } from '@/lib/api'
 
@@ -17,15 +18,28 @@ export function CategoriesPage() {
   const { data: categories, isLoading } = useCategoriesWithCount()
   const create = useCreateCategory()
   const del = useDeleteCategory()
+  const confirm = useConfirm()
   const [editing, setEditing] = useState<CategoryDtoWithCount | null>(null)
   const [creating, setCreating] = useState(false)
 
   const handleDelete = async (cat: CategoryDtoWithCount) => {
     if (cat.postCount > 0) {
-      alert(`A categoria "${cat.name}" tem ${cat.postCount} post(s) vinculado(s). Reatribua antes de excluir.`)
+      await confirm({
+        title: 'Categoria com posts vinculados',
+        description: `A categoria "${cat.name}" tem ${cat.postCount} post(s) vinculado(s). Reatribua antes de excluir.`,
+        confirmLabel: 'Entendi',
+        variant: 'primary',
+        hideCancel: true,
+      })
       return
     }
-    if (!window.confirm(`Excluir categoria "${cat.name}"?`)) return
+    const ok = await confirm({
+      title: 'Excluir categoria',
+      description: `Excluir categoria "${cat.name}"? Esta ação não pode ser desfeita.`,
+      confirmLabel: 'Excluir',
+      variant: 'danger',
+    })
+    if (!ok) return
     try {
       await del.mutateAsync(cat.id)
       toast.success('Categoria excluída')

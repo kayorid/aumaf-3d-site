@@ -37,6 +37,7 @@ import { MarkdownEditor } from '@/features/editor/MarkdownEditor'
 import { MediaPickerDialog } from '@/features/editor/MediaPickerDialog'
 import { AIPanel } from '@/features/ai/components/AIPanel'
 import { Button } from '@/components/ui/button'
+import { useConfirm } from '@/components/ui/confirm-dialog'
 import { Card } from '@/components/ui/card'
 import { Input, Textarea } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -52,6 +53,7 @@ export function PostEditorPage() {
   const navigate = useNavigate()
 
   const post = usePost(id)
+  const confirm = useConfirm()
   const categories = useCategories()
   const create = useCreatePost()
   const update = useUpdatePost(id ?? '')
@@ -198,7 +200,13 @@ export function PostEditorPage() {
 
   const handleDelete = async () => {
     if (!id) return
-    if (!window.confirm('Excluir este post? Esta ação não pode ser desfeita.')) return
+    const ok = await confirm({
+      title: 'Excluir post',
+      description: 'Excluir este post? Esta ação não pode ser desfeita.',
+      confirmLabel: 'Excluir',
+      variant: 'danger',
+    })
+    if (!ok) return
     try {
       await del.mutateAsync(id)
       toast.success('Post excluído')
@@ -358,7 +366,7 @@ export function PostEditorPage() {
         <aside className="space-y-4">
           {aiPanelOpen && (
             <AIPanel
-              onApply={(out) => {
+              onApply={async (out) => {
                 if (!form.getValues('title')) form.setValue('title', out.title, { shouldValidate: true })
                 if (!form.getValues('excerpt')) form.setValue('excerpt', out.excerpt)
                 if (!form.getValues('metaTitle')) form.setValue('metaTitle', out.metaTitle)
@@ -368,7 +376,14 @@ export function PostEditorPage() {
                   if (match) form.setValue('categoryId', match.id)
                 }
                 const current = form.getValues('content')
-                const shouldReplace = !current.trim() || window.confirm('Substituir o conteúdo atual pelo gerado pela IA?')
+                const shouldReplace =
+                  !current.trim() ||
+                  (await confirm({
+                    title: 'Substituir conteúdo',
+                    description: 'Já existe conteúdo no editor. Substituir pelo rascunho gerado pela IA?',
+                    confirmLabel: 'Substituir',
+                    variant: 'danger',
+                  }))
                 if (shouldReplace) {
                   form.setValue('content', out.content)
                   form.setValue('generatedByAi', true)
