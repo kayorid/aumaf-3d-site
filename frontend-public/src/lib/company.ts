@@ -26,7 +26,7 @@ export const COMPANY = {
     phone: '+5516992863412',
     phoneDisplay: '(16) 99286-3412',
     whatsapp: 'https://wa.me/5516992863412',
-    email: 'comercial@auma3d.com.br',
+    email: 'comercial@aumaf3d.com.br',
   },
   hours: {
     open: '08:00',
@@ -35,8 +35,8 @@ export const COMPANY = {
     displayPt: 'Segunda – Sexta, 08h–18h',
   },
   socials: {
-    instagram: 'https://instagram.com/auma.3d/',
-    linkedin: 'https://linkedin.com/company/auma3d/',
+    instagram: 'https://www.instagram.com/aumaf3d',
+    linkedin: 'https://www.linkedin.com/company/aumaf3d',
     facebook: 'https://facebook.com/auma3d',
   },
   serviceAreaCountry: 'BR',

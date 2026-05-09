@@ -3,7 +3,7 @@
   Empresa: AUMAF 3D — Manufatura Aditiva Industrial
   Local: São Carlos – SP, Brasil
   Site: https://aumaf3d.com.br
-  Contato: comercial@auma3d.com.br
+  Contato: comercial@aumaf3d.com.br
 
 /* DESENVOLVIMENTO */
 
