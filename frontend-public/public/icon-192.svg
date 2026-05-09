@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="32" fill="#000000"/>
-  <text x="96" y="86" font-family="'Pirulen','Space Grotesk',sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2">AUMAF</text>
-  <text x="96" y="138" font-family="'Pirulen','Space Grotesk',sans-serif" font-size="46" font-weight="700" fill="#61c54f" text-anchor="middle" letter-spacing="4">3D</text>
-  <line x1="36" y1="156" x2="156" y2="156" stroke="#61c54f" stroke-opacity="0.4" stroke-width="1"/>
-</svg>
