@@ -2,12 +2,19 @@ import { useMemo, type ReactNode } from 'react'
 import { useMyPermissions } from '../api/use-users'
 
 export function usePermissions() {
-  const { data, isLoading } = useMyPermissions()
+  const { data, isLoading, isError } = useMyPermissions()
   const set = useMemo(() => new Set(data ?? []), [data])
+  // Fail-open: se a API de permissões está indisponível ou ainda carregando,
+  // o admin não fica sem nada — gating é apenas defesa em profundidade,
+  // o backend já valida cada endpoint.
+  const ready = !isLoading && !isError && Array.isArray(data)
   return {
     isLoading,
+    isError,
+    ready,
     permissions: set,
-    can: (feature: string, action: 'view' | 'edit') => set.has(`${feature}:${action}`),
+    can: (feature: string, action: 'view' | 'edit') =>
+      ready ? set.has(`${feature}:${action}`) : true,
   }
 }
 
