@@ -19,7 +19,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/leads',     label: 'Leads',      icon: Users,           number: '04', feature: 'leads' },
   { to: '/settings',  label: 'Settings',   icon: Settings,        number: '05', feature: 'settings' },
   { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '06', feature: 'botyio' },
-  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '07', feature: 'media', disabled: true },
+  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '07', feature: 'media' },
   { to: '/usuarios',  label: 'Usuários',   icon: ShieldCheck,     number: '08', feature: 'users' },
 ]
 

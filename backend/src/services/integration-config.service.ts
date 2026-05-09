@@ -42,6 +42,7 @@ function cacheKeyFor(provider: string): string {
 
 export function invalidateLocalCache(provider: string): void {
   cache.delete(cacheKeyFor(provider))
+  if (provider === 'llm') llmCache.delete(`config:llm`)
   logger.debug({ provider }, 'integration-config cache local invalidado')
 }
 
@@ -190,8 +191,155 @@ export async function setBotyioField(
   })
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// LLM provider credentials (OpenAI / Anthropic / Gemini)
+// ─────────────────────────────────────────────────────────────────────
+
+export const LLM_PROVIDER = 'llm'
+
+export const LLM_KEYS = {
+  DEFAULT_PROVIDER: 'DEFAULT_PROVIDER',
+  OPENAI_API_KEY: 'OPENAI_API_KEY',
+  OPENAI_MODEL: 'OPENAI_MODEL',
+  ANTHROPIC_API_KEY: 'ANTHROPIC_API_KEY',
+  ANTHROPIC_MODEL: 'ANTHROPIC_MODEL',
+  GEMINI_API_KEY: 'GEMINI_API_KEY',
+  GEMINI_MODEL: 'GEMINI_MODEL',
+} as const
+
+const LLM_SENSITIVE_KEYS = new Set<string>([
+  LLM_KEYS.OPENAI_API_KEY,
+  LLM_KEYS.ANTHROPIC_API_KEY,
+  LLM_KEYS.GEMINI_API_KEY,
+])
+
+export type LLMProviderName = 'anthropic' | 'openai' | 'gemini'
+
+interface LLMConfigInternal {
+  defaultProvider: LLMProviderName
+  envFallbacks: Record<LLMProviderName, { apiKey: boolean }>
+  providers: Record<
+    LLMProviderName,
+    {
+      apiKey: string | null
+      model: string | null
+      meta: { updatedAt: Date | null; updatedBy: string | null; lastFour: string | null } | null
+    }
+  >
+}
+
+async function readLLMFromDb(): Promise<LLMConfigInternal> {
+  const rows = await prisma.integrationSecret.findMany({
+    where: { provider: LLM_PROVIDER },
+  })
+  const byKey = new Map(rows.map((r) => [r.key, r]))
+
+  const decryptIfPresent = (key: string): string | null => {
+    const row = byKey.get(key)
+    if (!row) return null
+    return decryptValue({
+      ciphertext: Buffer.from(row.ciphertext),
+      iv: Buffer.from(row.iv),
+      authTag: Buffer.from(row.authTag),
+    })
+  }
+  const metaFor = (key: string) => {
+    const row = byKey.get(key)
+    if (!row) return null
+    return { updatedAt: row.updatedAt, updatedBy: row.updatedBy, lastFour: row.lastFour }
+  }
+
+  const defaultRaw = decryptIfPresent(LLM_KEYS.DEFAULT_PROVIDER)
+  const defaultProvider = (
+    defaultRaw && ['anthropic', 'openai', 'gemini'].includes(defaultRaw)
+      ? defaultRaw
+      : env.AI_PROVIDER
+  ) as LLMProviderName
+
+  return {
+    defaultProvider,
+    envFallbacks: {
+      anthropic: { apiKey: !!env.ANTHROPIC_API_KEY },
+      openai: { apiKey: !!env.OPENAI_API_KEY },
+      gemini: { apiKey: !!env.GEMINI_API_KEY },
+    },
+    providers: {
+      openai: {
+        apiKey: decryptIfPresent(LLM_KEYS.OPENAI_API_KEY),
+        model: decryptIfPresent(LLM_KEYS.OPENAI_MODEL),
+        meta: metaFor(LLM_KEYS.OPENAI_API_KEY),
+      },
+      anthropic: {
+        apiKey: decryptIfPresent(LLM_KEYS.ANTHROPIC_API_KEY),
+        model: decryptIfPresent(LLM_KEYS.ANTHROPIC_MODEL),
+        meta: metaFor(LLM_KEYS.ANTHROPIC_API_KEY),
+      },
+      gemini: {
+        apiKey: decryptIfPresent(LLM_KEYS.GEMINI_API_KEY),
+        model: decryptIfPresent(LLM_KEYS.GEMINI_MODEL),
+        meta: metaFor(LLM_KEYS.GEMINI_API_KEY),
+      },
+    },
+  }
+}
+
+const llmCacheKey = `config:${LLM_PROVIDER}`
+const llmCache = new Map<string, CacheEntry<LLMConfigInternal>>()
+
+export function invalidateLLMCacheLocal(): void {
+  llmCache.delete(llmCacheKey)
+}
+
+export async function getLLMConfig(): Promise<LLMConfigInternal> {
+  const cached = llmCache.get(llmCacheKey)
+  if (cached && cached.expiresAt > Date.now()) return cached.data
+  const data = await readLLMFromDb()
+  llmCache.set(llmCacheKey, { data, expiresAt: Date.now() + CACHE_TTL_MS })
+  return data
+}
+
+export async function getLLMConfigDto() {
+  const cfg = await getLLMConfig()
+  const buildSecret = (apiKey: string | null, meta: LLMConfigInternal['providers']['openai']['meta']) => {
+    const isSet = !!apiKey
+    return {
+      masked: isSet ? maskSecret(apiKey ?? '', 4).replace(/^•+/, '••••') : '',
+      isSet,
+      updatedAt: meta?.updatedAt?.toISOString() ?? null,
+      updatedBy: meta?.updatedBy ?? null,
+    }
+  }
+  const providers = (['anthropic', 'openai', 'gemini'] as const).map((p) => ({
+    provider: p,
+    apiKey: buildSecret(cfg.providers[p].apiKey, cfg.providers[p].meta),
+    model: cfg.providers[p].model,
+    envFallback: cfg.envFallbacks[p].apiKey,
+  }))
+  return {
+    defaultProvider: cfg.defaultProvider,
+    providers,
+  }
+}
+
+export async function setLLMField(
+  key: keyof typeof LLM_KEYS,
+  value: string,
+  userId?: string | null,
+): Promise<void> {
+  const dbKey = LLM_KEYS[key]
+  await setSecret({
+    provider: LLM_PROVIDER,
+    key: dbKey,
+    value,
+    userId,
+    isSensitive: LLM_SENSITIVE_KEYS.has(dbKey),
+  })
+  invalidateLLMCacheLocal()
+}
+
 /** Apenas para testes. */
 export function __resetIntegrationConfigCache(): void {
   cache.clear()
+  llmCache.clear()
   pubsubSubscribed = false
 }

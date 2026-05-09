@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Save, BarChart3, Building2, Webhook } from 'lucide-react'
+import { Save, BarChart3, Building2, Sparkles } from 'lucide-react'
 import { UpdateSettingsSchema, type UpdateSettingsInput } from '@aumaf/shared'
 import { useSettings, useUpdateSettings } from '../api/use-settings'
 import { Button } from '@/components/ui/button'
@@ -11,13 +11,14 @@ import { Label } from '@/components/ui/label'
 import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { LLMConfigSection } from '../components/LLMConfigSection'
 
-type Tab = 'geral' | 'analytics' | 'integracoes'
+type Tab = 'geral' | 'analytics' | 'ia'
 
 const TABS: { id: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'geral', label: 'Geral', icon: Building2 },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { id: 'integracoes', label: 'Integrações', icon: Webhook },
+  { id: 'ia', label: 'IA / LLM', icon: Sparkles },
 ]
 
 export function SettingsPage() {
@@ -150,18 +151,9 @@ export function SettingsPage() {
           </div>
         )}
 
-        {tab === 'integracoes' && (
-          <div className="bg-surface-low/60 border border-white/10 rounded-sm p-6 space-y-5 max-w-2xl">
-            <Field label="Webhook do Botyo (WhatsApp)" error={form.formState.errors.botyoWebhookUrl?.message}>
-              <Input {...form.register('botyoWebhookUrl')} placeholder="https://botyo.com.br/webhook/..." />
-            </Field>
-            <p className="text-[11px] text-on-surface-variant/70">
-              Mais integrações chegam em Phase 3.
-            </p>
-          </div>
-        )}
+        {tab === 'ia' && <LLMConfigSection />}
 
-        <div className="flex items-center justify-end gap-3">
+        <div className={cn('flex items-center justify-end gap-3', tab === 'ia' && 'hidden')}>
           {settings?.updatedAt && (
             <span className="text-[11px] text-on-surface-variant/70">
               Última atualização: {new Date(settings.updatedAt).toLocaleString('pt-BR')}

@@ -22,6 +22,7 @@ import { settingsRoutes } from './routes/settings.routes'
 import { healthRoutes } from './routes/health.routes'
 import { botyioWebhookRoutes } from './routes/botyio-webhook.routes'
 import { adminIntegrationRoutes } from './routes/admin-integration.routes'
+import { mediaRoutes } from './routes/media.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -70,6 +71,7 @@ export function createApp() {
   app.use('/api/v1/posts', postRoutes)
   app.use('/api/v1/categories', categoryRoutes)
   app.use('/api/v1/uploads', uploadRoutes)
+  app.use('/api/v1/media', mediaRoutes)
   app.use('/api/v1/leads', leadRoutes)
   app.use('/api/v1/ai', aiRoutes)
   app.use('/api/v1/metrics', metricsRoutes)

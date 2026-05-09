@@ -3,32 +3,25 @@ import { env } from '../../../config/env'
 import { httpErrors } from '../../../lib/http-error'
 import { SYSTEM_PROMPT_PT_BR, buildUserPrompt } from '../prompts/blog-post.prompt'
 import { parseProviderJson } from '../parse-output'
-import type { AIProvider, ProviderInput, ProviderOutput } from '../provider.interface'
+import type { AIProvider, ProviderCredentials, ProviderInput, ProviderOutput } from '../provider.interface'
 
 export class OpenAIProvider implements AIProvider {
   readonly name = 'openai' as const
   readonly defaultModel = env.OPENAI_MODEL
 
-  private client: OpenAI | null = null
-
-  private getClient(): OpenAI {
-    if (!env.OPENAI_API_KEY) {
-      throw httpErrors.badRequest('AI_KEY_MISSING', 'OPENAI_API_KEY não configurada')
+  async generatePost(input: ProviderInput, creds?: ProviderCredentials): Promise<ProviderOutput> {
+    const apiKey = creds?.apiKey || env.OPENAI_API_KEY
+    if (!apiKey) {
+      throw httpErrors.badRequest('AI_KEY_MISSING', 'OPENAI_API_KEY não configurada (use Settings → Integrações → IA)')
     }
-    if (!this.client) {
-      this.client = new OpenAI({ apiKey: env.OPENAI_API_KEY, timeout: 90_000 })
-    }
-    return this.client
-  }
-
-  async generatePost(input: ProviderInput): Promise<ProviderOutput> {
-    const client = this.getClient()
+    const model = creds?.model || this.defaultModel
+    const client = new OpenAI({ apiKey, timeout: 90_000 })
     const userPrompt = buildUserPrompt(input)
 
     let response: Awaited<ReturnType<typeof client.chat.completions.create>>
     try {
       response = await client.chat.completions.create({
-        model: this.defaultModel,
+        model,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT_PT_BR },
           { role: 'user', content: userPrompt },

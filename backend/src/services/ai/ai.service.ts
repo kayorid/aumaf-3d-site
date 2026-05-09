@@ -1,6 +1,7 @@
 import { env } from '../../config/env'
 import { logger } from '../../config/logger'
 import { httpErrors } from '../../lib/http-error'
+import { getLLMConfig } from '../integration-config.service'
 import { AnthropicProvider } from './providers/anthropic.provider'
 import { OpenAIProvider } from './providers/openai.provider'
 import { GeminiProvider } from './providers/gemini.provider'
@@ -21,16 +22,25 @@ export function getProvider(requested?: AIProviderName): AIProvider {
 }
 
 export async function generatePost(input: GeneratePostInput): Promise<GeneratePostOutput> {
-  const provider = getProvider(input.provider)
+  const llm = await getLLMConfig()
+  const providerName = input.provider ?? llm.defaultProvider
+  const provider = getProvider(providerName)
+  const creds = {
+    apiKey: llm.providers[providerName].apiKey,
+    model: llm.providers[providerName].model,
+  }
   const start = Date.now()
 
   try {
-    const output = await provider.generatePost({
-      topic: input.topic,
-      keywords: input.keywords,
-      tone: input.tone,
-      targetWordCount: input.targetWordCount,
-    })
+    const output = await provider.generatePost(
+      {
+        topic: input.topic,
+        keywords: input.keywords,
+        tone: input.tone,
+        targetWordCount: input.targetWordCount,
+      },
+      creds,
+    )
     const latencyMs = Date.now() - start
 
     logger.info(
@@ -41,6 +51,7 @@ export async function generatePost(input: GeneratePostInput): Promise<GeneratePo
         outputTokens: output.usage.outputTokens,
         latencyMs,
         topic: input.topic.slice(0, 80),
+        credsSource: creds.apiKey ? 'db' : 'env',
       },
       'AI post generated',
     )
