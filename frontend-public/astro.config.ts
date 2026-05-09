@@ -55,7 +55,10 @@ export default defineConfig({
         if (url.endsWith('/blog/')) {
           return { ...item, priority: 0.85, changefreq: EnumChangefreq.WEEKLY }
         }
-        if (url.includes('/portfolio') || url.includes('/materiais') || url.includes('/faq')) {
+        if (url.includes('/portfolio') || url.includes('/materiais')) {
+          return { ...item, priority: 0.85, changefreq: EnumChangefreq.MONTHLY }
+        }
+        if (url.includes('/faq')) {
           return { ...item, priority: 0.75, changefreq: EnumChangefreq.MONTHLY }
         }
         return item
