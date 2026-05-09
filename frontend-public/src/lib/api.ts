@@ -12,13 +12,21 @@ import type {
   PublicSettingsDto,
 } from '@aumaf/shared'
 
-const DEFAULT_BASE = 'http://localhost:3000/api/v1'
+const DEFAULT_BASE = 'http://localhost:3000'
+const API_PREFIX = '/api/v1'
 
-const BASE_URL = (
+// Aceita PUBLIC_API_URL como origem (ex.: https://api-aumaf.kayoridolfi.ai)
+// OU já com sufixo /api/v1 (compat retroativa). Sempre normaliza para origem,
+// e o prefixo /api/v1 é acrescentado pelos paths abaixo.
+const RAW_BASE = (
   import.meta.env.PUBLIC_API_URL ||
   process.env.PUBLIC_API_URL ||
   DEFAULT_BASE
 ).replace(/\/$/, '')
+
+const BASE_URL = RAW_BASE.endsWith(API_PREFIX)
+  ? RAW_BASE.slice(0, -API_PREFIX.length)
+  : RAW_BASE
 
 interface FetchOptions {
   /** Cache hint para o fetch interno do Astro (build time) */
@@ -28,7 +36,7 @@ interface FetchOptions {
 }
 
 async function apiGet<T>(path: string, options: FetchOptions = {}): Promise<T> {
-  const url = `${BASE_URL}${path}`
+  const url = `${BASE_URL}${API_PREFIX}${path}`
   const res = await fetch(url, {
     headers: { Accept: 'application/json', ...options.headers },
   })
