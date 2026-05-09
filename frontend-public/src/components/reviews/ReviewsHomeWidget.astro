@@ -4,7 +4,8 @@ import ReviewStars from './ReviewStars.astro'
 import ReviewCard from './ReviewCard.astro'
 
 const data = await getReviews()
-const cards = data ? data.reviews.slice(0, 3) : []
+const cards = data ? data.reviews.slice(0, 9) : []
+const carouselId = `home-reviews-${Math.random().toString(36).slice(2, 9)}`
 ---
 
 {data && cards.length > 0 && (
@@ -32,13 +33,67 @@ const cards = data ? data.reviews.slice(0, 3) : []
         </aside>
       </div>
 
-      <ul role="list" class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-        {cards.map((r) => (
-          <li class="flex">
-            <ReviewCard review={r} placeUrl={data.placeUrl} />
-          </li>
-        ))}
-      </ul>
+      <!-- ============== CARROSSEL ============== -->
+      <div
+        class="reviews-carousel relative"
+        data-carousel={carouselId}
+        data-autoplay="6000"
+        role="region"
+        aria-roledescription="carrossel"
+        aria-label="Avaliações de clientes no Google"
+      >
+        <!-- Track scrollável com snap -->
+        <ul
+          role="list"
+          class="reviews-track flex gap-5 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-edge px-edge"
+          data-track
+          tabindex="0"
+          aria-live="polite"
+        >
+          {cards.map((r, i) => (
+            <li
+              class="reviews-slide snap-start shrink-0 basis-[85%] sm:basis-[60%] md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)] flex"
+              data-slide-index={i}
+              aria-roledescription="slide"
+              aria-label={`Avaliação ${i + 1} de ${cards.length}`}
+            >
+              <ReviewCard review={r} placeUrl={data.placeUrl} />
+            </li>
+          ))}
+        </ul>
+
+        <!-- Setas (desktop) -->
+        <button
+          type="button"
+          class="reviews-arrow reviews-arrow--prev hidden md:flex absolute top-1/2 -translate-y-1/2 -left-3 lg:-left-5 z-10 w-11 h-11 items-center justify-center rounded-full bg-surface-base/85 border border-white/12 backdrop-blur-sm text-on-surface hover:text-primary-container hover:border-primary-container/50 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed"
+          data-prev
+          aria-label="Avaliação anterior"
+        >
+          <span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">chevron_left</span>
+        </button>
+        <button
+          type="button"
+          class="reviews-arrow reviews-arrow--next hidden md:flex absolute top-1/2 -translate-y-1/2 -right-3 lg:-right-5 z-10 w-11 h-11 items-center justify-center rounded-full bg-surface-base/85 border border-white/12 backdrop-blur-sm text-on-surface hover:text-primary-container hover:border-primary-container/50 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed"
+          data-next
+          aria-label="Próxima avaliação"
+        >
+          <span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">chevron_right</span>
+        </button>
+
+        <!-- Dots indicador -->
+        <div class="reviews-dots flex items-center justify-center gap-2 mt-8" role="tablist" aria-label="Selecionar avaliação">
+          {cards.map((_, i) => (
+            <button
+              type="button"
+              role="tab"
+              class="reviews-dot w-2 h-2 rounded-full bg-white/15 hover:bg-primary-container/60 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container data-[active=true]:bg-primary-container data-[active=true]:w-6"
+              data-dot={i}
+              aria-label={`Ir para avaliação ${i + 1}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+            ></button>
+          ))}
+        </div>
+      </div>
 
       <div class="mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <a
@@ -60,5 +115,130 @@ const cards = data ? data.reviews.slice(0, 3) : []
         </a>
       </div>
     </div>
+
+    <style>
+      .reviews-track {
+        scrollbar-width: none;
+      }
+      .reviews-track::-webkit-scrollbar { display: none; }
+      .reviews-arrow { will-change: transform; }
+    </style>
+
+    <script>
+      type CarouselEl = HTMLElement & { __initialized?: boolean }
+
+      function initCarousel(root: CarouselEl) {
+        if (root.__initialized) return
+        root.__initialized = true
+
+        const track = root.querySelector<HTMLUListElement>('[data-track]')
+        const prevBtn = root.querySelector<HTMLButtonElement>('[data-prev]')
+        const nextBtn = root.querySelector<HTMLButtonElement>('[data-next]')
+        const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot]'))
+        if (!track) return
+        const trackEl: HTMLUListElement = track
+
+        const slides = Array.from(track.querySelectorAll<HTMLLIElement>('.reviews-slide'))
+        if (slides.length === 0) return
+
+        const autoplayMs = Number(root.dataset.autoplay) || 0
+        let autoplayTimer: ReturnType<typeof setInterval> | null = null
+        let isHovering = false
+        let isFocusInside = false
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+        function getCurrentIndex() {
+          const trackLeft = trackEl.scrollLeft
+          let bestIdx = 0
+          let bestDist = Infinity
+          slides.forEach((s, i) => {
+            const d = Math.abs(s.offsetLeft - trackLeft)
+            if (d < bestDist) { bestDist = d; bestIdx = i }
+          })
+          return bestIdx
+        }
+
+        function update() {
+          const idx = getCurrentIndex()
+          dots.forEach((d, i) => {
+            const active = i === idx
+            d.dataset.active = active ? 'true' : 'false'
+            d.setAttribute('aria-selected', active ? 'true' : 'false')
+          })
+          if (prevBtn) prevBtn.disabled = idx === 0
+          if (nextBtn) nextBtn.disabled = idx >= slides.length - 1
+        }
+
+        function goTo(i: number, behavior: ScrollBehavior = 'smooth') {
+          const target = slides[Math.max(0, Math.min(slides.length - 1, i))]
+          if (!target) return
+          trackEl.scrollTo({ left: target.offsetLeft, behavior })
+        }
+
+        function next() {
+          const i = getCurrentIndex()
+          if (i >= slides.length - 1) goTo(0)
+          else goTo(i + 1)
+        }
+
+        function prev() {
+          const i = getCurrentIndex()
+          goTo(i - 1)
+        }
+
+        function startAutoplay() {
+          if (!autoplayMs || prefersReducedMotion) return
+          stopAutoplay()
+          autoplayTimer = setInterval(() => {
+            if (isHovering || isFocusInside || document.hidden) return
+            next()
+          }, autoplayMs)
+        }
+
+        function stopAutoplay() {
+          if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null }
+        }
+
+        prevBtn?.addEventListener('click', () => { prev(); })
+        nextBtn?.addEventListener('click', () => { next(); })
+        dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)))
+
+        let scrollRaf: number | null = null
+        trackEl.addEventListener('scroll', () => {
+          if (scrollRaf) cancelAnimationFrame(scrollRaf)
+          scrollRaf = requestAnimationFrame(update)
+        }, { passive: true })
+
+        trackEl.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev() }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); next() }
+          else if (e.key === 'Home') { e.preventDefault(); goTo(0) }
+          else if (e.key === 'End') { e.preventDefault(); goTo(slides.length - 1) }
+        })
+
+        root.addEventListener('mouseenter', () => { isHovering = true })
+        root.addEventListener('mouseleave', () => { isHovering = false })
+        root.addEventListener('focusin', () => { isFocusInside = true })
+        root.addEventListener('focusout', () => { isFocusInside = false })
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) stopAutoplay()
+          else startAutoplay()
+        })
+
+        update()
+        startAutoplay()
+      }
+
+      function initAll() {
+        document.querySelectorAll<CarouselEl>('[data-carousel]').forEach(initCarousel)
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll, { once: true })
+      } else {
+        initAll()
+      }
+    </script>
   </section>
 )}

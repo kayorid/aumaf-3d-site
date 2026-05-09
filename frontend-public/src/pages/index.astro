@@ -6,6 +6,19 @@ import Footer from '../components/Footer.astro'
 import ReviewsHomeWidget from '../components/reviews/ReviewsHomeWidget.astro'
 import { COMPANY } from '../lib/company'
 import { itemListSchema } from '../lib/schemas'
+import { fetchPublicPosts } from '../lib/api'
+import { resolveCoverImage } from '../lib/blog-defaults'
+import { formatPostDateShort } from '../lib/render-post'
+
+let allPosts: Awaited<ReturnType<typeof fetchPublicPosts>>['data'] = []
+try {
+  const res = await fetchPublicPosts({ pageSize: 12 })
+  allPosts = res.data
+} catch (err) {
+  console.warn('[home] fetchPublicPosts falhou, usando fallback estático:', (err as Error).message)
+}
+const featuredPost = allPosts.find((p) => p.featured) ?? allPosts[0] ?? null
+const otherPosts = allPosts.filter((p) => p.slug !== featuredPost?.slug).slice(0, 3)
 
 const description = 'AUMAF 3D — manufatura aditiva industrial em São Carlos, SP. Impressão 3D em metal 316L, polímeros (PEEK, PA, PET-G CF15) e resina, com tolerância ±0.05mm. +500 projetos entregues, orçamento em até 24h.'
 
@@ -124,29 +137,18 @@ const homeSchemas = [
 
         <!-- Coluna direita: painel de vídeo/mídia -->
         <div class="hidden lg:flex flex-col gap-4 opacity-0 animate-fade-up" style="animation-delay:300ms;animation-fill-mode:forwards;">
-          <!-- VIDEO_HERO: slot de vídeo principal -->
+          <!-- IMAGE_HERO: imagem principal — impressora AUMAF 3D -->
           <div class="relative aspect-video rounded-sm overflow-hidden bg-surface-base border border-white/8 group" style="box-shadow:0 0 60px rgba(0,0,0,0.8),0 0 30px rgba(97,197,79,0.05);">
-            <video
+            <img
+              src="/images/hero-aumaf-printer.webp"
+              alt="Impressora 3D industrial AUMAF 3D imprimindo engrenagem metálica — extrusor com glow verde, ambiente cinematográfico"
               class="absolute inset-0 w-full h-full object-cover"
-              poster="/images/hero-fdm-extrusion.webp"
-              autoplay
-              loop
-              muted
-              playsinline
-              preload="metadata"
-              aria-label="Bico extrusor FDM em ação com glow verde AUMAF — depositando filamento em peça com geometria treliçada"
-            >
-              <source src="/videos/hero-fdm-extrusion.mp4" type="video/mp4" />
-              <img
-                src="/images/hero-fdm-extrusion.webp"
-                alt="Bico extrusor FDM em ação com glow verde AUMAF — depositando filamento em peça com geometria treliçada"
-                class="absolute inset-0 w-full h-full object-cover"
-                width="1376"
-                height="768"
-                loading="eager"
-                decoding="async"
-              />
-            </video>
+              width="1920"
+              height="1072"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
             <div class="absolute inset-0 bg-tech-grid opacity-20 mix-blend-overlay"></div>
             <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 40%,rgba(97,197,79,0.08) 0%,transparent 65%),linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.45) 100%);"></div>
 
@@ -158,7 +160,7 @@ const homeSchemas = [
 
             <!-- Labels sobrepostos -->
             <div class="absolute top-3 left-1/2 -translate-x-1/2">
-              <span class="text-label-caps text-primary-container/30 uppercase tracking-widest text-[9px]">VIDEO_HERO</span>
+              <span class="text-label-caps text-primary-container/30 uppercase tracking-widest text-[9px]">AUMAF_3D // CORE_UNIT</span>
             </div>
             <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
           </div>
@@ -776,82 +778,95 @@ const homeSchemas = [
         </a>
       </div>
 
-      <!-- Post em destaque (full-width) -->
-      <a href="/blog/fdm-vs-sla-vs-sls" class="group block mb-gutter">
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-sm overflow-hidden border border-white/8 hover:border-primary-container/20 transition-all duration-300">
-          <!-- Visual destaque -->
-          <div class="lg:col-span-3 relative h-64 lg:h-auto bg-gradient-to-br from-primary-container/10 via-surface-high to-surface-base overflow-hidden">
-            <div class="absolute inset-0 bg-tech-grid opacity-30"></div>
-            <div class="absolute inset-0" style="background:radial-gradient(circle at 30% 60%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
-            <div class="absolute inset-0 flex items-center justify-center opacity-20">
-              <svg viewBox="0 0 200 200" fill="none" class="w-48 h-48">
-                <rect x="20" y="20" width="160" height="160" stroke="#61c54f" stroke-width="0.5"/>
-                <rect x="50" y="50" width="100" height="100" stroke="#61c54f" stroke-width="0.5"/>
-                <rect x="80" y="80" width="40" height="40" stroke="#61c54f" stroke-width="1" fill="rgba(97,197,79,0.05)"/>
-                <line x1="20" y1="100" x2="180" y2="100" stroke="#61c54f" stroke-width="0.3"/>
-                <line x1="100" y1="20" x2="100" y2="180" stroke="#61c54f" stroke-width="0.3"/>
-                <circle cx="100" cy="100" r="8" fill="#61c54f" opacity="0.6"/>
-                <circle cx="100" cy="100" r="20" stroke="#61c54f" stroke-width="0.5"/>
-                <circle cx="100" cy="100" r="40" stroke="#61c54f" stroke-width="0.3"/>
-              </svg>
+      {featuredPost && (
+        <!-- Post em destaque (full-width) — capa real do post -->
+        <a href={`/blog/${featuredPost.slug}`} class="group block mb-gutter">
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-sm overflow-hidden border border-white/8 hover:border-primary-container/20 transition-all duration-300">
+            <!-- Visual destaque com cover real -->
+            <div class="lg:col-span-3 relative h-64 lg:h-auto min-h-[320px] overflow-hidden bg-surface-high">
+              <img
+                src={resolveCoverImage(featuredPost.coverImageUrl, featuredPost.category)}
+                alt={`Capa: ${featuredPost.title}`}
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              />
+              <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.55) 100%);"></div>
+              <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay"></div>
+              {featuredPost.category?.name && (
+                <div class="absolute top-4 left-4"><span class="pill-active text-[9px]">{featuredPost.category.name}</span></div>
+              )}
+              <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
+              <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-primary-container/30"></div>
+              <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-primary-container/30"></div>
             </div>
-            <div class="absolute top-4 left-4"><span class="pill-active text-[9px]">Guia Técnico</span></div>
-            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
-            <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-primary-container/30"></div>
-            <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-primary-container/30"></div>
-          </div>
-          <!-- Conteúdo -->
-          <div class="lg:col-span-2 p-8 lg:p-10 flex flex-col justify-between bg-surface-base">
-            <div>
-              <div class="flex items-center gap-3 mb-4">
-                <span class="pill-green text-[9px]">FDM vs SLA vs SLS</span>
-                <span class="text-[11px] text-tertiary">8 min leitura</span>
+            <!-- Conteúdo -->
+            <div class="lg:col-span-2 p-8 lg:p-10 flex flex-col justify-between bg-surface-base">
+              <div>
+                <div class="flex items-center gap-3 mb-4">
+                  {featuredPost.category?.name && (
+                    <span class="pill-green text-[9px]">{featuredPost.category.name}</span>
+                  )}
+                  {featuredPost.readingTimeMin != null && (
+                    <span class="text-[11px] text-tertiary">{featuredPost.readingTimeMin} min leitura</span>
+                  )}
+                </div>
+                <h3 class="text-headline-md font-bold text-white uppercase tracking-[-0.01em] leading-tight mb-4 group-hover:text-primary-container transition-colors duration-200">
+                  {featuredPost.title}
+                </h3>
+                {featuredPost.excerpt && (
+                  <p class="text-body-md text-tertiary leading-relaxed">{featuredPost.excerpt}</p>
+                )}
               </div>
-              <h3 class="text-headline-md font-bold text-white uppercase tracking-[-0.01em] leading-tight mb-4 group-hover:text-primary-container transition-colors duration-200">
-                FDM, SLA ou SLS? O guia definitivo para escolher o processo certo
-              </h3>
-              <p class="text-body-md text-tertiary leading-relaxed">Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, tolerância, materiais e casos de uso reais de cada processo.</p>
-            </div>
-            <div class="flex items-center justify-between mt-8 pt-6 border-t border-white/8">
-              <span class="text-[11px] text-tertiary">Mai 2026 · Equipe AUMAF 3D</span>
-              <span class="text-label-caps text-primary-container uppercase tracking-[0.15em] text-[10px] flex items-center gap-1 group-hover:gap-3 transition-all duration-200">
-                Ler guia <span class="material-symbols-outlined text-sm">arrow_forward</span>
-              </span>
+              <div class="flex items-center justify-between mt-8 pt-6 border-t border-white/8">
+                <span class="text-[11px] text-tertiary">
+                  {featuredPost.publishedAt ? formatPostDateShort(featuredPost.publishedAt) : ''} · Equipe AUMAF 3D
+                </span>
+                <span class="text-label-caps text-primary-container uppercase tracking-[0.15em] text-[10px] flex items-center gap-1 group-hover:gap-3 transition-all duration-200">
+                  Ler guia <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </a>
+        </a>
+      )}
 
-      <!-- Grid 3 posts menores -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-        {[
-          {slug:'guia-materiais-impressao-3d',    cat:'Materiais',  time:'6 min', title:'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação',       excerpt:'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.'},
-          {slug:'formula-sae-case-study-completo',cat:'Case Study', time:'5 min', title:'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista',                    excerpt:'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.'},
-          {slug:'engenharia-reversa-passo-a-passo',cat:'Engenharia',time:'7 min', title:'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original',        excerpt:'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.'},
-        ].map((p, i) => (
-          <a href={`/blog/${p.slug}`} class:list={["group cursor-pointer block reveal-hidden", `stagger-${i+1}`]} data-animate>
-            <div class="relative h-48 rounded-sm overflow-hidden mb-5 bg-gradient-to-br from-surface-high to-surface-base border border-white/5 hover:border-primary-container/15 transition-all duration-300">
-              <div class="absolute inset-0 bg-tech-grid opacity-25"></div>
-              <div class="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-300">
-                <span class="material-symbols-outlined text-5xl text-primary-container">description</span>
+      {otherPosts.length > 0 && (
+        <!-- Grid posts menores — capas reais -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          {otherPosts.map((p, i) => (
+            <a href={`/blog/${p.slug}`} class:list={["group cursor-pointer block reveal-hidden", `stagger-${i+1}`]} data-animate>
+              <div class="relative h-48 rounded-sm overflow-hidden mb-5 border border-white/5 hover:border-primary-container/25 transition-all duration-300 bg-surface-high">
+                <img
+                  src={resolveCoverImage(p.coverImageUrl, p.category)}
+                  alt={`Capa: ${p.title}`}
+                  loading="lazy"
+                  decoding="async"
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-tech-grid opacity-10 mix-blend-overlay"></div>
+                <div class="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span class="text-label-caps text-white uppercase tracking-[0.15em] text-[10px] flex items-center gap-1">Ler artigo <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+                </div>
               </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span class="text-label-caps text-white uppercase tracking-[0.15em] text-[10px] flex items-center gap-1">Ler artigo <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+              {p.category?.name && (
+                <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest mb-3 text-[10px]">{p.category.name}</span>
+              )}
+              <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors duration-200 leading-snug mb-3">{p.title}</h3>
+              {p.excerpt && (
+                <p class="text-sm text-tertiary leading-relaxed mb-3">{p.excerpt}</p>
+              )}
+              <div class="flex items-center gap-3 text-code-data text-on-surface-variant text-[12px]">
+                <span class="material-symbols-outlined text-sm text-on-surface-variant" aria-hidden="true">timer</span>
+                <span>{p.readingTimeMin ?? 5} min leitura</span>
+                <span class="w-px h-3 bg-white/15"></span>
+                <span>{p.publishedAt ? formatPostDateShort(p.publishedAt) : ''}</span>
               </div>
-            </div>
-            <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest mb-3 text-[10px]">{p.cat}</span>
-            <h3 class="text-body-lg font-medium text-on-surface-variant group-hover:text-white transition-colors duration-200 leading-snug mb-3">{p.title}</h3>
-            <p class="text-sm text-tertiary leading-relaxed mb-3">{p.excerpt}</p>
-            <div class="flex items-center gap-3 text-code-data text-on-surface-variant text-[12px]">
-              <span class="material-symbols-outlined text-sm text-on-surface-variant" aria-hidden="true">timer</span>
-              <span>{p.time} leitura</span>
-              <span class="w-px h-3 bg-white/15"></span>
-              <span>Mai 2026</span>
-            </div>
-          </a>
-        ))}
-      </div>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   </section>
 
