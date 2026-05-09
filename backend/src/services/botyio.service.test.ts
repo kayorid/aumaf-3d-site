@@ -202,6 +202,24 @@ describe('syncLeadToBotyo', () => {
     const headers = options?.headers as Record<string, string>
     expect(headers['X-Idempotency-Key']).toBe('lead_test_001')
   })
+
+  it('NÃO envia chave top-level "source" no payload (Botyio schema é .strict() e Source vem da API key bound)', async () => {
+    const fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+      status: 202,
+      ok: true,
+      json: async () => ({ data: { id: 'ldi_x', externalId: 'lead_test_001', status: 'queued', whatsapp: { willAttempt: true, reason: null }, links: { self: '' } } }),
+    } as Response)
+
+    await syncLeadToBotyo(baseLead as any)
+
+    const [, options] = fetchSpy.mock.calls[0]
+    const body = JSON.parse(options?.body as string)
+    expect(body).not.toHaveProperty('source')
+    expect(body.metadata).toHaveProperty('internalSource', 'site-contato')
+    expect(Object.keys(body).sort()).toEqual(
+      ['email', 'externalId', 'message', 'metadata', 'name', 'phone', 'variables'].sort(),
+    )
+  })
 })
 
 describe('applyBotyoEvent', () => {
