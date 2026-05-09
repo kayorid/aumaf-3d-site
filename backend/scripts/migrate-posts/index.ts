@@ -42,6 +42,17 @@ const uploadCache = new Map<string, string>()
 async function uploadCover(cover: LegacyPostCoverImage): Promise<string> {
   if (uploadCache.has(cover.filename)) return uploadCache.get(cover.filename)!
 
+  // Se a imagem já está em frontend-public/public/images/, usa caminho relativo:
+  // ela é servida diretamente como asset estático pelo site público, sem precisar
+  // do MinIO (cuja rota /media/ não é exposta pelo Caddy em produção).
+  const PUBLIC_IMAGES_PREFIX = 'frontend-public/public/images/'
+  if (cover.localPath.startsWith(PUBLIC_IMAGES_PREFIX)) {
+    const publicUrl = `/images/${cover.filename}`
+    uploadCache.set(cover.filename, publicUrl)
+    console.log(`  ↪ Imagem ${cover.filename} → ${publicUrl} (servida pelo site público)`)
+    return publicUrl
+  }
+
   const filePath = path.resolve(REPO_ROOT, cover.localPath)
   const body = await fs.readFile(filePath)
   const key = `migrated/${cover.filename}`
