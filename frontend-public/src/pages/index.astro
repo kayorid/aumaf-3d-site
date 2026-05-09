@@ -3,6 +3,7 @@ export const prerender = true
 import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
+import ReviewsHomeWidget from '../components/reviews/ReviewsHomeWidget.astro'
 import { COMPANY } from '../lib/company'
 import { itemListSchema } from '../lib/schemas'
 
@@ -853,6 +854,12 @@ const homeSchemas = [
       </div>
     </div>
   </section>
+
+
+  <!-- =============================================
+       AVALIAÇÕES GOOGLE
+       ============================================= -->
+  <ReviewsHomeWidget />
 
 
   <!-- =============================================
