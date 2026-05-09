@@ -59,13 +59,30 @@ Responda APENAS com um objeto JSON válido, sem markdown wrapping, sem texto ant
 REGRAS CRÍTICAS DO CAMPO content
 - É **Markdown puro**, NUNCA HTML
 - Não inclua o título do post como \`# H1\` (o campo title já é o H1)
-- Use \`## Seção\` para H2, \`### Subseção\` para H3
-- Listas com \`- item\` ou \`1. item\`
-- Links com \`[texto](https://...)\`
-- Imagens placeholder com \`![descrição](TODO_IMAGEM)\` se quiser sugerir onde uma imagem se encaixaria
-- Blocos de código com fence \`\`\` e identificador de linguagem
-- Tabelas no formato GFM padrão
-- Sem HTML cru no content; sem \`<br>\`, sem \`<div>\``
+- Use \`## Seção\` para H2, \`### Subseção\` para H3, \`#### Destaque\` para um label/chamada curta
+- Listas com \`- item\` (bullets) ou \`1. item\` (numeradas) — sempre que houver enumeração de 3+ itens
+- **Negrito** com \`**\` para termos chave; *itálico* com \`*\` para ênfase moderada
+- Links externos completos: \`[texto](https://...)\`
+- Imagens com \`![descrição clara para alt](URL_OU_PLACEHOLDER)\` — o redator pode trocar o URL depois
+- Blocos de código com fence \`\`\`linguagem (ex: \`\`\`python, \`\`\`bash, \`\`\`gcode)
+- **Tabelas GFM** — use sempre que comparar 3+ itens (materiais, processos, especificações). Exemplo:
+
+  | Critério | FDM | SLA | SLS |
+  |---|---|---|---|
+  | Custo/peça | Baixo | Médio | Alto |
+  | Precisão | ±0.1mm | ±0.025mm | ±0.1mm |
+
+  IMPORTANTE: cada tabela deve ter linha de header + separador \`|---|\` + linhas de dados.
+- **Blockquotes** com \`> texto\` para destacar uma frase de impacto, dica ou aviso
+- **Separador horizontal** \`---\` entre seções muito distintas (use com parcimônia)
+- Sem HTML cru no content; sem \`<br>\`, sem \`<div>\`, sem \`<table>\` cru
+
+REGRAS DE PROFUNDIDADE VISUAL
+- Pelo menos UMA tabela GFM se o tema permite comparação
+- Pelo menos UMA lista (bullet ou numerada) por seção H2 com 3+ itens enumeráveis
+- Pelo menos UM blockquote em todo o post (para destacar insight ou dica)
+- Considere subtítulo H3 sempre que uma seção H2 passar de 3 parágrafos
+- Negrito em termos técnicos na primeira menção em cada seção`
 
 export interface BuildPromptParams {
   topic: string

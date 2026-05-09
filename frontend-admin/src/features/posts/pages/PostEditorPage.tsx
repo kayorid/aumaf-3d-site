@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { ArrowLeft, Send, EyeOff, Trash2, Save, Sparkles, ExternalLink } from 'lucide-react'
 import { PostInputSchema } from '@aumaf/shared'
+import { publicPostUrl } from '@/lib/public-site'
 
 interface PostFormValues {
   title: string
@@ -291,7 +292,7 @@ export function PostEditorPage() {
 
           {!isNew && status === 'PUBLISHED' && slugValue && (
             <a
-              href={`${import.meta.env.VITE_PUBLIC_URL ?? 'http://localhost:4321'}/blog/${slugValue}`}
+              href={publicPostUrl(slugValue)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-primary-container border border-primary-container/50 rounded-sm px-3 py-1.5 hover:bg-primary-container/10 transition-colors"

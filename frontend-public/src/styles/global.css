@@ -597,3 +597,210 @@
   }
 
 }
+
+/* ─────────────────────────────────────────────────
+   .prose-aumaf — estilo padrão para conteúdo
+   markdown renderizado (set:html) no blog dinâmico.
+   Aplica DS Cinematic Additive Manufacturing aos
+   elementos gerados pelo `marked` (h2/h3, p, ul/ol,
+   table, blockquote, img, code) sem precisar de
+   classes inline em cada post.
+   ───────────────────────────────────────────────── */
+@layer components {
+  .prose-aumaf {
+    color: rgba(229, 226, 225, 0.92);
+    font-size: 17px;
+    line-height: 1.75;
+    max-width: 75ch;
+  }
+  .prose-aumaf > * + * { margin-top: 1.25em; }
+  .prose-aumaf p {
+    color: rgba(229, 226, 225, 0.85);
+    margin-bottom: 1.1em;
+  }
+  .prose-aumaf strong { color: #ffffff; font-weight: 700; }
+  .prose-aumaf em { color: rgba(229, 226, 225, 0.9); font-style: italic; }
+  .prose-aumaf a {
+    color: #61c54f;
+    text-decoration: underline;
+    text-decoration-color: rgba(97,197,79,0.4);
+    text-underline-offset: 3px;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+  .prose-aumaf a:hover {
+    color: #7fdc6c;
+    text-decoration-color: rgba(127,220,108,0.8);
+  }
+
+  .prose-aumaf h2 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: #ffffff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-size: clamp(22px, 2.4vw, 30px);
+    margin-top: 2.5em;
+    margin-bottom: 0.9em;
+    padding-bottom: 0.6em;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    line-height: 1.15;
+  }
+  .prose-aumaf h2:first-child { margin-top: 0.5em; }
+
+  .prose-aumaf h3 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: #ffffff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    font-size: clamp(17px, 1.6vw, 21px);
+    margin-top: 2em;
+    margin-bottom: 0.7em;
+    line-height: 1.25;
+  }
+  .prose-aumaf h4 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: #61c54f;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+    margin-top: 1.6em;
+    margin-bottom: 0.6em;
+  }
+
+  .prose-aumaf ul, .prose-aumaf ol {
+    margin: 1.2em 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .prose-aumaf ul li, .prose-aumaf ol li {
+    position: relative;
+    padding-left: 1.6em;
+    margin-bottom: 0.65em;
+    color: rgba(229, 226, 225, 0.85);
+  }
+  .prose-aumaf ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0.25em;
+    top: 0.7em;
+    width: 6px;
+    height: 6px;
+    background: #61c54f;
+    box-shadow: 0 0 6px rgba(97,197,79,0.55);
+    border-radius: 9999px;
+  }
+  .prose-aumaf ol { counter-reset: aumaf-ol; }
+  .prose-aumaf ol > li {
+    counter-increment: aumaf-ol;
+  }
+  .prose-aumaf ol > li::before {
+    content: counter(aumaf-ol, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    color: #61c54f;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .prose-aumaf li > ul, .prose-aumaf li > ol { margin-top: 0.5em; margin-bottom: 0; }
+
+  .prose-aumaf blockquote {
+    margin: 1.8em 0;
+    padding: 1em 1.4em;
+    border-left: 2px solid #61c54f;
+    background: rgba(97,197,79,0.05);
+    border-radius: 0 2px 2px 0;
+    color: rgba(229, 226, 225, 0.95);
+    font-style: italic;
+    box-shadow: -1px 0 12px -4px rgba(97,197,79,0.25);
+  }
+  .prose-aumaf blockquote p { margin-bottom: 0; }
+
+  .prose-aumaf code {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    background: rgba(97,197,79,0.08);
+    color: #61c54f;
+    padding: 0.15em 0.45em;
+    border-radius: 2px;
+    border: 1px solid rgba(97,197,79,0.18);
+  }
+  .prose-aumaf pre {
+    margin: 1.8em 0;
+    padding: 1.2em 1.4em;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(97,197,79,0.18);
+    border-left: 2px solid #61c54f;
+    border-radius: 2px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .prose-aumaf pre code {
+    background: transparent;
+    color: #e7e7e7;
+    padding: 0;
+    border: 0;
+    font-size: inherit;
+  }
+
+  .prose-aumaf img {
+    margin: 2em auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 2px;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: block;
+  }
+  .prose-aumaf figure { margin: 2em 0; }
+  .prose-aumaf figcaption {
+    font-size: 12px;
+    color: rgba(190, 202, 182, 0.7);
+    text-align: center;
+    margin-top: 0.6em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .prose-aumaf hr {
+    margin: 3em 0;
+    border: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(97,197,79,0.5), transparent);
+  }
+
+  .prose-aumaf table {
+    width: 100%;
+    margin: 2em 0;
+    border-collapse: collapse;
+    font-size: 14px;
+    border: 1px solid rgba(97,197,79,0.18);
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.4);
+    box-shadow: 0 0 24px -8px rgba(97,197,79,0.18);
+  }
+  .prose-aumaf thead { background: rgba(97,197,79,0.1); }
+  .prose-aumaf th {
+    text-align: left;
+    padding: 0.85em 1em;
+    color: #61c54f;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .prose-aumaf td {
+    padding: 0.8em 1em;
+    color: rgba(229, 226, 225, 0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .prose-aumaf tbody tr:last-child td { border-bottom: 0; }
+  .prose-aumaf tbody tr:hover { background: rgba(97,197,79,0.04); }
+  .prose-aumaf tbody tr td:first-child { color: rgba(190, 202, 182, 0.95); font-weight: 600; }
+}

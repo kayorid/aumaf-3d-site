@@ -1,0 +1,81 @@
+---
+import { getReviews, truncate } from '../../lib/google-reviews'
+import ReviewStars from './ReviewStars.astro'
+
+const data = await getReviews()
+const rotators = data
+  ? data.reviews.slice(0, 3).map((r) => ({
+      text: truncate(r.text, 120).text,
+      author: r.authorName.split(' ')[0],
+      lastInitial: (r.authorName.split(' ').slice(-1)[0]?.[0] || '').toUpperCase(),
+    }))
+  : []
+---
+
+{data && rotators.length > 0 && (
+  <div class="border-t border-white/8 bg-surface-low" aria-label="Resumo de avaliações Google">
+    <div class="max-w-[1600px] mx-auto px-edge py-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      <div class="lg:col-span-4 flex flex-col gap-1.5">
+        <div class="flex items-center gap-3">
+          <ReviewStars rating={data.rating} size="md" />
+          <span class="text-on-surface font-medium text-sm">
+            <span class="font-pirulen text-base text-white" style="font-family:'Pirulen',sans-serif;">{data.rating.toFixed(1).replace('.', ',')}</span>
+            <span class="text-on-surface-variant"> / 5</span>
+          </span>
+        </div>
+        <p class="text-xs text-tertiary">
+          <strong class="text-on-surface font-medium">{data.totalCount} avaliações</strong> verificadas no Google
+        </p>
+      </div>
+
+      <div class="lg:col-span-5 relative min-h-[3.5rem] overflow-hidden">
+        <ul role="list" class="reviews-rotator m-0 p-0 list-none">
+          {rotators.map((r, i) => (
+            <li
+              class="absolute inset-0 flex items-center opacity-0"
+              style={`animation: review-rotate 18s linear infinite; animation-delay: ${i * 6}s;`}
+              aria-live={i === 0 ? 'polite' : undefined}
+            >
+              <p class="text-sm text-tertiary leading-snug italic">
+                <span class="text-primary-container/60" aria-hidden="true">“</span>{r.text}<span class="text-primary-container/60" aria-hidden="true">”</span>
+                <span class="not-italic text-on-surface-variant text-xs ml-2 whitespace-nowrap">— {r.author} {r.lastInitial}.</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <nav class="lg:col-span-3 flex flex-wrap gap-2 lg:justify-end" aria-label="Ações de avaliações">
+        <a
+          href="/avaliacoes"
+          class="inline-flex items-center gap-1.5 border border-white/15 hover:border-primary-container hover:text-primary-container text-on-surface text-xs uppercase tracking-[0.15em] font-bold px-4 py-2 rounded-sm transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+        >
+          Ver todas
+          <span class="material-symbols-outlined leading-none" aria-hidden="true" style="font-size:14px;">arrow_forward</span>
+        </a>
+        <a
+          href={data.writeReviewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Avaliar no Google (abre em nova aba)"
+          class="inline-flex items-center gap-1.5 bg-primary-container/10 border border-primary-container/40 hover:bg-primary-container hover:text-on-primary text-primary-container text-xs uppercase tracking-[0.15em] font-bold px-4 py-2 rounded-sm transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+        >
+          Avaliar
+          <span class="material-symbols-outlined leading-none" aria-hidden="true" style="font-size:14px;">arrow_outward</span>
+        </a>
+      </nav>
+    </div>
+
+    <style>
+      @keyframes review-rotate {
+        0%, 30% { opacity: 1; transform: translateY(0); }
+        33%, 100% { opacity: 0; transform: translateY(-8px); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reviews-rotator > li { animation: none !important; }
+        .reviews-rotator > li:not(:first-child) { display: none; }
+        .reviews-rotator > li:first-child { opacity: 1 !important; position: relative !important; }
+      }
+    </style>
+  </div>
+)}

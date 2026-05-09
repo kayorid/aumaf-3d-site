@@ -1,0 +1,81 @@
+---
+import type { Review } from '../../lib/google-reviews'
+import { formatRelative, truncate } from '../../lib/google-reviews'
+import ReviewStars from './ReviewStars.astro'
+
+export interface Props {
+  review: Review
+  maxChars?: number
+  placeUrl: string
+}
+const { review, maxChars = 220, placeUrl } = Astro.props as Props
+const { text, truncated } = truncate(review.text, maxChars)
+const initials = review.authorName
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((p) => p[0]?.toUpperCase())
+  .join('')
+const linkOut = review.permalink || placeUrl
+const relative = formatRelative(review.publishedAt)
+---
+<article
+  class="relative bg-surface-dim border border-white/8 rounded-sm p-6 md:p-7 transition-all duration-200 hover:border-primary-container/40 hover:bg-surface-dim/80 flex flex-col gap-5 h-full"
+  aria-label={`Avaliação de ${review.authorName}`}
+>
+  <span
+    aria-hidden="true"
+    class="absolute top-4 right-5 material-symbols-outlined text-primary-container/30 select-none pointer-events-none"
+    style="font-size:42px; font-variation-settings:'FILL' 1;"
+  >format_quote</span>
+
+  <header class="flex items-center gap-3">
+    {review.authorAvatar ? (
+      <img
+        src={review.authorAvatar}
+        alt=""
+        width="40"
+        height="40"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+        class="w-10 h-10 rounded-full border border-white/15 object-cover bg-surface-low"
+      />
+    ) : (
+      <span
+        aria-hidden="true"
+        class="w-10 h-10 rounded-full border border-primary-container/40 bg-primary-container/15 text-primary-container flex items-center justify-center text-xs font-bold tracking-wider"
+      >{initials}</span>
+    )}
+    <div class="min-w-0 flex-1">
+      <p class="text-sm text-on-surface font-medium truncate">{review.authorName}</p>
+      <div class="flex items-center gap-2 mt-0.5">
+        <ReviewStars rating={review.rating} size="sm" />
+        {relative && (
+          <>
+            <span aria-hidden="true" class="text-on-surface-variant/60 text-xs">·</span>
+            <time datetime={review.publishedAt} class="text-xs text-on-surface-variant">{relative}</time>
+          </>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <p class="text-sm text-tertiary leading-relaxed flex-1">
+    {text}
+  </p>
+
+  <footer class="flex items-center justify-between gap-3 pt-2 border-t border-white/5">
+    <span class="text-label-caps uppercase tracking-[0.2em] text-on-surface-variant text-[10px]">Google Business</span>
+    <a
+      href={linkOut}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Ver avaliação de ${review.authorName} no Google (abre em nova aba)`}
+      class="inline-flex items-center gap-1 text-xs text-on-surface-variant hover:text-primary-container transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container rounded-sm"
+    >
+      {truncated ? 'Ler completa' : 'Ver no Google'}
+      <span class="material-symbols-outlined text-sm leading-none" aria-hidden="true" style="font-size:14px;">arrow_outward</span>
+    </a>
+  </footer>
+</article>

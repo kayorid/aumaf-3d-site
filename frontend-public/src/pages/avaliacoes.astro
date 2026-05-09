@@ -1,0 +1,188 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+import Breadcrumb from '../components/Breadcrumb.astro'
+import ReviewStars from '../components/reviews/ReviewStars.astro'
+import ReviewCard from '../components/reviews/ReviewCard.astro'
+import { getReviews, aggregateRatingSchema, reviewsSchema } from '../lib/google-reviews'
+import { localBusinessSchema } from '../lib/schemas'
+
+const data = await getReviews()
+
+const description = data
+  ? `Avaliações reais de clientes da AUMAF 3D no Google Business Profile. Nota ${data.rating.toFixed(1).replace('.', ',')} de 5 baseada em ${data.totalCount} avaliações verificadas.`
+  : 'Avaliações reais de clientes da AUMAF 3D no Google Business Profile.'
+
+const lb = localBusinessSchema()
+const schemas = data
+  ? [
+      {
+        ...lb,
+        aggregateRating: aggregateRatingSchema(data),
+        review: reviewsSchema(data),
+      },
+    ]
+  : [lb]
+
+const steps = [
+  {
+    n: '01',
+    title: 'Abra a ficha no Google',
+    body: 'Clique em "Avalie no Google" abaixo. Vamos te levar direto para a página da AUMAF 3D no Maps.',
+  },
+  {
+    n: '02',
+    title: 'Escolha sua nota',
+    body: 'Selecione de 1 a 5 estrelas. Sua avaliação ajuda outros engenheiros e times a tomarem decisão.',
+  },
+  {
+    n: '03',
+    title: 'Conte sua experiência',
+    body: 'Em poucas linhas, descreva o serviço — material, prazo, qualidade. Nada mais valioso que sua palavra.',
+  },
+]
+---
+
+<Base
+  title="Avaliações"
+  description={description}
+  pageType="WebPage"
+  breadcrumb={[{ name: 'Avaliações', url: '/avaliacoes' }]}
+  schemas={schemas}
+>
+  <Navbar currentPath="/avaliacoes" />
+
+  <!-- Hero -->
+  <section class="bg-background pt-28 pb-16 md:pt-32 md:pb-20 relative overflow-hidden" aria-labelledby="hero-avaliacoes">
+    <div class="absolute inset-0 bg-tech-grid opacity-10 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(97,197,79,0.08) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.4) 0%,transparent 50%,rgba(0,0,0,0.6) 100%);"></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge w-full relative z-10">
+      <Breadcrumb items={[{ name: 'Avaliações' }]} compact />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end mt-6">
+        <header class="lg:col-span-7">
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Prova social // Google Business Profile</span>
+          <h1 id="hero-avaliacoes" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-[0.95]">
+            Avaliações<br/>verificadas.
+          </h1>
+          <p class="mt-6 text-body-lg text-tertiary leading-relaxed max-w-xl">
+            Cada avaliação abaixo é pública no Google e foi deixada por um cliente real da AUMAF 3D. Não selecionamos, não filtramos, não editamos.
+          </p>
+        </header>
+
+        {data && (
+          <aside class="lg:col-span-5 flex flex-col items-start lg:items-end gap-3" aria-label="Resumo agregado">
+            <div class="flex items-baseline gap-3">
+              <span class="font-pirulen text-7xl md:text-8xl text-white leading-none" style="font-family:'Pirulen',sans-serif;">{data.rating.toFixed(1).replace('.', ',')}</span>
+              <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">/ 5</span>
+            </div>
+            <ReviewStars rating={data.rating} size="lg" />
+            <p class="text-sm text-tertiary lg:text-right">
+              <strong class="text-on-surface font-medium">{data.totalCount} avaliações</strong> verificadas
+            </p>
+            <a
+              href={data.writeReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Avaliar a AUMAF 3D no Google (abre em nova aba)"
+              class="inline-flex items-center gap-2 mt-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+            >
+              Avalie no Google
+              <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_outward</span>
+            </a>
+          </aside>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews grid -->
+  <section class="bg-surface-low py-section relative overflow-hidden" aria-labelledby="lista-avaliacoes">
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <div class="flex items-end justify-between mb-10 gap-4 flex-wrap">
+        <h2 id="lista-avaliacoes" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Todas as avaliações</h2>
+        {data && (
+          <span class="text-label-caps uppercase tracking-[0.2em] text-on-surface-variant text-xs">
+            Exibindo {data.reviews.length} de {data.totalCount}
+          </span>
+        )}
+      </div>
+
+      {data && data.reviews.length > 0 ? (
+        <ul role="list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          {data.reviews.map((r) => (
+            <li class="flex">
+              <ReviewCard review={r} placeUrl={data.placeUrl} maxChars={400} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="bg-surface-dim border border-white/8 rounded-sm p-8 md:p-12 text-center">
+          <p class="text-tertiary">As avaliações estão temporariamente indisponíveis.</p>
+          <a
+            href={data?.placeUrl ?? 'https://www.google.com/maps?cid=9655082316416517921'}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 mt-4 text-primary-container hover:text-white transition-colors"
+          >
+            Ver no Google Maps
+            <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_outward</span>
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Como avaliar -->
+  <section class="bg-background py-section section-glow-top relative overflow-hidden" aria-labelledby="como-avaliar">
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <header class="max-w-3xl mb-12">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Como avaliar // 3 passos</span>
+        <h2 id="como-avaliar" class="text-headline-lg md:text-display-xl font-bold uppercase text-white tracking-[-0.03em] leading-[0.95]">
+          Já é cliente?<br/>Conte sua experiência.
+        </h2>
+      </header>
+
+      <ol role="list" class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        {steps.map((s) => (
+          <li class="bg-surface-dim border border-white/8 rounded-sm p-6 md:p-7 hover:border-primary-container/40 transition-all">
+            <span class="font-pirulen text-5xl text-primary-container leading-none block mb-5" style="font-family:'Pirulen',sans-serif;" aria-hidden="true">{s.n}</span>
+            <h3 class="text-headline-md font-bold uppercase text-white tracking-[-0.01em] mb-3">{s.title}</h3>
+            <p class="text-sm text-tertiary leading-relaxed">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+
+      {data && (
+        <div class="mt-12 flex flex-col sm:flex-row gap-3 sm:items-center">
+          <a
+            href={data.writeReviewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Avaliar a AUMAF 3D no Google (abre em nova aba)"
+            class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-7 py-3.5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container w-fit"
+          >
+            Avaliar agora no Google
+            <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_outward</span>
+          </a>
+          <a
+            href={data.placeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ver perfil da AUMAF 3D no Google Maps (abre em nova aba)"
+            class="inline-flex items-center gap-2 border border-white/20 hover:border-primary-container hover:text-primary-container text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-7 py-3.5 rounded-sm transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container w-fit"
+          >
+            Ver perfil no Maps
+            <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_outward</span>
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Base>

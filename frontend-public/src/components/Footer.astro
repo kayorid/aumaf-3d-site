@@ -1,5 +1,6 @@
 ---
 import { COMPANY } from '../lib/company'
+import ReviewsFooterWidget from './reviews/ReviewsFooterWidget.astro'
 
 const year = new Date().getFullYear()
 
@@ -8,6 +9,7 @@ const links = [
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/materiais', label: 'Materiais' },
   { href: '/sobre', label: 'Sobre' },
+  { href: '/avaliacoes', label: 'Avaliações' },
   { href: '/blog', label: 'Blog' },
   { href: '/contato', label: 'Contato' },
   { href: '/faq', label: 'FAQ' },
@@ -124,6 +126,9 @@ const socials = [
       </div>
     </div>
   </div>
+
+  <!-- Reviews widget -->
+  <ReviewsFooterWidget />
 
   <!-- Bottom bar -->
   <div class="border-t border-white/8">

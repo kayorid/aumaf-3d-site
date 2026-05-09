@@ -1,0 +1,28 @@
+---
+export interface Props {
+  rating: number
+  size?: 'sm' | 'md' | 'lg'
+  label?: string
+}
+const { rating, size = 'md', label } = Astro.props as Props
+const sizes = { sm: 'text-sm', md: 'text-base', lg: 'text-2xl' }
+const fullStars = Math.floor(rating)
+const hasHalf = rating - fullStars >= 0.5
+const empty = 5 - fullStars - (hasHalf ? 1 : 0)
+const computedLabel = label ?? `${rating.toFixed(1).replace('.', ',')} de 5 estrelas`
+---
+<span
+  class:list={['inline-flex items-center gap-0.5 leading-none text-primary-container', sizes[size]]}
+  role="img"
+  aria-label={computedLabel}
+>
+  {Array.from({ length: fullStars }).map(() => (
+    <span class="material-symbols-outlined leading-none" aria-hidden="true" style="font-variation-settings:'FILL' 1; font-size:1em;">star</span>
+  ))}
+  {hasHalf && (
+    <span class="material-symbols-outlined leading-none" aria-hidden="true" style="font-variation-settings:'FILL' 1; font-size:1em;">star_half</span>
+  )}
+  {Array.from({ length: empty }).map(() => (
+    <span class="material-symbols-outlined leading-none text-white/20" aria-hidden="true" style="font-size:1em;">star</span>
+  ))}
+</span>
