@@ -36,6 +36,14 @@ export const leadsApi = {
     await apiClient.delete(`/leads/${id}`)
   },
 
+  async bulkDelete(ids: string[]): Promise<{ deleted: number }> {
+    const { data } = await apiClient.post<ApiSuccess<{ deleted: number }>>(
+      '/leads/bulk-delete',
+      { ids },
+    )
+    return data.data
+  },
+
   async addNote(leadId: string, input: CreateLeadNoteInput) {
     const { data } = await apiClient.post<ApiSuccess<LeadNoteDto>>(`/leads/${leadId}/notes`, input)
     return data.data

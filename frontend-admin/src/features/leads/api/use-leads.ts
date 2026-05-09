@@ -41,6 +41,18 @@ export function useDeleteLead() {
   })
 }
 
+export function useBulkDeleteLeads() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (ids: string[]) => leadsApi.bulkDelete(ids),
+    onSuccess: (result) => {
+      qc.invalidateQueries({ queryKey: LEADS_KEY })
+      toast.success(`${result.deleted} lead(s) excluído(s)`)
+    },
+    onError: (err: Error) => toast.error(err.message ?? 'Falha ao excluir leads'),
+  })
+}
+
 export function useAddLeadNote(leadId: string) {
   const qc = useQueryClient()
   return useMutation({
