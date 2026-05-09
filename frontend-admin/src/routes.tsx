@@ -6,6 +6,7 @@ import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { PostsListPage } from '@/features/posts/pages/PostsListPage'
 import { PostEditorPage } from '@/features/posts/pages/PostEditorPage'
 import { LeadsListPage } from '@/features/leads/pages/LeadsListPage'
+import { ProfilePage } from '@/features/profile/pages/ProfilePage'
 import { SettingsPage } from '@/features/settings/pages/SettingsPage'
 import { BotyioConfigPage } from '@/features/integrations/pages/BotyioConfigPage'
 import { CategoriesPage } from '@/features/categories/pages/CategoriesPage'
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
           { path: '/posts/:id', element: <PostEditorPage /> },
           { path: '/categories', element: <CategoriesPage /> },
           { path: '/leads', element: <LeadsListPage /> },
+          { path: '/perfil', element: <ProfilePage /> },
           { path: '/settings', element: <SettingsPage /> },
           { path: '/integrations/botyio', element: <BotyioConfigPage /> },
           { path: '*', element: <NotFoundPage /> },

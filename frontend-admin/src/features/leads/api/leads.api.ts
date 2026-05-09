@@ -1,6 +1,13 @@
 import { apiClient } from '@/lib/api'
 import type { ApiList, ApiSuccess } from '@/lib/api'
-import type { LeadDto, LeadFilterQuery } from '@aumaf/shared'
+import type {
+  LeadDto,
+  LeadFilterQuery,
+  LeadDetailDto,
+  LeadNoteDto,
+  CreateLeadNoteInput,
+  UpdateLeadNoteInput,
+} from '@aumaf/shared'
 
 export const leadsApi = {
   async list(query: Partial<LeadFilterQuery> = {}) {
@@ -18,6 +25,29 @@ export const leadsApi = {
   async sources() {
     const { data } = await apiClient.get<ApiSuccess<string[]>>('/leads/sources')
     return data.data
+  },
+
+  async getById(id: string) {
+    const { data } = await apiClient.get<ApiSuccess<LeadDetailDto>>(`/leads/${id}`)
+    return data.data
+  },
+
+  async remove(id: string) {
+    await apiClient.delete(`/leads/${id}`)
+  },
+
+  async addNote(leadId: string, input: CreateLeadNoteInput) {
+    const { data } = await apiClient.post<ApiSuccess<LeadNoteDto>>(`/leads/${leadId}/notes`, input)
+    return data.data
+  },
+
+  async updateNote(leadId: string, noteId: string, input: UpdateLeadNoteInput) {
+    const { data } = await apiClient.patch<ApiSuccess<LeadNoteDto>>(`/leads/${leadId}/notes/${noteId}`, input)
+    return data.data
+  },
+
+  async deleteNote(leadId: string, noteId: string) {
+    await apiClient.delete(`/leads/${leadId}/notes/${noteId}`)
   },
 
   async exportCsvUrl(query: Partial<LeadFilterQuery> = {}): Promise<string> {

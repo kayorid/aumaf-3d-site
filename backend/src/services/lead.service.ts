@@ -1,9 +1,16 @@
 import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
+import { httpErrors } from '../lib/http-error'
 import { maskEmail, maskPhone } from '../lib/mask'
 import { enqueueLeadNotification } from '../workers/lead-notification.worker'
 import { enqueueBotyioLeadSync } from '../workers/botyio-lead-sync.worker'
-import type { CreateLeadInput, LeadDto, LeadMaskedDto } from '@aumaf/shared'
+import type {
+  CreateLeadInput,
+  LeadDto,
+  LeadMaskedDto,
+  LeadDetailDto,
+  LeadNoteDto,
+} from '@aumaf/shared'
 
 function toDto(lead: Awaited<ReturnType<typeof prisma.lead.findUnique>>): LeadDto {
   if (!lead) throw new Error('lead null')
@@ -80,6 +87,7 @@ export interface LeadFilters {
 
 function buildLeadWhere(filters: LeadFilters) {
   return {
+    deletedAt: null,
     ...(filters.from || filters.to
       ? {
           createdAt: {
@@ -146,8 +154,95 @@ export async function countLeadsLast30Days(): Promise<number> {
 
 export async function listRecentLeadsMasked(take = 5): Promise<LeadMaskedDto[]> {
   const items = await prisma.lead.findMany({
+    where: { deletedAt: null },
     orderBy: { createdAt: 'desc' },
     take,
   })
   return items.map(maskLead)
+}
+
+function noteToDto(note: {
+  id: string
+  leadId: string
+  authorId: string
+  body: string
+  createdAt: Date
+  updatedAt: Date
+  author?: { name: string } | null
+}): LeadNoteDto {
+  return {
+    id: note.id,
+    leadId: note.leadId,
+    authorId: note.authorId,
+    authorName: note.author?.name ?? null,
+    body: note.body,
+    createdAt: note.createdAt.toISOString(),
+    updatedAt: note.updatedAt.toISOString(),
+  }
+}
+
+export async function getLeadById(id: string): Promise<LeadDetailDto> {
+  const lead = await prisma.lead.findFirst({
+    where: { id, deletedAt: null },
+    include: {
+      notes: {
+        include: { author: { select: { name: true } } },
+        orderBy: { createdAt: 'desc' },
+      },
+    },
+  })
+  if (!lead) throw httpErrors.notFound('Lead não encontrado')
+  return {
+    ...toDto(lead),
+    notes: lead.notes.map(noteToDto),
+  }
+}
+
+export async function softDeleteLead(id: string, userId: string): Promise<void> {
+  const result = await prisma.lead.updateMany({
+    where: { id, deletedAt: null },
+    data: { deletedAt: new Date(), deletedBy: userId },
+  })
+  if (result.count === 0) throw httpErrors.notFound('Lead não encontrado')
+  logger.info({ leadId: id, userId }, 'Lead soft-deleted')
+}
+
+export async function addLeadNote(leadId: string, authorId: string, body: string): Promise<LeadNoteDto> {
+  const lead = await prisma.lead.findFirst({ where: { id: leadId, deletedAt: null }, select: { id: true } })
+  if (!lead) throw httpErrors.notFound('Lead não encontrado')
+  const note = await prisma.leadNote.create({
+    data: { leadId, authorId, body },
+    include: { author: { select: { name: true } } },
+  })
+  logger.info({ noteId: note.id, leadId, authorId }, 'Lead note created')
+  return noteToDto(note)
+}
+
+export async function updateLeadNote(
+  noteId: string,
+  userId: string,
+  isAdmin: boolean,
+  body: string,
+): Promise<LeadNoteDto> {
+  const note = await prisma.leadNote.findUnique({ where: { id: noteId } })
+  if (!note) throw httpErrors.notFound('Anotação não encontrada')
+  if (!isAdmin && note.authorId !== userId) {
+    throw httpErrors.forbidden('Apenas o autor ou um administrador pode editar esta anotação')
+  }
+  const updated = await prisma.leadNote.update({
+    where: { id: noteId },
+    data: { body },
+    include: { author: { select: { name: true } } },
+  })
+  return noteToDto(updated)
+}
+
+export async function deleteLeadNote(noteId: string, userId: string, isAdmin: boolean): Promise<void> {
+  const note = await prisma.leadNote.findUnique({ where: { id: noteId } })
+  if (!note) throw httpErrors.notFound('Anotação não encontrada')
+  if (!isAdmin && note.authorId !== userId) {
+    throw httpErrors.forbidden('Apenas o autor ou um administrador pode excluir esta anotação')
+  }
+  await prisma.leadNote.delete({ where: { id: noteId } })
+  logger.info({ noteId, userId }, 'Lead note deleted')
 }
