@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input, Textarea } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select } from '@/components/ui/select'
+import { SelectStyled } from '@/components/ui/select-styled'
 import { useGeneratePost } from '../api/use-generate-post'
 import type { AIProviderName, AITone, GeneratePostOutput } from '@aumaf/shared'
 import { cn } from '@/lib/utils'
@@ -19,8 +19,10 @@ const TONE_OPTIONS: Array<{ value: AITone; label: string }> = [
   { value: 'comercial', label: 'Comercial' },
 ]
 
-const PROVIDER_OPTIONS: Array<{ value: '' | AIProviderName; label: string }> = [
-  { value: '', label: 'Padrão (env)' },
+const DEFAULT_PROVIDER = '__default__'
+type ProviderSelectValue = typeof DEFAULT_PROVIDER | AIProviderName
+const PROVIDER_OPTIONS: Array<{ value: ProviderSelectValue; label: string }> = [
+  { value: DEFAULT_PROVIDER, label: 'Padrão da configuração' },
   { value: 'anthropic', label: 'Anthropic — Claude' },
   { value: 'openai', label: 'OpenAI — GPT' },
   { value: 'gemini', label: 'Google — Gemini' },
@@ -31,7 +33,7 @@ export function AIPanel({ onApply }: Props) {
   const [keywords, setKeywords] = useState('')
   const [tone, setTone] = useState<AITone>('didático')
   const [targetWordCount, setTargetWordCount] = useState(1200)
-  const [provider, setProvider] = useState<'' | AIProviderName>('')
+  const [provider, setProvider] = useState<ProviderSelectValue>(DEFAULT_PROVIDER)
   const [elapsed, setElapsed] = useState(0)
   const generate = useGeneratePost()
 
@@ -57,7 +59,7 @@ export function AIPanel({ onApply }: Props) {
           .slice(0, 10),
         tone,
         targetWordCount,
-        provider: provider || undefined,
+        provider: provider === DEFAULT_PROVIDER ? undefined : provider,
       })
       onApply(result)
     } catch {
@@ -76,17 +78,12 @@ export function AIPanel({ onApply }: Props) {
 
       <div className="space-y-2">
         <Label htmlFor="ai-provider">Provedor</Label>
-        <Select
+        <SelectStyled<ProviderSelectValue>
           id="ai-provider"
           value={provider}
-          onChange={(e) => setProvider(e.target.value as '' | AIProviderName)}
-        >
-          {PROVIDER_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </Select>
+          onValueChange={(v) => setProvider(v)}
+          options={PROVIDER_OPTIONS}
+        />
       </div>
 
       <div className="space-y-2">
