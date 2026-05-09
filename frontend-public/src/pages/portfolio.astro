@@ -5,28 +5,20 @@ import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
 import { itemListSchema } from '../lib/schemas'
+import { portfolioProjects, portfolioCategories } from '../data/portfolio'
+import { COMPANY } from '../lib/company'
 
-const projects = [
-  { slug: 'port-01-suporte-robo',         cat: 'Prototipagem',     title: 'Suporte para Robô Industrial',          mat: 'PA CF15',                 accent: true  },
-  { slug: 'port-02-flange-316l',          cat: 'Metal',            title: 'Flange em Aço Inox 316L',               mat: 'BASF Ultrafuse 316L',     accent: false },
-  { slug: 'port-03-encaixe-sae',          cat: 'Prototipagem',     title: 'Encaixe para Fórmula SAE USP',          mat: 'Nylon PA',                accent: false },
-  { slug: 'port-04-garra-pneumatica',     cat: 'Peças Funcionais', title: 'Garra Pneumática para Automação',       mat: 'PC + TPU',                accent: true  },
-  { slug: 'port-05-maquete-residencial',  cat: 'Maquetes',         title: 'Maquete Arquitetônica Residencial',     mat: 'PLA / Resina',            accent: false },
-  { slug: 'port-06-conector-aeronautico', cat: 'Metal',            title: 'Conector Estrutural Aeronáutico',       mat: 'Ultrafuse 316L',          accent: false },
-  { slug: 'port-07-empacotadora',         cat: 'Peças Funcionais', title: 'Peça de Reposição para Empacotadora',   mat: 'ABS Industrial',          accent: false },
-  { slug: 'port-08-caixa-eletronica',     cat: 'Prototipagem',     title: 'Caixa de Eletrônica com Tampa',         mat: 'PETG CF15',               accent: false },
-  { slug: 'port-09-painel-resina',        cat: 'Resina',           title: 'Painel de Controle em Resina ABS',      mat: 'Resina ABS',              accent: false },
-  { slug: 'port-10-bucha-eixo',           cat: 'Peças Funcionais', title: 'Bucha de Eixo com Rosca Interna',       mat: 'Nylon + Fibra',           accent: true  },
-  { slug: 'port-11-prototipo-pitch',      cat: 'Maquetes',         title: 'Protótipo de Produto para Pitch',       mat: 'PLA + Pintura',           accent: false },
-  { slug: 'port-12-implante-medico',      cat: 'Resina',           title: 'Implante Educacional Médico',           mat: 'Resina Cerâmica',         accent: false },
-]
-
-const cats = ['Todos', 'Prototipagem', 'Peças Funcionais', 'Metal', 'Resina', 'Maquetes']
+const projects = portfolioProjects
+const cats = portfolioCategories
 
 const description = 'Portfolio AUMAF 3D com +500 projetos entregues: peças funcionais, protótipos, peças em metal 316L, resina e maquetes arquitetônicas. Casos reais de impressão 3D industrial em São Carlos – SP.'
 
 const schemas = [
-  itemListSchema(projects.map((p) => ({ name: p.title, description: `Material: ${p.mat}. Categoria: ${p.cat}.` }))),
+  itemListSchema(projects.map((p) => ({
+    name: p.title,
+    url: `${COMPANY.url}/portfolio/${p.slug}`,
+    description: `${p.excerpt} Material: ${p.mat}. Categoria: ${p.cat}.`,
+  }))),
 ]
 ---
 
@@ -95,45 +87,55 @@ const schemas = [
       <ul role="list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter" id="portfolio-grid">
         {projects.map((p, i) => (
           <li>
-            <article
+            <a
+              href={`/portfolio/${p.slug}`}
               data-cat={p.cat}
-              class="group relative overflow-hidden rounded-sm cursor-pointer h-full"
-              aria-label={`${p.title} — ${p.cat} em ${p.mat}`}
+              class="group relative overflow-hidden rounded-sm h-full block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+              aria-label={`${p.title} — ${p.cat} em ${p.mat}. Ver ficha completa.`}
             >
-              <div class:list={[
-                'relative overflow-hidden aspect-[4/3]',
-                p.accent ? 'bg-gradient-to-br from-primary-container/15 to-surface-base' : 'bg-gradient-to-br from-surface-base to-surface-dim',
-              ]}>
-                <img
-                  src={`/images/${p.slug}.webp`}
-                  alt={`${p.title} — peça impressa em ${p.mat}`}
-                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                  width="1376"
-                  height="1032"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
-                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style={`background:radial-gradient(circle at ${30 + i * 7}% ${40 + i * 3}%, rgba(97,197,79,0.06) 0%, transparent 60%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.45) 100%);`}></div>
+              <article>
+                <div class:list={[
+                  'relative overflow-hidden aspect-[4/3]',
+                  p.accent ? 'bg-gradient-to-br from-primary-container/15 to-surface-base' : 'bg-gradient-to-br from-surface-base to-surface-dim',
+                ]}>
+                  <img
+                    src={`/images/${p.slug}.webp`}
+                    alt={`${p.title} — peça impressa em ${p.mat}`}
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    width="1376"
+                    height="1032"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                  <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style={`background:radial-gradient(circle at ${30 + i * 7}% ${40 + i * 3}%, rgba(97,197,79,0.06) 0%, transparent 60%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.45) 100%);`}></div>
 
-                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                  <div class="absolute bottom-0 left-0 right-0 p-6">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest mb-3 block w-fit">{p.cat}</span>
-                    <h3 class="text-body-lg font-bold text-white uppercase tracking-[0.01em] mb-2">{p.title}</h3>
-                    <p class="text-code-data text-tertiary">Material: {p.mat}</p>
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/60 text-primary-container text-label-caps uppercase tracking-widest mb-3 block w-fit">{p.cat}</span>
+                      <h3 class="text-body-lg font-bold text-white uppercase tracking-[0.01em] mb-2">{p.title}</h3>
+                      <p class="text-code-data text-tertiary">Material: {p.mat}</p>
+                    </div>
+                  </div>
+
+                  <div class="absolute top-4 left-4">
+                    <span class="pill text-[10px]">{p.cat}</span>
+                  </div>
+
+                  <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm border border-primary-container/30 text-primary-container text-label-caps uppercase tracking-widest text-[9px]">
+                      Ver ficha
+                      <span class="material-symbols-outlined text-sm leading-none" aria-hidden="true">arrow_outward</span>
+                    </span>
                   </div>
                 </div>
 
-                <div class="absolute top-4 left-4">
-                  <span class="pill text-[10px]">{p.cat}</span>
+                <div class="py-4">
+                  <h3 class="text-body-md font-medium text-on-surface group-hover:text-white transition-colors mb-1">{p.title}</h3>
+                  <p class="text-code-data text-tertiary">{p.mat}</p>
                 </div>
-              </div>
-
-              <div class="py-4">
-                <h3 class="text-body-md font-medium text-on-surface group-hover:text-white transition-colors mb-1">{p.title}</h3>
-                <p class="text-code-data text-tertiary">{p.mat}</p>
-              </div>
-            </article>
+              </article>
+            </a>
           </li>
         ))}
       </ul>

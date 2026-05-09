@@ -167,20 +167,89 @@ const {
       }
     </script>
 
-    <!-- FAB: scroll to top -->
-    <button
-      id="fab-top"
-      type="button"
-      aria-label="Voltar ao topo da página"
-      class="fixed bottom-6 right-6 z-[60] w-11 h-11 rounded-full bg-surface-high border border-primary-container/30 text-primary-container flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-primary-container hover:text-on-primary hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
-      style="box-shadow:0 0 12px rgba(97,197,79,0.3);"
-    >
-      <span class="material-symbols-outlined text-lg" aria-hidden="true" style="font-variation-settings:'FILL' 1;">arrow_upward</span>
-    </button>
+    <!-- FAB stack: WhatsApp + Scroll-to-top -->
+    <div class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[60] flex flex-col items-end gap-3 pointer-events-none">
+      <!-- WhatsApp FAB com balão de mensagens variantes -->
+      <div id="fab-wa-wrap" class="relative pointer-events-auto flex items-center gap-3">
+        <!-- Balão de mensagem (esquerda) -->
+        <div
+          id="fab-wa-bubble"
+          class="hidden sm:flex flex-col gap-1 max-w-[280px] bg-surface-base border border-primary-container/25 rounded-sm px-4 py-3 opacity-0 translate-x-2 transition-all duration-300 pointer-events-auto relative"
+          style="box-shadow:0 12px 32px rgba(0,0,0,0.45),0 0 18px rgba(97,197,79,0.10);"
+          aria-live="polite"
+        >
+          <span class="text-[9px] uppercase tracking-[0.2em] text-primary-container font-bold">AUMAF 3D · ONLINE</span>
+          <span id="fab-wa-msg" class="text-sm text-on-surface leading-snug font-medium">Posso ajudar com seu orçamento?</span>
+          <button
+            type="button"
+            id="fab-wa-bubble-close"
+            class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-surface-high border border-white/15 text-on-surface-variant hover:text-white hover:border-white/30 flex items-center justify-center transition-colors"
+            aria-label="Fechar balão"
+          ><span class="material-symbols-outlined text-[12px] leading-none" aria-hidden="true">close</span></button>
+          <!-- Caudinha apontando para o FAB -->
+          <span class="absolute top-1/2 -translate-y-1/2 -right-[6px] w-3 h-3 bg-surface-base border-r border-b border-primary-container/25 rotate-[-45deg]" aria-hidden="true"></span>
+        </div>
+
+        <!-- Botão WhatsApp -->
+        <a
+          id="fab-wa"
+          href="https://wa.me/5516992863412?text=Vim%20do%20site%20da%20AUMAF%203D%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar com a AUMAF 3D pelo WhatsApp (abre em nova aba)"
+          class="fab-wa-btn relative w-14 h-14 sm:w-[58px] sm:h-[58px] rounded-full flex items-center justify-center text-white transition-transform duration-200 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container pointer-events-auto"
+          style="background:linear-gradient(135deg,#25D366 0%,#128C7E 100%); box-shadow:0 12px 28px rgba(37,211,102,0.45),0 0 0 0 rgba(37,211,102,0.55);"
+        >
+          <!-- Pulse rings -->
+          <span class="fab-wa-ring absolute inset-0 rounded-full pointer-events-none" aria-hidden="true"></span>
+          <span class="fab-wa-ring fab-wa-ring--2 absolute inset-0 rounded-full pointer-events-none" aria-hidden="true"></span>
+          <!-- WhatsApp glyph (SVG inline) -->
+          <svg viewBox="0 0 32 32" class="w-7 h-7" fill="currentColor" aria-hidden="true">
+            <path d="M16.001 4C9.376 4 4 9.376 4 16c0 2.119.554 4.184 1.605 5.997L4.05 27.95l6.108-1.595A11.946 11.946 0 0 0 16.001 28C22.626 28 28 22.624 28 16S22.626 4 16.001 4zm0 21.818c-1.84 0-3.652-.494-5.236-1.428l-.376-.222-3.626.948.967-3.534-.245-.376a9.793 9.793 0 0 1-1.534-5.207c0-5.42 4.41-9.83 9.832-9.83 5.42 0 9.83 4.41 9.83 9.83 0 5.421-4.41 9.819-9.612 9.819zm5.394-7.354c-.295-.148-1.747-.862-2.018-.96-.27-.099-.467-.148-.664.148-.196.295-.762.96-.935 1.157-.172.197-.344.222-.639.074-.295-.148-1.246-.459-2.373-1.464-.877-.782-1.47-1.747-1.642-2.042-.172-.295-.018-.454.13-.601.133-.133.295-.345.443-.517.149-.172.198-.295.297-.492.098-.197.05-.37-.025-.517-.074-.148-.665-1.604-.911-2.196-.24-.577-.484-.499-.665-.508l-.566-.01a1.083 1.083 0 0 0-.787.37c-.27.296-1.034 1.01-1.034 2.466 0 1.456 1.058 2.864 1.205 3.061.148.197 2.083 3.181 5.046 4.46.706.305 1.256.487 1.685.624.708.225 1.353.193 1.864.117.569-.085 1.747-.713 1.994-1.402.246-.69.246-1.281.172-1.402-.074-.123-.27-.197-.566-.345z"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Scroll to top -->
+      <button
+        id="fab-top"
+        type="button"
+        aria-label="Voltar ao topo da página"
+        class="pointer-events-auto w-11 h-11 rounded-full bg-surface-high border border-primary-container/30 text-primary-container flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-primary-container hover:text-on-primary hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+        style="box-shadow:0 0 12px rgba(97,197,79,0.3);"
+      >
+        <span class="material-symbols-outlined text-lg" aria-hidden="true" style="font-variation-settings:'FILL' 1;">arrow_upward</span>
+      </button>
+    </div>
+
+    <style>
+      /* WhatsApp FAB — pulse + bob */
+      @keyframes fabWaBob {
+        0%,100% { transform: translateY(0); }
+        50%     { transform: translateY(-4px); }
+      }
+      @keyframes fabWaRing {
+        0%   { transform: scale(1);   opacity: 0.55; }
+        80%  { transform: scale(1.9); opacity: 0;    }
+        100% { transform: scale(1.9); opacity: 0;    }
+      }
+      .fab-wa-btn { animation: fabWaBob 3.2s ease-in-out infinite; }
+      .fab-wa-btn:hover { animation-play-state: paused; }
+      .fab-wa-ring {
+        background: rgba(37,211,102,0.55);
+        animation: fabWaRing 2.4s cubic-bezier(0.4,0,0.6,1) infinite;
+      }
+      .fab-wa-ring--2 { animation-delay: 1.2s; }
+      @media (prefers-reduced-motion: reduce) {
+        .fab-wa-btn, .fab-wa-ring { animation: none !important; }
+      }
+      #fab-wa-bubble.is-open { opacity: 1; transform: translateX(0); }
+    </style>
   </body>
 </html>
 
 <script>
+  // Scroll to top
   const fab = document.getElementById('fab-top') as HTMLButtonElement | null
   if (fab) {
     window.addEventListener(
@@ -197,5 +266,54 @@ const {
       { passive: true },
     )
     fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+  }
+
+  // WhatsApp FAB — balão com mensagens rotativas
+  const bubble = document.getElementById('fab-wa-bubble')
+  const bubbleMsg = document.getElementById('fab-wa-msg')
+  const bubbleClose = document.getElementById('fab-wa-bubble-close')
+
+  if (bubble && bubbleMsg) {
+    const messages = [
+      'Posso ajudar com seu orçamento?',
+      'Tem uma peça parada na manutenção?',
+      'Precisa prototipar uma ideia em 48h?',
+      'Importação travada? Replicamos a peça aqui.',
+      'Quer falar com um engenheiro agora?',
+      'Orçamento em até 24h pelo WhatsApp.',
+    ]
+    let idx = 0
+    let dismissed = false
+
+    function showBubble() {
+      if (dismissed) return
+      bubbleMsg!.textContent = messages[idx % messages.length]
+      bubble!.classList.add('is-open')
+    }
+
+    function hideBubble() {
+      bubble!.classList.remove('is-open')
+    }
+
+    function rotate() {
+      if (dismissed) return
+      hideBubble()
+      idx = (idx + 1) % messages.length
+      window.setTimeout(showBubble, 350)
+    }
+
+    // Aparece após 3.5s, depois alterna a cada 7s
+    window.setTimeout(() => {
+      if (sessionStorage.getItem('fab-wa-dismissed') === '1') { dismissed = true; return }
+      showBubble()
+      window.setInterval(rotate, 7000)
+    }, 3500)
+
+    bubbleClose?.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation()
+      dismissed = true
+      hideBubble()
+      try { sessionStorage.setItem('fab-wa-dismissed', '1') } catch {}
+    })
   }
 </script>
