@@ -50,15 +50,17 @@ function buildPayload(lead: Lead) {
     landingPage: lead.landingPage ?? null,
   }
 
+  // Botyio resolve o Source pela API key bound (boundLeadSourceId nos scopes da key);
+  // mandar `source` no body viola o schema .strict() e retorna 400.
+  // Preservamos lead.source nosso lado em metadata para auditoria.
   return {
     externalId: lead.id,
     name: lead.name,
     ...(lead.email ? { email: lead.email } : {}),
     ...(phone ? { phone } : {}),
     ...(lead.message ? { message: lead.message } : {}),
-    source: lead.source ?? 'site-aumaf-3d',
     variables,
-    metadata,
+    metadata: { ...metadata, internalSource: lead.source ?? null },
   }
 }
 
