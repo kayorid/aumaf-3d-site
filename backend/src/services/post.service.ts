@@ -55,10 +55,33 @@ export async function generateUniqueSlug(title: string, currentSlug?: string): P
 }
 
 export async function listPosts(query: PostListQuery) {
-  const { page, pageSize, status, search, categoryId } = query
+  const {
+    page,
+    pageSize,
+    status,
+    search,
+    categoryId,
+    dateFrom,
+    dateTo,
+    generatedByAi,
+    featured,
+    sort,
+    order,
+  } = query
+  const dateField = sort === 'publishedAt' ? 'publishedAt' : 'updatedAt'
   const where = {
     ...(status ? { status } : {}),
     ...(categoryId ? { categoryId } : {}),
+    ...(typeof generatedByAi === 'boolean' ? { generatedByAi } : {}),
+    ...(typeof featured === 'boolean' ? { featured } : {}),
+    ...(dateFrom || dateTo
+      ? {
+          [dateField]: {
+            ...(dateFrom ? { gte: dateFrom } : {}),
+            ...(dateTo ? { lte: dateTo } : {}),
+          },
+        }
+      : {}),
     ...(search
       ? {
           OR: [
@@ -71,7 +94,7 @@ export async function listPosts(query: PostListQuery) {
   const [items, total] = await Promise.all([
     prisma.post.findMany({
       where,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { [sort]: order } as Record<string, 'asc' | 'desc'>,
       skip: (page - 1) * pageSize,
       take: pageSize,
       include: {

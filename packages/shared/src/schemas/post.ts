@@ -34,6 +34,12 @@ export const PostListQuerySchema = z.object({
   status: PostStatusSchema.optional(),
   search: z.string().optional(),
   categoryId: z.string().cuid().optional(),
+  dateFrom: z.coerce.date().optional(),
+  dateTo: z.coerce.date().optional(),
+  generatedByAi: z.coerce.boolean().optional(),
+  featured: z.coerce.boolean().optional(),
+  sort: z.enum(['updatedAt', 'createdAt', 'publishedAt', 'title']).default('updatedAt'),
+  order: z.enum(['asc', 'desc']).default('desc'),
 })
 export type PostListQuery = z.infer<typeof PostListQuerySchema>
 
