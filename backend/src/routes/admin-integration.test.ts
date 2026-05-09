@@ -15,6 +15,7 @@ jest.mock('../lib/prisma', () => ({
     user: {
       findUnique: jest.fn(),
     },
+    userPermission: { findMany: jest.fn().mockResolvedValue([]) },
   },
 }))
 

@@ -12,6 +12,7 @@ jest.mock('../workers/botyio-lead-sync.worker', () => ({
 jest.mock('../lib/prisma', () => ({
   prisma: {
     user: { findUnique: jest.fn() },
+    userPermission: { findMany: jest.fn().mockResolvedValue([]) },
     lead: {
       findFirst: jest.fn(),
       updateMany: jest.fn(),

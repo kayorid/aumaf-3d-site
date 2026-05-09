@@ -7,6 +7,8 @@ import { PostsListPage } from '@/features/posts/pages/PostsListPage'
 import { PostEditorPage } from '@/features/posts/pages/PostEditorPage'
 import { LeadsListPage } from '@/features/leads/pages/LeadsListPage'
 import { ProfilePage } from '@/features/profile/pages/ProfilePage'
+import { UsersListPage } from '@/features/users/pages/UsersListPage'
+import { UserDetailPage } from '@/features/users/pages/UserDetailPage'
 import { SettingsPage } from '@/features/settings/pages/SettingsPage'
 import { BotyioConfigPage } from '@/features/integrations/pages/BotyioConfigPage'
 import { CategoriesPage } from '@/features/categories/pages/CategoriesPage'
@@ -28,6 +30,8 @@ export const router = createBrowserRouter([
           { path: '/categories', element: <CategoriesPage /> },
           { path: '/leads', element: <LeadsListPage /> },
           { path: '/perfil', element: <ProfilePage /> },
+          { path: '/usuarios', element: <UsersListPage /> },
+          { path: '/usuarios/:id', element: <UserDetailPage /> },
           { path: '/settings', element: <SettingsPage /> },
           { path: '/integrations/botyio', element: <BotyioConfigPage /> },
           { path: '*', element: <NotFoundPage /> },
