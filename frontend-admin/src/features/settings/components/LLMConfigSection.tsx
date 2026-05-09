@@ -33,13 +33,21 @@ const CUSTOM_MODEL_VALUE = '__custom__'
 
 const PROVIDER_MODELS: Record<AIProviderName, Array<{ value: string; label: string; hint?: string }>> = {
   openai: [
-    { value: 'gpt-4o-mini', label: 'gpt-4o-mini', hint: 'rápido · barato (padrão)' },
-    { value: 'gpt-4o', label: 'gpt-4o', hint: 'multimodal · qualidade' },
-    { value: 'gpt-4.1', label: 'gpt-4.1', hint: 'flagship 2025' },
+    { value: 'gpt-5', label: 'gpt-5', hint: 'flagship 2025/26 · multimodal' },
+    { value: 'gpt-5-mini', label: 'gpt-5-mini', hint: 'flagship rápido · barato' },
+    { value: 'gpt-5-nano', label: 'gpt-5-nano', hint: 'ultra-rápido · custo mínimo' },
+    { value: 'gpt-4.1', label: 'gpt-4.1', hint: 'flagship 2025 · 1M ctx' },
     { value: 'gpt-4.1-mini', label: 'gpt-4.1-mini', hint: 'flagship rápido' },
-    { value: 'gpt-4-turbo', label: 'gpt-4-turbo' },
+    { value: 'gpt-4.1-nano', label: 'gpt-4.1-nano', hint: 'mais barato · 1M ctx' },
+    { value: 'gpt-4o', label: 'gpt-4o', hint: 'multimodal · qualidade' },
+    { value: 'gpt-4o-mini', label: 'gpt-4o-mini', hint: 'rápido · barato (padrão)' },
+    { value: 'chatgpt-4o-latest', label: 'chatgpt-4o-latest', hint: 'sempre o último 4o' },
+    { value: 'o3', label: 'o3', hint: 'reasoning · qualidade' },
     { value: 'o3-mini', label: 'o3-mini', hint: 'reasoning · rápido' },
-    { value: 'o1-mini', label: 'o1-mini', hint: 'reasoning' },
+    { value: 'o4-mini', label: 'o4-mini', hint: 'reasoning · novo' },
+    { value: 'o1', label: 'o1', hint: 'reasoning · profundo' },
+    { value: 'o1-mini', label: 'o1-mini', hint: 'reasoning · barato' },
+    { value: 'gpt-4-turbo', label: 'gpt-4-turbo', hint: 'legacy' },
   ],
   anthropic: [
     { value: 'claude-opus-4-7', label: 'claude-opus-4-7', hint: 'flagship · 1M ctx' },
