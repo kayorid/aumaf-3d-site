@@ -19,7 +19,9 @@ async function dynamicBlogPages(): Promise<string[]> {
 }
 
 export default defineConfig({
-  site: 'https://aumaf3d.com.br',
+  // Domínio de produção atual (homologação). Pós-migração para aumaf3d.com.br,
+  // alterar aqui + COMPANY.url em src/lib/company.ts.
+  site: 'https://aumaf.kayoridolfi.ai',
   // output: 'server' — todas as páginas são SSR por padrão.
   // Páginas estáticas (home, servicos etc.) marcadas com `export const prerender = true`.
   // Blog (/blog, /blog/[slug]) é SSR puro: cada F5 busca da API e reflete edições imediatamente.

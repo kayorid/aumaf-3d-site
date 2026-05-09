@@ -46,6 +46,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString()
 const fullTitle = title.includes('AUMAF 3D') ? title : `${title} | AUMAF 3D`
 const imageAlt = title.includes('AUMAF 3D') ? title : `${title} — AUMAF 3D`
 
+// og:image precisa ser URL absoluta. Resolve contra o host real da requisição
+// (funciona tanto em homologação quanto pós-migração de domínio sem mudar código).
+const resolvedOgImage = ogImage.startsWith('http')
+  ? ogImage
+  : new URL(ogImage, Astro.url).toString()
+
 // @graph base: Organization + LocalBusiness + WebSite + WebPage atual
 const baseGraph: object[] = [
   organizationSchema(),
@@ -84,7 +90,7 @@ const graph = graphPayload([...baseGraph, ...schemas])
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
-<meta property="og:image" content={ogImage} />
+<meta property="og:image" content={resolvedOgImage} />
 <meta property="og:type" content={ogType} />
 <meta property="og:locale" content="pt_BR" />
 <meta property="og:site_name" content="AUMAF 3D" />
@@ -98,7 +104,7 @@ const graph = graphPayload([...baseGraph, ...schemas])
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image" content={resolvedOgImage} />
 <meta name="twitter:image:alt" content={imageAlt} />
 
 <!-- Article meta (para BlogPosting) -->

@@ -6,9 +6,11 @@
 export const COMPANY = {
   name: 'AUMAF 3D',
   legalName: 'AUMAF 3D — Manufatura Aditiva',
-  url: 'https://aumaf3d.com.br',
-  logo: 'https://aumaf3d.com.br/logo.png',
-  ogImageDefault: 'https://aumaf3d.com.br/og/og-default.svg',
+  // Domínio canônico atual (homologação). Pós-migração: trocar para https://aumaf3d.com.br
+  // e também alterar `site` em frontend-public/astro.config.ts.
+  url: 'https://aumaf.kayoridolfi.ai',
+  logo: 'https://aumaf.kayoridolfi.ai/logo.png',
+  ogImageDefault: '/og/og-default.png',
   founded: '2022',
   description:
     'Manufatura aditiva industrial de alta precisão. Peças em metal, carbono e polímeros com tolerância ±0.05mm. São Carlos – SP.',
