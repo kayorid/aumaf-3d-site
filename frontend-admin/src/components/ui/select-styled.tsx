@@ -72,16 +72,16 @@ export function SelectStyled<V extends string>({
                 value={opt.value}
                 disabled={opt.disabled}
                 className={cn(
-                  'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-3 py-2 text-sm text-on-surface outline-none',
+                  'relative flex cursor-pointer select-none items-center gap-2 rounded-sm pl-8 pr-3 py-2 text-sm text-on-surface outline-none',
                   'data-[highlighted]:bg-white/5 data-[highlighted]:text-primary-container',
                   'data-[state=checked]:text-primary-container data-[state=checked]:bg-primary-container/8',
                   'data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed',
                 )}
               >
-                <RSelect.ItemIndicator className="absolute left-1 flex size-4 items-center justify-center">
+                <RSelect.ItemIndicator className="absolute left-2 flex size-4 items-center justify-center">
                   <Check className="size-3 text-primary-container" />
                 </RSelect.ItemIndicator>
-                <span className="pl-5">{opt.label}</span>
+                <RSelect.ItemText>{opt.label}</RSelect.ItemText>
               </RSelect.Item>
             ))}
           </RSelect.Viewport>
