@@ -92,14 +92,18 @@ adminIntegrationRoutes.post('/botyio/test', async (req, res, next) => {
     let message = 'Conexão estabelecida com sucesso.'
 
     try {
-      const probe = await fetch(`${baseUrl.replace(/\/$/, '')}/v1/sources/me`, {
+      // Probe um endpoint real autenticado: GET /v1/leads?limit=1.
+      // 200 = ok; 401 = key inválida; 404 = endpoint mudou no provider.
+      const probe = await fetch(`${baseUrl.replace(/\/$/, '')}/v1/leads?limit=1`, {
         method: 'GET',
         headers: { 'X-API-Key': apiKey, Accept: 'application/json' },
         signal: AbortSignal.timeout(5_000),
       })
       httpStatus = probe.status
       ok = probe.status >= 200 && probe.status < 400
-      if (!ok) {
+      if (probe.status === 401) {
+        message = 'API key inválida ou sem permissão.'
+      } else if (!ok) {
         message = `Botyio respondeu HTTP ${probe.status}.`
       }
     } catch (err) {

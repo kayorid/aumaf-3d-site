@@ -192,13 +192,31 @@ describe('POST /api/v1/admin/integrations/botyio/test', () => {
       .expect(200)
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      expect.stringContaining('/v1/sources/me'),
+      expect.stringContaining('/v1/leads?limit=1'),
       expect.objectContaining({
         headers: expect.objectContaining({ 'X-API-Key': 'bty_lds_test_provided' }),
       }),
     )
     expect(res.body.ok).toBe(true)
     expect(res.body.status).toBe(200)
+    fetchSpy.mockRestore()
+  })
+
+  it('reporta mensagem específica para 401 (key inválida)', async () => {
+    const fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+      status: 401,
+      ok: false,
+    } as Response)
+
+    const res = await request(app)
+      .post('/api/v1/admin/integrations/botyio/test')
+      .set('Cookie', adminCookie())
+      .send({ apiKey: 'bty_lds_invalid' })
+      .expect(200)
+
+    expect(res.body.ok).toBe(false)
+    expect(res.body.status).toBe(401)
+    expect(res.body.message).toMatch(/inválida/i)
     fetchSpy.mockRestore()
   })
 
