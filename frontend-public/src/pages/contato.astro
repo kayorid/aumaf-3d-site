@@ -112,8 +112,31 @@ const infoCards = [
             <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Formulário de Projeto</span>
           </div>
 
+          <!-- Banner de contexto — exibido quando o usuário chega via ?material= ou ?ref= -->
+          <div
+            id="context-banner"
+            class="hidden mb-6 rounded-sm border border-primary-container/30 bg-primary-container/8 p-4 flex items-start gap-3"
+            role="status"
+            aria-live="polite"
+          >
+            <span class="material-symbols-outlined text-primary-container text-xl shrink-0 mt-0.5" aria-hidden="true" style="font-variation-settings:'FILL' 1;">target</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-label-caps text-primary-container uppercase tracking-[0.18em] text-[10px] mb-1">Solicitando orçamento para</p>
+              <p id="context-banner-text" class="text-body-md text-white font-medium leading-snug">—</p>
+              <p id="context-banner-sub" class="text-code-data text-tertiary text-[11px] mt-1 hidden">—</p>
+            </div>
+            <button
+              type="button"
+              id="context-banner-clear"
+              class="shrink-0 w-7 h-7 inline-flex items-center justify-center rounded-full text-on-surface-variant hover:text-error border border-transparent hover:border-error/40 transition-colors"
+              aria-label="Remover contexto"
+            ><span class="material-symbols-outlined text-base leading-none" aria-hidden="true">close</span></button>
+          </div>
+
           <form id="contact-form" class="space-y-8" novalidate aria-describedby="form-help">
             <p id="form-help" class="sr-only">Campos marcados com asterisco são obrigatórios.</p>
+            <input type="hidden" name="material" id="material-hidden" value="" />
+            <input type="hidden" name="ref" id="ref-hidden" value="" />
 
             <!-- Grupo: Dados do Solicitante -->
             <fieldset class="space-y-6 border-0 p-0 m-0">
@@ -362,6 +385,13 @@ const infoCards = [
   // ── Tipo de Projeto: radiogroup acessível ──────────────────
   const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('#subject-pills [role="radio"]'))
   const hiddenInput = document.getElementById('assunto-hidden') as HTMLInputElement | null
+  const materialHidden = document.getElementById('material-hidden') as HTMLInputElement | null
+  const refHidden = document.getElementById('ref-hidden') as HTMLInputElement | null
+  const mensagemEl = document.getElementById('mensagem') as HTMLTextAreaElement | null
+  const banner = document.getElementById('context-banner')
+  const bannerText = document.getElementById('context-banner-text')
+  const bannerSub = document.getElementById('context-banner-sub')
+  const bannerClear = document.getElementById('context-banner-clear')
 
   function selectPill(pill: HTMLButtonElement) {
     pills.forEach((p) => {
@@ -372,6 +402,84 @@ const infoCards = [
     })
     if (hiddenInput) hiddenInput.value = pill.dataset.value || ''
   }
+
+  // ── Contexto via querystring (?material= ou ?ref=) ─────────
+  // Ativa banner, pré-seleciona pill e pré-preenche mensagem
+  const params = new URLSearchParams(location.search)
+  const materialParam = params.get('material')?.trim() || ''
+  const refParam = params.get('ref')?.trim() || ''
+
+  // Mapa "Categoria material → pill Tipo de Projeto"
+  // Usado para auto-selecionar a pill apropriada quando vem ?material=
+  const materialToPillHints: Array<{ match: RegExp; pill: string }> = [
+    { match: /metal|316l|titânio|titanio|alumínio|aluminio|inox|aço|aco/i, pill: 'Metal' },
+    { match: /resina|sla|tough|clear|dental|biocompatível|biocompativel/i, pill: 'Prototipagem' },
+    { match: /tpu|flex|elastômero|elastomero/i, pill: 'Peça Funcional' },
+    { match: /pa|nylon|peek|carbono|fibra|abs|petg|asa|policarbonato|pc/i, pill: 'Peça Funcional' },
+    { match: /pla/i, pill: 'Prototipagem' },
+  ]
+
+  function pickPillForMaterial(material: string): HTMLButtonElement | null {
+    for (const hint of materialToPillHints) {
+      if (hint.match.test(material)) {
+        return pills.find((p) => p.dataset.value === hint.pill) ?? null
+      }
+    }
+    return pills.find((p) => p.dataset.value === 'Peça Funcional') ?? null
+  }
+
+  if (materialParam) {
+    if (materialHidden) materialHidden.value = materialParam
+    if (banner && bannerText) {
+      bannerText.textContent = materialParam
+      if (bannerSub) {
+        bannerSub.textContent = 'Material pré-selecionado · Descreva geometria, quantidade e prazo abaixo.'
+        bannerSub.classList.remove('hidden')
+      }
+      banner.classList.remove('hidden')
+    }
+    const targetPill = pickPillForMaterial(materialParam)
+    if (targetPill) selectPill(targetPill)
+    if (mensagemEl && !mensagemEl.value) {
+      mensagemEl.value = `Olá! Tenho interesse em um orçamento usando o material ${materialParam}.\n\nDetalhes da peça (geometria, quantidade, prazo desejado):\n`
+      mensagemEl.dispatchEvent(new Event('input'))
+    }
+  } else if (refParam) {
+    if (refHidden) refHidden.value = refParam
+    if (banner && bannerText) {
+      bannerText.textContent = `Projeto de referência: ${refParam}`
+      if (bannerSub) {
+        bannerSub.textContent = 'Vimos que você consultou esse projeto do portfolio. Vamos partir dele.'
+        bannerSub.classList.remove('hidden')
+      }
+      banner.classList.remove('hidden')
+    }
+    if (mensagemEl && !mensagemEl.value) {
+      mensagemEl.value = `Olá! Tenho um projeto similar ao "${refParam}" do portfolio. Gostaria de orçamento para:\n\n`
+      mensagemEl.dispatchEvent(new Event('input'))
+    }
+  }
+
+  function slugify(s: string): string {
+    return s
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 60)
+  }
+
+  bannerClear?.addEventListener('click', () => {
+    banner?.classList.add('hidden')
+    if (materialHidden) materialHidden.value = ''
+    if (refHidden) refHidden.value = ''
+    // remove ?material= / ?ref= da URL sem reload
+    const url = new URL(location.href)
+    url.searchParams.delete('material')
+    url.searchParams.delete('ref')
+    history.replaceState(null, '', url.toString())
+  })
 
   pills.forEach((pill, i) => {
     pill.addEventListener('click', () => {
@@ -467,16 +575,44 @@ const infoCards = [
     const sobrenome = (document.getElementById('sobrenome') as HTMLInputElement).value.trim()
     const email = (document.getElementById('email') as HTMLInputElement).value.trim()
     const telefone = (document.getElementById('telefone') as HTMLInputElement).value.trim()
-    const mensagem = (document.getElementById('mensagem') as HTMLTextAreaElement).value.trim()
+    const empresa = (document.getElementById('empresa') as HTMLInputElement).value.trim()
+    const mensagemUsuario = (document.getElementById('mensagem') as HTMLTextAreaElement).value.trim()
     const assunto = hiddenInput?.value ?? ''
+    const material = materialHidden?.value.trim() ?? ''
+    const ref = refHidden?.value.trim() ?? ''
+    const arquivo = (document.getElementById('file-input') as HTMLInputElement | null)?.files?.[0] ?? null
     const utm = readUtm()
+
+    // ── Enriquecer mensagem com header estruturado contendo TODOS os
+    //    metadados que o schema atual de leads não tem campos dedicados.
+    //    Garante que admin/email/Botyio recebam o contexto completo do lead.
+    const headerLines: string[] = ['━━━ DADOS DO PROJETO ━━━']
+    if (assunto) headerLines.push(`Tipo: ${assunto}`)
+    if (material) headerLines.push(`Material de interesse: ${material}`)
+    if (ref) headerLines.push(`Projeto de referência (portfolio): ${ref}`)
+    if (empresa) headerLines.push(`Empresa: ${empresa}`)
+    if (telefone) headerLines.push(`Telefone/WhatsApp: ${telefone}`)
+    if (arquivo) {
+      const sizeKb = (arquivo.size / 1024).toFixed(1)
+      headerLines.push(`Arquivo anexo: ${arquivo.name} (${sizeKb} KB) — solicitar via WhatsApp`)
+    }
+    headerLines.push('━━━━━━━━━━━━━━━━━━━━━━━━')
+    const message = `${headerLines.join('\n')}\n\n${mensagemUsuario}`
+
+    // ── Source granular para segmentação no admin/Botyio
+    let sourceTag = 'site-contato'
+    if (material) sourceTag = `site-contato/material-${slugify(material)}`
+    else if (ref) sourceTag = `site-contato/portfolio-${slugify(ref)}`
+    else if (assunto) sourceTag = `site-contato/${slugify(assunto)}`
 
     const payload = {
       name: `${nome} ${sobrenome}`.trim(),
       email,
       ...(telefone ? { phone: telefone } : {}),
-      message: mensagem,
-      source: `site-contato${assunto ? `-${assunto.toLowerCase().replace(/\s+/g, '-')}` : ''}`,
+      message,
+      source: sourceTag,
+      referrer: document.referrer || undefined,
+      landingPage: `${location.pathname}${location.search}` || undefined,
       ...utm,
     }
 
