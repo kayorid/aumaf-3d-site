@@ -165,8 +165,9 @@ const carouselId = `home-reviews-${Math.random().toString(36).slice(2, 9)}`
             d.dataset.active = active ? 'true' : 'false'
             d.setAttribute('aria-selected', active ? 'true' : 'false')
           })
-          if (prevBtn) prevBtn.disabled = idx === 0
-          if (nextBtn) nextBtn.disabled = idx >= slides.length - 1
+          // Loop infinito: setas nunca ficam disabled
+          if (prevBtn) prevBtn.disabled = false
+          if (nextBtn) nextBtn.disabled = false
         }
 
         function goTo(i: number, behavior: ScrollBehavior = 'smooth') {
@@ -177,13 +178,18 @@ const carouselId = `home-reviews-${Math.random().toString(36).slice(2, 9)}`
 
         function next() {
           const i = getCurrentIndex()
-          if (i >= slides.length - 1) goTo(0)
-          else goTo(i + 1)
+          // Loop infinito: ao chegar no último, volta pro primeiro com salto instantâneo
+          if (i >= slides.length - 1) {
+            goTo(0, prefersReducedMotion ? 'auto' : 'smooth')
+          } else goTo(i + 1)
         }
 
         function prev() {
           const i = getCurrentIndex()
-          goTo(i - 1)
+          // Loop infinito: ao estar no primeiro, vai pro último
+          if (i <= 0) {
+            goTo(slides.length - 1, prefersReducedMotion ? 'auto' : 'smooth')
+          } else goTo(i - 1)
         }
 
         function startAutoplay() {

@@ -108,15 +108,15 @@ const schemas = [
   <section class="min-h-[60vh] flex items-end bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-servicos">
     <!-- Background AI: blueprint da impressora -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.18]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.40]"
       aria-hidden="true"
       style="background-image:url('/images/bg-blueprint.webp');"
     ></div>
-    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 70% 50% at 85% 15%,rgba(97,197,79,0.10) 0%,transparent 60%);"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 40% 40% at 10% 80%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 70% 50% at 85% 15%,rgba(97,197,79,0.12) 0%,transparent 60%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 40% 40% at 10% 80%,rgba(97,197,79,0.07) 0%,transparent 65%);"></div>
     <!-- Vinheta para legibilidade do conteúdo -->
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,transparent 30%,transparent 65%,rgba(0,0,0,0.65) 100%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.50) 0%,transparent 30%,transparent 65%,rgba(0,0,0,0.65) 100%);"></div>
     <div class="absolute bottom-0 inset-x-0 h-16 pointer-events-none" aria-hidden="true" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.6));"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge w-full relative z-10">
@@ -147,12 +147,12 @@ const schemas = [
   <section class="bg-background py-section relative overflow-hidden" aria-labelledby="servicos-list">
     <!-- Background AI: hexágonos -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.08]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.20]"
       aria-hidden="true"
       style="background-image:url('/images/bg-hex.webp');"
     ></div>
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 40% at 95% 0%,rgba(97,197,79,0.06) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 5% 100%,rgba(97,197,79,0.05) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.08] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 40% at 95% 0%,rgba(97,197,79,0.08) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 5% 100%,rgba(97,197,79,0.07) 0%,transparent 65%);"></div>
     <h2 id="servicos-list" class="sr-only">Lista de serviços</h2>
     <div class="max-w-[1600px] mx-auto px-edge divide-y divide-white/5 relative z-10">
       {services.map((service, i) => (
@@ -193,15 +193,15 @@ const schemas = [
 
   <!-- Como Funciona — Industrial Control Surface (refeito) -->
   <section class="bg-surface-low py-section relative overflow-hidden" aria-labelledby="como-funciona">
-    <!-- Background AI subliminar (blueprint da impressora) -->
+    <!-- Background AI (blueprint da impressora) — mais presente -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.10]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.42]"
       aria-hidden="true"
       style="background-image:url('/images/bg-blueprint.webp');"
     ></div>
     <!-- Camadas geométricas overlay -->
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 50% at 88% 12%,rgba(97,197,79,0.10) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 8% 88%,rgba(97,197,79,0.07) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.14] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 50% at 88% 12%,rgba(97,197,79,0.16) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 8% 88%,rgba(97,197,79,0.11) 0%,transparent 65%);"></div>
     <!-- Vinheta vertical para foco no conteúdo -->
     <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.50) 0%,transparent 18%,transparent 82%,rgba(0,0,0,0.70) 100%);"></div>
 
@@ -279,12 +279,12 @@ const schemas = [
   <section class="bg-background py-section relative overflow-hidden" aria-labelledby="cta-servicos">
     <!-- Background AI: particles -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.18]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.32]"
       aria-hidden="true"
       style="background-image:url('/images/bg-particles.webp');"
     ></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(97,197,79,0.10) 0%,transparent 65%);"></div>
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(97,197,79,0.12) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.08] pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-[1600px] mx-auto px-edge text-center relative z-10">
       <h2 id="cta-servicos" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Inicie seu Projeto Agora</h2>
       <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Envie seu arquivo ou descreva o projeto. Orçamento em até 24 horas.</p>

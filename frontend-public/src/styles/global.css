@@ -95,19 +95,19 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Nav glass */
+  /* Nav glass — mais opaco para evitar conflito com conteúdo de fundo */
   .nav-glass {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(48px);
-    -webkit-backdrop-filter: blur(48px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(28px) saturate(140%);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   /* Sub-nav glass (filtros sticky abaixo do navbar) */
   .nav-glass-sub {
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: rgba(10, 10, 10, 0.78);
+    backdrop-filter: blur(24px) saturate(130%);
+    -webkit-backdrop-filter: blur(24px) saturate(130%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
@@ -803,4 +803,74 @@
   .prose-aumaf tbody tr:last-child td { border-bottom: 0; }
   .prose-aumaf tbody tr:hover { background: rgba(97,197,79,0.04); }
   .prose-aumaf tbody tr td:first-child { color: rgba(190, 202, 182, 0.95); font-weight: 600; }
+}
+
+/* ============================================================
+ * Polish final — micro-interações + neon highlights (PR #36)
+ * ============================================================ */
+
+/* Magnetic CTAs: leve "respiro" ao hover em todos os botões verdes do DS */
+.glow-effect:hover,
+.glow-effect-lg:hover {
+  box-shadow:
+    0 0 24px rgba(97, 197, 79, 0.45),
+    0 0 6px rgba(97, 197, 79, 0.65),
+    inset 0 0 0 1px rgba(97, 197, 79, 0.4);
+}
+
+/* Hover-lift universal nos glass-panels */
+.glass-panel {
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+/* Pill-green glow animado */
+.pill-green {
+  box-shadow: 0 0 0 rgba(97, 197, 79, 0);
+  transition: box-shadow 240ms ease, color 240ms ease, border-color 240ms ease;
+}
+.pill-green:hover,
+.group:hover .pill-green {
+  box-shadow: 0 0 18px rgba(97, 197, 79, 0.35);
+}
+
+/* Neon highlight para texto-âncora dentro de seções escuras */
+.neon-text {
+  color: #61c54f;
+  text-shadow:
+    0 0 4px rgba(97, 197, 79, 0.6),
+    0 0 12px rgba(97, 197, 79, 0.35);
+}
+
+/* Aumenta sutilmente o glow do animate-scan-line */
+@keyframes scanLinePulse {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  50%  { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+.animate-scan-line {
+  animation: scanLinePulse 3.2s ease-in-out infinite;
+}
+
+/* Marquee shimmer em wordmarks de clientes ao scroll para a seção */
+@keyframes brandShimmer {
+  0%, 90%, 100% { color: var(--color-on-surface-variant, #999); text-shadow: none; }
+  45%           { color: #fff; text-shadow: 0 0 10px rgba(97, 197, 79, 0.4); }
+}
+
+/* Animação 'pulse' no pin do SectionSeparator strong */
+@keyframes pinPulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(97, 197, 79, 0.55); }
+  50%      { box-shadow: 0 0 0 6px rgba(97, 197, 79, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scan-line,
+  .glass-panel,
+  .pill-green {
+    animation: none !important;
+    transition: none !important;
+  }
 }

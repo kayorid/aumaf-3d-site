@@ -165,29 +165,43 @@ const homeSchemas = [
             <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
           </div>
 
-          <!-- Active Build widget — abaixo do vídeo -->
-          <div class="glass-panel rounded-sm p-5 w-full" style="border:1px solid rgba(97,197,79,0.12);">
+          <!-- Active Build widget — telemetry animada -->
+          <div class="glass-panel rounded-sm p-5 w-full relative overflow-hidden" style="border:1px solid rgba(97,197,79,0.12);">
+            <!-- Scan-line top -->
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent animate-scan-line" aria-hidden="true"></div>
+
             <div class="flex justify-between items-center mb-4 border-b border-white/8 pb-3">
-              <span class="text-label-caps text-tertiary uppercase tracking-widest text-[10px]">Active Build</span>
-              <span class="text-label-caps text-primary-container tracking-widest text-[10px]">ID_409X</span>
+              <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot flex-shrink-0 glow-effect"></span>
+                <span class="text-label-caps text-tertiary uppercase tracking-widest text-[10px]">Active Build</span>
+              </div>
+              <span class="text-label-caps text-primary-container tracking-widest text-[10px] font-mono active-build-id" data-id-anim>ID_409X</span>
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <div class="flex justify-between text-[11px] text-tertiary mb-1.5">
                   <span class="uppercase tracking-wider">Impressão</span>
-                  <span class="text-primary-container font-semibold">80%</span>
+                  <span class="text-primary-container font-semibold font-mono" data-progress-pct>0%</span>
                 </div>
-                <div class="h-px bg-surface-high rounded overflow-hidden">
-                  <div class="h-full bg-primary-container glow-effect transition-all duration-1000" style="width:80%;"></div>
+                <div class="h-[2px] bg-surface-high rounded overflow-hidden relative">
+                  <div
+                    class="h-full bg-primary-container glow-effect transition-[width] duration-[2400ms] ease-out"
+                    style="width:0%;"
+                    data-progress-bar
+                  ></div>
                 </div>
               </div>
               <div>
                 <div class="flex justify-between text-[11px] text-tertiary mb-1.5">
                   <span class="uppercase tracking-wider">Temperatura</span>
-                  <span class="text-error font-semibold">265°C</span>
+                  <span class="text-error font-semibold font-mono" data-temp-pct>0°C</span>
                 </div>
-                <div class="h-px bg-surface-high rounded overflow-hidden">
-                  <div class="h-full bg-error" style="width:95%;"></div>
+                <div class="h-[2px] bg-surface-high rounded overflow-hidden">
+                  <div
+                    class="h-full bg-error transition-[width] duration-[1800ms] ease-out"
+                    style="width:0%;"
+                    data-temp-bar
+                  ></div>
                 </div>
               </div>
             </div>
@@ -196,6 +210,56 @@ const homeSchemas = [
               <span class="text-[11px] text-tertiary tracking-wide font-mono">PA CF15 · Layer: 0.15mm · Nozzle: 0.4mm</span>
             </div>
           </div>
+
+          <script is:inline>
+            (function () {
+              const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+              const bar = document.querySelector('[data-progress-bar]')
+              const pct = document.querySelector('[data-progress-pct]')
+              const tBar = document.querySelector('[data-temp-bar]')
+              const tPct = document.querySelector('[data-temp-pct]')
+              if (!bar || !pct || !tBar || !tPct) return
+
+              if (reduced) {
+                bar.style.width = '80%'; pct.textContent = '80%'
+                tBar.style.width = '95%'; tPct.textContent = '265°C'
+                return
+              }
+
+              // Anima ao entrar no viewport
+              const obs = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                  if (!e.isIntersecting) return
+                  // Progress 0→80% com counter
+                  let p = 0
+                  bar.style.width = '80%'
+                  const tStart = performance.now()
+                  const dur = 2400
+                  const tick = (now) => {
+                    const k = Math.min(1, (now - tStart) / dur)
+                    p = Math.round(80 * (1 - Math.pow(1 - k, 3)))
+                    pct.textContent = p + '%'
+                    if (k < 1) requestAnimationFrame(tick)
+                  }
+                  requestAnimationFrame(tick)
+                  // Temperature 0→265°C
+                  let t = 0
+                  tBar.style.width = '95%'
+                  const t2Start = performance.now()
+                  const dur2 = 1800
+                  const tick2 = (now) => {
+                    const k = Math.min(1, (now - t2Start) / dur2)
+                    t = Math.round(265 * (1 - Math.pow(1 - k, 3)))
+                    tPct.textContent = t + '°C'
+                    if (k < 1) requestAnimationFrame(tick2)
+                  }
+                  requestAnimationFrame(tick2)
+                  obs.disconnect()
+                })
+              }, { threshold: 0.4 })
+              obs.observe(bar.closest('.glass-panel'))
+            })()
+          </script>
         </div>
       </div>
     </div>
@@ -505,13 +569,13 @@ const homeSchemas = [
   <section class="bg-surface-low py-section section-glow-top relative overflow-hidden">
     <!-- Background AI: hexágonos -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.10]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.24]"
       aria-hidden="true"
       style="background-image:url('/images/bg-hex.webp');"
     ></div>
     <!-- Camadas geométricas -->
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 45% at 8% 5%,rgba(97,197,79,0.10) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 95% 95%,rgba(97,197,79,0.07) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.14] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 45% at 8% 5%,rgba(97,197,79,0.12) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 95% 95%,rgba(97,197,79,0.09) 0%,transparent 65%);"></div>
     <div class="line-glow-bright absolute top-0 left-[5%] right-[5%] pointer-events-none" aria-hidden="true"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
@@ -563,12 +627,12 @@ const homeSchemas = [
   <section class="bg-background py-section relative overflow-hidden" aria-labelledby="personas-title">
     <!-- Background AI: particles atmosféricas -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.14]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.28]"
       aria-hidden="true"
       style="background-image:url('/images/bg-particles.webp');"
     ></div>
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 35% at 18% 15%,rgba(97,197,79,0.08) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 82% 85%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.08] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 35% at 18% 15%,rgba(97,197,79,0.10) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 82% 85%,rgba(97,197,79,0.08) 0%,transparent 65%);"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="mb-14 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -690,11 +754,11 @@ const homeSchemas = [
   <section class="bg-background py-section relative overflow-hidden">
     <!-- Background AI: blueprint -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.07]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.18]"
       aria-hidden="true"
       style="background-image:url('/images/bg-blueprint.webp');"
     ></div>
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.08] pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="mb-16 border-b border-white/8 pb-10">
         <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">04 // Sistemas</span>
@@ -821,25 +885,64 @@ const homeSchemas = [
 
 
   <!-- =============================================
-       CLIENTES — Logo grid
+       CLIENTES — Logo grid (wordmarks estilizados)
        ============================================= -->
-  <section class="bg-surface-low border-y border-white/5 py-14">
-    <div class="max-w-[1600px] mx-auto px-edge">
-      <div class="text-center mb-10">
-        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em]">Empresas que confiam na AUMAF 3D</span>
+  <section class="bg-surface-low border-y border-white/5 py-16 relative overflow-hidden">
+    <!-- Background subliminar -->
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.05] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 35% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <div class="text-center mb-12">
+        <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-2">Trust // Proof</span>
+        <p class="text-on-surface-variant uppercase tracking-[0.18em] text-[11px]">Empresas que confiam na AUMAF 3D</p>
       </div>
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-px border border-white/5 rounded-sm overflow-hidden">
+
+      <ul role="list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-px bg-white/5 border border-white/5 rounded-sm overflow-hidden">
         {[
-          'Fugini','Aulevi','Tatu Marchesan','xmobots','Magnoflux',
-          'LATAM','brain4care','Tecumseh','Sapra Landauer','Piccin',
-          'Hortron','Razek','NSF Instalações','wisecomfort','Novel Tec',
-          'Callamarys',
-        ].map(name => (
-          <div class="bg-surface-base hover:bg-surface-high transition-colors duration-200 flex items-center justify-center px-4 py-6">
-            <span class="text-on-surface-variant hover:text-on-surface transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wider text-center leading-tight">{name}</span>
-          </div>
+          { name: 'FUGINI',         font: 'serif',     weight: 'font-bold',     italic: false, tracking: '0.04em' },
+          { name: 'AULEVI',         font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.18em' },
+          { name: 'TATU MARCHESAN', font: 'sans',      weight: 'font-bold',     italic: false, tracking: '0.06em' },
+          { name: 'XMOBOTS',        font: 'mono',      weight: 'font-bold',     italic: false, tracking: '0.10em' },
+          { name: 'MAGNOFLUX',      font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.05em' },
+          { name: 'LATAM',          font: 'sans',      weight: 'font-black',    italic: false, tracking: '0.10em' },
+          { name: 'brain4care',     font: 'sans',      weight: 'font-light',    italic: false, tracking: '0.02em' },
+          { name: 'TECUMSEH',       font: 'serif',     weight: 'font-bold',     italic: false, tracking: '0.18em' },
+          { name: 'SAPRA',          font: 'sans',      weight: 'font-bold',     italic: false, tracking: '0.20em', sub: 'LANDAUER' },
+          { name: 'PICCIN',         font: 'serif',     weight: 'font-extrabold', italic: true,  tracking: '0.05em' },
+          { name: 'HORTRON',        font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.18em' },
+          { name: 'RAZEK',          font: 'sans',      weight: 'font-black',    italic: false, tracking: '0.06em' },
+          { name: 'NSF',            font: 'sans',      weight: 'font-black',    italic: false, tracking: '0.04em', sub: 'INSTALAÇÕES' },
+          { name: 'wisecomfort',    font: 'sans',      weight: 'font-medium',   italic: false, tracking: '0.02em' },
+          { name: 'NOVEL',          font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.05em', sub: 'TEC' },
+          { name: 'CALLAMARYS',     font: 'serif',     weight: 'font-bold',     italic: true,  tracking: '0.04em' },
+        ].map((c) => (
+          <li class="bg-surface-base hover:bg-surface-high transition-all duration-300 group relative overflow-hidden">
+            <!-- Scan-line no hover -->
+            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent animate-scan-line opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
+
+            <div class="flex flex-col items-center justify-center px-3 py-7 min-h-[88px]">
+              <span
+                class:list={[
+                  'text-on-surface-variant group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(97,197,79,0.4)] transition-all duration-300 text-center leading-none',
+                  c.font === 'serif' ? 'font-serif' : c.font === 'mono' ? 'font-mono' : 'font-sans',
+                  c.weight,
+                  c.italic ? 'italic' : '',
+                  'text-[15px]',
+                ]}
+                style={`letter-spacing:${c.tracking};`}
+              >{c.name}</span>
+              {c.sub && (
+                <span class="text-[9px] uppercase tracking-[0.2em] text-on-surface-variant/60 group-hover:text-on-surface-variant mt-1 transition-colors duration-300">{c.sub}</span>
+              )}
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
+
+      <p class="text-center mt-8 text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/50">
+        + 500 projetos entregues · Atendimento nacional
+      </p>
     </div>
   </section>
 
@@ -920,11 +1023,11 @@ const homeSchemas = [
   <section class="bg-surface-low py-section relative overflow-hidden">
     <!-- Background AI: particles -->
     <div
-      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.10]"
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.22]"
       aria-hidden="true"
       style="background-image:url('/images/bg-particles.webp');"
     ></div>
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.08] pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
