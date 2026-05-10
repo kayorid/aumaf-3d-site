@@ -7,10 +7,17 @@ export const fileServeRoutes = Router()
 
 // Public proxy for stored objects — keeps MinIO off the public network.
 // Mounted at /api/v1/files; key may contain slashes (e.g. posts/uuid-name.jpg).
+// Defesa em profundidade: só servimos chaves dentro destes prefixos.
+const ALLOWED_PREFIXES = ['posts/']
+
 fileServeRoutes.get(/^\/(.+)$/, async (req, res) => {
   const key = req.params[0]
   if (!key) {
     res.status(404).json({ status: 'error', code: 'NOT_FOUND', message: 'Missing key' })
+    return
+  }
+  if (!ALLOWED_PREFIXES.some((p) => key.startsWith(p))) {
+    res.status(404).json({ status: 'error', code: 'NOT_FOUND', message: 'File not found' })
     return
   }
   try {
@@ -19,6 +26,7 @@ fileServeRoutes.get(/^\/(.+)$/, async (req, res) => {
     if (obj.ContentLength) res.setHeader('Content-Length', String(obj.ContentLength))
     if (obj.ETag) res.setHeader('ETag', obj.ETag)
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
 
     const body = obj.Body
     if (!body) {
