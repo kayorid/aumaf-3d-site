@@ -76,6 +76,13 @@ pg_restore --clean --if-exists --no-owner -d $DATABASE_URL aumaf-YYYYMMDD.dump
 
 Bucket `aumaf-blog-images` deve ter versionamento ativo em produção. Restauração é via console S3 — recuperação por versão.
 
+**Arquitetura de uploads (PR #33):** desde 2026-05-09 o backend faz **proxy server-side**. MinIO permanece privado na rede Docker; o browser nunca fala com ele direto.
+
+- `POST /api/v1/uploads/file` (auth) — recebe binário raw com `Content-Type: image/{png,jpeg,webp,avif}`, valida tipo/tamanho (≤10MB), faz `PutObject` server-side, retorna `{ key, publicUrl }`.
+- `GET /api/v1/files/<key>` (público, sem auth) — streams do MinIO com `Cache-Control: public, max-age=31536000, immutable` + `X-Content-Type-Options: nosniff`. Restrito ao prefixo `posts/`.
+- `POST /api/v1/uploads/presign` mantido para back-compat; o `publicUrl` retornado já usa o novo proxy.
+- Migração de URLs antigas (formato `http://minio:9000/<bucket>/<key>`): `npx tsx backend/scripts/migrate-image-urls.ts`. Idempotente; reescreve `Post.coverImageUrl` e `MediaAsset.url`.
+
 ## Logs
 
 Em produção `LOG_FORMAT=json`. Padrão Pino com campos:
