@@ -51,9 +51,21 @@ export function LeadsListPage() {
     setSelectedIds(new Set())
   }
 
+  const BULK_LIMIT = 100
+
   async function handleBulkDelete() {
     const count = selectedIds.size
     if (count === 0) return
+    if (count > BULK_LIMIT) {
+      await confirm({
+        title: 'Limite por operação atingido',
+        description: `Máximo ${BULK_LIMIT} leads por exclusão. Você selecionou ${count} — desmarque alguns e tente novamente.`,
+        confirmLabel: 'Entendi',
+        variant: 'primary',
+        hideCancel: true,
+      })
+      return
+    }
     const ok = await confirm({
       title: `Excluir ${count} lead(s)?`,
       description: `Esta ação não pode ser desfeita. Os dados ficam preservados no banco como soft-delete, mas saem da listagem.`,
@@ -165,6 +177,15 @@ export function LeadsListPage() {
           <div className="flex items-center gap-3">
             <span className="text-[11px] uppercase tracking-[0.2em] text-primary-container">
               {selectedCount} selecionado(s)
+              {(() => {
+                const onPage = visibleIds.filter((id) => selectedIds.has(id)).length
+                const offPage = selectedCount - onPage
+                return offPage > 0 ? (
+                  <span className="ml-2 text-on-surface-variant/80 normal-case tracking-normal text-[10px]">
+                    ({onPage} nesta página + {offPage} em outras)
+                  </span>
+                ) : null
+              })()}
             </span>
             <button
               onClick={clearSelection}
