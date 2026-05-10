@@ -178,17 +178,18 @@ const carouselId = `home-reviews-${Math.random().toString(36).slice(2, 9)}`
 
         function next() {
           const i = getCurrentIndex()
-          // Loop infinito: ao chegar no último, volta pro primeiro com salto instantâneo
+          // Loop infinito: ao chegar no último, salta instantaneamente para o primeiro
+          // (smooth scroll reversed seria visualmente estranho — preferimos jump-cut)
           if (i >= slides.length - 1) {
-            goTo(0, prefersReducedMotion ? 'auto' : 'smooth')
+            goTo(0, 'auto')
           } else goTo(i + 1)
         }
 
         function prev() {
           const i = getCurrentIndex()
-          // Loop infinito: ao estar no primeiro, vai pro último
+          // Loop infinito: ao estar no primeiro, salta para o último
           if (i <= 0) {
-            goTo(slides.length - 1, prefersReducedMotion ? 'auto' : 'smooth')
+            goTo(slides.length - 1, 'auto')
           } else goTo(i - 1)
         }
 

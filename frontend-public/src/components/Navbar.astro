@@ -11,8 +11,8 @@ const links = [
   { href: '/sobre',      label: 'Sobre'      },
   { href: '/avaliacoes', label: 'Avaliações' },
   { href: '/blog',       label: 'Blog'       },
-  { href: '/faq',        label: 'Perguntas Frequentes' },
 ]
+const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
 ---
 
 <header
@@ -55,8 +55,21 @@ const links = [
       })}
     </ul>
 
-    <!-- CTA + Hamburger -->
+    <!-- CTA + Help icon + Hamburger -->
     <div class="flex items-center gap-3">
+      <a
+        href={helpLink.href}
+        aria-label={`${helpLink.label} (FAQ)`}
+        title={helpLink.label}
+        class:list={[
+          'hidden lg:inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container',
+          currentPath === helpLink.href
+            ? 'border-primary-container text-primary-container glow-effect'
+            : 'border-white/15 text-on-surface-variant hover:border-primary-container/60 hover:text-primary-container',
+        ]}
+      >
+        <span class="material-symbols-outlined text-[20px] leading-none" aria-hidden="true">help</span>
+      </a>
       <a
         href="/contato"
         class="hidden lg:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-2.5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
@@ -92,7 +105,7 @@ const links = [
   aria-modal="true"
 >
   <ul role="list" class="mt-16 space-y-1 w-full">
-    {links.map((link, i) => (
+    {[...links, helpLink].map((link, i) => (
       <li>
         <a
           href={link.href}

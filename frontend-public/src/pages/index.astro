@@ -165,17 +165,23 @@ const homeSchemas = [
             <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/20 to-transparent animate-scan-line"></div>
           </div>
 
-          <!-- Active Build widget — telemetry animada -->
-          <div class="glass-panel rounded-sm p-5 w-full relative overflow-hidden" style="border:1px solid rgba(97,197,79,0.12);">
-            <!-- Scan-line top -->
-            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent animate-scan-line" aria-hidden="true"></div>
+          <!-- Active Build widget — telemetry com camadas de animação -->
+          <div class="glass-panel rounded-sm p-5 w-full relative overflow-hidden" style="border:1px solid rgba(97,197,79,0.18);" data-active-build>
+            <!-- Scan-line top contínua -->
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/55 to-transparent animate-scan-line" aria-hidden="true"></div>
+            <!-- Pulse glow border -->
+            <div class="absolute inset-0 rounded-sm pointer-events-none active-build-pulse" aria-hidden="true"></div>
 
             <div class="flex justify-between items-center mb-4 border-b border-white/8 pb-3">
               <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot flex-shrink-0 glow-effect"></span>
                 <span class="text-label-caps text-tertiary uppercase tracking-widest text-[10px]">Active Build</span>
               </div>
-              <span class="text-label-caps text-primary-container tracking-widest text-[10px] font-mono active-build-id" data-id-anim>ID_409X</span>
+              <span
+                class="text-label-caps text-primary-container tracking-widest text-[10px] font-mono active-build-id"
+                data-id-glitch
+                style="text-shadow: 0 0 8px rgba(97,197,79,0.4);"
+              >ID_409X</span>
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -183,12 +189,14 @@ const homeSchemas = [
                   <span class="uppercase tracking-wider">Impressão</span>
                   <span class="text-primary-container font-semibold font-mono" data-progress-pct>0%</span>
                 </div>
-                <div class="h-[2px] bg-surface-high rounded overflow-hidden relative">
+                <div class="h-[3px] bg-surface-high rounded overflow-hidden relative">
                   <div
                     class="h-full bg-primary-container glow-effect transition-[width] duration-[2400ms] ease-out"
                     style="width:0%;"
                     data-progress-bar
                   ></div>
+                  <!-- Shimmer travelling -->
+                  <div class="absolute inset-y-0 -left-1/3 w-1/3 progress-shimmer" aria-hidden="true"></div>
                 </div>
               </div>
               <div>
@@ -196,68 +204,141 @@ const homeSchemas = [
                   <span class="uppercase tracking-wider">Temperatura</span>
                   <span class="text-error font-semibold font-mono" data-temp-pct>0°C</span>
                 </div>
-                <div class="h-[2px] bg-surface-high rounded overflow-hidden">
+                <div class="h-[3px] bg-surface-high rounded overflow-hidden relative">
                   <div
                     class="h-full bg-error transition-[width] duration-[1800ms] ease-out"
                     style="width:0%;"
                     data-temp-bar
                   ></div>
+                  <div class="absolute inset-y-0 -left-1/3 w-1/3 progress-shimmer progress-shimmer--red" aria-hidden="true"></div>
                 </div>
               </div>
             </div>
-            <div class="mt-3 flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot flex-shrink-0"></span>
-              <span class="text-[11px] text-tertiary tracking-wide font-mono">PA CF15 · Layer: 0.15mm · Nozzle: 0.4mm</span>
+            <div class="mt-3 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot flex-shrink-0"></span>
+                <span class="text-[11px] text-tertiary tracking-wide font-mono truncate">PA CF15 · Nozzle 0.4mm</span>
+              </div>
+              <span class="text-[10px] text-on-surface-variant tracking-wider font-mono">
+                <span class="text-primary-container/70" data-layer-current>—</span>
+                <span class="opacity-50">/</span>
+                <span data-layer-total>418</span>
+              </span>
             </div>
           </div>
+
+          <style>
+            @keyframes progressShimmer {
+              0%   { transform: translateX(0%);   opacity: 0; }
+              25%  { opacity: 1; }
+              100% { transform: translateX(400%); opacity: 0; }
+            }
+            .progress-shimmer {
+              background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255,255,255,0.85) 50%,
+                transparent 100%);
+              animation: progressShimmer 2.6s ease-in-out infinite;
+            }
+            .progress-shimmer--red {
+              background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255,180,170,0.85) 50%,
+                transparent 100%);
+              animation-delay: 0.7s;
+            }
+
+            @keyframes activeBuildPulse {
+              0%, 100% { box-shadow: inset 0 0 0 1px rgba(97,197,79,0.18), 0 0 0 0 rgba(97,197,79,0); }
+              50%      { box-shadow: inset 0 0 0 1px rgba(97,197,79,0.45), 0 0 24px rgba(97,197,79,0.18); }
+            }
+            .active-build-pulse { animation: activeBuildPulse 3.6s ease-in-out infinite; }
+
+            @media (prefers-reduced-motion: reduce) {
+              .progress-shimmer, .active-build-pulse { animation: none !important; }
+              .progress-shimmer { display: none; }
+            }
+          </style>
 
           <script is:inline>
             (function () {
               const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-              const bar = document.querySelector('[data-progress-bar]')
-              const pct = document.querySelector('[data-progress-pct]')
-              const tBar = document.querySelector('[data-temp-bar]')
-              const tPct = document.querySelector('[data-temp-pct]')
-              if (!bar || !pct || !tBar || !tPct) return
+              const root = document.querySelector('[data-active-build]')
+              if (!root) return
+              const bar = root.querySelector('[data-progress-bar]')
+              const pct = root.querySelector('[data-progress-pct]')
+              const tBar = root.querySelector('[data-temp-bar]')
+              const tPct = root.querySelector('[data-temp-pct]')
+              const idEl = root.querySelector('[data-id-glitch]')
+              const layerCurrent = root.querySelector('[data-layer-current]')
+              if (!bar || !pct || !tBar || !tPct || !idEl) return
+
+              const TOTAL = 418
+              const TARGET = Math.round(TOTAL * 0.80) // 334
 
               if (reduced) {
                 bar.style.width = '80%'; pct.textContent = '80%'
                 tBar.style.width = '95%'; tPct.textContent = '265°C'
+                if (layerCurrent) layerCurrent.textContent = String(TARGET)
                 return
               }
 
-              // Anima ao entrar no viewport
+              const easeOutCubic = (k) => 1 - Math.pow(1 - k, 3)
+
+              function animateProgress() {
+                bar.style.width = '80%'
+                tBar.style.width = '95%'
+                const start = performance.now()
+                const tickP = (now) => {
+                  const k = Math.min(1, (now - start) / 2400)
+                  const v = Math.round(80 * easeOutCubic(k))
+                  pct.textContent = v + '%'
+                  if (layerCurrent) layerCurrent.textContent = String(Math.round(TARGET * easeOutCubic(k)))
+                  if (k < 1) requestAnimationFrame(tickP)
+                  else startLayerCycle()
+                }
+                requestAnimationFrame(tickP)
+
+                const startT = performance.now()
+                const tickT = (now) => {
+                  const k = Math.min(1, (now - startT) / 1800)
+                  const v = Math.round(265 * easeOutCubic(k))
+                  tPct.textContent = v + '°C'
+                  if (k < 1) requestAnimationFrame(tickT)
+                }
+                requestAnimationFrame(tickT)
+              }
+
+              // Layer counter "respira" entre 332-336 após chegar no target
+              function startLayerCycle() {
+                if (!layerCurrent) return
+                let cur = TARGET
+                let dir = 1
+                setInterval(() => {
+                  cur += dir
+                  if (cur >= TARGET + 2) dir = -1
+                  if (cur <= TARGET - 2) dir = 1
+                  layerCurrent.textContent = String(cur)
+                }, 900)
+              }
+
+              // Glitch flicker no ID
+              const ids = ['ID_409X', 'ID_410A', 'ID_409X', 'ID_4Ø9X', 'ID_409X']
+              let gi = 0
+              setInterval(() => {
+                gi = (gi + 1) % ids.length
+                idEl.textContent = ids[gi]
+              }, 4200)
+
+              // Trigger ao entrar no viewport
               const obs = new IntersectionObserver((entries) => {
                 entries.forEach((e) => {
                   if (!e.isIntersecting) return
-                  // Progress 0→80% com counter
-                  let p = 0
-                  bar.style.width = '80%'
-                  const tStart = performance.now()
-                  const dur = 2400
-                  const tick = (now) => {
-                    const k = Math.min(1, (now - tStart) / dur)
-                    p = Math.round(80 * (1 - Math.pow(1 - k, 3)))
-                    pct.textContent = p + '%'
-                    if (k < 1) requestAnimationFrame(tick)
-                  }
-                  requestAnimationFrame(tick)
-                  // Temperature 0→265°C
-                  let t = 0
-                  tBar.style.width = '95%'
-                  const t2Start = performance.now()
-                  const dur2 = 1800
-                  const tick2 = (now) => {
-                    const k = Math.min(1, (now - t2Start) / dur2)
-                    t = Math.round(265 * (1 - Math.pow(1 - k, 3)))
-                    tPct.textContent = t + '°C'
-                    if (k < 1) requestAnimationFrame(tick2)
-                  }
-                  requestAnimationFrame(tick2)
+                  animateProgress()
                   obs.disconnect()
                 })
-              }, { threshold: 0.4 })
-              obs.observe(bar.closest('.glass-panel'))
+              }, { threshold: 0.35 })
+              obs.observe(root)
             })()
           </script>
         </div>
@@ -650,11 +731,11 @@ const homeSchemas = [
             tag: 'Manutenção · Reposição de Peças',
             icon: 'precision_manufacturing',
             headline: 'Sua linha não para por falta de peça.',
-            sub: 'Quando o fornecedor sumiu, o item foi descontinuado ou o prazo aperta — replicamos a peça em horas, não semanas.',
+            sub: 'Fornecedor sumiu, item descontinuado ou prazo apertou? Replicamos a peça em horas — não em semanas.',
             pains: [
-              { p: 'Importação com 60 dias de prazo', s: 'Reposição em 24–72h' },
-              { p: 'Item descontinuado pelo fabricante', s: 'Engenharia reversa + impressão' },
-              { p: 'Parada de máquina custando R$/hora', s: 'MVP funcional em 1 turno' },
+              { p: 'Peça importada · 60 dias de espera',         s: 'Replicada em 24–72h' },
+              { p: 'Item descontinuado pelo fabricante',         s: 'Engenharia reversa + reimpressão' },
+              { p: 'Linha parada custa R$ por hora',             s: 'Peça funcional em 1 turno' },
             ],
             roles: ['Supervisor', 'Coordenador', 'Engenheiro de Manutenção', 'Técnico Industrial', 'PCM', 'Analista', 'Gerente', 'Comprador Técnico', 'Eng. Confiabilidade', 'Especialista em Manutenção'],
             cta: 'Tenho uma máquina parada',
@@ -664,12 +745,12 @@ const homeSchemas = [
             id: 'pd',
             tag: 'P&D · Desenvolvimento de Produtos',
             icon: 'science',
-            headline: 'Itera no ciclo curto que o seu projeto precisa.',
-            sub: 'Da CAD ao protótipo funcional em 48h. Múltiplas iterações sem custo de molde, com material certificado para validação real.',
+            headline: 'Iteração rápida do CAD ao protótipo.',
+            sub: 'Da modelagem ao protótipo funcional em 48h. Múltiplas versões sem ferramental — valide com material real desde o primeiro teste.',
             pains: [
-              { p: 'Molde de injeção custa R$50k+', s: 'Prototipagem por R$ centenas' },
-              { p: 'Iteração leva 2–3 semanas', s: 'Próxima versão em 48h' },
-              { p: 'Validação só após produção', s: 'Material funcional desde o V1' },
+              { p: 'Molde de injeção: R$ 50 mil+',         s: 'Prototipagem por centenas de reais' },
+              { p: 'Iteração leva 2–3 semanas',            s: 'Nova versão em 48h' },
+              { p: 'Validação só depois da produção',      s: 'Material funcional desde o V1' },
             ],
             roles: ['Eng. de Produto', 'Eng. de Desenvolvimento', 'Eng. de P&D', 'Analista de Desenvolvimento', 'Designer Industrial', 'Eng. Mecânico', 'Coordenador de Engenharia', 'Gerente de P&D / Inovação', 'Especialista em Prototipagem', 'Eng. de Processos'],
             cta: 'Quero testar uma ideia',
@@ -900,41 +981,57 @@ const homeSchemas = [
 
       <ul role="list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-px bg-white/5 border border-white/5 rounded-sm overflow-hidden">
         {[
-          { name: 'FUGINI',         font: 'serif',     weight: 'font-bold',     italic: false, tracking: '0.04em' },
-          { name: 'AULEVI',         font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.18em' },
-          { name: 'TATU MARCHESAN', font: 'sans',      weight: 'font-bold',     italic: false, tracking: '0.06em' },
-          { name: 'XMOBOTS',        font: 'mono',      weight: 'font-bold',     italic: false, tracking: '0.10em' },
-          { name: 'MAGNOFLUX',      font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.05em' },
-          { name: 'LATAM',          font: 'sans',      weight: 'font-black',    italic: false, tracking: '0.10em' },
-          { name: 'brain4care',     font: 'sans',      weight: 'font-light',    italic: false, tracking: '0.02em' },
-          { name: 'TECUMSEH',       font: 'serif',     weight: 'font-bold',     italic: false, tracking: '0.18em' },
-          { name: 'SAPRA',          font: 'sans',      weight: 'font-bold',     italic: false, tracking: '0.20em', sub: 'LANDAUER' },
-          { name: 'PICCIN',         font: 'serif',     weight: 'font-extrabold', italic: true,  tracking: '0.05em' },
-          { name: 'HORTRON',        font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.18em' },
-          { name: 'RAZEK',          font: 'sans',      weight: 'font-black',    italic: false, tracking: '0.06em' },
-          { name: 'NSF',            font: 'sans',      weight: 'font-black',    italic: false, tracking: '0.04em', sub: 'INSTALAÇÕES' },
-          { name: 'wisecomfort',    font: 'sans',      weight: 'font-medium',   italic: false, tracking: '0.02em' },
-          { name: 'NOVEL',          font: 'sans',      weight: 'font-extrabold', italic: false, tracking: '0.05em', sub: 'TEC' },
-          { name: 'CALLAMARYS',     font: 'serif',     weight: 'font-bold',     italic: true,  tracking: '0.04em' },
+          { slug: 'fugini',        name: 'FUGINI',         font: 'serif',  weight: 'font-bold',      italic: false, tracking: '0.04em' },
+          { slug: 'aulevi',        name: 'AULEVI',         font: 'sans',   weight: 'font-extrabold', italic: false, tracking: '0.18em' },
+          { slug: 'tatumarchesan', name: 'TATU MARCHESAN', font: 'sans',   weight: 'font-bold',      italic: false, tracking: '0.06em' },
+          { slug: 'xmobots',       name: 'XMOBOTS',        font: 'mono',   weight: 'font-bold',      italic: false, tracking: '0.10em' },
+          { slug: 'magnoflux',     name: 'MAGNOFLUX',      font: 'sans',   weight: 'font-extrabold', italic: false, tracking: '0.05em' },
+          { slug: 'latam',         name: 'LATAM',          font: 'sans',   weight: 'font-black',     italic: false, tracking: '0.10em' },
+          { slug: 'brain4care',    name: 'brain4care',     font: 'sans',   weight: 'font-light',     italic: false, tracking: '0.02em' },
+          { slug: 'tecumseh',      name: 'TECUMSEH',       font: 'serif',  weight: 'font-bold',      italic: false, tracking: '0.18em' },
+          { slug: 'sapralandauer', name: 'SAPRA',          font: 'sans',   weight: 'font-bold',      italic: false, tracking: '0.20em', sub: 'LANDAUER' },
+          { slug: 'piccin',        name: 'PICCIN',         font: 'serif',  weight: 'font-extrabold', italic: true,  tracking: '0.05em' },
+          { slug: 'hortron',       name: 'HORTRON',        font: 'sans',   weight: 'font-extrabold', italic: false, tracking: '0.18em' },
+          { slug: 'razek',         name: 'RAZEK',          font: 'sans',   weight: 'font-black',     italic: false, tracking: '0.06em' },
+          { slug: 'nsf',           name: 'NSF',            font: 'sans',   weight: 'font-black',     italic: false, tracking: '0.04em', sub: 'INSTALAÇÕES' },
+          { slug: 'wisecomfort',   name: 'wisecomfort',    font: 'sans',   weight: 'font-medium',    italic: false, tracking: '0.02em' },
+          { slug: 'noveltec',      name: 'NOVEL',          font: 'sans',   weight: 'font-extrabold', italic: false, tracking: '0.05em', sub: 'TEC' },
+          { slug: 'callamarys',    name: 'CALLAMARYS',     font: 'serif',  weight: 'font-bold',      italic: true,  tracking: '0.04em' },
         ].map((c) => (
           <li class="bg-surface-base hover:bg-surface-high transition-all duration-300 group relative overflow-hidden">
             <!-- Scan-line no hover -->
             <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent animate-scan-line opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
 
-            <div class="flex flex-col items-center justify-center px-3 py-7 min-h-[88px]">
-              <span
-                class:list={[
-                  'text-on-surface-variant group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(97,197,79,0.4)] transition-all duration-300 text-center leading-none',
-                  c.font === 'serif' ? 'font-serif' : c.font === 'mono' ? 'font-mono' : 'font-sans',
-                  c.weight,
-                  c.italic ? 'italic' : '',
-                  'text-[15px]',
-                ]}
-                style={`letter-spacing:${c.tracking};`}
-              >{c.name}</span>
-              {c.sub && (
-                <span class="text-[9px] uppercase tracking-[0.2em] text-on-surface-variant/60 group-hover:text-on-surface-variant mt-1 transition-colors duration-300">{c.sub}</span>
-              )}
+            <div class="flex flex-col items-center justify-center px-3 py-7 min-h-[88px] relative">
+              <!--
+                Camada 1: logo PNG real (drop em /public/images/clients/<slug>.png).
+                Quando a imagem carrega, JS abaixo esconde o wordmark fallback.
+              -->
+              <img
+                src={`/images/clients/${c.slug}.png`}
+                alt={`${c.name}${c.sub ? ' ' + c.sub : ''}`}
+                class="client-logo absolute inset-0 m-auto w-auto h-9 max-w-[80%] object-contain opacity-0 transition-opacity duration-200"
+                loading="lazy"
+                decoding="async"
+                onload="this.classList.add('client-logo--loaded'); this.style.opacity='0.7'; this.parentElement.querySelector('.client-wordmark').classList.add('hidden')"
+                onerror="this.remove()"
+              />
+              <!-- Camada 2: wordmark fallback (visível até o PNG carregar) -->
+              <div class="client-wordmark flex flex-col items-center">
+                <span
+                  class:list={[
+                    'text-on-surface-variant group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(97,197,79,0.4)] transition-all duration-300 text-center leading-none',
+                    c.font === 'serif' ? 'font-serif' : c.font === 'mono' ? 'font-mono' : 'font-sans',
+                    c.weight,
+                    c.italic ? 'italic' : '',
+                    'text-[15px]',
+                  ]}
+                  style={`letter-spacing:${c.tracking};`}
+                >{c.name}</span>
+                {c.sub && (
+                  <span class="text-[9px] uppercase tracking-[0.2em] text-on-surface-variant/60 group-hover:text-on-surface-variant mt-1 transition-colors duration-300">{c.sub}</span>
+                )}
+              </div>
             </div>
           </li>
         ))}

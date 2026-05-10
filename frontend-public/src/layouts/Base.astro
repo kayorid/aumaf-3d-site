@@ -167,6 +167,46 @@ const {
       }
     </script>
 
+    <!--
+      Reveal-on-scroll observer global.
+      Elementos com `data-animate` + classe `reveal-hidden` ganham `reveal-visible`
+      ao entrar no viewport (com stagger via classes `.stagger-N`).
+      Fail-safe: se IntersectionObserver não estiver disponível, mostra tudo imediatamente.
+    -->
+    <script is:inline>
+      (function () {
+        var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        function reveal(el) {
+          el.classList.remove('reveal-hidden', 'reveal-hidden-left')
+          el.classList.add('reveal-visible')
+        }
+        function init() {
+          var els = document.querySelectorAll('[data-animate]')
+          if (!els.length) return
+          if (prefersReduced || !('IntersectionObserver' in window)) {
+            els.forEach(reveal); return
+          }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                reveal(entry.target)
+                io.unobserve(entry.target)
+              }
+            })
+          }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 })
+          els.forEach(function (el) { io.observe(el) })
+          // Fallback: força reveal de qualquer elemento que ainda esteja escondido
+          // após 1.4s — protege contra layouts que não disparam intersect (above-fold).
+          setTimeout(function () {
+            document.querySelectorAll('[data-animate].reveal-hidden, [data-animate].reveal-hidden-left').forEach(reveal)
+          }, 1400)
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init, { once: true })
+        } else { init() }
+      })()
+    </script>
+
     <!-- FAB stack: WhatsApp + Scroll-to-top -->
     <div class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[60] flex flex-col items-end gap-3 pointer-events-none">
       <!-- WhatsApp FAB com balão de mensagens variantes -->
