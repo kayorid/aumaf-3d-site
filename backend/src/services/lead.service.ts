@@ -207,6 +207,20 @@ export async function softDeleteLead(id: string, userId: string): Promise<void> 
   logger.info({ leadId: id, userId }, 'Lead soft-deleted')
 }
 
+export async function softDeleteLeadsBulk(
+  ids: string[],
+  userId: string,
+): Promise<{ deleted: number }> {
+  if (ids.length === 0) return { deleted: 0 }
+  const unique = Array.from(new Set(ids))
+  const result = await prisma.lead.updateMany({
+    where: { id: { in: unique }, deletedAt: null },
+    data: { deletedAt: new Date(), deletedBy: userId },
+  })
+  logger.info({ requested: unique.length, deleted: result.count, userId }, 'Leads bulk soft-deleted')
+  return { deleted: result.count }
+}
+
 export async function addLeadNote(leadId: string, authorId: string, body: string): Promise<LeadNoteDto> {
   const lead = await prisma.lead.findFirst({ where: { id: leadId, deletedAt: null }, select: { id: true } })
   if (!lead) throw httpErrors.notFound('Lead não encontrado')

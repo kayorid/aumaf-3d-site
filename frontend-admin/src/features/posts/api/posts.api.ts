@@ -10,7 +10,13 @@ import type {
 
 export const postsApi = {
   async list(query: Partial<PostListQuery> = {}) {
-    const { data } = await apiClient.get<ApiList<PostDto>>('/posts', { params: query })
+    const params: Record<string, string | number | boolean> = {}
+    for (const [k, v] of Object.entries(query)) {
+      if (v === undefined || v === null || v === '') continue
+      if (v instanceof Date) params[k] = v.toISOString()
+      else params[k] = v as string | number | boolean
+    }
+    const { data } = await apiClient.get<ApiList<PostDto>>('/posts', { params })
     return data
   },
 

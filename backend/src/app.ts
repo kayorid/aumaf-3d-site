@@ -23,6 +23,7 @@ import { healthRoutes } from './routes/health.routes'
 import { botyioWebhookRoutes } from './routes/botyio-webhook.routes'
 import { adminIntegrationRoutes } from './routes/admin-integration.routes'
 import { mediaRoutes } from './routes/media.routes'
+import { fileServeRoutes } from './routes/file-serve.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -62,6 +63,9 @@ export function createApp() {
   // Mantém /api/health legado como alias do novo /health agregado.
   app.use('/health', healthRoutes)
   app.use('/api/health', healthRoutes)
+
+  // Public file proxy (no auth) — mounted before /uploads to avoid auth middleware.
+  app.use('/api/v1/files', fileServeRoutes)
 
   app.use('/api/v1/public', publicRoutes)
   app.use('/api/v1/auth', authRoutes)

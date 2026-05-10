@@ -34,6 +34,18 @@ export const PostListQuerySchema = z.object({
   status: PostStatusSchema.optional(),
   search: z.string().optional(),
   categoryId: z.string().cuid().optional(),
+  dateFrom: z.coerce.date().optional(),
+  dateTo: z.coerce.date().optional(),
+  generatedByAi: z
+    .union([z.boolean(), z.enum(['true', 'false'])])
+    .transform((v) => (typeof v === 'boolean' ? v : v === 'true'))
+    .optional(),
+  featured: z
+    .union([z.boolean(), z.enum(['true', 'false'])])
+    .transform((v) => (typeof v === 'boolean' ? v : v === 'true'))
+    .optional(),
+  sort: z.enum(['updatedAt', 'createdAt', 'publishedAt', 'title']).default('updatedAt'),
+  order: z.enum(['asc', 'desc']).default('desc'),
 })
 export type PostListQuery = z.infer<typeof PostListQuerySchema>
 
@@ -99,7 +111,10 @@ export const PublicPostListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(12),
   category: z.string().optional(),
-  featured: z.coerce.boolean().optional(),
+  featured: z
+    .union([z.boolean(), z.enum(['true', 'false'])])
+    .transform((v) => (typeof v === 'boolean' ? v : v === 'true'))
+    .optional(),
 })
 export type PublicPostListQuery = z.infer<typeof PublicPostListQuerySchema>
 

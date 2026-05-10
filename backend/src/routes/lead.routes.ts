@@ -5,6 +5,7 @@ import {
   LeadFilterQuerySchema,
   CreateLeadNoteSchema,
   UpdateLeadNoteSchema,
+  BulkDeleteLeadsSchema,
 } from '@aumaf/shared'
 import { requireAuth, requireRole } from '../middlewares/require-auth'
 import { httpErrors } from '../lib/http-error'
@@ -112,6 +113,17 @@ leadRoutes.delete('/:id', requireAuth, requireRole('ADMIN'), async (req, res, ne
     if (!req.user) throw httpErrors.unauthorized()
     await leadService.softDeleteLead(req.params.id, req.user.id)
     res.json({ status: 'ok' })
+  } catch (err) {
+    next(err)
+  }
+})
+
+leadRoutes.post('/bulk-delete', requireAuth, requireRole('ADMIN'), async (req, res, next) => {
+  try {
+    if (!req.user) throw httpErrors.unauthorized()
+    const input = BulkDeleteLeadsSchema.parse(req.body)
+    const result = await leadService.softDeleteLeadsBulk(input.ids, req.user.id)
+    res.json({ status: 'ok', data: result })
   } catch (err) {
     next(err)
   }

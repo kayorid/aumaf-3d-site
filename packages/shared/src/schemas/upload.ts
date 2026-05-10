@@ -22,3 +22,12 @@ export const PresignOutputSchema = z.object({
   expiresIn: z.number(),
 })
 export type PresignOutput = z.infer<typeof PresignOutputSchema>
+
+export const DirectUploadOutputSchema = z.object({
+  key: z.string(),
+  publicUrl: z.string().url(),
+  contentType: UploadContentTypeSchema,
+  size: z.number().int().min(1),
+  originalName: z.string(),
+})
+export type DirectUploadOutput = z.infer<typeof DirectUploadOutputSchema>

@@ -80,6 +80,16 @@ export const UpdateLeadNoteSchema = z.object({
 })
 export type UpdateLeadNoteInput = z.infer<typeof UpdateLeadNoteSchema>
 
+export const BulkDeleteLeadsSchema = z.object({
+  ids: z.array(z.string().min(1)).min(1).max(100),
+})
+export type BulkDeleteLeadsInput = z.infer<typeof BulkDeleteLeadsSchema>
+
+export const BulkDeleteLeadsResultSchema = z.object({
+  deleted: z.number().int().min(0),
+})
+export type BulkDeleteLeadsResult = z.infer<typeof BulkDeleteLeadsResultSchema>
+
 export const LeadListResponseSchema = z.object({
   data: z.array(LeadDtoSchema),
   pagination: z.object({

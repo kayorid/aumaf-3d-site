@@ -1,22 +1,90 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Download, Mail, MessageCircle, Phone, Search, Users, X } from 'lucide-react'
+import { Download, Mail, MessageCircle, Phone, Search, Trash2, Users, X } from 'lucide-react'
 import type { LeadFilterQuery } from '@aumaf/shared'
-import { useLeads, useLeadSources } from '../api/use-leads'
+import { useLeads, useLeadSources, useBulkDeleteLeads } from '../api/use-leads'
 import { leadsApi } from '../api/leads.api'
 import { LeadDrawer } from '../components/LeadDrawer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { cn } from '@/lib/utils'
 
 export function LeadsListPage() {
   const [filters, setFilters] = useState<Partial<LeadFilterQuery>>({ page: 1, pageSize: 20 })
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const { data, isLoading, isError, error } = useLeads(filters)
   const sources = useLeadSources()
+  const bulkDelete = useBulkDeleteLeads()
+  const confirm = useConfirm()
 
-  const update = (patch: Partial<LeadFilterQuery>) => setFilters((prev) => ({ ...prev, ...patch, page: 1 }))
+  const visibleIds = useMemo(() => data?.data.map((l) => l.id) ?? [], [data])
+  const allSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.has(id))
+  const someSelected = !allSelected && visibleIds.some((id) => selectedIds.has(id))
+  const selectedCount = selectedIds.size
+
+  function toggleOne(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function toggleAllVisible() {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (allSelected) {
+        visibleIds.forEach((id) => next.delete(id))
+      } else {
+        visibleIds.forEach((id) => next.add(id))
+      }
+      return next
+    })
+  }
+
+  function clearSelection() {
+    setSelectedIds(new Set())
+  }
+
+  const BULK_LIMIT = 100
+
+  async function handleBulkDelete() {
+    const count = selectedIds.size
+    if (count === 0) return
+    if (count > BULK_LIMIT) {
+      await confirm({
+        title: 'Limite por operação atingido',
+        description: `Máximo ${BULK_LIMIT} leads por exclusão. Você selecionou ${count} — desmarque alguns e tente novamente.`,
+        confirmLabel: 'Entendi',
+        variant: 'primary',
+        hideCancel: true,
+      })
+      return
+    }
+    const ok = await confirm({
+      title: `Excluir ${count} lead(s)?`,
+      description: `Esta ação não pode ser desfeita. Os dados ficam preservados no banco como soft-delete, mas saem da listagem.`,
+      confirmLabel: `Excluir ${count}`,
+      variant: 'danger',
+    })
+    if (!ok) return
+    try {
+      await bulkDelete.mutateAsync(Array.from(selectedIds))
+      clearSelection()
+    } catch {
+      // toast já tratado no hook
+    }
+  }
+
+  const update = (patch: Partial<LeadFilterQuery>) => {
+    setFilters((prev) => ({ ...prev, ...patch, page: 1 }))
+    clearSelection()
+  }
 
   const clear = () => setFilters({ page: 1, pageSize: 20 })
 
@@ -104,6 +172,40 @@ export function LeadsListPage() {
         )}
       </div>
 
+      {selectedCount > 0 && (
+        <div className="sticky top-2 z-30 flex items-center justify-between gap-3 px-4 py-2.5 rounded-sm border border-primary-container/40 bg-black/80 backdrop-blur shadow-[0_0_30px_rgba(97,197,79,0.15)]">
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] uppercase tracking-[0.2em] text-primary-container">
+              {selectedCount} selecionado(s)
+              {(() => {
+                const onPage = visibleIds.filter((id) => selectedIds.has(id)).length
+                const offPage = selectedCount - onPage
+                return offPage > 0 ? (
+                  <span className="ml-2 text-on-surface-variant/80 normal-case tracking-normal text-[10px]">
+                    ({onPage} nesta página + {offPage} em outras)
+                  </span>
+                ) : null
+              })()}
+            </span>
+            <button
+              onClick={clearSelection}
+              className="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant hover:text-on-surface flex items-center gap-1"
+              type="button"
+            >
+              <X className="size-3" /> Limpar seleção
+            </button>
+          </div>
+          <Button
+            size="sm"
+            variant="danger"
+            onClick={handleBulkDelete}
+            loading={bulkDelete.isPending}
+          >
+            <Trash2 className="size-3.5" /> Excluir selecionados
+          </Button>
+        </div>
+      )}
+
       <div className="bg-surface-low/60 border border-white/10 rounded-sm overflow-hidden">
         {isError && <div className="p-6 text-sm text-error">Erro: {(error as Error).message}</div>}
 
@@ -127,6 +229,21 @@ export function LeadsListPage() {
             <table className="w-full text-sm">
               <thead className="border-b border-white/10 bg-surface-dim/50">
                 <tr className="text-on-surface-variant/70 text-[10px] uppercase tracking-[0.2em] font-bold">
+                  <th className="px-4 py-3 w-10">
+                    <input
+                      type="checkbox"
+                      aria-label="Selecionar todos"
+                      checked={allSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = someSelected
+                      }}
+                      onChange={toggleAllVisible}
+                      className={cn(
+                        'size-4 rounded-sm border border-white/20 bg-black accent-primary-container cursor-pointer',
+                        'focus:outline-none focus:ring-1 focus:ring-primary-container/40',
+                      )}
+                    />
+                  </th>
                   <th className="text-left px-6 py-3">Nome</th>
                   <th className="text-left px-6 py-3 hidden md:table-cell">Contato</th>
                   <th className="text-left px-6 py-3 hidden lg:table-cell">Fonte</th>
@@ -138,7 +255,10 @@ export function LeadsListPage() {
                 {data?.data.map((lead) => (
                   <tr
                     key={lead.id}
-                    className="border-b border-white/5 hover:bg-white/[0.03] transition-colors cursor-pointer"
+                    className={cn(
+                      'border-b border-white/5 hover:bg-white/[0.03] transition-colors cursor-pointer',
+                      selectedIds.has(lead.id) && 'bg-primary-container/5',
+                    )}
                     onClick={() => setSelectedLeadId(lead.id)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -150,6 +270,16 @@ export function LeadsListPage() {
                     role="button"
                     aria-label={`Abrir detalhes do lead ${lead.name}`}
                   >
+                    <td className="px-4 py-3.5" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        aria-label={`Selecionar lead ${lead.name}`}
+                        checked={selectedIds.has(lead.id)}
+                        onChange={() => toggleOne(lead.id)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="size-4 rounded-sm border border-white/20 bg-black accent-primary-container cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-container/40"
+                      />
+                    </td>
                     <td className="px-6 py-3.5">
                       <div className="font-medium text-on-surface">{lead.name}</div>
                       {lead.message && (

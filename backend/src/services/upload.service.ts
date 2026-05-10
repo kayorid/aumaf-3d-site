@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import {
   CreateBucketCommand,
+  GetObjectCommand,
   HeadBucketCommand,
   PutBucketPolicyCommand,
   PutObjectCommand,
@@ -9,7 +10,13 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { s3 } from '../lib/s3-client'
 import { env } from '../config/env'
 import { logger } from '../config/logger'
-import type { PresignInput, PresignOutput } from '@aumaf/shared'
+import { httpErrors } from '../lib/http-error'
+import type {
+  DirectUploadOutput,
+  PresignInput,
+  PresignOutput,
+  UploadContentType,
+} from '@aumaf/shared'
 
 const BUCKET = env.S3_BUCKET
 const PRESIGN_EXPIRES = 900 // 15 min
@@ -62,7 +69,7 @@ export async function presignUpload(input: PresignInput): Promise<PresignOutput>
   })
 
   const uploadUrl = await getSignedUrl(s3, command, { expiresIn: PRESIGN_EXPIRES })
-  const publicUrl = `${env.S3_PUBLIC_URL}/${BUCKET}/${key}`
+  const publicUrl = buildPublicUrl(key)
 
   return {
     uploadUrl,
@@ -70,4 +77,42 @@ export async function presignUpload(input: PresignInput): Promise<PresignOutput>
     key,
     expiresIn: PRESIGN_EXPIRES,
   }
+}
+
+function buildPublicUrl(key: string): string {
+  return `${env.BACKEND_URL.replace(/\/$/, '')}/api/v1/files/${key}`
+}
+
+export async function uploadFile(input: {
+  buffer: Buffer
+  contentType: UploadContentType
+  originalName: string
+}): Promise<DirectUploadOutput> {
+  if (input.buffer.byteLength === 0) {
+    throw httpErrors.badRequest('EMPTY_FILE', 'Arquivo vazio')
+  }
+  const id = randomUUID()
+  const key = `posts/${id}-${safeFilename(input.originalName)}`
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: BUCKET,
+      Key: key,
+      Body: input.buffer,
+      ContentType: input.contentType,
+      ContentLength: input.buffer.byteLength,
+    }),
+  )
+
+  return {
+    key,
+    publicUrl: buildPublicUrl(key),
+    contentType: input.contentType,
+    size: input.buffer.byteLength,
+    originalName: input.originalName,
+  }
+}
+
+export async function getFileObject(key: string) {
+  return s3.send(new GetObjectCommand({ Bucket: BUCKET, Key: key }))
 }
