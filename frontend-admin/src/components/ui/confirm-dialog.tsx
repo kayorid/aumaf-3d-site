@@ -43,7 +43,11 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const confirm = useCallback((opts: ConfirmOptions) => {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<boolean>((resolve, reject) => {
+      if (resolverRef.current) {
+        reject(new Error('Outro diálogo de confirmação já está aberto'))
+        return
+      }
       resolverRef.current = resolve
       setState({ open: true, variant: 'danger', ...opts })
     })
