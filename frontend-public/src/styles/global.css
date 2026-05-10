@@ -15,12 +15,14 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-background text-on-surface antialiased;
     font-family: 'Space Grotesk', sans-serif;
     overflow-x: clip; /* clip não cria BFC, não quebra position:sticky */
+    max-width: 100vw;
   }
 
   /* Foco visível global — anel verde com offset, contraste >= 3:1 */
