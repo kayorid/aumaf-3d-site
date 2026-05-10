@@ -259,3 +259,63 @@ describe('DELETE /api/v1/leads/:id/notes/:noteId', () => {
     expect(res.status).toBe(403)
   })
 })
+
+describe('POST /api/v1/leads/bulk-delete', () => {
+  beforeEach(() => jest.clearAllMocks())
+
+  it('ADMIN pode excluir vários leads e retorna count efetivamente apagado', async () => {
+    prisma.lead.updateMany.mockResolvedValue({ count: 3 })
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/v1/leads/bulk-delete')
+      .set('Cookie', authCookie('ADMIN'))
+      .send({ ids: ['a', 'b', 'c'] })
+    expect(res.status).toBe(200)
+    expect(res.body).toEqual({ status: 'ok', data: { deleted: 3 } })
+    expect(prisma.lead.updateMany).toHaveBeenCalledWith({
+      where: { id: { in: ['a', 'b', 'c'] }, deletedAt: null },
+      data: expect.objectContaining({ deletedAt: expect.any(Date), deletedBy: 'u1' }),
+    })
+  })
+
+  it('deduplica ids antes de chamar o Prisma', async () => {
+    prisma.lead.updateMany.mockResolvedValue({ count: 2 })
+    const app = createApp()
+    await request(app)
+      .post('/api/v1/leads/bulk-delete')
+      .set('Cookie', authCookie('ADMIN'))
+      .send({ ids: ['a', 'a', 'b'] })
+    expect(prisma.lead.updateMany).toHaveBeenCalledWith({
+      where: { id: { in: ['a', 'b'] }, deletedAt: null },
+      data: expect.any(Object),
+    })
+  })
+
+  it('MARKETING recebe 403', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/v1/leads/bulk-delete')
+      .set('Cookie', authCookie('MARKETING'))
+      .send({ ids: ['a'] })
+    expect(res.status).toBe(403)
+  })
+
+  it('rejeita lista vazia (Zod min 1)', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/v1/leads/bulk-delete')
+      .set('Cookie', authCookie('ADMIN'))
+      .send({ ids: [] })
+    expect(res.status).toBe(422)
+  })
+
+  it('rejeita lista acima de 100', async () => {
+    const app = createApp()
+    const ids = Array.from({ length: 101 }, (_, i) => `id-${i}`)
+    const res = await request(app)
+      .post('/api/v1/leads/bulk-delete')
+      .set('Cookie', authCookie('ADMIN'))
+      .send({ ids })
+    expect(res.status).toBe(422)
+  })
+})
