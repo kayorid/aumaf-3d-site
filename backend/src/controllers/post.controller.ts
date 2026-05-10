@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import { CreatePostSchema, UpdatePostSchema, PostListQuerySchema } from '@aumaf/shared'
+import { CreatePostSchema, UpdatePostSchema, PostListQuerySchema } from '@template/shared'
 import * as postService from '../services/post.service'
 import { httpErrors } from '../lib/http-error'
 

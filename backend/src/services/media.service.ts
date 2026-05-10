@@ -10,7 +10,7 @@ import type {
   MediaListResponse,
   RegisterMediaInput,
   UpdateMediaInput,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 function toDto(row: {
   id: string

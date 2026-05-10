@@ -6,7 +6,7 @@ import type {
   BotyioTestResult,
   TestBotyioConnectionInput,
   BotyioDeliveryDto,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 const BASE = '/admin/integrations/botyio'
 

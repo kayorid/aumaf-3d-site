@@ -2,7 +2,7 @@ import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Users } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import type { LeadMaskedDto } from '@aumaf/shared'
+import type { LeadMaskedDto } from '@template/shared'
 
 interface Props {
   leads: LeadMaskedDto[]

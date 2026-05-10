@@ -2,7 +2,7 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "paths": {
-      "@aumaf/shared": ["../packages/shared/src/index.ts"]
+      "@template/shared": ["../packages/shared/src/index.ts"]
     }
   },
   "include": [".astro/types.d.ts", "**/*"],

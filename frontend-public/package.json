@@ -14,7 +14,7 @@
     "@astrojs/node": "^9.5.5",
     "@astrojs/sitemap": "^3.0.0",
     "@astrojs/tailwind": "^6.0.0",
-    "@aumaf/shared": "*",
+    "@template/shared": "*",
     "astro": "^5.0.0",
     "marked": "^18.0.3"
   },

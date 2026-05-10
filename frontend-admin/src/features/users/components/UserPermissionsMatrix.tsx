@@ -5,7 +5,7 @@ import type {
   PermissionOverride,
   UserRole,
   PermissionCatalog,
-} from '@aumaf/shared'
+} from '@template/shared'
 import { Button } from '@/components/ui/button'
 import { usePermissionCatalog, useSetUserPermissions } from '../api/use-users'
 

@@ -10,7 +10,7 @@ import type {
   PostPublicDto,
   PublicPostListResponse,
   PublicSettingsDto,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 const DEFAULT_BASE = 'http://localhost:3000'
 const API_PREFIX = '/api/v1'

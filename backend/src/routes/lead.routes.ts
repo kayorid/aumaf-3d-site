@@ -6,7 +6,7 @@ import {
   CreateLeadNoteSchema,
   UpdateLeadNoteSchema,
   BulkDeleteLeadsSchema,
-} from '@aumaf/shared'
+} from '@template/shared'
 import { requireAuth, requireRole } from '../middlewares/require-auth'
 import { httpErrors } from '../lib/http-error'
 import * as leadService from '../services/lead.service'

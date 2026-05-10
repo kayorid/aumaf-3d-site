@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { usePermissions } from '@/features/users/hooks/usePermissions'
+import { BrandLockup } from './BrandLockup'
 
 interface NavItem {
   to: string
@@ -28,14 +29,7 @@ export function Sidebar() {
     <aside className="hidden lg:flex w-60 flex-col fixed left-0 top-0 bottom-0 z-30 nav-glass border-r border-white/10">
       {/* Logo block */}
       <div className="px-6 pt-7 pb-8">
-        <div className="flex items-center gap-1">
-          <span className="font-pirulen text-[16px] text-white tracking-[0.06em] leading-none">
-            AUMAF
-          </span>
-          <span className="font-pirulen text-[16px] text-primary-container tracking-[0.06em] leading-none">
-            3D
-          </span>
-        </div>
+        <BrandLockup size={16} />
         <div className="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mt-2">
           Backoffice
         </div>

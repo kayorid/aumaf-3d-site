@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api'
 import type { ApiSuccess } from '@/lib/api'
-import type { SettingsDto, UpdateSettingsInput } from '@aumaf/shared'
+import type { SettingsDto, UpdateSettingsInput } from '@template/shared'
 
 export const settingsApi = {
   async get() {

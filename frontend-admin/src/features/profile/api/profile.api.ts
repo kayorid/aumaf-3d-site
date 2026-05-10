@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api'
 import type { ApiSuccess } from '@/lib/api'
-import type { ProfileDto, UpdateProfileInput, ChangePasswordInput } from '@aumaf/shared'
+import type { ProfileDto, UpdateProfileInput, ChangePasswordInput } from '@template/shared'
 
 export const profileApi = {
   async get() {

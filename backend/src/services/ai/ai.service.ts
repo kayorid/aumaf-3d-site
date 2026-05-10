@@ -6,7 +6,7 @@ import { AnthropicProvider } from './providers/anthropic.provider'
 import { OpenAIProvider } from './providers/openai.provider'
 import { GeminiProvider } from './providers/gemini.provider'
 import type { AIProvider } from './provider.interface'
-import type { AIProviderName, GeneratePostInput, GeneratePostOutput } from '@aumaf/shared'
+import type { AIProviderName, GeneratePostInput, GeneratePostOutput } from '@template/shared'
 
 const providers: Record<AIProviderName, AIProvider> = {
   anthropic: new AnthropicProvider(),

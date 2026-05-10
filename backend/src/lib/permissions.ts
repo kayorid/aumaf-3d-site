@@ -1,7 +1,7 @@
 // Modelo de permissões: feature × action.
 // Roles funcionam como presets; UserPermission contém overrides (granted=true adiciona,
 // granted=false revoga em relação ao preset).
-import type { UserRole } from '@aumaf/shared'
+import type { UserRole } from '@template/shared'
 
 export const FEATURES = [
   'dashboard',

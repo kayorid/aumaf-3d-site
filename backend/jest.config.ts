@@ -6,7 +6,7 @@ const config: Config = {
   roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
   moduleNameMapper: {
-    '@aumaf/shared': '<rootDir>/../packages/shared/src/index.ts',
+    '@template/shared': '<rootDir>/../packages/shared/src/index.ts',
   },
   clearMocks: true,
   collectCoverageFrom: ['src/**/*.ts', '!src/server.ts'],

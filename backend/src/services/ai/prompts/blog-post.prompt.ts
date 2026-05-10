@@ -1,4 +1,4 @@
-import type { AITone } from '@aumaf/shared'
+import type { AITone } from '@template/shared'
 
 export const SYSTEM_PROMPT_PT_BR = `Você é um redator sênior brasileiro especializado em SEO técnico para o setor de impressão 3D profissional.
 

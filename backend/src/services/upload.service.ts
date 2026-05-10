@@ -16,7 +16,7 @@ import type {
   PresignInput,
   PresignOutput,
   UploadContentType,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 const BUCKET = env.S3_BUCKET
 const PRESIGN_EXPIRES = 900 // 15 min

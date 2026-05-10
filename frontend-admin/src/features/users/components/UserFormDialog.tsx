@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X, Loader2 } from 'lucide-react'
-import type { UserDto, CreateUserInput, UpdateUserInput, UserRole } from '@aumaf/shared'
+import type { UserDto, CreateUserInput, UpdateUserInput, UserRole } from '@template/shared'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'

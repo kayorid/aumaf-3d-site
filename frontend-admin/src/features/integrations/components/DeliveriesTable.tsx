@@ -1,5 +1,5 @@
 import { Inbox } from 'lucide-react'
-import type { BotyioDeliveryDto } from '@aumaf/shared'
+import type { BotyioDeliveryDto } from '@template/shared'
 
 export interface DeliveriesTableProps {
   rows: BotyioDeliveryDto[]

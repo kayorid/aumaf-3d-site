@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { UpdateSettingsSchema } from '@aumaf/shared'
+import { UpdateSettingsSchema } from '@template/shared'
 import { requireAuth, requireRole } from '../middlewares/require-auth'
 import * as settingsService from '../services/settings.service'
 

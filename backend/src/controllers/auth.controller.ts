@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import { LoginSchema } from '@aumaf/shared'
+import { LoginSchema } from '@template/shared'
 import { login } from '../services/auth.service'
 import { COOKIE_NAME } from '../middlewares/require-auth'
 import { env } from '../config/env'

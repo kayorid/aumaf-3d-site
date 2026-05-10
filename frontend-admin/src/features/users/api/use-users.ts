@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { CreateUserInput, UpdateUserInput, PermissionOverride } from '@aumaf/shared'
+import type { CreateUserInput, UpdateUserInput, PermissionOverride } from '@template/shared'
 import { usersApi, permissionsApi } from './users.api'
 
 export const USERS_KEY = ['users'] as const

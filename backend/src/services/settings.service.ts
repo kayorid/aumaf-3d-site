@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
-import type { UpdateSettingsInput, SettingsDto } from '@aumaf/shared'
+import type { UpdateSettingsInput, SettingsDto } from '@template/shared'
 
 const SINGLETON_ID = 'default'
 

@@ -8,7 +8,7 @@ import {
   type Feature,
   type Permission,
 } from '../lib/permissions'
-import type { AuthUser, UserRole } from '@aumaf/shared'
+import type { AuthUser, UserRole } from '@template/shared'
 
 declare module 'express-serve-static-core' {
   interface Request {

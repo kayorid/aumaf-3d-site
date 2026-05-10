@@ -24,7 +24,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@aumaf/shared": ["../packages/shared/src/index.ts"]
+      "@template/shared": ["../packages/shared/src/index.ts"]
     },
 
     "types": ["node", "vite/client"]

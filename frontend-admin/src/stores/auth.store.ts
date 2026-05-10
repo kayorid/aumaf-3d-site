@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AuthUser } from '@aumaf/shared'
+import type { AuthUser } from '@template/shared'
 
 interface AuthState {
   user: AuthUser | null

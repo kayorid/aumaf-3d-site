@@ -7,7 +7,7 @@ import type {
   LeadNoteDto,
   CreateLeadNoteInput,
   UpdateLeadNoteInput,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 export const leadsApi = {
   async list(query: Partial<LeadFilterQuery> = {}) {

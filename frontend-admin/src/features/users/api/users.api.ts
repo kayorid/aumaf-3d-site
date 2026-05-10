@@ -8,7 +8,7 @@ import type {
   PermissionOverride,
   PermissionCatalog,
   ResetPasswordResponse,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 export const usersApi = {
   async list() {
