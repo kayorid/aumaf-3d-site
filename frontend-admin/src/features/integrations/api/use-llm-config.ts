@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { llmApi } from './llm.api'
-import type { TestLLMConnectionInput, UpdateLLMConfigInput } from '@aumaf/shared'
+import type { TestLLMConnectionInput, UpdateLLMConfigInput } from '@template/shared'
 
 export const LLM_CONFIG_KEY = ['integrations', 'llm'] as const
 

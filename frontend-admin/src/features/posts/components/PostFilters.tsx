@@ -3,7 +3,7 @@ import { Search, X, Sparkles, Star } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { SelectStyled } from '@/components/ui/select-styled'
 import { useCategories } from '../api/use-posts'
-import type { PostListQuery, PostStatus } from '@aumaf/shared'
+import type { PostListQuery, PostStatus } from '@template/shared'
 import { cn } from '@/lib/utils'
 
 interface Props {

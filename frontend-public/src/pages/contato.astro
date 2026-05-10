@@ -5,8 +5,11 @@ import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
 import { COMPANY } from '../lib/company'
+import { templateConfig } from '@template/shared'
 
-const description = 'Solicite orçamento de impressão 3D na AUMAF 3D. Envie seu arquivo .STL, .STEP ou descreva o projeto e receba retorno em até 24 horas. São Carlos – SP.'
+// TEMPLATE DEMO PAGE — campos `projectTypes` e textos abaixo refletem o
+// setor original (impressão 3D). Adapte para o domínio da sua marca.
+const description = `Entre em contato com ${templateConfig.name}. Envie sua mensagem e receba retorno em até 24 horas.`
 
 const projectTypes = [
   'Prototipagem',
@@ -337,7 +340,7 @@ const infoCards = [
           href={`${COMPANY.contact.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de solicitar um orçamento para impressão 3D.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Abrir conversa no WhatsApp da AUMAF 3D (abre em nova aba)"
+          aria-label={`Abrir conversa no WhatsApp de ${templateConfig.name} (abre em nova aba)`}
           class="inline-flex items-center gap-2 border border-[#25D366]/40 text-[#25D366] text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:bg-[#25D366]/10 transition-all duration-300 whitespace-nowrap"
         >
           Abrir WhatsApp

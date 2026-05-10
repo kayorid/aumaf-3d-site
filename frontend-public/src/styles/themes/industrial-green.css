@@ -1,0 +1,59 @@
+/**
+ * Theme: industrial-green
+ * Origem: design original AUMAF 3D — "Cinematic Additive Manufacturing"
+ * Paleta: preto profundo + verde neon (#7ce268)
+ *
+ * Para criar um novo tema, copie este arquivo e ajuste as variáveis abaixo.
+ * Atualize `theme.themeName` em packages/shared/src/template/config.ts.
+ */
+
+:root {
+  /* ---- Surfaces ---- */
+  --color-background: 0 0 0;
+  --color-surface: 19 19 19;
+  --color-surface-dim: 14 14 14;
+  --color-surface-low: 28 27 27;
+  --color-surface-base: 32 31 31;
+  --color-surface-high: 42 42 42;
+  --color-surface-highest: 53 53 52;
+  --color-surface-variant: 53 53 52;
+
+  /* ---- Brand ---- */
+  --color-primary: 124 226 104;        /* #7ce268 */
+  --color-primary-container: 97 197 79; /* #61c54f */
+  --color-primary-dim: 120 221 100;    /* #78dd64 */
+  --color-primary-fixed: 147 250 125;  /* #93fa7d */
+  --color-on-primary: 1 58 0;          /* #013a00 */
+
+  /* ---- Foreground ---- */
+  --color-on-surface: 229 226 225;
+  --color-on-surface-variant: 190 202 182;
+  --color-tertiary: 205 202 202;
+  --color-tertiary-container: 177 175 175;
+  --color-outline: 137 148 130;
+  --color-outline-variant: 63 74 59;
+
+  /* ---- States ---- */
+  --color-error: 255 180 171;
+  --color-error-container: 147 0 10;
+
+  /* ---- Effects ---- */
+  --shadow-glow: 0 0 15px rgba(97, 197, 79, 0.3);
+  --shadow-glow-lg: 0 0 30px rgba(97, 197, 79, 0.4);
+  --shadow-glow-sm: 0 0 8px rgba(97, 197, 79, 0.2);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+  --gradient-radial-brand: radial-gradient(ellipse at 30% 50%, rgba(97, 197, 79, 0.07) 0%, transparent 70%);
+  --gradient-grid: linear-gradient(rgba(124, 226, 104, 0.04) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(124, 226, 104, 0.04) 1px, transparent 1px);
+
+  /* ---- Typography ---- */
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+
+  /* ---- Radii ---- */
+  --radius-default: 2px;
+  --radius-sm: 1px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+}

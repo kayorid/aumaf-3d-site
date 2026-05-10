@@ -4,6 +4,7 @@ import { LogOut, ChevronDown, User } from 'lucide-react'
 import { useAuthStore } from '@/stores/auth.store'
 import { useLogout } from '@/features/auth/api/use-logout'
 import { cn } from '@/lib/utils'
+import { BrandLockup } from './BrandLockup'
 
 export function Topbar() {
   const user = useAuthStore((s) => s.user)
@@ -18,10 +19,7 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-20 nav-glass border-b border-white/10">
       <div className="flex h-14 items-center justify-between px-6">
-        <div className="lg:hidden flex items-center gap-1">
-          <span className="font-pirulen text-[14px] text-white tracking-[0.06em]">AUMAF</span>
-          <span className="font-pirulen text-[14px] text-primary-container tracking-[0.06em]">3D</span>
-        </div>
+        <BrandLockup className="lg:hidden" size={14} />
 
         <div className="ml-auto flex items-center gap-4">
           {/* Status pill mini */}

@@ -1,4 +1,4 @@
-import type { AIProviderName, GeneratePostInput, GeneratePostOutput } from '@aumaf/shared'
+import type { AIProviderName, GeneratePostInput, GeneratePostOutput } from '@template/shared'
 
 export type ProviderInput = Omit<GeneratePostInput, 'provider'>
 export type ProviderOutput = Omit<GeneratePostOutput, 'provider' | 'latencyMs'>

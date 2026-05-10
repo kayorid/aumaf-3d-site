@@ -14,7 +14,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('7d'),
   ADMIN_EMAIL: z.string().email(),
   ADMIN_PASSWORD: z.string().min(8),
-  ADMIN_NAME: z.string().default('Admin AUMAF'),
+  ADMIN_NAME: z.string().default('Admin'),
 
   // CORS
   FRONTEND_ADMIN_URL: z.string().url(),
@@ -54,7 +54,7 @@ const envSchema = z.object({
 
   // Email (notificação de leads ao admin)
   ADMIN_NOTIFICATION_EMAIL: z.string().email().optional(),
-  EMAIL_FROM: z.string().default('AUMAF 3D <noreply@aumaf-3d.com.br>'),
+  EMAIL_FROM: z.string().default('Template Site <noreply@example.com>'),
   EMAIL_TRANSPORT: z.enum(['console', 'smtp', 'stub']).default('console'),
   EMAIL_SMTP_HOST: z.string().optional(),
   EMAIL_SMTP_PORT: z.coerce.number().default(587),

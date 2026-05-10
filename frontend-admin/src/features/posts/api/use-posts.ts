@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { postsApi, categoriesApi } from './posts.api'
-import type { CreatePostInput, PostListQuery, UpdatePostInput } from '@aumaf/shared'
+import type { CreatePostInput, PostListQuery, UpdatePostInput } from '@template/shared'
 import { DASHBOARD_QUERY_KEY } from '@/features/dashboard/api/use-metrics'
 
 export const POSTS_KEY = ['posts'] as const

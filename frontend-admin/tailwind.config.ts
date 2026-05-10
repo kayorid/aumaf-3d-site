@@ -1,52 +1,42 @@
 import type { Config } from 'tailwindcss'
 import tailwindAnimate from 'tailwindcss-animate'
 
+/**
+ * Tailwind do frontend-admin — todas as cores leem de CSS variables
+ * compartilhadas com o frontend-public (mesmo design system).
+ * Definidas em `src/index.css` via @import dos themes do public.
+ */
+const withRgb = (varName: string) => `rgb(var(${varName}) / <alpha-value>)`
+
 const config: Config = {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        background: '#000000',
+        background: withRgb('--color-background'),
         surface: {
-          DEFAULT: '#131313',
-          dim: '#0e0e0e',
-          low: '#1c1b1b',
-          base: '#201f1f',
-          high: '#2a2a2a',
-          highest: '#353534',
-          variant: '#353534',
-          // aliases mantendo compatibilidade com componentes existentes
-          50: '#0e0e0e',
-          100: '#131313',
-          200: '#1c1b1b',
-          300: '#2a2a2a',
-          400: '#353534',
+          DEFAULT: withRgb('--color-surface'),
+          dim: withRgb('--color-surface-dim'),
+          low: withRgb('--color-surface-low'),
+          base: withRgb('--color-surface-base'),
+          high: withRgb('--color-surface-high'),
+          highest: withRgb('--color-surface-highest'),
+          variant: withRgb('--color-surface-variant'),
         },
         primary: {
-          DEFAULT: '#7ce268',
-          container: '#61c54f',
-          dim: '#78dd64',
-          fixed: '#93fa7d',
-          // aliases para componentes existentes
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#7ce268',
-          500: '#61c54f',
-          600: '#4fb83a',
-          700: '#3a8c2c',
-          800: '#2f6b25',
-          900: '#013a00',
+          DEFAULT: withRgb('--color-primary'),
+          container: withRgb('--color-primary-container'),
+          dim: withRgb('--color-primary-dim'),
+          fixed: withRgb('--color-primary-fixed'),
         },
-        'on-surface': '#e5e2e1',
-        'on-surface-variant': '#becab6',
-        'on-primary': '#013a00',
-        tertiary: '#cdcaca',
-        'tertiary-container': '#b1afaf',
-        outline: '#899482',
-        'outline-variant': '#3f4a3b',
+        'on-surface': withRgb('--color-on-surface'),
+        'on-surface-variant': withRgb('--color-on-surface-variant'),
+        'on-primary': withRgb('--color-on-primary'),
+        tertiary: withRgb('--color-tertiary'),
+        'tertiary-container': withRgb('--color-tertiary-container'),
+        outline: withRgb('--color-outline'),
+        'outline-variant': withRgb('--color-outline-variant'),
         border: {
           subtle: 'rgba(255,255,255,0.06)',
           DEFAULT: 'rgba(255,255,255,0.10)',
@@ -54,12 +44,12 @@ const config: Config = {
         },
         text: {
           primary: '#ffffff',
-          secondary: '#e5e2e1',
-          tertiary: '#becab6',
-          muted: '#899482',
+          secondary: withRgb('--color-on-surface'),
+          tertiary: withRgb('--color-on-surface-variant'),
+          muted: withRgb('--color-outline'),
         },
         danger: {
-          400: '#ffb4ab',
+          400: withRgb('--color-error'),
           500: '#f87171',
           600: '#dc2626',
         },
@@ -73,10 +63,12 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-        pirulen: ['Pirulen', '"Space Grotesk"', 'sans-serif'],
+        // `pirulen` é uma fonte específica do legado AUMAF — preservada para
+        // compatibilidade. Em uma nova marca, redefina a face em src/index.css.
+        pirulen: ['Pirulen', 'var(--font-display)', 'sans-serif'],
       },
       fontSize: {
         'display-xl': ['clamp(48px,6vw,72px)', { lineHeight: '1.0', letterSpacing: '-0.04em' }],
@@ -89,17 +81,17 @@ const config: Config = {
         'code-data': ['13px', { lineHeight: '1.4', letterSpacing: '0.05em' }],
       },
       borderRadius: {
-        DEFAULT: '2px',
-        sm: '1px',
-        md: '4px',
-        lg: '8px',
+        DEFAULT: 'var(--radius-default)',
+        sm: 'var(--radius-sm)',
+        md: 'var(--radius-md)',
+        lg: 'var(--radius-lg)',
         full: '9999px',
       },
       boxShadow: {
-        glow: '0 0 15px rgba(97, 197, 79, 0.35)',
-        'glow-lg': '0 0 30px rgba(97, 197, 79, 0.4), 0 0 60px rgba(97, 197, 79, 0.15)',
-        'glow-sm': '0 0 8px rgba(97, 197, 79, 0.2)',
-        glass: '0 8px 32px rgba(0,0,0,0.6)',
+        glow: 'var(--shadow-glow)',
+        'glow-lg': 'var(--shadow-glow-lg)',
+        'glow-sm': 'var(--shadow-glow-sm)',
+        glass: 'var(--shadow-glass)',
       },
       keyframes: {
         'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
@@ -134,30 +126,24 @@ const config: Config = {
         float: 'float 6s ease-in-out infinite',
       },
       backgroundImage: {
-        'grid-pattern':
-          'linear-gradient(rgba(124,226,104,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,226,104,0.04) 1px, transparent 1px)',
-        'radial-green': 'radial-gradient(ellipse at 30% 50%, rgba(97,197,79,0.07) 0%, transparent 70%)',
+        'grid-pattern': 'var(--gradient-grid)',
+        'radial-brand': 'var(--gradient-radial-brand)',
+        'radial-green': 'var(--gradient-radial-brand)',
       },
       backgroundSize: {
         grid: '60px 60px',
       },
     },
   },
-  // Safelist para classes usadas em blocos HTML do editor (HtmlBlock NodeView preview).
-  // O purger não analisa strings dinâmicas de HTML — estas classes precisam ser
-  // explicitamente preservadas para o preview do DS aparecer corretamente no editor.
   safelist: [
-    // Layout dos blocos
     'glass-panel', 'glass-panel-strong',
     'pill', 'pill-green',
-    // Grid e flex
     'grid', 'grid-cols-1', 'grid-cols-2', 'grid-cols-3',
     'sm:grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-2',
     'gap-3', 'gap-4', 'gap-6', 'space-y-3', 'space-y-4',
     'flex', 'flex-col', 'flex-shrink-0', 'items-start', 'items-center', 'justify-center',
     'relative', 'absolute', 'overflow-hidden', 'overflow-x-auto',
     'inset-0', 'top-0', 'left-0', 'bottom-4', 'right-4',
-    // Tipografia DS
     'text-body-lg', 'text-body-md', 'text-label-caps', 'text-code-data', 'text-headline-md',
     'text-on-surface', 'text-on-surface-variant', 'text-tertiary',
     'text-primary-container', 'text-white',
@@ -165,14 +151,12 @@ const config: Config = {
     'leading-relaxed', 'leading-snug', 'leading-none',
     'font-bold', 'font-medium', 'font-light', 'italic', 'not-italic',
     'text-\\[10px\\]', 'text-\\[11px\\]', 'text-\\[12px\\]', 'text-sm',
-    // Bordas e backgrounds DS
     'border-b', 'border-l-2', 'border-t',
     'rounded-sm', 'rounded-full',
     'p-3', 'p-4', 'p-5', 'p-6', 'pb-3', 'pt-4', 'px-4', 'py-3', 'my-4', 'my-6', 'my-8',
     'mb-0', 'mb-1', 'mb-2', 'mb-3', 'mb-4', 'mt-2',
     'w-full', 'h-px', 'w-8', 'h-8',
-    // Padrões com opacidade (Tailwind JIT) — usar regex
-    { pattern: /^(bg|border|text)-(primary-container|on-surface|on-surface-variant|tertiary|white)\/(5|8|10|12|15|20|25|30|40|50|60|70|80)$/ },
+    { pattern: /^(bg|border|text)-(primary|primary-container|on-surface|on-surface-variant|tertiary|white)\/(5|8|10|12|15|20|25|30|40|50|60|70|80)$/ },
     { pattern: /^(bg|border)-primary-container\/(10|15|20|40|50|60)$/ },
     { pattern: /^gap-\d+$/ },
     { pattern: /^(p|px|py|pb|pt|m|my|mb|mt)-\d+$/ },

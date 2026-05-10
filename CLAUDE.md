@@ -1,68 +1,74 @@
-# AUMAF 3D — Contexto do Projeto
+# Multi-Brand Site Template — Contexto do Projeto
 
-## O Projeto
-Site institucional + Blog + Backoffice para **AUMAF 3D** (São Carlos – SP), empresa de impressão 3D profissional. Desenvolvido por **kayoridolfi.ai** como freelancer.
+## O que é este repositório
 
-**Contrato:** R$ 3.500 (50% entrada + 50% entrega) + R$ 150/mês manutenção  
-**Prazo:** 3 quinzenas (~1,5 mês)  
-**Repositório:** https://github.com/kayorid/aumaf-3d-site
+Boilerplate full-stack para sites institucionais com blog, captação de leads e backoffice administrativo. Destilado do projeto AUMAF 3D, agora reutilizável para múltiplas marcas.
 
-## Comandos Essenciais
+**Toda identidade vive em `packages/shared/src/template/config.ts`** (alias raiz: `template.config.ts`). Toda paleta vive em `frontend-public/src/styles/themes/<theme>.css`. Nada de hardcode em componentes — sempre que precisar do nome/contato/URL, importe:
+
+```ts
+import { templateConfig } from '@template/shared'
+```
+
+## Comandos essenciais
 
 ```bash
-# Subir tudo (Docker + backend + frontends)
+# subir tudo (Docker + backend + 2 frontends)
 npm run dev
 
-# Workspaces individuais
+# workspaces individuais
 npm run dev:backend       # API → http://localhost:3000
 npm run dev:public        # Astro → http://localhost:4321
 npm run dev:admin         # Vite/React → http://localhost:5174
 
-# Infra Docker apenas
+# infra Docker apenas
 npm run dev:db            # PostgreSQL :5432, Redis :6379, MinIO :9000
 
-# Qualidade
-npm run build             # turbo build (todos os workspaces)
+# qualidade
+npm run build             # turbo build
 npm run lint              # turbo lint
 npm run typecheck         # turbo typecheck
 npm run test              # turbo test (unit)
 npm run test:e2e          # Playwright (frontend-admin)
 
-# Backend
+# backend
 cd backend && npx prisma studio        # UI do banco → :5555
-cd backend && npx prisma migrate dev   # Aplicar migrations
-cd backend && npx prisma db seed       # Popular banco
+cd backend && npx prisma migrate dev   # aplicar migrations
+cd backend && npx prisma db seed       # popular banco
 
-# Storybook
+# storybook
 cd frontend-admin && npm run storybook  # → http://localhost:6006
+
+# bootstrap de marca nova
+npm run brand:init
 ```
 
 ## Arquitetura
 
 ```
-aumaf-3d-site/
-├── backend/              # Node.js + Express + Prisma + PostgreSQL
-├── frontend-public/      # Astro 5 + Tailwind — site público (SSG/SSR)
-├── frontend-admin/       # React 18 + Vite + Tailwind — backoffice
-├── packages/
-│   └── shared/           # @aumaf/shared — schemas Zod compartilhados
+.
+├── packages/shared/        # @template/shared — Zod + TemplateConfig types
+├── frontend-public/        # Astro 5 + Tailwind — site público (SSG/SSR)
+├── frontend-admin/         # React 18 + Vite + Tailwind — backoffice
+├── backend/                # Node 18 + Express + Prisma + Postgres
+├── template.config.ts      # entry-point ergonômico (re-export do shared)
+├── scripts/                # init-brand.mjs, smoke-test.sh
 ├── docs/
-│   ├── plans/            # Planos de implementação por fase
-│   ├── research/         # Pesquisa de conteúdo e referências
-│   ├── design/           # Design system, tokens, referências visuais
-│   └── decisions/        # ADRs — decisões arquiteturais
-├── assets/               # Contrato, plano de trabalho (PDF)
-└── docker-compose.yml    # PostgreSQL 16, Redis 7, MinIO
+│   ├── template/           # REBRAND, THEMING, CONTENT, ARCHITECTURE
+│   ├── design/             # design system
+│   ├── plans/              # planos de implementação
+│   └── decisions/          # ADRs
+└── docker-compose.yml      # Postgres 16, Redis 7, MinIO
 ```
 
 ## Stack
 
 | Camada | Tech |
 |---|---|
-| Backend | Node.js 18 + Express + Prisma + PostgreSQL 16 |
+| Backend | Node 18 + Express + Prisma + PostgreSQL 16 |
 | Frontend público | Astro 5 + Tailwind CSS |
 | Frontend admin | React 18 + Vite + Tailwind + Radix UI |
-| Shared | Zod schemas (`@aumaf/shared`) |
+| Shared | Zod schemas + TemplateConfig (`@template/shared`) |
 | Cache/Filas | Redis 7 + BullMQ |
 | Storage | MinIO (dev) / S3 (prod) |
 | Auth | JWT em cookie httpOnly |
@@ -71,36 +77,37 @@ aumaf-3d-site/
 | Testes FE | Vitest + Playwright + Storybook |
 | Monitoramento | Pino + Sentry |
 
-## Regras Críticas
+## Regras críticas
 
-- **Sem multi-tenancy** — sem `tenantId` em nenhum lugar do schema Prisma
-- **Storybook obrigatório** — nunca remover mesmo sob pressão de prazo
-- **Playwright obrigatório** — E2E no frontend-admin
-- **MinIO obrigatório** — upload de imagens do blog
-- JWT **sempre** em cookie httpOnly, nunca em localStorage
-- Imports do `@aumaf/shared` devem vir de `packages/shared/src`
+- **Identidade nunca hardcoded.** Sempre `templateConfig.*`. Em `.astro`/`.tsx`, importe de `@template/shared`. Em `.ts` do backend, idem.
+- **Cores nunca hardcoded.** Use os tokens Tailwind (`bg-primary`, `text-on-surface`, etc.) que apontam para CSS variables. Nunca escreva `#61c54f` ou `rgba(97,197,79,...)`. Se precisar de uma cor de marca, escreva `rgb(var(--color-primary-container) / 0.X)`.
+- **Sem multi-tenancy** — sem `tenantId` no schema Prisma. O template é "uma marca por instância".
+- **Storybook obrigatório** para componentes novos no admin.
+- **Playwright obrigatório** para fluxos críticos no admin.
+- **MinIO obrigatório** para upload de imagens do blog (dev). Em prod, S3.
+- **JWT sempre** em cookie httpOnly, nunca em localStorage.
+- **Imports do `@template/shared`** devem vir de `packages/shared/src` (alias configurado).
 
-## Checkpoints do Projeto
+## Como adicionar / re-skinnar uma marca
 
-| Quinzena | Entrega | Status |
-|---|---|---|
-| Q1 (sem 1–2) | Site público navegável + design aprovado + infra ativa | ✅ Concluído |
-| Q2 (sem 3–4) | Blog funcional + backoffice + IA gerando posts | ✅ Concluído |
-| Q3 (sem 5–6) | BullMQ + Storybook + QA + handover; deploy + Botyo separados | 🟡 Foundation entregue; deploy/Botyo aguardam |
+Ver [`docs/template/REBRAND.md`](docs/template/REBRAND.md).
 
-## Q3 Foundation (entregue em `feat/q3-foundation`)
+Em uma frase: edite `packages/shared/src/template/config.ts`, troque o `@import` do tema em `frontend-public/src/styles/global.css` e em `frontend-admin/src/index.css`, e remova/edite as páginas marcadas com `TEMPLATE DEMO PAGE`.
 
-- **BullMQ + workers**: `lead-notification` (email ao admin) e `post-publish-cache` (warm-up SSR Astro). Health endpoint `/health` agrega DB/Redis/queues.
-- **Storybook tematizado**: stories para todos os primitivos UI (`Button`, `Badge`, `Card`, `Input`, `Label`, `Select`, `KpiCard`), `BlockPreview` com 4 templates, página `Foundation/Tokens` com cores/tipografia/radii/shadows ao vivo.
-- **Cobertura de testes**: 36 Jest backend + 35 Vitest admin + Playwright E2E (smoke + posts + leads + wysiwyg).
-- **Ops**: `scripts/smoke-test.sh`, runbooks `local-development.md` e `operational-handover.md`.
+## Páginas vitrine — política de demo content
 
-## Integrações Previstas
-- **Botyo** — WhatsApp chatbot + captação de leads
-- **GA4 + Microsoft Clarity + Facebook Pixel + GTM**
-- **IA para posts** — geração automática SEO/GEO (provedor a definir pela AUMAF)
+As seguintes páginas têm copy específica do setor original (impressão 3D) marcada com banner `TEMPLATE DEMO PAGE`:
 
-## URLs Locais
+- `frontend-public/src/pages/servicos.astro`
+- `frontend-public/src/pages/materiais.astro`
+- `frontend-public/src/pages/portfolio.astro`
+- `frontend-public/src/pages/sobre.astro`
+- `frontend-public/src/pages/faq.astro`
+- `frontend-public/src/pages/avaliacoes.astro`
+
+Estas páginas servem como **scaffolds visuais** — substitua textos, imagens e seções pela proposta da sua marca. A estrutura visual é reaproveitável.
+
+## URLs locais
 
 | Serviço | URL |
 |---|---|
@@ -111,7 +118,10 @@ aumaf-3d-site/
 | Prisma Studio | http://localhost:5555 |
 | Storybook | http://localhost:6006 |
 
-## Docs do Projeto
-- `docs/research/site-atual-conteudo.md` — scraping completo do site Wix atual
-- `docs/plans/2026-05-02-project-scaffold.md` — plano de scaffold executado
-- `docs/design/` — design system em construção (Q1)
+## Docs do projeto
+
+- [`README.md`](README.md) — overview do template
+- [`docs/template/REBRAND.md`](docs/template/REBRAND.md) — passo-a-passo de rebrand
+- [`docs/template/THEMING.md`](docs/template/THEMING.md) — como criar/editar temas
+- [`docs/template/CONTENT.md`](docs/template/CONTENT.md) — guia das páginas (genéricas vs. demo)
+- [`docs/template/ARCHITECTURE.md`](docs/template/ARCHITECTURE.md) — visão técnica detalhada

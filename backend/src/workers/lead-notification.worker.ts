@@ -5,6 +5,7 @@ import { env } from '../config/env'
 import { createQueue, createWorker } from '../lib/queue'
 import { sendEmail } from '../services/email.service'
 import { registerWorker } from './index'
+import { templateConfig } from '@template/shared'
 
 export interface LeadNotificationJobData {
   leadId: string
@@ -24,7 +25,7 @@ function formatLeadEmailText(lead: {
   createdAt: Date
 }): string {
   return [
-    `Você recebeu um novo lead pelo site AUMAF 3D.`,
+    `Você recebeu um novo lead pelo site de ${templateConfig.name}.`,
     ``,
     `Nome:     ${lead.name}`,
     `E-mail:   ${lead.email}`,
@@ -60,7 +61,7 @@ export async function processLeadNotification(job: Job<LeadNotificationJobData>)
 
   await sendEmail({
     to: env.ADMIN_NOTIFICATION_EMAIL,
-    subject: `[AUMAF 3D] Novo lead: ${lead.name}`,
+    subject: `[${templateConfig.name}] Novo lead: ${lead.name}`,
     text: formatLeadEmailText(lead),
     replyTo: lead.email,
   })

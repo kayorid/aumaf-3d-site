@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import type { PostStatus } from '@aumaf/shared'
+import type { PostStatus } from '@template/shared'
 
 const STATUS_CONFIG: Record<
   PostStatus,

@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma'
 import { logger } from '../config/logger'
-import type { UpdateSettingsInput, SettingsDto } from '@aumaf/shared'
+import { templateConfig, type UpdateSettingsInput, type SettingsDto } from '@template/shared'
 
 const SINGLETON_ID = 'default'
 
@@ -8,7 +8,7 @@ function toDto(s: Awaited<ReturnType<typeof prisma.setting.findUnique>>): Settin
   if (!s) {
     // fallback: nunca deve ocorrer pós-seed
     return {
-      siteName: 'AUMAF 3D',
+      siteName: templateConfig.name,
       siteDescription: null,
       contactEmail: null,
       contactPhone: null,
@@ -54,7 +54,7 @@ export async function updateSettings(input: UpdateSettingsInput): Promise<Settin
 
   const updated = await prisma.setting.upsert({
     where: { id: SINGLETON_ID },
-    create: { id: SINGLETON_ID, siteName: 'AUMAF 3D', ...data },
+    create: { id: SINGLETON_ID, siteName: templateConfig.name, ...data },
     update: data,
   })
   logger.info({ keys: Object.keys(data) }, 'Settings updated')

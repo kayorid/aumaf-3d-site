@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { GeneratePostInputSchema } from '@aumaf/shared'
+import { GeneratePostInputSchema } from '@template/shared'
 import { requireAuth } from '../middlewares/require-auth'
 import { generatePost } from '../services/ai/ai.service'
 

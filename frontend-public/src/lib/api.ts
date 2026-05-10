@@ -1,5 +1,5 @@
 /**
- * Cliente HTTP para o backend da AUMAF 3D — usado pelo blog dinâmico.
+ * Cliente HTTP para o backend do template — usado pelo blog dinâmico.
  *
  * Em build time (SSG), a base URL aponta para o backend local ou de produção via env.
  * Em runtime SSR, idem.
@@ -10,7 +10,7 @@ import type {
   PostPublicDto,
   PublicPostListResponse,
   PublicSettingsDto,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 const DEFAULT_BASE = 'http://localhost:3000'
 const API_PREFIX = '/api/v1'

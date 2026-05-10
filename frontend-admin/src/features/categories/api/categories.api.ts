@@ -5,7 +5,7 @@ import type {
   CategoryDtoWithCount,
   CreateCategoryInput,
   UpdateCategoryInput,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 export const categoriesApi = {
   async list() {

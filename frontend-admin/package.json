@@ -1,5 +1,5 @@
 {
-  "name": "@aumaf/frontend-admin",
+  "name": "@template/frontend-admin",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -15,7 +15,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@aumaf/shared": "*",
+    "@template/shared": "*",
     "@casl/ability": "^6.8.1",
     "@casl/react": "^5.0.0",
     "@hookform/resolvers": "^5.2.2",

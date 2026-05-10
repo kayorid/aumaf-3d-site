@@ -1,6 +1,6 @@
 import { Router, type Request, type Response, type NextFunction } from 'express'
 import crypto from 'node:crypto'
-import { PublicPostListQuerySchema } from '@aumaf/shared'
+import { PublicPostListQuerySchema } from '@template/shared'
 import * as publicService from '../services/public.service'
 
 export const publicRoutes = Router()

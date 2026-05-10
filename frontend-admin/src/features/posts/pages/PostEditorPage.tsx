@@ -4,7 +4,7 @@ import { useForm, Controller, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { ArrowLeft, Send, EyeOff, Trash2, Save, Sparkles, ExternalLink } from 'lucide-react'
-import { PostInputSchema } from '@aumaf/shared'
+import { PostInputSchema } from '@template/shared'
 import { publicPostUrl } from '@/lib/public-site'
 
 interface PostFormValues {

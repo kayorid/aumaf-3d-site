@@ -10,7 +10,7 @@ import type {
   LeadMaskedDto,
   LeadDetailDto,
   LeadNoteDto,
-} from '@aumaf/shared'
+} from '@template/shared'
 
 function toDto(lead: Awaited<ReturnType<typeof prisma.lead.findUnique>>): LeadDto {
   if (!lead) throw new Error('lead null')

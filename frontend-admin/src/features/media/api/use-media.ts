@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { mediaApi } from './media.api'
-import type { MediaListQuery, RegisterMediaInput, UpdateMediaInput } from '@aumaf/shared'
+import type { MediaListQuery, RegisterMediaInput, UpdateMediaInput } from '@template/shared'
 
 export const MEDIA_LIST_KEY = ['media', 'list'] as const
 
