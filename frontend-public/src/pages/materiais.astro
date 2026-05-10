@@ -6,24 +6,301 @@ import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
 import { itemListSchema } from '../lib/schemas'
 
-const materials = [
-  { slug: 'mat-01-nylon-pa',         cat: 'Termoplásticos',   name: 'Nylon (PA)',           tempMax: '120°C',  flex: 'Semi-rígido', app: 'Mecânica geral',                  highlight: false },
-  { slug: 'mat-02-abs',              cat: 'Termoplásticos',   name: 'ABS',                  tempMax: '100°C',  flex: 'Rígido',      app: 'Protótipos + peças funcionais',   highlight: false },
-  { slug: 'mat-03-pc',               cat: 'Termoplásticos',   name: 'Policarbonato (PC)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Alta resistência ao impacto',     highlight: false },
-  { slug: 'mat-04-petg',             cat: 'Termoplásticos',   name: 'PET-G',                tempMax: '80°C',   flex: 'Semi-rígido', app: 'Alimentício seguro',              highlight: false },
-  { slug: 'mat-05-pp',               cat: 'Termoplásticos',   name: 'Polipropileno (PP)',   tempMax: '100°C',  flex: 'Semi-rígido', app: 'Resistência química',             highlight: false },
-  { slug: 'mat-06-tpu',              cat: 'Termoplásticos',   name: 'TPU',                  tempMax: '80°C',   flex: 'Flexível',    app: 'Borracha técnica, solas',         highlight: false },
-  { slug: 'mat-07-pva',              cat: 'Termoplásticos',   name: 'PVA',                  tempMax: '60°C',   flex: 'Solúvel',     app: 'Suporte solúvel em água',         highlight: false },
-  { slug: 'mat-08-pa-cf15',          cat: 'Alta Performance', name: 'PA CF15',              tempMax: '180°C',  flex: 'Rígido+Leve', app: 'Industrial severo',               highlight: true  },
-  { slug: 'mat-09-petg-cf15',        cat: 'Alta Performance', name: 'PET-G CF15',           tempMax: '80°C',   flex: 'Rígido',      app: 'Estrutural leve',                 highlight: false },
-  { slug: 'mat-10-tritan-ht',        cat: 'Alta Performance', name: 'Tritan HT',            tempMax: '95°C',   flex: 'Rígido',      app: 'Transparência + temperatura',     highlight: false },
-  { slug: 'mat-11-pc-perf',          cat: 'Alta Performance', name: 'PC (Policarbonato)',   tempMax: '130°C',  flex: 'Rígido',      app: 'Impacto industrial',              highlight: false },
-  { slug: 'mat-12-tpu-shore-95a',    cat: 'Flexíveis',        name: 'TPU Shore 95A',        tempMax: '80°C',   flex: 'Flex. médio', app: 'Juntas, vedações',                highlight: false },
-  { slug: 'mat-13-flex-shore-85a',   cat: 'Flexíveis',        name: 'Flex Shore 85A',       tempMax: '70°C',   flex: 'Alta flex.',  app: 'Solas, grips, amortecedores',     highlight: false },
-  { slug: 'mat-14-resina-standard',  cat: 'Resinas',          name: 'Resina Standard',      tempMax: '60°C',   flex: 'Rígido',      app: 'Alta resolução SLA',              highlight: false },
-  { slug: 'mat-15-resina-abs',       cat: 'Resinas',          name: 'Resina ABS',           tempMax: '80°C',   flex: 'Rígido',      app: 'Mecânica + acabamento',           highlight: false },
-  { slug: 'mat-16-resina-ceramica',  cat: 'Resinas',          name: 'Resina Cerâmica',      tempMax: '+400°C', flex: 'Rígido',      app: 'Temp. extrema, moldes',           highlight: true  },
-  { slug: 'mat-17-ultrafuse-316l',   cat: 'Metal',            name: 'BASF Ultrafuse 316L',  tempMax: '800°C+', flex: 'Aço Inox',    app: 'Componentes metálicos finais',    highlight: true  },
+interface MaterialDetail {
+  slug: string
+  cat: string
+  name: string
+  tempMax: string
+  flex: string
+  app: string
+  highlight: boolean
+  /** Resumo técnico exibido no modal (1-2 parágrafos curtos). */
+  description: string
+  /** Propriedades técnicas principais (label/value). */
+  properties: { label: string; value: string }[]
+  /** Parâmetros de impressão típicos. */
+  printing: { label: string; value: string }[]
+  /** Aplicações reais e casos de uso. */
+  useCases: string[]
+  /** Pontos fortes. */
+  pros: string[]
+  /** Limitações / contra-indicações. */
+  cons: string[]
+}
+
+const materials: MaterialDetail[] = [
+  {
+    slug: 'mat-01-nylon-pa', cat: 'Termoplásticos', name: 'Nylon (PA)', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false,
+    description: 'Termoplástico técnico de engenharia com excelente combinação de resistência mecânica, tenacidade e resistência ao desgaste. Absorve umidade — armazenar em ambiente seco. Indicado para peças funcionais sujeitas a fricção, esforços cíclicos e impactos moderados.',
+    properties: [
+      { label: 'Resistência tração', value: '60–70 MPa' },
+      { label: 'Módulo elástico', value: '1,5–2,0 GPa' },
+      { label: 'Alongamento', value: '20–60%' },
+      { label: 'Densidade', value: '1,14 g/cm³' },
+      { label: 'Temp. máx. uso', value: '120°C' },
+      { label: 'Higroscópico', value: 'Sim' },
+    ],
+    printing: [{ label: 'Bico', value: '250–270°C' }, { label: 'Mesa', value: '70–80°C' }, { label: 'Velocidade', value: '40–60 mm/s' }, { label: 'Câmara', value: 'Recomendada' }],
+    useCases: ['Engrenagens e buchas', 'Suportes mecânicos', 'Peças com atrito', 'Conectores estruturais'],
+    pros: ['Alta tenacidade', 'Boa resistência ao desgaste', 'Resistência a fadiga'],
+    cons: ['Absorve umidade', 'Empena se mal seco', 'Requer câmara fechada'],
+  },
+  {
+    slug: 'mat-02-abs', cat: 'Termoplásticos', name: 'ABS', tempMax: '100°C', flex: 'Rígido', app: 'Protótipos + peças funcionais', highlight: false,
+    description: 'Termoplástico amorfo amplamente utilizado em protótipos funcionais e peças mecânicas. Boa resistência mecânica e ao impacto, com a vantagem de poder ser pós-processado por vapor de acetona para acabamento liso.',
+    properties: [
+      { label: 'Resistência tração', value: '40–45 MPa' },
+      { label: 'Módulo elástico', value: '1,8–2,5 GPa' },
+      { label: 'Alongamento', value: '5–10%' },
+      { label: 'Densidade', value: '1,04 g/cm³' },
+      { label: 'Temp. máx. uso', value: '100°C' },
+      { label: 'Pós-processo', value: 'Acetona' },
+    ],
+    printing: [{ label: 'Bico', value: '230–250°C' }, { label: 'Mesa', value: '90–110°C' }, { label: 'Velocidade', value: '40–60 mm/s' }, { label: 'Câmara', value: 'Obrigatória' }],
+    useCases: ['Protótipos funcionais', 'Carcaças e gabinetes', 'Peças automotivas internas', 'Modelos de feira'],
+    pros: ['Ótima usinabilidade', 'Liso com acetona', 'Bom custo-benefício'],
+    cons: ['Empena com facilidade', 'Cheiro forte', 'Sensível a UV sem pintura'],
+  },
+  {
+    slug: 'mat-03-pc', cat: 'Termoplásticos', name: 'Policarbonato (PC)', tempMax: '130°C', flex: 'Rígido', app: 'Alta resistência ao impacto', highlight: false,
+    description: 'Polímero técnico com a maior resistência ao impacto entre os termoplásticos comuns. Transparente, rígido e com alta temperatura de uso — ideal para peças que sofrem cargas dinâmicas severas.',
+    properties: [
+      { label: 'Resistência tração', value: '60–70 MPa' },
+      { label: 'Módulo elástico', value: '2,0–2,4 GPa' },
+      { label: 'Impacto Izod', value: '600–900 J/m' },
+      { label: 'Densidade', value: '1,20 g/cm³' },
+      { label: 'Temp. máx. uso', value: '130°C' },
+      { label: 'Transmitância', value: '~88%' },
+    ],
+    printing: [{ label: 'Bico', value: '270–300°C' }, { label: 'Mesa', value: '110–120°C' }, { label: 'Velocidade', value: '30–50 mm/s' }, { label: 'Câmara', value: 'Obrigatória aquecida' }],
+    useCases: ['Capacetes e EPI', 'Componentes de máquinas', 'Carcaças sob impacto', 'Peças de iluminação'],
+    pros: ['Impacto excepcional', 'Transparência possível', 'Alta temperatura'],
+    cons: ['Empena severamente', 'Requer câmara aquecida', 'Higroscópico'],
+  },
+  {
+    slug: 'mat-04-petg', cat: 'Termoplásticos', name: 'PET-G', tempMax: '80°C', flex: 'Semi-rígido', app: 'Alimentício seguro', highlight: false,
+    description: 'Versão modificada do PET com alta tenacidade, boa transparência e segurança alimentar (FDA grade disponível). Combina facilidade de impressão com propriedades mecânicas equilibradas.',
+    properties: [
+      { label: 'Resistência tração', value: '45–55 MPa' },
+      { label: 'Módulo elástico', value: '1,6–2,1 GPa' },
+      { label: 'Alongamento', value: '120–180%' },
+      { label: 'Densidade', value: '1,27 g/cm³' },
+      { label: 'Temp. máx. uso', value: '80°C' },
+      { label: 'Contato alimentar', value: 'Sim (FDA)' },
+    ],
+    printing: [{ label: 'Bico', value: '220–245°C' }, { label: 'Mesa', value: '70–85°C' }, { label: 'Velocidade', value: '50–70 mm/s' }, { label: 'Câmara', value: 'Opcional' }],
+    useCases: ['Embalagens e potes', 'Protetores de máquinas', 'Componentes médicos', 'Peças translúcidas'],
+    pros: ['Alta tenacidade', 'Sem empenamento', 'Fácil impressão', 'Alimentício'],
+    cons: ['Tendência a stringing', 'Temp. uso moderada', 'Cola excessivamente em mesas quentes'],
+  },
+  {
+    slug: 'mat-05-pp', cat: 'Termoplásticos', name: 'Polipropileno (PP)', tempMax: '100°C', flex: 'Semi-rígido', app: 'Resistência química', highlight: false,
+    description: 'Excelente resistência química a ácidos, bases e solventes. Baixa densidade e boa resistência à fadiga em flexão repetida — ideal para "living hinges" e recipientes químicos.',
+    properties: [
+      { label: 'Resistência tração', value: '25–35 MPa' },
+      { label: 'Módulo elástico', value: '1,1–1,5 GPa' },
+      { label: 'Alongamento', value: '100–200%' },
+      { label: 'Densidade', value: '0,90 g/cm³' },
+      { label: 'Temp. máx. uso', value: '100°C' },
+      { label: 'Resist. química', value: 'Excelente' },
+    ],
+    printing: [{ label: 'Bico', value: '220–235°C' }, { label: 'Mesa', value: '80–100°C' }, { label: 'Velocidade', value: '40–55 mm/s' }, { label: 'Adesão', value: 'Fita PP especial' }],
+    useCases: ['Recipientes para químicos', 'Dobradiças vivas', 'Peças automotivas', 'Tubulações leves'],
+    pros: ['Resist. química', 'Leve', 'Fadiga em flexão'],
+    cons: ['Adesão à mesa difícil', 'Empena', 'Baixa rigidez'],
+  },
+  {
+    slug: 'mat-06-tpu', cat: 'Termoplásticos', name: 'TPU', tempMax: '80°C', flex: 'Flexível', app: 'Borracha técnica, solas', highlight: false,
+    description: 'Elastômero termoplástico que une flexibilidade da borracha com a processabilidade dos plásticos. Excelente resistência à abrasão e ao rasgo. Disponível em diversas durezas Shore A.',
+    properties: [
+      { label: 'Resist. tração', value: '30–50 MPa' },
+      { label: 'Alongamento', value: '500–700%' },
+      { label: 'Dureza', value: 'Shore A 85–95' },
+      { label: 'Densidade', value: '1,20 g/cm³' },
+      { label: 'Temp. máx. uso', value: '80°C' },
+      { label: 'Resist. abrasão', value: 'Excelente' },
+    ],
+    printing: [{ label: 'Bico', value: '220–240°C' }, { label: 'Mesa', value: '40–60°C' }, { label: 'Velocidade', value: '20–35 mm/s' }, { label: 'Retração', value: 'Ajuste fino' }],
+    useCases: ['Solas e palmilhas', 'Vedações e o-rings', 'Cases protetores', 'Borrachas técnicas'],
+    pros: ['Flexível e elástico', 'Resist. abrasão', 'Resist. impacto'],
+    cons: ['Impressão lenta', 'Requer extrusor direto', 'Sensível a umidade'],
+  },
+  {
+    slug: 'mat-07-pva', cat: 'Termoplásticos', name: 'PVA', tempMax: '60°C', flex: 'Solúvel', app: 'Suporte solúvel em água', highlight: false,
+    description: 'Polímero solúvel em água utilizado como material de suporte em impressões duais com PLA, PETG ou Nylon. Permite geometrias internas complexas que não podem ser removidas mecanicamente.',
+    properties: [
+      { label: 'Solubilidade', value: 'Água morna' },
+      { label: 'Tempo dissolução', value: '4–24h' },
+      { label: 'Densidade', value: '1,20 g/cm³' },
+      { label: 'Temp. máx. uso', value: '60°C' },
+      { label: 'Compatibilidade', value: 'PLA / PETG / PA' },
+      { label: 'Higroscópico', value: 'Extremo' },
+    ],
+    printing: [{ label: 'Bico', value: '180–210°C' }, { label: 'Mesa', value: '45–60°C' }, { label: 'Velocidade', value: '30–45 mm/s' }, { label: 'Armazenamento', value: 'Sílica obrigatória' }],
+    useCases: ['Suportes em geometrias internas', 'Canais e dutos complexos', 'Modelos médicos', 'Peças com overhangs extremos'],
+    pros: ['Dissolve sem dano', 'Geometrias impossíveis', 'Acabamento limpo'],
+    cons: ['Custo alto', 'Hipersensível a umidade', 'Requer dual-extruder'],
+  },
+  {
+    slug: 'mat-08-pa-cf15', cat: 'Alta Performance', name: 'PA CF15', tempMax: '180°C', flex: 'Rígido+Leve', app: 'Industrial severo', highlight: true,
+    description: 'Nylon reforçado com 15% de fibra de carbono — combinação de altíssima rigidez, leveza e estabilidade térmica. Substitui peças metálicas em aplicações onde peso importa. Filamento de classe industrial.',
+    properties: [
+      { label: 'Resist. tração', value: '85–105 MPa' },
+      { label: 'Módulo elástico', value: '6,0–8,0 GPa' },
+      { label: 'Alongamento', value: '2–4%' },
+      { label: 'Densidade', value: '1,15 g/cm³' },
+      { label: 'Temp. máx. uso', value: '180°C' },
+      { label: 'Reforço', value: '15% fibra carbono' },
+    ],
+    printing: [{ label: 'Bico', value: '270–290°C (hardened)' }, { label: 'Mesa', value: '80–100°C' }, { label: 'Velocidade', value: '30–50 mm/s' }, { label: 'Bico', value: '0,4–0,6mm aço' }],
+    useCases: ['Substituição de peças metálicas', 'Drones e UAVs', 'Componentes Fórmula SAE', 'Suportes industriais'],
+    pros: ['Rigidez excepcional', 'Estabilidade térmica', 'Leve'],
+    cons: ['Desgasta bico', 'Requer extrusor hardened', 'Custo elevado'],
+  },
+  {
+    slug: 'mat-09-petg-cf15', cat: 'Alta Performance', name: 'PET-G CF15', tempMax: '80°C', flex: 'Rígido', app: 'Estrutural leve', highlight: false,
+    description: 'PET-G reforçado com fibra de carbono. Ganho expressivo de rigidez sobre o PET-G puro mantendo facilidade de impressão e acabamento fosco premium.',
+    properties: [
+      { label: 'Resist. tração', value: '55–65 MPa' },
+      { label: 'Módulo elástico', value: '4,0–5,5 GPa' },
+      { label: 'Alongamento', value: '4–8%' },
+      { label: 'Densidade', value: '1,30 g/cm³' },
+      { label: 'Temp. máx. uso', value: '80°C' },
+      { label: 'Acabamento', value: 'Fosco premium' },
+    ],
+    printing: [{ label: 'Bico', value: '230–250°C (hardened)' }, { label: 'Mesa', value: '70–85°C' }, { label: 'Velocidade', value: '40–60 mm/s' }, { label: 'Câmara', value: 'Opcional' }],
+    useCases: ['Estruturas leves', 'Cases técnicos', 'Componentes visíveis premium', 'Suportes de câmera/drone'],
+    pros: ['Acabamento fosco', 'Fácil impressão', 'Rigidez aumentada'],
+    cons: ['Desgasta bico padrão', 'Temp. uso limitada'],
+  },
+  {
+    slug: 'mat-10-tritan-ht', cat: 'Alta Performance', name: 'Tritan HT', tempMax: '95°C', flex: 'Rígido', app: 'Transparência + temperatura', highlight: false,
+    description: 'Copoliéster Eastman Tritan™ para impressão 3D. Combina transparência cristalina, segurança alimentar (BPA-free) e resistência à temperatura — ideal para peças visíveis que precisam suportar lavagem em água quente.',
+    properties: [
+      { label: 'Resist. tração', value: '50–60 MPa' },
+      { label: 'Módulo elástico', value: '1,9–2,2 GPa' },
+      { label: 'Alongamento', value: '90–110%' },
+      { label: 'Densidade', value: '1,18 g/cm³' },
+      { label: 'Temp. máx. uso', value: '95°C' },
+      { label: 'Transmitância', value: '~92%' },
+    ],
+    printing: [{ label: 'Bico', value: '245–265°C' }, { label: 'Mesa', value: '70–90°C' }, { label: 'Velocidade', value: '30–50 mm/s' }, { label: 'Câmara', value: 'Recomendada' }],
+    useCases: ['Garrafas e potes reutilizáveis', 'Peças médicas/laboratório', 'Componentes visíveis transparentes', 'Equipamentos esportivos'],
+    pros: ['Transparência cristalina', 'BPA-free', 'Suporta autoclave leve'],
+    cons: ['Custo elevado', 'Camadas visíveis em peças cristalinas'],
+  },
+  {
+    slug: 'mat-11-pc-perf', cat: 'Alta Performance', name: 'PC (Policarbonato)', tempMax: '130°C', flex: 'Rígido', app: 'Impacto industrial', highlight: false,
+    description: 'Variante industrial do Policarbonato com aditivos para melhor processabilidade FDM e maior estabilidade dimensional. Para aplicações que exigem máxima resistência ao impacto e calor.',
+    properties: [
+      { label: 'Resist. tração', value: '65–75 MPa' },
+      { label: 'Módulo elástico', value: '2,2–2,5 GPa' },
+      { label: 'Impacto Izod', value: '700–950 J/m' },
+      { label: 'Densidade', value: '1,20 g/cm³' },
+      { label: 'Temp. máx. uso', value: '130°C' },
+      { label: 'HDT', value: '~115°C' },
+    ],
+    printing: [{ label: 'Bico', value: '275–300°C' }, { label: 'Mesa', value: '110–130°C' }, { label: 'Velocidade', value: '30–45 mm/s' }, { label: 'Câmara', value: 'Aquecida obrigatória' }],
+    useCases: ['Capacetes industriais', 'Componentes elétricos', 'Suportes sob carga térmica', 'EPI estrutural'],
+    pros: ['Impacto industrial', 'Resistência térmica', 'Rigidez alta'],
+    cons: ['Empena severamente', 'Higroscópico', 'Requer câmara aquecida'],
+  },
+  {
+    slug: 'mat-12-tpu-shore-95a', cat: 'Flexíveis', name: 'TPU Shore 95A', tempMax: '80°C', flex: 'Flex. médio', app: 'Juntas, vedações', highlight: false,
+    description: 'TPU mais firme — flexível mas com boa retenção de forma. Ideal para juntas, vedações dinâmicas e componentes que precisam absorver impacto sem perder geometria.',
+    properties: [
+      { label: 'Dureza', value: 'Shore A 95' },
+      { label: 'Resist. tração', value: '40–50 MPa' },
+      { label: 'Alongamento', value: '450–600%' },
+      { label: 'Densidade', value: '1,21 g/cm³' },
+      { label: 'Temp. máx. uso', value: '80°C' },
+      { label: 'Memória de forma', value: 'Alta' },
+    ],
+    printing: [{ label: 'Bico', value: '220–235°C' }, { label: 'Mesa', value: '40–60°C' }, { label: 'Velocidade', value: '25–40 mm/s' }, { label: 'Extrusor', value: 'Direto' }],
+    useCases: ['Juntas e vedações', 'Buchas técnicas', 'Amortecedores leves', 'Coxins'],
+    pros: ['Resist. abrasão', 'Memória de forma', 'Resiste a óleos'],
+    cons: ['Impressão lenta', 'Sensível a umidade'],
+  },
+  {
+    slug: 'mat-13-flex-shore-85a', cat: 'Flexíveis', name: 'Flex Shore 85A', tempMax: '70°C', flex: 'Alta flex.', app: 'Solas, grips, amortecedores', highlight: false,
+    description: 'Mais macio que o Shore 95A. Sensação tátil próxima da borracha — para empunhaduras, solas, peças anatômicas e amortecimento.',
+    properties: [
+      { label: 'Dureza', value: 'Shore A 85' },
+      { label: 'Resist. tração', value: '25–35 MPa' },
+      { label: 'Alongamento', value: '600–800%' },
+      { label: 'Densidade', value: '1,20 g/cm³' },
+      { label: 'Temp. máx. uso', value: '70°C' },
+      { label: 'Tato', value: 'Borracha macia' },
+    ],
+    printing: [{ label: 'Bico', value: '210–230°C' }, { label: 'Mesa', value: '40–55°C' }, { label: 'Velocidade', value: '20–30 mm/s' }, { label: 'Extrusor', value: 'Direto curto' }],
+    useCases: ['Solas e palmilhas', 'Grips ergonômicos', 'Coxins e amortecedores', 'Brinquedos e peças táteis'],
+    pros: ['Macio e elástico', 'Conforto tátil', 'Absorve impacto'],
+    cons: ['Difícil de imprimir rápido', 'Sem rigidez estrutural'],
+  },
+  {
+    slug: 'mat-14-resina-standard', cat: 'Resinas', name: 'Resina Standard', tempMax: '60°C', flex: 'Rígido', app: 'Alta resolução SLA', highlight: false,
+    description: 'Resina fotopolimerizável padrão para SLA/MSLA. Excelente resolução de detalhes (microns) e acabamento liso, ideal para protótipos visuais, miniaturas e modelos de joalheria.',
+    properties: [
+      { label: 'Resolução XY', value: '~50 µm' },
+      { label: 'Camada Z', value: '25–100 µm' },
+      { label: 'Resist. tração', value: '35–55 MPa' },
+      { label: 'Densidade', value: '1,12 g/cm³' },
+      { label: 'Temp. máx. uso', value: '60°C' },
+      { label: 'Cura', value: 'UV 405nm' },
+    ],
+    printing: [{ label: 'Tecnologia', value: 'SLA / MSLA' }, { label: 'Camada', value: '25–100 µm' }, { label: 'Cura', value: 'UV pós' }, { label: 'Lavagem', value: 'IPA 99%' }],
+    useCases: ['Protótipos visuais', 'Miniaturas e tabletop', 'Modelos de joalheria', 'Master para moldagem'],
+    pros: ['Detalhe extremo', 'Acabamento liso', 'Sem linhas de camada visíveis'],
+    cons: ['Frágil', 'Requer pós-cura', 'Tóxica antes da cura'],
+  },
+  {
+    slug: 'mat-15-resina-abs', cat: 'Resinas', name: 'Resina ABS-Like', tempMax: '80°C', flex: 'Rígido', app: 'Mecânica + acabamento', highlight: false,
+    description: 'Resina com propriedades mecânicas similares ao ABS — combina o detalhe da SLA com tenacidade adequada para peças funcionais, fixadores e componentes mecânicos.',
+    properties: [
+      { label: 'Resist. tração', value: '50–65 MPa' },
+      { label: 'Alongamento', value: '8–15%' },
+      { label: 'Resist. impacto', value: 'Boa' },
+      { label: 'Densidade', value: '1,13 g/cm³' },
+      { label: 'Temp. máx. uso', value: '80°C' },
+      { label: 'Acabamento', value: 'Liso premium' },
+    ],
+    printing: [{ label: 'Tecnologia', value: 'SLA / MSLA' }, { label: 'Camada', value: '50–100 µm' }, { label: 'Cura', value: 'UV pós + térmica' }, { label: 'Tempo cura', value: '15–30 min' }],
+    useCases: ['Peças funcionais detalhadas', 'Carcaças premium', 'Conectores e fixadores', 'Modelos para feiras'],
+    pros: ['Mecânica + detalhe', 'Pós-processamento fácil', 'Acabamento alto'],
+    cons: ['Custo médio-alto', 'Cura crítica para mecânica'],
+  },
+  {
+    slug: 'mat-16-resina-ceramica', cat: 'Resinas', name: 'Resina Cerâmica', tempMax: '+400°C', flex: 'Rígido', app: 'Temp. extrema, moldes', highlight: true,
+    description: 'Resina com partículas cerâmicas em suspensão. Após cura UV e sinterização, atinge propriedades cerâmicas — resistência a temperaturas extremas e isolamento térmico/elétrico.',
+    properties: [
+      { label: 'Temp. máx. uso', value: '+400°C' },
+      { label: 'Coef. expansão', value: 'Baixíssimo' },
+      { label: 'Isolamento', value: 'Térmico e elétrico' },
+      { label: 'Densidade', value: '~2,3 g/cm³ (sint.)' },
+      { label: 'Pós-processo', value: 'Sinterização' },
+      { label: 'Acabamento', value: 'Cerâmico mate' },
+    ],
+    printing: [{ label: 'Tecnologia', value: 'SLA + sinterização' }, { label: 'Camada', value: '50–100 µm' }, { label: 'Cura UV', value: 'Pós' }, { label: 'Sinterização', value: 'Forno especializado' }],
+    useCases: ['Moldes para fundição', 'Componentes resistentes a fogo', 'Isoladores elétricos/térmicos', 'Protótipos refratários'],
+    pros: ['Temp. extrema', 'Isolante', 'Acabamento cerâmico'],
+    cons: ['Frágil sob impacto', 'Pós-processo longo', 'Requer forno especializado'],
+  },
+  {
+    slug: 'mat-17-ultrafuse-316l', cat: 'Metal', name: 'BASF Ultrafuse 316L', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true,
+    description: 'Filamento metálico com pó de aço inox 316L em matriz polimérica. Após impressão FDM convencional, a peça passa por debinding e sinterização em forno industrial — atinge >95% da densidade do aço maciço, certificada pela norma ASTM 316L.',
+    properties: [
+      { label: 'Densidade pós-sinter.', value: '>95% do aço' },
+      { label: 'Resist. tração', value: '450–550 MPa' },
+      { label: 'Alongamento', value: '40–55%' },
+      { label: 'Norma', value: 'ASTM 316L' },
+      { label: 'Temp. máx. uso', value: '800°C+' },
+      { label: 'Resist. corrosão', value: 'Alimentícia / marinha' },
+    ],
+    printing: [{ label: 'Bico', value: '230–250°C (hardened)' }, { label: 'Mesa', value: '90–105°C' }, { label: 'Velocidade', value: '20–40 mm/s' }, { label: 'Pós-processo', value: 'Debinding + sinterização' }],
+    useCases: ['Componentes metálicos finais', 'Indústria alimentícia', 'Aplicações marítimas', 'Peças sob alta temperatura'],
+    pros: ['Aço inox real', 'Geometrias impossíveis em usinagem', 'Certificação ASTM'],
+    cons: ['Prazo 15–20 dias', 'Encolhimento ~20% na sinter.', 'Custo elevado'],
+  },
 ]
 
 const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal']
@@ -109,8 +386,13 @@ const schemas = [
           <li>
             <article
               data-cat={mat.cat}
+              data-mat-slug={mat.slug}
+              role="button"
+              tabindex="0"
+              aria-haspopup="dialog"
+              aria-controls="mat-modal"
               class:list={[
-                'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden h-full',
+                'glass-panel card-hover-glow p-6 rounded-sm group transition-all duration-300 relative overflow-hidden h-full text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container',
                 mat.highlight ? 'border border-primary-container/25' : '',
               ]}
               aria-labelledby={`mat-${mat.name.replace(/\s+/g, '-').toLowerCase()}`}
@@ -167,6 +449,11 @@ const schemas = [
                   <dd class="text-code-data text-primary-container font-medium text-right max-w-[60%]">{mat.app}</dd>
                 </div>
               </dl>
+
+              <div class="mt-4 pt-3 border-t border-white/8 flex items-center justify-between text-label-caps uppercase tracking-[0.18em] text-[10px] text-on-surface-variant group-hover:text-primary-container transition-colors">
+                <span>Ficha técnica completa</span>
+                <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_forward</span>
+              </div>
             </article>
           </li>
         ))}
@@ -252,6 +539,156 @@ const schemas = [
     </div>
   </section>
 
+  <!-- =============================================
+       MODAL — Ficha técnica completa do material
+       ============================================= -->
+  <div
+    id="mat-modal"
+    class="mat-modal fixed inset-0 z-[100] hidden items-stretch md:items-center justify-center"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mat-modal-title"
+    aria-hidden="true"
+  >
+    <!-- Overlay -->
+    <div
+      class="mat-modal__overlay absolute inset-0 bg-black/75 backdrop-blur-md opacity-0 transition-opacity duration-200"
+      data-modal-close
+      aria-hidden="true"
+    ></div>
+
+    <!-- Container -->
+    <div
+      class="mat-modal__container relative w-full md:w-[min(1180px,92vw)] h-full md:h-[min(880px,90vh)] bg-surface-base md:rounded-sm border-y md:border md:border-primary-container/15 flex flex-col overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)] opacity-0 translate-y-4 md:translate-y-0 md:scale-[0.98] transition-all duration-200"
+    >
+      <!-- Glow superior -->
+      <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/60 to-transparent pointer-events-none" aria-hidden="true"></div>
+
+      <!-- Header sticky -->
+      <header class="nav-glass-sub flex items-center justify-between gap-3 px-5 md:px-8 py-4 border-b border-white/8 shrink-0">
+        <div class="min-w-0 flex items-center gap-3">
+          <span data-mat-cat-pill class="pill text-[10px] shrink-0">—</span>
+          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase truncate hidden sm:inline">
+            <span data-mat-position>1</span> / <span data-mat-total>{materials.length}</span>
+          </span>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button
+            type="button"
+            data-mat-prev
+            class="w-9 h-9 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface hover:text-primary-container hover:border-primary-container/40 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Material anterior"
+          ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">chevron_left</span></button>
+          <button
+            type="button"
+            data-mat-next
+            class="w-9 h-9 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface hover:text-primary-container hover:border-primary-container/40 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Próximo material"
+          ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">chevron_right</span></button>
+          <span class="w-px h-5 bg-white/10 mx-1.5" aria-hidden="true"></span>
+          <button
+            type="button"
+            data-modal-close
+            class="w-9 h-9 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface hover:text-error hover:border-error/40 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+            aria-label="Fechar ficha técnica"
+          ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">close</span></button>
+        </div>
+      </header>
+
+      <!-- Conteúdo scrollável -->
+      <div data-mat-body class="flex-1 overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12">
+          <!-- Coluna imagem -->
+          <div class="lg:col-span-5 relative bg-surface-low border-b lg:border-b-0 lg:border-r border-white/8 min-h-[260px] lg:min-h-[420px]">
+            <img
+              data-mat-image
+              src=""
+              alt=""
+              class="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(circle at 30% 30%,rgba(97,197,79,0.10) 0%,transparent 65%),linear-gradient(180deg,rgba(0,0,0,0.10) 0%,rgba(0,0,0,0.55) 100%);"></div>
+            <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/40" aria-hidden="true"></div>
+            <div class="absolute top-3 right-3 w-3 h-3 border-t border-r border-primary-container/40" aria-hidden="true"></div>
+            <div class="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-primary-container/40" aria-hidden="true"></div>
+            <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/40" aria-hidden="true"></div>
+            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/25 to-transparent animate-scan-line" aria-hidden="true"></div>
+            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3">
+              <span data-mat-quickapp class="text-label-caps text-on-surface uppercase tracking-[0.18em] text-[10px] truncate"></span>
+              <span data-mat-quicktemp class="text-code-data text-primary-container font-semibold"></span>
+            </div>
+          </div>
+
+          <!-- Coluna dados -->
+          <div class="lg:col-span-7 p-6 md:p-8 flex flex-col gap-7">
+            <div>
+              <span data-mat-cat class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-3 text-[11px]">—</span>
+              <h2 id="mat-modal-title" data-mat-name class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] leading-tight mb-3">—</h2>
+              <p data-mat-desc class="text-body-md text-tertiary leading-relaxed"></p>
+            </div>
+
+            <!-- Propriedades técnicas -->
+            <section aria-labelledby="mat-props-title">
+              <h3 id="mat-props-title" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] text-[10px] mb-3">Propriedades técnicas</h3>
+              <dl data-mat-props class="grid grid-cols-2 sm:grid-cols-3 gap-3"></dl>
+            </section>
+
+            <!-- Parâmetros de impressão -->
+            <section aria-labelledby="mat-print-title">
+              <h3 id="mat-print-title" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] text-[10px] mb-3">Parâmetros de impressão</h3>
+              <dl data-mat-printing class="grid grid-cols-2 sm:grid-cols-4 gap-3"></dl>
+            </section>
+
+            <!-- Aplicações -->
+            <section aria-labelledby="mat-uses-title">
+              <h3 id="mat-uses-title" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] text-[10px] mb-3">Aplicações típicas</h3>
+              <ul data-mat-uses role="list" class="flex flex-wrap gap-2"></ul>
+            </section>
+
+            <!-- Pros / Cons -->
+            <section class="grid sm:grid-cols-2 gap-4" aria-label="Pontos fortes e limitações">
+              <div class="glass-panel p-4 rounded-sm border border-primary-container/15">
+                <h3 class="text-label-caps text-primary-container uppercase tracking-[0.18em] text-[10px] mb-3 flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm leading-none" aria-hidden="true">check_circle</span>
+                  Pontos fortes
+                </h3>
+                <ul data-mat-pros role="list" class="space-y-1.5 text-sm text-on-surface"></ul>
+              </div>
+              <div class="glass-panel p-4 rounded-sm border border-white/8">
+                <h3 class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] text-[10px] mb-3 flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm leading-none" aria-hidden="true">info</span>
+                  Considerações
+                </h3>
+                <ul data-mat-cons role="list" class="space-y-1.5 text-sm text-tertiary"></ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer com CTA -->
+      <footer class="border-t border-white/8 px-5 md:px-8 py-4 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-between gap-3 bg-surface-low shrink-0">
+        <span class="text-[11px] text-tertiary hidden sm:block">
+          Use as setas <kbd class="font-mono text-on-surface-variant">←</kbd> <kbd class="font-mono text-on-surface-variant">→</kbd> para navegar · <kbd class="font-mono text-on-surface-variant">ESC</kbd> fecha
+        </span>
+        <a
+          data-mat-cta
+          href="/contato"
+          class="inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200 text-[11px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+        >
+          Solicitar orçamento com este material
+          <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_forward</span>
+        </a>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Data store (consumido pelo controller do modal) -->
+  <script is:inline type="application/json" id="materials-data" set:html={JSON.stringify(materials)}></script>
+
   <Footer />
 </Base>
 
@@ -320,4 +757,252 @@ const schemas = [
       }
     })
   })
+
+  // ====================================================================
+  // MODAL — Ficha técnica do material
+  // ====================================================================
+  interface MaterialDetail {
+    slug: string; cat: string; name: string; tempMax: string; flex: string; app: string; highlight: boolean
+    description: string
+    properties: { label: string; value: string }[]
+    printing: { label: string; value: string }[]
+    useCases: string[]; pros: string[]; cons: string[]
+  }
+
+  const dataNode = document.getElementById('materials-data')
+  const allMaterials: MaterialDetail[] = dataNode ? JSON.parse(dataNode.textContent || '[]') : []
+  const materialsBySlug = new Map(allMaterials.map((m) => [m.slug, m]))
+
+  const modal = document.getElementById('mat-modal')
+
+  if (modal && allMaterials.length > 0) {
+    const overlay = modal.querySelector<HTMLElement>('.mat-modal__overlay')
+    const container = modal.querySelector<HTMLElement>('.mat-modal__container')
+    const body = modal.querySelector<HTMLElement>('[data-mat-body]')
+    const prevBtn = modal.querySelector<HTMLButtonElement>('[data-mat-prev]')
+    const nextBtn = modal.querySelector<HTMLButtonElement>('[data-mat-next]')
+    const closeBtns = Array.from(modal.querySelectorAll<HTMLElement>('[data-modal-close]'))
+
+    const elCatPill = modal.querySelector<HTMLElement>('[data-mat-cat-pill]')
+    const elPos = modal.querySelector<HTMLElement>('[data-mat-position]')
+    const elTotal = modal.querySelector<HTMLElement>('[data-mat-total]')
+    const elImg = modal.querySelector<HTMLImageElement>('[data-mat-image]')
+    const elQuickApp = modal.querySelector<HTMLElement>('[data-mat-quickapp]')
+    const elQuickTemp = modal.querySelector<HTMLElement>('[data-mat-quicktemp]')
+    const elCat = modal.querySelector<HTMLElement>('[data-mat-cat]')
+    const elName = modal.querySelector<HTMLElement>('[data-mat-name]')
+    const elDesc = modal.querySelector<HTMLElement>('[data-mat-desc]')
+    const elProps = modal.querySelector<HTMLElement>('[data-mat-props]')
+    const elPrinting = modal.querySelector<HTMLElement>('[data-mat-printing]')
+    const elUses = modal.querySelector<HTMLElement>('[data-mat-uses]')
+    const elPros = modal.querySelector<HTMLElement>('[data-mat-pros]')
+    const elCons = modal.querySelector<HTMLElement>('[data-mat-cons]')
+    const elCta = modal.querySelector<HTMLAnchorElement>('[data-mat-cta]')
+
+    let currentSlug: string | null = null
+    let triggerEl: HTMLElement | null = null
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    function visibleCards(): HTMLElement[] {
+      return cards.filter((c) => {
+        const li = c.parentElement as HTMLElement | null
+        return li && li.style.display !== 'none'
+      })
+    }
+
+    function categoryPillClass(cat: string): string {
+      if (cat === 'Metal') return 'pill border-error/60 text-error'
+      if (cat === 'Alta Performance') return 'pill pill-green'
+      if (cat === 'Flexíveis') return 'pill border-tertiary/60 text-tertiary'
+      if (cat === 'Resinas') return 'pill border-on-surface-variant text-on-surface-variant'
+      return 'pill border-white/30 text-on-surface-variant'
+    }
+
+    function buildDl(target: HTMLElement, items: { label: string; value: string }[]) {
+      target.innerHTML = items.map((it) => `
+        <div class="glass-panel p-3 rounded-sm border border-white/8">
+          <dt class="text-label-caps text-on-surface-variant uppercase tracking-widest text-[9px] mb-1">${escapeHtml(it.label)}</dt>
+          <dd class="text-code-data text-on-surface font-medium">${escapeHtml(it.value)}</dd>
+        </div>
+      `).join('')
+    }
+
+    function buildList(target: HTMLElement, items: string[], chip = false) {
+      if (chip) {
+        target.innerHTML = items.map((t) => `
+          <li class="inline-flex items-center px-3 py-1.5 rounded-full border border-primary-container/30 text-primary-container text-label-caps uppercase tracking-widest text-[10px]">${escapeHtml(t)}</li>
+        `).join('')
+      } else {
+        target.innerHTML = items.map((t) => `
+          <li class="flex items-start gap-2 leading-snug">
+            <span class="text-primary-container mt-1 text-[10px]" aria-hidden="true">▸</span>
+            <span>${escapeHtml(t)}</span>
+          </li>
+        `).join('')
+      }
+    }
+
+    function escapeHtml(s: string): string {
+      return s.replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]!))
+    }
+
+    function render(slug: string) {
+      const m = materialsBySlug.get(slug)
+      if (!m) return
+      currentSlug = slug
+
+      if (elCatPill) { elCatPill.textContent = m.cat; elCatPill.className = `${categoryPillClass(m.cat)} text-[10px] shrink-0` }
+      if (elCat) elCat.textContent = `${m.cat} // ${m.flex}`
+      if (elName) elName.textContent = m.name
+      if (elDesc) elDesc.textContent = m.description
+      if (elImg) { elImg.src = `/images/${m.slug}.webp`; elImg.alt = `Amostra de ${m.name} — ${m.app}` }
+      if (elQuickApp) elQuickApp.textContent = m.app
+      if (elQuickTemp) elQuickTemp.textContent = m.tempMax
+      if (elProps) buildDl(elProps, m.properties)
+      if (elPrinting) buildDl(elPrinting, m.printing)
+      if (elUses) buildList(elUses, m.useCases, true)
+      if (elPros) buildList(elPros, m.pros)
+      if (elCons) buildList(elCons, m.cons)
+      if (elCta) elCta.href = `/contato?material=${encodeURIComponent(m.name)}`
+
+      // Posição dentro dos cards visíveis
+      const visible = visibleCards()
+      const idx = visible.findIndex((c) => c.dataset.matSlug === slug)
+      if (elPos) elPos.textContent = String(idx >= 0 ? idx + 1 : 1)
+      if (elTotal) elTotal.textContent = String(visible.length)
+      if (prevBtn) prevBtn.disabled = idx <= 0
+      if (nextBtn) nextBtn.disabled = idx === -1 || idx >= visible.length - 1
+
+      // Reset scroll do conteúdo
+      if (body) body.scrollTop = 0
+    }
+
+    function open(slug: string, fromCard?: HTMLElement) {
+      if (!materialsBySlug.has(slug)) return
+      triggerEl = fromCard ?? (document.querySelector<HTMLElement>(`[data-mat-slug="${slug}"]`) || null)
+      render(slug)
+
+      modal!.classList.remove('hidden')
+      modal!.classList.add('flex')
+      modal!.setAttribute('aria-hidden', 'false')
+      document.body.style.overflow = 'hidden'
+
+      // Anima entrada
+      requestAnimationFrame(() => {
+        if (overlay) overlay.style.opacity = '1'
+        if (container) {
+          container.style.opacity = '1'
+          container.style.transform = prefersReduced ? '' : 'translateY(0) scale(1)'
+        }
+      })
+
+      // Atualiza hash sem trigger de scroll
+      if (location.hash !== `#${slug}`) {
+        history.replaceState(null, '', `#${slug}`)
+      }
+
+      // Foco inicial no botão de fechar (mais seguro que conteúdo)
+      const closeBtn = closeBtns[closeBtns.length - 1] as HTMLElement | undefined
+      closeBtn?.focus()
+    }
+
+    function close() {
+      if (!modal!.classList.contains('flex')) return
+      if (overlay) overlay.style.opacity = '0'
+      if (container) {
+        container.style.opacity = '0'
+        container.style.transform = prefersReduced ? '' : 'translateY(4px) scale(0.98)'
+      }
+      const finish = () => {
+        modal!.classList.add('hidden')
+        modal!.classList.remove('flex')
+        modal!.setAttribute('aria-hidden', 'true')
+        document.body.style.overflow = ''
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search)
+        triggerEl?.focus()
+        currentSlug = null
+      }
+      if (prefersReduced) finish()
+      else setTimeout(finish, 180)
+    }
+
+    function navigate(delta: number) {
+      if (!currentSlug) return
+      const visible = visibleCards()
+      const idx = visible.findIndex((c) => c.dataset.matSlug === currentSlug)
+      if (idx === -1) return
+      const next = visible[idx + delta]
+      if (!next) return
+      const nextSlug = next.dataset.matSlug
+      if (nextSlug) {
+        triggerEl = next
+        render(nextSlug)
+        history.replaceState(null, '', `#${nextSlug}`)
+      }
+    }
+
+    // Wire-up — cards
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const slug = card.dataset.matSlug
+        if (slug) open(slug, card)
+      })
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          const slug = card.dataset.matSlug
+          if (slug) open(slug, card)
+        }
+      })
+    })
+
+    // Wire-up — controles
+    closeBtns.forEach((b) => b.addEventListener('click', close))
+    prevBtn?.addEventListener('click', () => navigate(-1))
+    nextBtn?.addEventListener('click', () => navigate(+1))
+
+    // Teclado global enquanto o modal está aberto
+    document.addEventListener('keydown', (e) => {
+      if (modal!.classList.contains('hidden')) return
+      if (e.key === 'Escape') { e.preventDefault(); close() }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1) }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); navigate(+1) }
+      else if (e.key === 'Tab') {
+        // Focus trap simples
+        const focusables = modal!.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"]), input, select, textarea'
+        )
+        if (focusables.length === 0) return
+        const first = focusables[0]
+        const last = focusables[focusables.length - 1]
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+      }
+    })
+
+    // Touch swipe (mobile) entre materiais
+    let touchStartX = 0
+    let touchStartY = 0
+    container?.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0]
+      touchStartX = t.clientX; touchStartY = t.clientY
+    }, { passive: true })
+    container?.addEventListener('touchend', (e) => {
+      const t = e.changedTouches[0]
+      const dx = t.clientX - touchStartX
+      const dy = t.clientY - touchStartY
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        if (dx < 0) navigate(+1); else navigate(-1)
+      }
+    }, { passive: true })
+
+    // Deep-link inicial via hash
+    function openFromHash() {
+      const slug = location.hash.replace(/^#/, '')
+      if (slug && materialsBySlug.has(slug)) open(slug)
+    }
+    window.addEventListener('hashchange', openFromHash)
+    if (location.hash) openFromHash()
+  }
 </script>
