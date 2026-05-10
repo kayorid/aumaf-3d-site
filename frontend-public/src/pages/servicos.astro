@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
+import SectionSeparator from '../components/SectionSeparator.astro'
 import { COMPANY } from '../lib/company'
 import { serviceSchema, howToSchema, itemListSchema } from '../lib/schemas'
 
@@ -105,10 +106,18 @@ const schemas = [
 
   <!-- Hero Institucional (coffee-tech style: assimétrico) -->
   <section class="min-h-[60vh] flex items-end bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-servicos">
-    <div class="absolute inset-0 bg-tech-grid opacity-40 pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 70% 50% at 85% 15%,rgba(97,197,79,0.07) 0%,transparent 60%);"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 40% 40% at 10% 80%,rgba(97,197,79,0.04) 0%,transparent 65%);"></div>
-    <div class="absolute bottom-0 inset-x-0 h-16 pointer-events-none" aria-hidden="true" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.5));"></div>
+    <!-- Background AI: blueprint da impressora -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.18]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-blueprint.webp');"
+    ></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 70% 50% at 85% 15%,rgba(97,197,79,0.10) 0%,transparent 60%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 40% 40% at 10% 80%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <!-- Vinheta para legibilidade do conteúdo -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,transparent 30%,transparent 65%,rgba(0,0,0,0.65) 100%);"></div>
+    <div class="absolute bottom-0 inset-x-0 h-16 pointer-events-none" aria-hidden="true" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.6));"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge w-full relative z-10">
       <Breadcrumb items={[{ name: 'Serviços' }]} compact />
@@ -132,13 +141,18 @@ const schemas = [
     </div>
   </section>
 
-  <!-- Separator com glow -->
-  <div class="line-glow-bright relative" aria-hidden="true" style="height:1px;"></div>
+  <SectionSeparator variant="glow" spacing="md" />
 
   <!-- Serviços Zigzag -->
   <section class="bg-background py-section relative overflow-hidden" aria-labelledby="servicos-list">
+    <!-- Background AI: hexágonos -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.08]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-hex.webp');"
+    ></div>
     <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 40% at 95% 0%,rgba(97,197,79,0.05) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 5% 100%,rgba(97,197,79,0.04) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 40% at 95% 0%,rgba(97,197,79,0.06) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 5% 100%,rgba(97,197,79,0.05) 0%,transparent 65%);"></div>
     <h2 id="servicos-list" class="sr-only">Lista de serviços</h2>
     <div class="max-w-[1600px] mx-auto px-edge divide-y divide-white/5 relative z-10">
       {services.map((service, i) => (
@@ -177,49 +191,99 @@ const schemas = [
     </div>
   </section>
 
-  <!-- Como Funciona — agora com background subliminar e timeline -->
+  <!-- Como Funciona — Industrial Control Surface (refeito) -->
   <section class="bg-surface-low py-section relative overflow-hidden" aria-labelledby="como-funciona">
-    <!-- Camadas de fundo -->
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.18] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 55% 45% at 90% 8%,rgba(97,197,79,0.08) 0%,transparent 65%),radial-gradient(ellipse 45% 35% at 8% 92%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
-    <div class="line-glow-bright absolute top-0 left-[5%] right-[5%] pointer-events-none" aria-hidden="true"></div>
-    <!-- Linha horizontal sutil cruzando os passos -->
-    <div class="hidden lg:block absolute left-0 right-0 top-[58%] h-px pointer-events-none" aria-hidden="true" style="background:linear-gradient(90deg,transparent 0%,rgba(97,197,79,0.18) 20%,rgba(97,197,79,0.18) 80%,transparent 100%);"></div>
+    <!-- Background AI subliminar (blueprint da impressora) -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.10]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-blueprint.webp');"
+    ></div>
+    <!-- Camadas geométricas overlay -->
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 50% at 88% 12%,rgba(97,197,79,0.10) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 8% 88%,rgba(97,197,79,0.07) 0%,transparent 65%);"></div>
+    <!-- Vinheta vertical para foco no conteúdo -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.50) 0%,transparent 18%,transparent 82%,rgba(0,0,0,0.70) 100%);"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
-      <header class="mb-16 border-b border-white/8 pb-10">
-        <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">Processo</span>
-        <h2 id="como-funciona" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Como Funciona</h2>
-        <p class="text-body-md text-tertiary mt-4 max-w-2xl">
-          Do envio do arquivo à entrega da peça final: 6 etapas controladas com prazo definido em até 24 horas após análise técnica.
+      <header class="mb-14 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">Processo</span>
+          <h2 id="como-funciona" class="text-headline-lg md:text-display-xl font-bold uppercase text-white tracking-[-0.03em] leading-[0.95]">Como<br/>Funciona.</h2>
+        </div>
+        <p class="text-body-md text-tertiary md:text-right max-w-md leading-relaxed">
+          Do envio do arquivo à entrega da peça final: <strong class="text-on-surface">6 etapas controladas</strong> com prazo definido em até 24h após análise técnica.
         </p>
       </header>
-      <ol class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {processSteps.map((step, i) => (
-          <li data-animate class:list={['glass-panel card-hover-glow p-6 relative rounded-sm group hover:border-primary-container/30 transition-all duration-300 reveal-hidden list-none overflow-hidden', `stagger-${i + 1}`]}>
-            <!-- Corner decorations + scan-line -->
-            <div class="absolute top-2 left-2 w-3 h-3 border-t border-l border-primary-container/25 opacity-50 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
-            <div class="absolute top-2 right-2 w-3 h-3 border-t border-r border-primary-container/25 opacity-50 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
-            <div class="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-primary-container/25 opacity-50 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
-            <div class="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-primary-container/25 opacity-50 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
-            <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/30 to-transparent animate-scan-line opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
 
-            <span class="text-[32px] font-black text-white/[0.08] group-hover:text-primary-container/30 group-hover:text-glow-sm leading-none block mb-3 transition-all duration-300" aria-hidden="true">{step.n}</span>
-            <span class="text-label-caps text-primary-container uppercase tracking-widest block mb-2 relative">Etapa {step.n}</span>
-            <h3 class="text-body-md font-semibold text-white uppercase mb-2 tracking-[0.02em] relative">{step.title}</h3>
-            <p class="text-sm text-tertiary leading-relaxed relative">{step.body}</p>
-          </li>
-        ))}
+      <!-- Grid 2×3 (lg) / 1×6 stack mobile — mais respirável que 1×6 horizontal -->
+      <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        {processSteps.map((step, i) => {
+          const isLast = i === processSteps.length - 1
+          // Conector chevron entre etapas: aparece à direita em desktop (exceto última coluna), embaixo em mobile/tablet
+          const showRightArrow = !isLast && ((i + 1) % 3 !== 0)
+          return (
+            <li
+              data-animate
+              class:list={[
+                'glass-panel relative rounded-sm group transition-all duration-300 reveal-hidden list-none overflow-hidden border border-white/8 hover:border-primary-container/35 hover:-translate-y-1',
+                `stagger-${i + 1}`,
+              ]}
+            >
+              <!-- Corner brackets (4 cantos) -->
+              <div class="absolute top-2 left-2 w-3 h-3 border-t border-l border-primary-container/30 opacity-60 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
+              <div class="absolute top-2 right-2 w-3 h-3 border-t border-r border-primary-container/30 opacity-60 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
+              <div class="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-primary-container/30 opacity-60 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
+              <div class="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-primary-container/30 opacity-60 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
+              <!-- Scan-line no hover -->
+              <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent animate-scan-line opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
+              <!-- Glow superior linear -->
+              <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/40 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
+
+              <div class="p-7 lg:p-8 flex flex-col gap-3 h-full">
+                <!-- Header com numeral grande + label etapa -->
+                <div class="flex items-baseline justify-between mb-2">
+                  <span
+                    class="text-[64px] lg:text-[72px] font-black text-white/[0.10] group-hover:text-primary-container/35 group-hover:text-glow-sm leading-none tracking-[-0.04em] transition-all duration-300"
+                    aria-hidden="true"
+                  >{step.n}</span>
+                  <span class="text-label-caps text-primary-container uppercase tracking-[0.18em] text-[10px]">Etapa {step.n}</span>
+                </div>
+
+                <h3 class="text-headline-md font-bold text-white uppercase tracking-[0.01em] leading-tight">{step.title}</h3>
+                <p class="text-body-md text-tertiary leading-relaxed flex-1">{step.body}</p>
+              </div>
+
+              <!-- Chevron conector (só desktop, entre cards da mesma fileira) -->
+              {showRightArrow && (
+                <div
+                  class="hidden lg:flex absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-8 items-center justify-center pointer-events-none z-10"
+                  aria-hidden="true"
+                >
+                  <span class="material-symbols-outlined text-primary-container/40 text-2xl group-hover:text-primary-container/70 transition-colors duration-300" style="font-variation-settings:'FILL' 1;">chevron_right</span>
+                </div>
+              )}
+            </li>
+          )
+        })}
       </ol>
     </div>
 
     <!-- Fade gradient para próxima seção -->
-    <div class="absolute bottom-0 inset-x-0 h-20 pointer-events-none" aria-hidden="true" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.4));"></div>
+    <div class="absolute bottom-0 inset-x-0 h-24 pointer-events-none" aria-hidden="true" style="background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.55));"></div>
   </section>
 
+  <SectionSeparator variant="strong" spacing="md" />
+
   <!-- CTA -->
-  <section class="bg-background border-t border-primary-container/20 py-section relative overflow-hidden" aria-labelledby="cta-servicos">
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+  <section class="bg-background py-section relative overflow-hidden" aria-labelledby="cta-servicos">
+    <!-- Background AI: particles -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.18]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-particles.webp');"
+    ></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(97,197,79,0.10) 0%,transparent 65%);"></div>
     <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
     <div class="max-w-[1600px] mx-auto px-edge text-center relative z-10">
       <h2 id="cta-servicos" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Inicie seu Projeto Agora</h2>

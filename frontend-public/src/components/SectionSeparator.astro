@@ -1,0 +1,47 @@
+---
+/**
+ * Separador cinematográfico entre dobras.
+ * Gradient horizontal verde + corner brackets nas pontas, opcional scan-line.
+ *
+ * Variantes:
+ *  - 'glow'      → linha verde com glow (default, padrão)
+ *  - 'subtle'    → menor presença (separador interno entre seções afins)
+ *  - 'strong'    → linha mais grossa, dobra de transição importante
+ */
+export interface Props {
+  variant?: 'glow' | 'subtle' | 'strong'
+  /** Margem vertical (rem) — controla espaço acima/abaixo do separador */
+  spacing?: 'sm' | 'md' | 'lg'
+}
+const { variant = 'glow', spacing = 'md' } = Astro.props as Props
+
+const py = spacing === 'sm' ? 'py-4' : spacing === 'lg' ? 'py-12' : 'py-7'
+const lineH = variant === 'strong' ? 'h-[2px]' : 'h-px'
+const lineGlow =
+  variant === 'subtle'
+    ? 'bg-gradient-to-r from-transparent via-white/12 to-transparent'
+    : 'bg-gradient-to-r from-transparent via-primary-container/55 to-transparent'
+const dropShadow =
+  variant === 'strong'
+    ? 'drop-shadow-[0_0_8px_rgba(97,197,79,0.5)]'
+    : variant === 'subtle'
+    ? ''
+    : 'drop-shadow-[0_0_4px_rgba(97,197,79,0.35)]'
+---
+
+<div class:list={['relative w-full pointer-events-none select-none', py]} aria-hidden="true">
+  <div class="max-w-[1600px] mx-auto px-edge relative">
+    <!-- Linha central -->
+    <div class:list={['relative w-full', lineH, lineGlow, dropShadow]}></div>
+
+    <!-- Corner brackets -->
+    <div class="absolute top-1/2 left-edge -translate-y-1/2 w-2 h-2 border-t border-l border-primary-container/40"></div>
+    <div class="absolute top-1/2 right-edge -translate-y-1/2 w-2 h-2 border-t border-r border-primary-container/40"></div>
+    <div class="absolute top-1/2 left-edge -translate-y-1/2 translate-y-1.5 w-2 h-2 border-b border-l border-primary-container/40 hidden"></div>
+
+    <!-- Mini-pin central com pulse no variant 'strong' -->
+    {variant === 'strong' && (
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot glow-effect"></div>
+    )}
+  </div>
+</div>

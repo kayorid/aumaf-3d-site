@@ -503,9 +503,15 @@ const homeSchemas = [
        DIFERENCIAIS — Grid de cards
        ============================================= -->
   <section class="bg-surface-low py-section section-glow-top relative overflow-hidden">
-    <!-- Background subliminar — tech grid + radials -->
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.18] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 45% at 8% 5%,rgba(97,197,79,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 95% 95%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <!-- Background AI: hexágonos -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.10]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-hex.webp');"
+    ></div>
+    <!-- Camadas geométricas -->
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 45% at 8% 5%,rgba(97,197,79,0.10) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 95% 95%,rgba(97,197,79,0.07) 0%,transparent 65%);"></div>
     <div class="line-glow-bright absolute top-0 left-[5%] right-[5%] pointer-events-none" aria-hidden="true"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
@@ -555,9 +561,14 @@ const homeSchemas = [
        PERSONAS — Para quem a AUMAF 3D resolve
        ============================================= -->
   <section class="bg-background py-section relative overflow-hidden" aria-labelledby="personas-title">
-    <!-- Background subliminar -->
-    <div class="absolute inset-0 bg-tech-grid opacity-[0.08] pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 35% at 18% 15%,rgba(97,197,79,0.07) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 82% 85%,rgba(97,197,79,0.05) 0%,transparent 65%);"></div>
+    <!-- Background AI: particles atmosféricas -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.14]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-particles.webp');"
+    ></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 35% at 18% 15%,rgba(97,197,79,0.08) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 82% 85%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
 
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="mb-14 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -676,8 +687,15 @@ const homeSchemas = [
   <!-- =============================================
        TECNOLOGIAS DISPONÍVEIS
        ============================================= -->
-  <section class="bg-background py-section">
-    <div class="max-w-[1600px] mx-auto px-edge">
+  <section class="bg-background py-section relative overflow-hidden">
+    <!-- Background AI: blueprint -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.07]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-blueprint.webp');"
+    ></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="mb-16 border-b border-white/8 pb-10">
         <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">04 // Sistemas</span>
         <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Tecnologias Disponíveis</h2>
@@ -899,8 +917,15 @@ const homeSchemas = [
   <!-- =============================================
        BLOG PREVIEW — Posts reais com conteúdo técnico
        ============================================= -->
-  <section class="bg-surface-low py-section">
-    <div class="max-w-[1600px] mx-auto px-edge">
+  <section class="bg-surface-low py-section relative overflow-hidden">
+    <!-- Background AI: particles -->
+    <div
+      class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.10]"
+      aria-hidden="true"
+      style="background-image:url('/images/bg-particles.webp');"
+    ></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.06] pointer-events-none" aria-hidden="true"></div>
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <div class="mb-16 border-b border-white/8 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">07 // Conhecimento</span>
