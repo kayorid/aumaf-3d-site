@@ -349,22 +349,16 @@ const schemas = [
     </div>
   </section>
 
-  <!-- Filter pills — scroll horizontal em mobile -->
+  <!-- Filter pills — wrap multi-linha em mobile (sem scroll horizontal) -->
   <div
     id="materiais-filter"
-    class="nav-glass-sub sticky top-16 z-40 w-full relative"
+    class="nav-glass-sub sticky top-16 z-40 w-full"
   >
-    <!-- Fade lateral esquerdo (indicador de scroll) -->
-    <div class="md:hidden absolute top-0 bottom-0 left-0 w-8 z-10 pointer-events-none" style="background:linear-gradient(90deg,rgba(10,10,10,0.95) 0%,transparent 100%);" aria-hidden="true"></div>
-    <!-- Fade lateral direito -->
-    <div class="md:hidden absolute top-0 bottom-0 right-0 w-8 z-10 pointer-events-none" style="background:linear-gradient(-90deg,rgba(10,10,10,0.95) 0%,transparent 100%);" aria-hidden="true"></div>
-
     <div class="max-w-[1600px] mx-auto px-edge py-3">
       <div
-        class="flex md:flex-wrap items-center gap-2 mb-2 overflow-x-auto md:overflow-visible scrollbar-hide -mx-edge md:mx-0 px-edge md:px-0"
+        class="flex flex-wrap items-center gap-2 mb-2"
         role="radiogroup"
         aria-label="Filtrar materiais por categoria"
-        style="scroll-snap-type:x proximity;"
       >
         {categories.map((cat, i) => (
           <button
@@ -379,7 +373,6 @@ const schemas = [
                 ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
                 : 'border-white/30 text-on-surface-variant hover:border-primary-container hover:text-primary-container',
             ]}
-            style="scroll-snap-align:start;"
           >
             {cat}
           </button>
@@ -389,10 +382,6 @@ const schemas = [
         Exibindo {materials.length} materiais
       </p>
     </div>
-    <style is:inline>
-      .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
-      .scrollbar-hide::-webkit-scrollbar { display: none; }
-    </style>
   </div>
 
   <!-- Grid -->
@@ -584,14 +573,15 @@ const schemas = [
 
       <!-- Header sticky -->
       <header class="nav-glass-sub flex items-center justify-between gap-3 px-5 md:px-8 py-4 border-b border-white/8 shrink-0">
-        <div class="min-w-0 flex items-center gap-3">
+        <div class="min-w-0 flex items-center gap-3 flex-wrap">
           <span data-mat-cat-pill class="pill text-[10px] shrink-0">—</span>
-          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase truncate hidden sm:inline">
+          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase truncate">
             <span data-mat-position>1</span> / <span data-mat-total>{materials.length}</span>
           </span>
         </div>
 
-        <div class="flex items-center gap-1.5">
+        <!-- Desktop controls (≥md) -->
+        <div class="hidden md:flex items-center gap-1.5">
           <button
             type="button"
             data-mat-prev
@@ -612,11 +602,19 @@ const schemas = [
             aria-label="Fechar ficha técnica"
           ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">close</span></button>
         </div>
+
+        <!-- Mobile close-only no header -->
+        <button
+          type="button"
+          data-modal-close
+          class="md:hidden w-10 h-10 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+          aria-label="Fechar ficha técnica"
+        ><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">close</span></button>
       </header>
 
       <!-- Conteúdo scrollável -->
-      <div data-mat-body class="flex-1 overflow-y-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div data-mat-body class="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-24 md:pb-0">
+        <div class="grid grid-cols-1 lg:grid-cols-12 min-w-0">
           <!-- Coluna imagem -->
           <div class="lg:col-span-5 relative bg-surface-low border-b lg:border-b-0 lg:border-r border-white/8 min-h-[260px] lg:min-h-[420px]">
             <img
@@ -687,8 +685,37 @@ const schemas = [
         </div>
       </div>
 
-      <!-- Footer com CTA -->
-      <footer class="border-t border-white/8 px-5 md:px-8 py-4 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-between gap-3 bg-surface-low shrink-0">
+      <!-- Mobile bottom-bar — prev/next + CTA condensado, fixos no fundo -->
+      <div
+        class="md:hidden fixed inset-x-0 bottom-0 z-10 bg-surface-base/98 backdrop-blur-md border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] pb-[max(env(safe-area-inset-bottom),0.5rem)]"
+        aria-label="Controles do material"
+      >
+        <div class="flex items-center gap-2 px-4 py-3">
+          <button
+            type="button"
+            data-mat-prev
+            class="w-11 h-11 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface active:bg-primary-container/15 active:text-primary-container transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
+            aria-label="Material anterior"
+          ><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">chevron_left</span></button>
+          <a
+            data-mat-cta
+            href="/contato"
+            class="flex-1 inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.12em] px-3 py-3 rounded-sm glow-effect text-[10px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container min-w-0"
+          >
+            <span class="truncate">Solicitar orçamento</span>
+            <span class="material-symbols-outlined text-base leading-none shrink-0" aria-hidden="true">arrow_forward</span>
+          </a>
+          <button
+            type="button"
+            data-mat-next
+            class="w-11 h-11 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface active:bg-primary-container/15 active:text-primary-container transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
+            aria-label="Próximo material"
+          ><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">chevron_right</span></button>
+        </div>
+      </div>
+
+      <!-- Desktop footer com CTA -->
+      <footer class="hidden md:flex border-t border-white/8 px-5 md:px-8 py-4 flex-col sm:flex-row items-stretch sm:items-center sm:justify-between gap-3 bg-surface-low shrink-0">
         <span class="text-[11px] text-tertiary hidden sm:block">
           Use as setas <kbd class="font-mono text-on-surface-variant">←</kbd> <kbd class="font-mono text-on-surface-variant">→</kbd> para navegar · <kbd class="font-mono text-on-surface-variant">ESC</kbd> fecha
         </span>
@@ -797,8 +824,9 @@ const schemas = [
     const overlay = modal.querySelector<HTMLElement>('.mat-modal__overlay')
     const container = modal.querySelector<HTMLElement>('.mat-modal__container')
     const body = modal.querySelector<HTMLElement>('[data-mat-body]')
-    const prevBtn = modal.querySelector<HTMLButtonElement>('[data-mat-prev]')
-    const nextBtn = modal.querySelector<HTMLButtonElement>('[data-mat-next]')
+    const prevBtns = Array.from(modal.querySelectorAll<HTMLButtonElement>('[data-mat-prev]'))
+    const nextBtns = Array.from(modal.querySelectorAll<HTMLButtonElement>('[data-mat-next]'))
+    const ctaLinks = Array.from(modal.querySelectorAll<HTMLAnchorElement>('[data-mat-cta]'))
     const closeBtns = Array.from(modal.querySelectorAll<HTMLElement>('[data-modal-close]'))
 
     const elCatPill = modal.querySelector<HTMLElement>('[data-mat-cat-pill]')
@@ -815,7 +843,6 @@ const schemas = [
     const elUses = modal.querySelector<HTMLElement>('[data-mat-uses]')
     const elPros = modal.querySelector<HTMLElement>('[data-mat-pros]')
     const elCons = modal.querySelector<HTMLElement>('[data-mat-cons]')
-    const elCta = modal.querySelector<HTMLAnchorElement>('[data-mat-cta]')
 
     let currentSlug: string | null = null
     let triggerEl: HTMLElement | null = null
@@ -882,15 +909,15 @@ const schemas = [
       if (elUses) buildList(elUses, m.useCases, true)
       if (elPros) buildList(elPros, m.pros)
       if (elCons) buildList(elCons, m.cons)
-      if (elCta) elCta.href = `/contato?material=${encodeURIComponent(m.name)}`
+      ctaLinks.forEach((a) => { a.href = `/contato?material=${encodeURIComponent(m.name)}` })
 
       // Posição dentro dos cards visíveis
       const visible = visibleCards()
       const idx = visible.findIndex((c) => c.dataset.matSlug === slug)
       if (elPos) elPos.textContent = String(idx >= 0 ? idx + 1 : 1)
       if (elTotal) elTotal.textContent = String(visible.length)
-      if (prevBtn) prevBtn.disabled = idx <= 0
-      if (nextBtn) nextBtn.disabled = idx === -1 || idx >= visible.length - 1
+      prevBtns.forEach((b) => { b.disabled = idx <= 0 })
+      nextBtns.forEach((b) => { b.disabled = idx === -1 || idx >= visible.length - 1 })
 
       // Reset scroll do conteúdo
       if (body) body.scrollTop = 0
@@ -977,8 +1004,8 @@ const schemas = [
 
     // Wire-up — controles
     closeBtns.forEach((b) => b.addEventListener('click', close))
-    prevBtn?.addEventListener('click', () => navigate(-1))
-    nextBtn?.addEventListener('click', () => navigate(+1))
+    prevBtns.forEach((b) => b.addEventListener('click', () => navigate(-1)))
+    nextBtns.forEach((b) => b.addEventListener('click', () => navigate(+1)))
 
     // Teclado global enquanto o modal está aberto
     document.addEventListener('keydown', (e) => {

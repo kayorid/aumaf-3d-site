@@ -98,27 +98,43 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
 <!-- Mobile/Tablet Drawer — full screen overlay -->
 <div
   id="mobile-menu"
-  class="fixed inset-0 z-40 glass-panel-strong flex-col justify-center items-start px-8 hidden"
+  class="fixed inset-0 z-40 glass-panel-strong flex-col px-8 hidden overflow-y-auto overscroll-contain"
   aria-hidden="true"
   aria-label="Menu de navegação móvel"
   role="dialog"
   aria-modal="true"
 >
-  <ul role="list" class="mt-16 space-y-1 w-full">
-    {[...links, helpLink].map((link, i) => (
-      <li>
-        <a
-          href={link.href}
-          class="block py-5 text-headline-md font-bold uppercase tracking-[-0.02em] text-on-surface hover:text-white border-b border-white/8 transition-colors focus-visible:text-primary-container"
-          style={`animation-delay: ${i * 60}ms`}
-        >
-          <span class="text-primary-container text-label-caps mr-4 font-bold" aria-hidden="true">0{i + 1}</span>
-          {link.label}
-        </a>
-      </li>
-    ))}
+  <!-- Botão X dedicado no topo do drawer -->
+  <div class="flex justify-end pt-4 pb-2">
+    <button
+      id="menu-close"
+      type="button"
+      class="w-11 h-11 inline-flex items-center justify-center rounded-full border border-white/15 bg-surface-low/60 text-on-surface active:text-primary-container active:border-primary-container/40 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+      aria-label="Fechar menu de navegação"
+    ><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">close</span></button>
+  </div>
+  <ul role="list" class="mt-2 space-y-1 w-full">
+    {[...links, helpLink].map((link, i) => {
+      const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))
+      return (
+        <li>
+          <a
+            href={link.href}
+            aria-current={isActive ? 'page' : undefined}
+            class:list={[
+              'flex items-center min-h-14 py-4 text-headline-md font-bold uppercase tracking-[-0.02em] border-b border-white/8 transition-colors focus-visible:text-primary-container',
+              isActive ? 'text-primary-container' : 'text-on-surface hover:text-white',
+            ]}
+            style={`animation-delay: ${i * 60}ms`}
+          >
+            <span class="text-primary-container text-label-caps mr-4 font-bold" aria-hidden="true">0{i + 1}</span>
+            {link.label}
+          </a>
+        </li>
+      )
+    })}
   </ul>
-  <div class="pt-8">
+  <div class="pt-8 pb-[max(env(safe-area-inset-bottom),2rem)]">
     <a
       href="/contato"
       class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
@@ -163,6 +179,28 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
   }
 
   toggle?.addEventListener('click', () => setMenu(!open))
+
+  const closeBtn = document.getElementById('menu-close')
+  closeBtn?.addEventListener('click', () => setMenu(false))
+
+  // Swipe-to-close no drawer (gesto vertical para cima > 80px fecha)
+  if (menu) {
+    let sx = 0, sy = 0
+    menu.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0]
+      sx = t.clientX; sy = t.clientY
+    }, { passive: true })
+    menu.addEventListener('touchend', (e) => {
+      if (!open) return
+      const t = e.changedTouches[0]
+      const dx = t.clientX - sx
+      const dy = t.clientY - sy
+      // Swipe horizontal para a direita (>80px) ou vertical para cima (>80px) fecha
+      if ((Math.abs(dx) > 80 && dx > Math.abs(dy)) || (dy < -80 && Math.abs(dy) > Math.abs(dx))) {
+        setMenu(false)
+      }
+    }, { passive: true })
+  }
 
   // Fechar com Esc
   document.addEventListener('keydown', (e) => {

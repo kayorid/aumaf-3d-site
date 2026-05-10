@@ -275,4 +275,56 @@ const creativeWorkSchema = {
   </section>
 
   <Footer />
+
+  <!-- Mobile sticky bottom-bar — prev/next entre projetos (somente em telas <md) -->
+  <div
+    class="md:hidden fixed inset-x-0 bottom-0 z-30 bg-surface-base/96 backdrop-blur-md border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] pb-[max(env(safe-area-inset-bottom),0.5rem)]"
+    aria-label="Navegação entre projetos (mobile)"
+  >
+    <div class="flex items-stretch gap-2 px-3 py-2.5">
+      {prev ? (
+        <a
+          href={`/portfolio/${prev.slug}`}
+          class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-11 px-3 rounded-sm border border-white/10 bg-surface-low text-on-surface text-label-caps uppercase tracking-[0.12em] text-[10px] active:bg-primary-container/15 active:text-primary-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+          aria-label={`Projeto anterior: ${prev.title}`}
+        >
+          <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">chevron_left</span>
+          <span>Anterior</span>
+        </a>
+      ) : (
+        <span class="flex-1 inline-flex items-center justify-center min-h-11 px-3 rounded-sm border border-white/5 text-on-surface-variant/40 text-label-caps uppercase tracking-[0.12em] text-[10px]" aria-disabled="true">
+          <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">chevron_left</span>
+        </span>
+      )}
+      <a
+        href="/portfolio"
+        class="inline-flex items-center justify-center w-11 h-11 rounded-sm border border-white/10 bg-surface-low text-on-surface active:text-primary-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container shrink-0"
+        aria-label="Ver todos os projetos"
+      ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">grid_view</span></a>
+      {next ? (
+        <a
+          href={`/portfolio/${next.slug}`}
+          class="flex-1 inline-flex items-center justify-center gap-1.5 min-h-11 px-3 rounded-sm border border-white/10 bg-surface-low text-on-surface text-label-caps uppercase tracking-[0.12em] text-[10px] active:bg-primary-container/15 active:text-primary-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+          aria-label={`Próximo projeto: ${next.title}`}
+        >
+          <span>Próximo</span>
+          <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">chevron_right</span>
+        </a>
+      ) : (
+        <span class="flex-1 inline-flex items-center justify-center min-h-11 px-3 rounded-sm border border-white/5 text-on-surface-variant/40 text-label-caps uppercase tracking-[0.12em] text-[10px]" aria-disabled="true">
+          <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">chevron_right</span>
+        </span>
+      )}
+    </div>
+  </div>
+
+  <!-- Spacer mobile para garantir que conteúdo final não fique escondido pela bar -->
+  <div class="md:hidden h-16" aria-hidden="true"></div>
+
+  <style is:inline>
+    /* Esconder FAB WhatsApp no mobile — bottom-bar de navegação ocupa o espaço */
+    @media (max-width: 767px) {
+      .fab-stack { display: none !important; }
+    }
+  </style>
 </Base>
