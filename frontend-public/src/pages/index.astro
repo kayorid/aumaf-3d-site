@@ -20,7 +20,11 @@ try {
 const featuredPost = allPosts.find((p) => p.featured) ?? allPosts[0] ?? null
 const otherPosts = allPosts.filter((p) => p.slug !== featuredPost?.slug).slice(0, 3)
 
-const description = 'AUMAF 3D — manufatura aditiva industrial em São Carlos, SP. Impressão 3D em metal 316L, polímeros (PEEK, PA, PET-G CF15) e resina, com tolerância ±0.05mm. +500 projetos entregues, orçamento em até 24h.'
+// TEMPLATE DEMO PAGE — A copy desta home reflete o setor original (AUMAF 3D,
+// manufatura aditiva). Substitua texto/imagens/seções pela proposta da sua
+// marca. Apenas título e descrição leem do templateConfig por padrão.
+import { templateConfig } from '@template/shared'
+const description = templateConfig.seo.defaultDescription
 
 const homeSchemas = [
   itemListSchema([
@@ -32,7 +36,7 @@ const homeSchemas = [
 ]
 ---
 
-<Base title="Impressão 3D Industrial em São Carlos | AUMAF 3D" description={description} schemas={homeSchemas}>
+<Base title={templateConfig.seo.defaultTitle} description={description} schemas={homeSchemas}>
   <Navbar currentPath="/" />
 
   <!-- =============================================

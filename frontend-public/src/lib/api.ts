@@ -1,5 +1,5 @@
 /**
- * Cliente HTTP para o backend da AUMAF 3D — usado pelo blog dinâmico.
+ * Cliente HTTP para o backend do template — usado pelo blog dinâmico.
  *
  * Em build time (SSG), a base URL aponta para o backend local ou de produção via env.
  * Em runtime SSR, idem.

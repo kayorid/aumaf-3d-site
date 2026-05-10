@@ -1,5 +1,5 @@
 {
-  "name": "@aumaf/frontend-admin",
+  "name": "@template/frontend-admin",
   "version": "0.0.1",
   "private": true,
   "type": "module",
