@@ -33,7 +33,10 @@ const schemas = [
 
   <!-- Hero minimalista -->
   <section class="bg-background pt-28 pb-16 relative overflow-hidden" aria-labelledby="hero-portfolio">
+    <!-- Bg AI: blueprint (tema portfolio/projetos técnicos) -->
+    <div class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.26]" aria-hidden="true" style="background-image:url('/images/bg-blueprint.webp');"></div>
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.40) 0%,transparent 35%,rgba(0,0,0,0.55) 100%);"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <Breadcrumb items={[{ name: 'Portfolio' }]} compact />
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">

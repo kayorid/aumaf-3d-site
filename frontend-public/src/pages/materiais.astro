@@ -321,22 +321,25 @@ const schemas = [
 >
   <Navbar currentPath="/materiais" />
 
-  <!-- Hero -->
-  <section class="bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-mat">
-    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
-    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
+  <!-- Hero — compacto em mobile -->
+  <section class="bg-background pt-24 pb-12 md:pt-28 md:pb-20 relative overflow-hidden" aria-labelledby="hero-mat">
+    <!-- Bg AI: hexágonos (tema materiais/portfólio técnico) -->
+    <div class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.28]" aria-hidden="true" style="background-image:url('/images/bg-hex.webp');"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.20] pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 65% 55% at 75% 20%,rgba(97,197,79,0.10) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 30% 35% at 0% 100%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.40) 0%,transparent 35%,rgba(0,0,0,0.55) 100%);"></div>
     <div class="max-w-[1600px] mx-auto px-edge relative z-10">
       <Breadcrumb items={[{ name: 'Materiais' }]} compact />
       <div class="max-w-2xl">
-        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Catálogo // Materiais</span>
-        <h1 id="hero-mat" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-3 md:mb-4 text-[10px] md:text-xs">Catálogo // Materiais</span>
+        <h1 id="hero-mat" class="text-headline-lg md:text-display-xl font-bold uppercase text-white tracking-[-0.03em] md:tracking-[-0.04em] leading-[0.95] md:leading-none mb-4 md:mb-6">
           Materiais de<br/>Primeira Linha.
         </h1>
-        <p class="text-body-lg text-tertiary leading-relaxed mb-8">
-          <strong class="text-on-surface">{materials.length} materiais certificados</strong> em estoque na AUMAF 3D – São Carlos, SP. A variedade nas propriedades dos polímeros e metais torna possível atender desde protótipos de conceito até peças de uso final em ambientes industriais severos.
+        <p class="text-body-md md:text-body-lg text-tertiary leading-relaxed mb-6 md:mb-8">
+          <strong class="text-on-surface">{materials.length} materiais certificados</strong> em estoque. Atendemos de protótipos de conceito até peças de uso final em ambientes industriais severos.
         </p>
-        <ul role="list" class="flex flex-wrap items-center gap-x-4 gap-y-2 text-code-data text-on-surface-variant">
+        <ul role="list" class="flex flex-wrap items-center gap-x-3 md:gap-x-4 gap-y-2 text-code-data text-on-surface-variant text-[10px] md:text-[11px]">
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container" aria-hidden="true"></span> Termoplásticos</li>
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-on-surface" aria-hidden="true"></span> Alta Performance</li>
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary" aria-hidden="true"></span> Resinas</li>
@@ -346,13 +349,23 @@ const schemas = [
     </div>
   </section>
 
-  <!-- Filter pills -->
+  <!-- Filter pills — scroll horizontal em mobile -->
   <div
     id="materiais-filter"
-    class="nav-glass-sub sticky top-16 z-40 w-full"
+    class="nav-glass-sub sticky top-16 z-40 w-full relative"
   >
+    <!-- Fade lateral esquerdo (indicador de scroll) -->
+    <div class="md:hidden absolute top-0 bottom-0 left-0 w-8 z-10 pointer-events-none" style="background:linear-gradient(90deg,rgba(10,10,10,0.95) 0%,transparent 100%);" aria-hidden="true"></div>
+    <!-- Fade lateral direito -->
+    <div class="md:hidden absolute top-0 bottom-0 right-0 w-8 z-10 pointer-events-none" style="background:linear-gradient(-90deg,rgba(10,10,10,0.95) 0%,transparent 100%);" aria-hidden="true"></div>
+
     <div class="max-w-[1600px] mx-auto px-edge py-3">
-      <div class="flex flex-wrap items-center gap-2 mb-2" role="radiogroup" aria-label="Filtrar materiais por categoria">
+      <div
+        class="flex md:flex-wrap items-center gap-2 mb-2 overflow-x-auto md:overflow-visible scrollbar-hide -mx-edge md:mx-0 px-edge md:px-0"
+        role="radiogroup"
+        aria-label="Filtrar materiais por categoria"
+        style="scroll-snap-type:x proximity;"
+      >
         {categories.map((cat, i) => (
           <button
             type="button"
@@ -361,20 +374,25 @@ const schemas = [
             tabindex={i === 0 ? '0' : '-1'}
             data-filter={cat === 'Todos' ? 'all' : cat}
             class:list={[
-              'mat-filter transition-all duration-200 inline-flex items-center px-4 py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px]',
+              'mat-filter shrink-0 transition-all duration-200 inline-flex items-center px-4 py-2 md:py-1.5 rounded-full border text-label-caps uppercase tracking-widest whitespace-nowrap text-[10px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container',
               i === 0
                 ? 'bg-primary-container border-primary-container text-on-primary glow-effect'
                 : 'border-white/30 text-on-surface-variant hover:border-primary-container hover:text-primary-container',
             ]}
+            style="scroll-snap-align:start;"
           >
             {cat}
           </button>
         ))}
       </div>
-      <p id="mat-count" aria-live="polite" class="text-code-data text-on-surface-variant text-[11px]">
+      <p id="mat-count" aria-live="polite" class="text-code-data text-on-surface-variant text-[10px] md:text-[11px]">
         Exibindo {materials.length} materiais
       </p>
     </div>
+    <style is:inline>
+      .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
   </div>
 
   <!-- Grid -->

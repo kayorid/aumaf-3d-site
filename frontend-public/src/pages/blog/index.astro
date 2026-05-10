@@ -43,6 +43,8 @@ const lastUpdate = posts[0]?.publishedAt ?? new Date().toISOString()
 
   <!-- Hero -->
   <section class="bg-background pt-28 pb-20 relative overflow-hidden" aria-labelledby="hero-blog">
+    <!-- Bg AI: documentos técnicos (tema blog/conhecimento) -->
+    <div class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.28]" aria-hidden="true" style="background-image:url('/images/bg-docs.webp');"></div>
     <div class="absolute inset-0 bg-tech-grid opacity-25 pointer-events-none" aria-hidden="true"></div>
     <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 55% 50% at 70% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
     <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 30% 40% at 5% 100%,rgba(97,197,79,0.04) 0%,transparent 60%);"></div>
