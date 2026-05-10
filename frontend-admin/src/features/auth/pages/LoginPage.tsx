@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Lock } from 'lucide-react'
-import { LoginSchema, type LoginInput, templateConfig } from '@template/shared'
-import { BrandLockup } from '@/components/layout/BrandLockup'
+import { LoginSchema, type LoginInput } from '@aumaf/shared'
 import { useLogin } from '../api/use-login'
 import { useMe } from '../api/use-me'
 import { ApiError } from '@/lib/api'
@@ -100,7 +99,14 @@ export function LoginPage() {
         <aside className="hidden lg:flex flex-col justify-between px-14 py-12 relative overflow-hidden">
           {/* Topo — logo Pirulen + handle */}
           <header className="flex items-center gap-3">
-            <BrandLockup size={18} />
+            <div className="flex items-center gap-1">
+              <span className="font-pirulen text-[18px] text-white tracking-[0.06em] leading-none select-none">
+                AUMAF
+              </span>
+              <span className="font-pirulen text-[18px] text-primary-container tracking-[0.06em] leading-none select-none">
+                3D
+              </span>
+            </div>
             <span className="text-[11px] uppercase tracking-[0.3em] text-on-surface-variant border-l border-white/10 pl-3">
               Backoffice
             </span>
@@ -124,7 +130,8 @@ export function LoginPage() {
             </h1>
 
             <p className="text-body-md text-on-surface-variant leading-relaxed max-w-sm">
-              Painel administrativo de {templateConfig.name} — gestão de conteúdo, leads e operação digital.
+              Painel administrativo da AUMAF 3D — gestão de conteúdo, leads e operação digital.
+              Impressão 3D profissional para projetos críticos.
             </p>
 
             {/* Métricas rápidas */}
@@ -202,7 +209,14 @@ export function LoginPage() {
           <div className="relative w-full max-w-sm">
             {/* Logo mobile */}
             <div className="lg:hidden flex items-center gap-3 mb-12">
-              <BrandLockup size={16} />
+              <div className="flex items-center gap-1">
+                <span className="font-pirulen text-[16px] text-white tracking-[0.06em]">
+                  AUMAF
+                </span>
+                <span className="font-pirulen text-[16px] text-primary-container tracking-[0.06em]">
+                  3D
+                </span>
+              </div>
               <span className="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant border-l border-white/10 pl-3">
                 Backoffice
               </span>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { apiClient } from '@/lib/api'
 import type { ApiSuccess } from '@/lib/api'
-import type { DirectUploadOutput } from '@template/shared'
+import type { DirectUploadOutput } from '@aumaf/shared'
 
 const MAX_SIZE = 10 * 1024 * 1024
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/avif']

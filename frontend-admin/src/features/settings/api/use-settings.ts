@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { settingsApi } from './settings.api'
-import type { UpdateSettingsInput } from '@template/shared'
+import type { UpdateSettingsInput } from '@aumaf/shared'
 
 export const SETTINGS_KEY = ['settings'] as const
 

@@ -5,7 +5,7 @@ import type {
   UpdateLLMConfigInput,
   TestLLMConnectionInput,
   LLMTestResult,
-} from '@template/shared'
+} from '@aumaf/shared'
 
 const BASE = '/admin/integrations/llm'
 

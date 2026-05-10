@@ -1,4 +1,4 @@
-import type { LeadDetailDto } from '@template/shared'
+import type { LeadDetailDto } from '@aumaf/shared'
 import {
   AlertDialog,
   AlertDialogContent,

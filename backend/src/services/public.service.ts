@@ -5,7 +5,7 @@ import type {
   PublicPostListQuery,
   PublicPostListResponse,
   PublicSettingsDto,
-} from '@template/shared'
+} from '@aumaf/shared'
 
 function toPublicDto(post: {
   slug: string

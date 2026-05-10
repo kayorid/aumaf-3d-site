@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import type { SecretFieldDto } from '@template/shared'
+import type { SecretFieldDto } from '@aumaf/shared'
 import { toast } from 'sonner'
 import { Save, Sparkles, Zap, ShieldCheck, AlertTriangle } from 'lucide-react'
-import type { AIProviderName, LLMProviderConfigDto, UpdateLLMConfigInput } from '@template/shared'
+import type { AIProviderName, LLMProviderConfigDto, UpdateLLMConfigInput } from '@aumaf/shared'
 import {
   useLLMConfig,
   useUpdateLLMConfig,

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { LeadFilterQuery, CreateLeadNoteInput, UpdateLeadNoteInput } from '@template/shared'
+import type { LeadFilterQuery, CreateLeadNoteInput, UpdateLeadNoteInput } from '@aumaf/shared'
 import { leadsApi } from './leads.api'
 
 export const LEADS_KEY = ['leads'] as const

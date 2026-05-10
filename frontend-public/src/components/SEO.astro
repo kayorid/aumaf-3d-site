@@ -1,6 +1,5 @@
 ---
 import { COMPANY } from '../lib/company'
-import { templateConfig } from '@template/shared'
 import {
   organizationSchema,
   localBusinessSchema,
@@ -44,9 +43,8 @@ const {
 } = Astro.props
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString()
-const brand = templateConfig.name
-const fullTitle = title.includes(brand) ? title : templateConfig.seo.titleTemplate.replace('%s', title)
-const imageAlt = title.includes(brand) ? title : `${title} — ${brand}`
+const fullTitle = title.includes('AUMAF 3D') ? title : `${title} | AUMAF 3D`
+const imageAlt = title.includes('AUMAF 3D') ? title : `${title} — AUMAF 3D`
 
 // og:image precisa ser URL absoluta. Resolve contra o host real da requisição
 // (funciona tanto em homologação quanto pós-migração de domínio sem mudar código).
@@ -95,7 +93,7 @@ const graph = graphPayload([...baseGraph, ...schemas])
 <meta property="og:image" content={resolvedOgImage} />
 <meta property="og:type" content={ogType} />
 <meta property="og:locale" content="pt_BR" />
-<meta property="og:site_name" content={brand} />
+<meta property="og:site_name" content="AUMAF 3D" />
 
 <!-- Open Graph: imagem complementar -->
 <meta property="og:image:width" content="1200" />

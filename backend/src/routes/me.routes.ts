@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { UpdateProfileSchema, ChangePasswordSchema } from '@template/shared'
+import { UpdateProfileSchema, ChangePasswordSchema } from '@aumaf/shared'
 import { requireAuth } from '../middlewares/require-auth'
 import { httpErrors } from '../lib/http-error'
 import * as authService from '../services/auth.service'

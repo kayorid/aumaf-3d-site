@@ -1,5 +1,5 @@
 import { Router, raw } from 'express'
-import { PresignInputSchema, UploadContentTypeSchema } from '@template/shared'
+import { PresignInputSchema, UploadContentTypeSchema } from '@aumaf/shared'
 import { requireAuth } from '../middlewares/require-auth'
 import { httpErrors } from '../lib/http-error'
 import { presignUpload, uploadFile } from '../services/upload.service'

@@ -15,7 +15,7 @@ import {
   Check,
   X,
 } from 'lucide-react'
-import type { LeadDetailDto, LeadNoteDto } from '@template/shared'
+import type { LeadDetailDto, LeadNoteDto } from '@aumaf/shared'
 import { useLeadDetail, useAddLeadNote, useUpdateLeadNote, useDeleteLeadNote } from '../api/use-leads'
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'

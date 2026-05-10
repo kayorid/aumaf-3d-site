@@ -192,8 +192,7 @@ export function blogPostingSchema(args: {
   wordCount?: number
   keywords?: string[]
 }) {
-  const orgAuthorName = `Equipe ${COMPANY.name}`
-  const isOrg = !args.authorName || args.authorName === orgAuthorName
+  const isOrg = !args.authorName || args.authorName === 'Equipe AUMAF 3D'
   return {
     '@type': 'BlogPosting',
     '@id': `${args.url}#article`,
@@ -213,7 +212,7 @@ export function blogPostingSchema(args: {
     ...(args.wordCount ? { wordCount: args.wordCount } : {}),
     ...(args.keywords ? { keywords: args.keywords.join(', ') } : {}),
     author: isOrg
-      ? { '@id': ORG_ID, '@type': 'Organization', name: orgAuthorName }
+      ? { '@id': ORG_ID, '@type': 'Organization', name: 'Equipe AUMAF 3D' }
       : { '@type': 'Person', name: args.authorName },
     publisher: { '@id': ORG_ID },
     isPartOf: { '@id': SITE_ID },

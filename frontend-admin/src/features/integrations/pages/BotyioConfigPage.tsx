@@ -3,7 +3,7 @@ import { useForm, Controller, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Save, Zap, ShieldCheck, RefreshCcw, MessagesSquare } from 'lucide-react'
-import { UpdateBotyioConfigSchema, type UpdateBotyioConfigInput } from '@template/shared'
+import { UpdateBotyioConfigSchema, type UpdateBotyioConfigInput } from '@aumaf/shared'
 import {
   useBotyioConfig,
   useUpdateBotyioConfig,

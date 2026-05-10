@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { integrationsApi } from './integrations.api'
-import type { UpdateBotyioConfigInput, TestBotyioConnectionInput } from '@template/shared'
+import type { UpdateBotyioConfigInput, TestBotyioConnectionInput } from '@aumaf/shared'
 
 export const BOTYIO_CONFIG_KEY = ['integrations', 'botyio'] as const
 export const BOTYIO_DELIVERIES_KEY = ['integrations', 'botyio', 'deliveries'] as const

@@ -1,49 +1,54 @@
 /**
- * COMPANY — Proxy do `templateConfig` no formato esperado pelos componentes
- * legados deste workspace. A fonte de verdade vive em
- * `packages/shared/src/template/config.ts`, acessível via:
- *
- *   import { templateConfig } from '@template/shared'
- *
- * Mantemos esse alias para evitar churn nos componentes existentes.
- * Em código novo, prefira importar `templateConfig` direto.
+ * Single source of truth para NAP (Name/Address/Phone) e dados institucionais
+ * da AUMAF 3D. Toda menção do front-public deve derivar daqui — garante
+ * consistência para SEO local e GEO (LLMs).
  */
-import { templateConfig } from '@template/shared'
-
 export const COMPANY = {
-  name: templateConfig.name,
-  legalName: templateConfig.legalName,
-  url: templateConfig.url,
-  logo: templateConfig.logo.startsWith('http')
-    ? templateConfig.logo
-    : `${templateConfig.url}${templateConfig.logo}`,
-  ogImageDefault: templateConfig.seo.defaultOgImage,
-  founded: templateConfig.founded ?? '',
-  description: templateConfig.description,
-  shortPitch: templateConfig.shortPitch,
+  name: 'AUMAF 3D',
+  legalName: 'AUMAF 3D — Manufatura Aditiva',
+  // Domínio canônico atual (homologação). Pós-migração: trocar para https://aumaf3d.com.br
+  // e também alterar `site` em frontend-public/astro.config.ts.
+  url: 'https://aumaf.kayoridolfi.ai',
+  logo: 'https://aumaf.kayoridolfi.ai/logo.png',
+  ogImageDefault: '/og/og-default.png',
+  founded: '2022',
+  description:
+    'Manufatura aditiva industrial de alta precisão. Peças em metal, carbono e polímeros com tolerância ±0.05mm. São Carlos – SP.',
+  shortPitch: 'Impressão 3D industrial em São Carlos, SP — peças com tolerância ±0.05mm.',
   address: {
-    streetAddress: templateConfig.address.streetAddress,
-    neighborhood: templateConfig.address.neighborhood ?? '',
-    addressLocality: templateConfig.address.addressLocality,
-    addressRegion: templateConfig.address.addressRegion,
-    postalCode: templateConfig.address.postalCode,
-    addressCountry: templateConfig.address.addressCountry,
+    streetAddress: 'Alameda Sinlioku Tanaka, 202',
+    neighborhood: 'Parque Tecnológico Damha II',
+    addressLocality: 'São Carlos',
+    addressRegion: 'SP',
+    postalCode: '13565-261',
+    addressCountry: 'BR',
   },
-  geo: templateConfig.geo ?? { latitude: 0, longitude: 0 },
-  contact: templateConfig.contact,
-  hours: templateConfig.hours ?? {
-    open: '09:00',
+  geo: { latitude: -21.9766, longitude: -47.9064 },
+  contact: {
+    phone: '+5516992863412',
+    phoneDisplay: '(16) 99286-3412',
+    whatsapp: 'https://wa.me/5516992863412',
+    email: 'comercial@aumaf3d.com.br',
+  },
+  hours: {
+    open: '08:00',
     close: '18:00',
     days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as const,
-    displayPt: 'Segunda – Sexta',
+    displayPt: 'Segunda – Sexta, 08h–18h',
   },
   socials: {
-    instagram: templateConfig.socials.instagram ?? '',
-    linkedin: templateConfig.socials.linkedin ?? '',
-    facebook: templateConfig.socials.facebook ?? '',
+    instagram: 'https://www.instagram.com/aumaf3d',
+    linkedin: 'https://www.linkedin.com/company/aumaf3d',
+    facebook: 'https://www.facebook.com/aumaf3d/',
   },
-  serviceAreaCountry: templateConfig.serviceAreaCountry ?? 'BR',
-  industries: templateConfig.industries ?? [],
+  serviceAreaCountry: 'BR',
+  industries: [
+    'Automotiva',
+    'Aeroespacial',
+    'Médica',
+    'Industrial',
+    'Educação e Pesquisa',
+  ],
 } as const
 
 export type Company = typeof COMPANY

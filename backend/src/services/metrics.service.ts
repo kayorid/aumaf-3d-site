@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma'
 import { countLeadsLast30Days, listRecentLeadsMasked } from './lead.service'
-import type { DashboardMetrics, RecentPost } from '@template/shared'
+import type { DashboardMetrics, RecentPost } from '@aumaf/shared'
 
 export async function getDashboard(): Promise<DashboardMetrics> {
   const [postsPublished, postsDraft, postsByAi, leadsLast30d, recentPostsRaw, recentLeads] =

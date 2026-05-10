@@ -15,7 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@template/shared': path.resolve(__dirname, '../packages/shared/src/index.ts'),
+      '@aumaf/shared': path.resolve(__dirname, '../packages/shared/src/index.ts'),
     },
   },
 })

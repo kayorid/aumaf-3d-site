@@ -7,7 +7,7 @@ import type {
   CategoryDtoWithCount,
   CreateCategoryInput,
   UpdateCategoryInput,
-} from '@template/shared'
+} from '@aumaf/shared'
 
 function toDto(c: { id: string; name: string; slug: string; createdAt: Date; updatedAt: Date }): CategoryDto {
   return {

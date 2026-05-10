@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useConfirm } from '@/components/ui/confirm-dialog'
-import type { CategoryDtoWithCount } from '@template/shared'
+import type { CategoryDtoWithCount } from '@aumaf/shared'
 import { ApiError } from '@/lib/api'
 
 export function CategoriesPage() {

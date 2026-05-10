@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api'
 import type { ApiSuccess } from '@/lib/api'
-import type { AuthUser, LoginInput } from '@template/shared'
+import type { AuthUser, LoginInput } from '@aumaf/shared'
 
 export const authApi = {
   async login(input: LoginInput): Promise<AuthUser> {

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { authApi } from './auth.api'
 import { ME_QUERY_KEY } from './use-me'
 import { useAuthStore } from '@/stores/auth.store'
-import type { LoginInput } from '@template/shared'
+import type { LoginInput } from '@aumaf/shared'
 
 export function useLogin() {
   const qc = useQueryClient()

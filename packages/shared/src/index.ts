@@ -1,4 +1,3 @@
-export * from './template'
 export * from './schemas/auth'
 export * from './schemas/post'
 export * from './schemas/category'

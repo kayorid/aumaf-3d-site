@@ -83,7 +83,7 @@ export async function getReviews(): Promise<ReviewsData | null> {
         .filter((r) => (r.originalText || r.text || '').trim().length > 0)
         .map((r) => ({
           id: r.id,
-          authorName: r.author?.name?.trim() || 'Cliente',
+          authorName: r.author?.name?.trim() || 'Cliente AUMAF',
           authorAvatar: r.author?.avatarUrl || null,
           rating: Math.max(0, Math.min(5, Math.round(r.rating?.value ?? 0))),
           text: (r.originalText || r.text || '').trim(),

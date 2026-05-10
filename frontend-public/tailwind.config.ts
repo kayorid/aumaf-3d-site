@@ -1,31 +1,28 @@
 import type { Config } from 'tailwindcss'
 
-/**
- * Tailwind do frontend-public — todas as cores leem de CSS variables
- * definidas em `src/styles/themes/<theme>.css`. Para trocar de tema,
- * altere `theme.themeName` em `packages/shared/src/template/config.ts`
- * e o import correspondente em `src/styles/global.css`.
- *
- * Formato `rgb(var(--color-*) / <alpha-value>)` permite usar opacidades
- * Tailwind (`bg-primary/30`, `text-on-surface/60`, etc.) com vars.
- */
-
-const withRgb = (varName: string) => `rgb(var(${varName}) / <alpha-value>)`
-
 const config: Config = {
   content: ['./src/**/*.{astro,html,js,ts,jsx,tsx}'],
+  // === Phase 2 — safelist para classes usadas em conteúdo dinâmico de posts ===
+  // Os 6 posts migrados em P2 usam HTML inline com classes do design system
+  // que precisam sobreviver ao purge do Tailwind (não estão em arquivos .astro
+  // do source, e sim em strings vindas da API).
   safelist: [
+    // Layout containers
     'glass-panel', 'pill', 'pill-active', 'pill-green',
+    // Tipografia DS
     'text-display-xl', 'text-headline-lg', 'text-headline-md',
     'text-body-lg', 'text-body-md',
     'text-label-caps', 'text-code-data',
+    // Cores DS — variantes usadas em conteúdo
     'text-primary-container', 'text-on-surface', 'text-on-surface-variant',
     'text-tertiary', 'text-white',
     'bg-primary-container', 'bg-surface-base',
     'border-primary-container', 'border-white/8', 'border-white/12', 'border-white/30',
+    // Patterns: opacidades das cores DS (recorrentes em conteúdo)
     {
-      pattern: /^(text|bg|border)-(primary|primary-container|tertiary|on-surface|on-surface-variant|white)\/(5|8|10|12|15|20|25|30|40|50|60|70|80|90)$/,
+      pattern: /^(text|bg|border)-(primary-container|tertiary|on-surface|on-surface-variant|white)\/(5|8|10|12|15|20|25|30|40|50|60|70|80|90)$/,
     },
+    // Patterns: layouts comuns nos cards/grids dos posts
     { pattern: /^(grid|grid-cols|sm:grid-cols|md:grid-cols|gap)-/ },
     { pattern: /^(p|m|px|py|pt|pb|pl|pr|mt|mb|mx|my|gap)-/ },
     { pattern: /^(w|h|max-w|min-h|aspect)-/ },
@@ -36,35 +33,35 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: withRgb('--color-background'),
+        background: '#000000',
         surface: {
-          DEFAULT: withRgb('--color-surface'),
-          dim: withRgb('--color-surface-dim'),
-          low: withRgb('--color-surface-low'),
-          base: withRgb('--color-surface-base'),
-          high: withRgb('--color-surface-high'),
-          highest: withRgb('--color-surface-highest'),
-          variant: withRgb('--color-surface-variant'),
+          DEFAULT: '#131313',
+          dim: '#0e0e0e',
+          low: '#1c1b1b',
+          base: '#201f1f',
+          high: '#2a2a2a',
+          highest: '#353534',
+          variant: '#353534',
         },
         primary: {
-          DEFAULT: withRgb('--color-primary'),
-          container: withRgb('--color-primary-container'),
-          dim: withRgb('--color-primary-dim'),
-          fixed: withRgb('--color-primary-fixed'),
+          DEFAULT: '#7ce268',
+          container: '#61c54f',
+          dim: '#78dd64',
+          fixed: '#93fa7d',
         },
-        'on-surface': withRgb('--color-on-surface'),
-        'on-surface-variant': withRgb('--color-on-surface-variant'),
-        'on-primary': withRgb('--color-on-primary'),
-        tertiary: withRgb('--color-tertiary'),
-        'tertiary-container': withRgb('--color-tertiary-container'),
-        outline: withRgb('--color-outline'),
-        'outline-variant': withRgb('--color-outline-variant'),
-        error: withRgb('--color-error'),
-        'error-container': withRgb('--color-error-container'),
+        'on-surface': '#e5e2e1',
+        'on-surface-variant': '#becab6',
+        'on-primary': '#013a00',
+        tertiary: '#cdcaca',
+        'tertiary-container': '#b1afaf',
+        outline: '#899482',
+        'outline-variant': '#3f4a3b',
+        error: '#ffb4ab',
+        'error-container': '#93000a',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'sans-serif'],
-        display: ['var(--font-display)', 'sans-serif'],
+        sans: ['"Space Grotesk"', 'sans-serif'],
+        display: ['"Space Grotesk"', 'sans-serif'],
       },
       fontSize: {
         'display-xl': ['clamp(48px,6vw,72px)', { lineHeight: '1.0', letterSpacing: '-0.04em' }],
@@ -88,10 +85,10 @@ const config: Config = {
         'stack-sm': '8px',
       },
       borderRadius: {
-        DEFAULT: 'var(--radius-default)',
-        sm: 'var(--radius-sm)',
-        md: 'var(--radius-md)',
-        lg: 'var(--radius-lg)',
+        DEFAULT: '2px',
+        sm: '1px',
+        md: '4px',
+        lg: '8px',
         full: '9999px',
       },
       backdropBlur: {
@@ -99,10 +96,10 @@ const config: Config = {
         nav: '48px',
       },
       boxShadow: {
-        glow: 'var(--shadow-glow)',
-        'glow-lg': 'var(--shadow-glow-lg)',
-        'glow-sm': 'var(--shadow-glow-sm)',
-        glass: 'var(--shadow-glass)',
+        glow: '0 0 15px rgba(97, 197, 79, 0.3)',
+        'glow-lg': '0 0 30px rgba(97, 197, 79, 0.4)',
+        'glow-sm': '0 0 8px rgba(97, 197, 79, 0.2)',
+        glass: '0 8px 32px rgba(0,0,0,0.6)',
       },
       animation: {
         'pulse-dot': 'pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -158,9 +155,8 @@ const config: Config = {
         },
       },
       backgroundImage: {
-        'grid-pattern': 'var(--gradient-grid)',
-        'radial-brand': 'var(--gradient-radial-brand)',
-        'radial-green': 'var(--gradient-radial-brand)',
+        'grid-pattern': 'linear-gradient(rgba(124,226,104,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,226,104,0.04) 1px, transparent 1px)',
+        'radial-green': 'radial-gradient(ellipse at 30% 50%, rgba(97,197,79,0.07) 0%, transparent 70%)',
         'noise': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E\")",
       },
       backgroundSize: {

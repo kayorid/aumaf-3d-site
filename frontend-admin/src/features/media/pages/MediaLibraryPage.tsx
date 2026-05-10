@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Upload, Search, Trash2, Pencil, Copy, ImageOff, Loader2 } from 'lucide-react'
-import type { MediaAssetDto } from '@template/shared'
+import type { MediaAssetDto } from '@aumaf/shared'
 import { useMediaList, useRegisterMedia, useUpdateMedia, useDeleteMedia } from '../api/use-media'
 import { useUploadImage } from '@/features/editor/use-upload-image'
 import { Button } from '@/components/ui/button'

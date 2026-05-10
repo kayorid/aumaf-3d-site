@@ -8,7 +8,7 @@ import {
   TestBotyioConnectionSchema,
   UpdateLLMConfigSchema,
   TestLLMConnectionSchema,
-} from '@template/shared'
+} from '@aumaf/shared'
 import {
   getBotyioConfig,
   getBotyioConfigDto,

@@ -1,5 +1,5 @@
 {
-  "name": "multi-brand-site-template",
+  "name": "aumaf-3d-site",
   "version": "0.0.1",
   "private": true,
   "packageManager": "npm@11.6.0",
@@ -19,8 +19,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "test:e2e": "npm run test:e2e --workspace=frontend-admin",
-    "brand:init": "node scripts/init-brand.mjs"
+    "test:e2e": "npm run test:e2e --workspace=frontend-admin"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

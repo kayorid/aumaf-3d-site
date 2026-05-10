@@ -3,7 +3,7 @@ import { slugify } from '../lib/slug'
 import { httpErrors } from '../lib/http-error'
 import { logger } from '../config/logger'
 import { enqueuePostPublishWarmup } from '../workers/post-publish.worker'
-import type { CreatePostInput, UpdatePostInput, PostListQuery, PostDto } from '@template/shared'
+import type { CreatePostInput, UpdatePostInput, PostListQuery, PostDto } from '@aumaf/shared'
 
 async function safeEnqueueWarmup(postId: string, slug: string): Promise<void> {
   try {

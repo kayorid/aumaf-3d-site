@@ -1,22 +1,18 @@
 ---
-import { templateConfig } from '@template/shared'
 export interface Props {
   currentPath?: string
 }
 const { currentPath = '/' } = Astro.props
 
-// Navegação primária lida do templateConfig.
-// Excluímos a "/" home (lockup já leva à home) e o /faq (slot dedicado).
-const links = templateConfig.navigation.primary.filter(
-  (l) => l.href !== '/' && l.href !== '/faq'
-)
-const helpLink = templateConfig.navigation.primary.find((l) => l.href === '/faq')
-  ?? { href: '/faq', label: 'Perguntas Frequentes' }
-
-// Lockup do nome — particiona "AUMAF 3D" -> "AUMAF" + "3D" etc.
-const nameParts = templateConfig.name.trim().split(/\s+/)
-const lockupHead = nameParts.slice(0, nameParts.length === 1 ? 1 : -1).join(' ')
-const lockupTail = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''
+const links = [
+  { href: '/servicos',   label: 'Serviços'   },
+  { href: '/portfolio',  label: 'Portfolio'  },
+  { href: '/materiais',  label: 'Materiais'  },
+  { href: '/sobre',      label: 'Sobre'      },
+  { href: '/avaliacoes', label: 'Avaliações' },
+  { href: '/blog',       label: 'Blog'       },
+]
+const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
 ---
 
 <header
@@ -25,17 +21,15 @@ const lockupTail = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''
 >
   <nav aria-label="Principal" class="flex justify-between items-center px-edge h-16 max-w-[1600px] mx-auto">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-1 group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm" aria-label={`${templateConfig.name} — Página Inicial`}>
+    <a href="/" class="flex items-center gap-1 group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-container rounded-sm" aria-label="AUMAF 3D — Página Inicial">
       <span
         class="font-pirulen text-[18px] text-white tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none"
         style="font-family:'Pirulen',sans-serif;"
-      >{lockupHead}</span>
-      {lockupTail && (
-        <span
-          class="font-pirulen text-[18px] text-primary-container tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none ml-1"
-          style="font-family:'Pirulen',sans-serif;"
-        >{lockupTail}</span>
-      )}
+      >AUMAF</span>
+      <span
+        class="font-pirulen text-[18px] text-primary-container tracking-[0.06em] leading-none transition-opacity duration-300 group-hover:opacity-75 select-none ml-1"
+        style="font-family:'Pirulen',sans-serif;"
+      >3D</span>
     </a>
 
     <!-- Desktop Links (lg+) -->

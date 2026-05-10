@@ -1,24 +1,25 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
-import { templateConfig } from '@template/shared'
 
 dotenv.config()
 
 const prisma = new PrismaClient()
 
-// Categorias padrão neutras — adapte ao domínio da sua marca.
 const CATEGORIES = [
-  { name: 'Geral', slug: 'geral' },
-  { name: 'Tutoriais', slug: 'tutoriais' },
-  { name: 'Cases', slug: 'cases' },
-  { name: 'Novidades', slug: 'novidades' },
+  { name: 'Guia Técnico', slug: 'guia-tecnico' },
+  { name: 'Materiais', slug: 'materiais' },
+  { name: 'Case Study', slug: 'case-study' },
+  { name: 'Engenharia', slug: 'engenharia' },
+  { name: 'Parceria', slug: 'parceria' },
+  { name: 'Inovação', slug: 'inovacao' },
+  { name: 'Tutorial', slug: 'tutorial' },
 ]
 
 async function main() {
   const adminEmail = process.env.ADMIN_EMAIL
   const adminPassword = process.env.ADMIN_PASSWORD
-  const adminName = process.env.ADMIN_NAME ?? `Admin ${templateConfig.name}`
+  const adminName = process.env.ADMIN_NAME ?? 'Admin AUMAF'
 
   if (!adminEmail || !adminPassword) {
     throw new Error('ADMIN_EMAIL e ADMIN_PASSWORD são obrigatórios no .env')
@@ -60,8 +61,8 @@ async function main() {
     update: {},
     create: {
       id: 'default',
-      siteName: templateConfig.name,
-      siteDescription: templateConfig.shortPitch,
+      siteName: 'AUMAF 3D',
+      siteDescription: 'Impressão 3D profissional — FDM, SLA, SLS, SLM e mais.',
     },
   })
 }

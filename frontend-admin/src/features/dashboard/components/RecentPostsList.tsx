@@ -4,7 +4,7 @@ import { ptBR } from 'date-fns/locale'
 import { ArrowRight, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PostStatusBadge } from '@/features/posts/components/PostStatusBadge'
-import type { RecentPost } from '@template/shared'
+import type { RecentPost } from '@aumaf/shared'
 
 interface Props {
   posts: RecentPost[]

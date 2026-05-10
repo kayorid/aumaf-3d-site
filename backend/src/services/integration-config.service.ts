@@ -6,7 +6,7 @@ import {
   subscribeIntegrationInvalidate,
 } from '../lib/redis-pubsub'
 import { env } from '../config/env'
-import type { BotyioConfigDto, SecretFieldDto } from '@template/shared'
+import type { BotyioConfigDto, SecretFieldDto } from '@aumaf/shared'
 
 export const BOTYIO_PROVIDER = 'botyio'
 

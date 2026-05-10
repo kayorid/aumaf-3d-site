@@ -9,7 +9,7 @@ import { PostStatusBadge } from '../components/PostStatusBadge'
 import { PostFilters } from '../components/PostFilters'
 import { Button } from '@/components/ui/button'
 import { useConfirm } from '@/components/ui/confirm-dialog'
-import type { PostListQuery } from '@template/shared'
+import type { PostListQuery } from '@aumaf/shared'
 
 export function PostsListPage() {
   const navigate = useNavigate()

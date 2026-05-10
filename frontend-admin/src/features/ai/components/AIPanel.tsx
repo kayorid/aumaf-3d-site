@@ -6,7 +6,7 @@ import { Input, Textarea } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SelectStyled } from '@/components/ui/select-styled'
 import { useGeneratePost } from '../api/use-generate-post'
-import type { AIProviderName, AITone, GeneratePostOutput } from '@template/shared'
+import type { AIProviderName, AITone, GeneratePostOutput } from '@aumaf/shared'
 import { cn } from '@/lib/utils'
 
 interface Props {

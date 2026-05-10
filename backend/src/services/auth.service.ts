@@ -5,7 +5,7 @@ import { prisma } from '../lib/prisma'
 import { httpErrors } from '../lib/http-error'
 import { env } from '../config/env'
 import { logger } from '../config/logger'
-import type { AuthUser, UserRole, ProfileDto, UpdateProfileInput } from '@template/shared'
+import type { AuthUser, UserRole, ProfileDto, UpdateProfileInput } from '@aumaf/shared'
 
 export interface JwtPayload {
   sub: string

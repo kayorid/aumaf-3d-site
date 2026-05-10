@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api'
 import type { ApiSuccess } from '@/lib/api'
-import type { GeneratePostInput, GeneratePostOutput } from '@template/shared'
+import type { GeneratePostInput, GeneratePostOutput } from '@aumaf/shared'
 
 export function useGeneratePost() {
   return useMutation({

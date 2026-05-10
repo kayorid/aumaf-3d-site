@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { UpdateProfileInput, ChangePasswordInput } from '@template/shared'
+import type { UpdateProfileInput, ChangePasswordInput } from '@aumaf/shared'
 import { profileApi } from './profile.api'
 import { ME_QUERY_KEY } from '@/features/auth/api/use-me'
 

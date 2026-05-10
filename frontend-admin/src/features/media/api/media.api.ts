@@ -6,7 +6,7 @@ import type {
   MediaListResponse,
   RegisterMediaInput,
   UpdateMediaInput,
-} from '@template/shared'
+} from '@aumaf/shared'
 
 const BASE = '/media'
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { apiClient } from '@/lib/api'
-import type { UpdatePostInput } from '@template/shared'
+import type { UpdatePostInput } from '@aumaf/shared'
 
 export type AutoSaveState = 'idle' | 'saving' | 'saved' | 'error' | 'paused'
 

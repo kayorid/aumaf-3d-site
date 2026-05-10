@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api'
 import type { ApiSuccess } from '@/lib/api'
-import type { DashboardMetrics } from '@template/shared'
+import type { DashboardMetrics } from '@aumaf/shared'
 
 export const DASHBOARD_QUERY_KEY = ['metrics', 'dashboard'] as const
 

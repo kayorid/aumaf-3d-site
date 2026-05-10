@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { categoriesApi } from './categories.api'
-import type { CreateCategoryInput, UpdateCategoryInput } from '@template/shared'
+import type { CreateCategoryInput, UpdateCategoryInput } from '@aumaf/shared'
 
 export const CATEGORIES_KEY = ['categories'] as const
 

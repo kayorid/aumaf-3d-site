@@ -3,7 +3,7 @@ import {
   CreateUserSchema,
   UpdateUserSchema,
   SetUserPermissionsSchema,
-} from '@template/shared'
+} from '@aumaf/shared'
 import { requireAuth, requirePermission } from '../middlewares/require-auth'
 import { httpErrors } from '../lib/http-error'
 import { permissionCatalog } from '../lib/permissions'

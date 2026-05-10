@@ -4,17 +4,13 @@ import sitemap from '@astrojs/sitemap'
 import node from '@astrojs/node'
 import { EnumChangefreq } from 'sitemap'
 import { fetchPublicSlugs } from './src/lib/api'
-import { templateConfig } from '@template/shared'
-
-const SITE_URL = templateConfig.url
-const HOME_URL = `${SITE_URL.replace(/\/$/, '')}/`
 
 // Em build time, busca slugs publicados para incluir no sitemap.
 // Falha silenciosa se o backend não estiver disponível.
 async function dynamicBlogPages(): Promise<string[]> {
   try {
     const slugs = await fetchPublicSlugs()
-    return slugs.map((s) => `${SITE_URL.replace(/\/$/, '')}/blog/${s}`)
+    return slugs.map((s) => `https://aumaf3d.com.br/blog/${s}`)
   } catch (err) {
     // eslint-disable-next-line no-console
     console.warn('[sitemap] Falha ao buscar slugs do backend:', (err as Error).message)
@@ -23,8 +19,9 @@ async function dynamicBlogPages(): Promise<string[]> {
 }
 
 export default defineConfig({
-  // Domínio canônico — lido de templateConfig.url.
-  site: SITE_URL,
+  // Domínio de produção atual (homologação). Pós-migração para aumaf3d.com.br,
+  // alterar aqui + COMPANY.url em src/lib/company.ts.
+  site: 'https://aumaf.kayoridolfi.ai',
   // output: 'server' — todas as páginas são SSR por padrão.
   // Páginas estáticas (home, servicos etc.) marcadas com `export const prerender = true`.
   // Blog (/blog, /blog/[slug]) é SSR puro: cada F5 busca da API e reflete edições imediatamente.
@@ -48,7 +45,7 @@ export default defineConfig({
       customPages: await dynamicBlogPages(),
       serialize(item) {
         const url = item.url
-        if (url === HOME_URL) {
+        if (url === 'https://aumaf3d.com.br/') {
           return { ...item, priority: 1.0, changefreq: EnumChangefreq.WEEKLY }
         }
         if (url.includes('/contato') || url.includes('/servicos')) {
@@ -73,7 +70,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@template/shared': '../packages/shared/src/index.ts',
+        '@aumaf/shared': '../packages/shared/src/index.ts',
       },
     },
     build: {

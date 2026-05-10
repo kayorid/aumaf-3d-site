@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { CreateCategorySchema, UpdateCategorySchema } from '@template/shared'
+import { CreateCategorySchema, UpdateCategorySchema } from '@aumaf/shared'
 import { requireAuth, requireRole } from '../middlewares/require-auth'
 import * as categoryService from '../services/category.service'
 

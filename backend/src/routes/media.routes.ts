@@ -3,7 +3,7 @@ import {
   MediaListQuerySchema,
   RegisterMediaInputSchema,
   UpdateMediaInputSchema,
-} from '@template/shared'
+} from '@aumaf/shared'
 import { requireAuth } from '../middlewares/require-auth'
 import {
   deleteMedia,

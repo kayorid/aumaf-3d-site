@@ -11,7 +11,7 @@ import type {
   UpdateUserInput,
   PermissionOverride,
   UserRole,
-} from '@template/shared'
+} from '@aumaf/shared'
 
 function toDto(user: {
   id: string

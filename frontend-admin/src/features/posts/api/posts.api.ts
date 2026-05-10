@@ -6,7 +6,7 @@ import type {
   PostDto,
   PostListQuery,
   UpdatePostInput,
-} from '@template/shared'
+} from '@aumaf/shared'
 
 export const postsApi = {
   async list(query: Partial<PostListQuery> = {}) {
