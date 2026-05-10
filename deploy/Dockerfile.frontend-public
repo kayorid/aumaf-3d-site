@@ -14,7 +14,9 @@ RUN npm ci
 
 FROM deps AS build
 ARG PUBLIC_API_URL
+ARG PUBLIC_BEHOLD_FEED_ID=
 ENV PUBLIC_API_URL=${PUBLIC_API_URL}
+ENV PUBLIC_BEHOLD_FEED_ID=${PUBLIC_BEHOLD_FEED_ID}
 COPY turbo.json ./
 COPY packages/shared packages/shared
 COPY frontend-public frontend-public
