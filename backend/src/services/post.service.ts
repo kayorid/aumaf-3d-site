@@ -74,6 +74,9 @@ export async function listPosts(query: PostListQuery) {
     ...(categoryId ? { categoryId } : {}),
     ...(typeof generatedByAi === 'boolean' ? { generatedByAi } : {}),
     ...(typeof featured === 'boolean' ? { featured } : {}),
+    // Sort por publishedAt só faz sentido para posts publicados — exclui rascunhos
+    // que têm publishedAt NULL (apareceriam fora de ordem na lista).
+    ...(sort === 'publishedAt' ? { publishedAt: { not: null } } : {}),
     ...(dateFrom || dateTo
       ? {
           [dateField]: {

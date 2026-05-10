@@ -166,13 +166,16 @@ export function PostFilters({ value, onChange }: Props) {
           <Input
             type="date"
             value={dateToInput(value.dateTo)}
-            onChange={(e) =>
-              onChange({
-                ...value,
-                dateTo: e.target.value ? new Date(e.target.value) : undefined,
-                page: 1,
-              })
-            }
+            onChange={(e) => {
+              if (!e.target.value) {
+                onChange({ ...value, dateTo: undefined, page: 1 })
+                return
+              }
+              // end-of-day local — "até 09/05" inclui posts editados durante todo o dia 9
+              const d = new Date(e.target.value)
+              d.setHours(23, 59, 59, 999)
+              onChange({ ...value, dateTo: d, page: 1 })
+            }}
           />
         </div>
 
