@@ -16,7 +16,7 @@ FROM deps AS build
 COPY turbo.json ./
 COPY packages/shared packages/shared
 COPY backend backend
-RUN npm run build --workspace=@aumaf/shared
+RUN npm run build --workspace=@template/shared
 RUN cd backend && npx prisma generate
 RUN npm run build --workspace=backend
 
