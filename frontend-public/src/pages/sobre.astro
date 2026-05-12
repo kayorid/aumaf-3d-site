@@ -259,6 +259,65 @@ const schemas = [
     </div>
   </section>
 
+  <!-- =============================================
+       EQUIPE AUMAF 3D
+       ============================================= -->
+  <section class="bg-background border-t border-white/5 py-section relative overflow-hidden" aria-labelledby="equipe-sobre">
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 45% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.05] pointer-events-none" aria-hidden="true"></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <div class="mb-12 md:mb-16 border-b border-white/8 pb-8 md:pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">04 // Equipe</span>
+          <h2 id="equipe-sobre" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">
+            Equipe AUMAF 3D.<br/>
+            <span class="text-on-surface-variant font-light">Quem fabrica suas peças.</span>
+          </h2>
+        </div>
+        <p class="text-body-md text-tertiary max-w-sm leading-relaxed">Engenharia, operação e atendimento sob o mesmo teto em São Carlos — SP. Pessoas reais por trás de cada peça entregue.</p>
+      </div>
+
+      <ul role="list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        {[
+          { slug: 'marcos-ninelli',     name: 'Marcos Vinicius Ninelli Martins', role: 'Diretor de Operações' },
+          { slug: 'luiz-felipe-risse',  name: 'Luiz Felipe Lampa Risse',         role: 'Administrador' },
+          { slug: 'nieldson-martins',   name: 'Nieldson Martins',                role: 'Representante Comercial' },
+          { slug: 'hian-zambulin',      name: 'Hian Zambulin',                   role: 'Modelador 3D' },
+          { slug: 'tiago-frasson',      name: 'Tiago Frasson',                   role: 'Técnico em Impressão 3D' },
+          { slug: 'felipe-gonsales',    name: 'Felipe Gonsales',                 role: 'Estagiário de Impressão 3D' },
+        ].map((m) => (
+          <li>
+            <article class="glass-panel card-hover-glow rounded-sm overflow-hidden group h-full flex flex-col border border-white/8 hover:border-primary-container/30 transition-all duration-300">
+              <div class="relative aspect-[3/4] overflow-hidden bg-surface-base">
+                <img
+                  src={`/images/team/${m.slug}.webp`}
+                  alt={`Foto de ${m.name} — ${m.role} na AUMAF 3D`}
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  width="900"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.75) 100%);"></div>
+                <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute top-3 right-3 w-3 h-3 border-t border-r border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/40" aria-hidden="true"></div>
+              </div>
+              <div class="p-4 md:p-5 flex flex-col gap-1.5 border-t border-white/5">
+                <h3 class="text-body-md font-bold text-on-surface tracking-tight leading-tight">{m.name}</h3>
+                <p class="text-code-data text-primary-container uppercase tracking-[0.12em] text-[10px] md:text-[11px]">{m.role}</p>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+
   <!-- CTA -->
   <section class="bg-surface-low border-t border-white/5 py-16" aria-labelledby="cta-sobre">
     <div class="max-w-[1600px] mx-auto px-edge text-center">
