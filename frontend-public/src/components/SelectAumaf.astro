@@ -146,12 +146,17 @@ const {
   function setupSelect(root: HTMLElement) {
     const id = root.dataset.selectId
     if (!id) return
-    const native = root.querySelector<HTMLSelectElement>(`#${CSS.escape(id)}-native`)
-    const trigger = root.querySelector<HTMLButtonElement>(`#${CSS.escape(id)}`)
-    const panel = root.querySelector<HTMLElement>(`#${CSS.escape(id)}-panel`)
-    const listbox = root.querySelector<HTMLElement>(`#${CSS.escape(id)}-listbox`)
-    const valueLabel = root.querySelector<HTMLElement>(`#${CSS.escape(id)}-label-text`)
-    if (!native || !trigger || !panel || !listbox || !valueLabel) return
+    const nativeEl = root.querySelector<HTMLSelectElement>(`#${CSS.escape(id)}-native`)
+    const triggerEl = root.querySelector<HTMLButtonElement>(`#${CSS.escape(id)}`)
+    const panelEl = root.querySelector<HTMLElement>(`#${CSS.escape(id)}-panel`)
+    const listboxEl = root.querySelector<HTMLElement>(`#${CSS.escape(id)}-listbox`)
+    const valueLabelEl = root.querySelector<HTMLElement>(`#${CSS.escape(id)}-label-text`)
+    if (!nativeEl || !triggerEl || !panelEl || !listboxEl || !valueLabelEl) return
+    const native: HTMLSelectElement = nativeEl
+    const trigger: HTMLButtonElement = triggerEl
+    const panel: HTMLElement = panelEl
+    const listbox: HTMLElement = listboxEl
+    const valueLabel: HTMLElement = valueLabelEl
 
     const options = Array.from(panel.querySelectorAll<HTMLElement>('[role="option"]'))
     const placeholder = valueLabel.dataset.placeholder ?? 'Selecione…'
