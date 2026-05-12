@@ -10,7 +10,7 @@ import { FunnelView } from '../components/FunnelView'
 import { DevicesPanel } from '../components/DevicesPanel'
 import { RealtimePanel } from '../components/RealtimePanel'
 import { useOverview, useTimeseries } from '../hooks/use-analytics'
-import { useRange } from '../hooks/use-range'
+import { useAnalyticsRange } from '../hooks/use-range'
 
 type Tab = 'overview' | 'pages' | 'events' | 'funnel' | 'devices' | 'realtime'
 
@@ -31,7 +31,7 @@ function fmtDuration(s: number) {
 
 export function AnalyticsPage() {
   const [tab, setTab] = useState<Tab>('overview')
-  const range = useRange((s) => s.range())
+  const range = useAnalyticsRange()
   const { data: kpi, isLoading: kpiLoading } = useOverview(range)
   const { data: tsPv, isLoading: tsPvLoading } = useTimeseries(range, 'pageviews', 'day')
   const { data: tsVis } = useTimeseries(range, 'visitors', 'day')

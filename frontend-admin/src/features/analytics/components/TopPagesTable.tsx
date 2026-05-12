@@ -1,5 +1,5 @@
 import { useTopPages } from '../hooks/use-analytics'
-import { useRange } from '../hooks/use-range'
+import { useAnalyticsRange } from '../hooks/use-range'
 
 function fmtDuration(s: number) {
   const m = Math.floor(s / 60)
@@ -8,7 +8,7 @@ function fmtDuration(s: number) {
 }
 
 export function TopPagesTable() {
-  const range = useRange((s) => s.range())
+  const range = useAnalyticsRange()
   const { data, isLoading } = useTopPages(range, 20)
   const max = data?.[0]?.pageviews ?? 0
   return (

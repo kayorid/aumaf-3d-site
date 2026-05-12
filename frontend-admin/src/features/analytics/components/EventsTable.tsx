@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useEvents } from '../hooks/use-analytics'
-import { useRange } from '../hooks/use-range'
+import { useAnalyticsRange } from '../hooks/use-range'
 import { cn } from '@/lib/utils'
 
 const TYPE_FILTERS = ['', 'click', 'pageview', 'form_submit', 'form_start', 'scroll', 'engagement', 'modal_open', 'outbound']
 
 export function EventsTable() {
-  const range = useRange((s) => s.range())
+  const range = useAnalyticsRange()
   const [type, setType] = useState<string>('')
   const { data, isLoading } = useEvents(range, type || undefined)
   const max = (data?.[0]?.count ?? 0)
