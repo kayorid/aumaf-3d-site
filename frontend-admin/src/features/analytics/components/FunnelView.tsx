@@ -1,5 +1,5 @@
 import { useFunnel } from '../hooks/use-analytics'
-import { useRange } from '../hooks/use-range'
+import { useAnalyticsRange } from '../hooks/use-range'
 
 const STEP_LABEL: Record<string, string> = {
   visit: 'Visita',
@@ -10,7 +10,7 @@ const STEP_LABEL: Record<string, string> = {
 }
 
 export function FunnelView() {
-  const range = useRange((s) => s.range())
+  const range = useAnalyticsRange()
   const { data, isLoading } = useFunnel(range, 'lead_conversion')
   const top = data?.steps[0]?.visitors ?? 0
 

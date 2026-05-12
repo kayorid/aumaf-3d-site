@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { useDevices } from '../hooks/use-analytics'
-import { useRange } from '../hooks/use-range'
+import { useAnalyticsRange } from '../hooks/use-range'
 import { cn } from '@/lib/utils'
 
 type Dim = 'device' | 'os' | 'browser' | 'country' | 'utm_source' | 'referrer'
@@ -17,7 +17,7 @@ const DIMS: { value: Dim; label: string }[] = [
 const COLORS = ['#61c54f', '#4aa83a', '#3c8a30', '#316f27', '#268519', '#7be466', '#a5f291', '#cbf8be']
 
 export function DevicesPanel() {
-  const range = useRange((s) => s.range())
+  const range = useAnalyticsRange()
   const [dim, setDim] = useState<Dim>('device')
   const { data, isLoading } = useDevices(range, dim)
 
