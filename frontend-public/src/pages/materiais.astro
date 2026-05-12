@@ -352,7 +352,8 @@ const schemas = [
   <!-- Filter pills — wrap multi-linha em mobile (sem scroll horizontal) -->
   <div
     id="materiais-filter"
-    class="nav-glass-sub sticky top-16 z-40 w-full"
+    class="nav-glass-sub sticky z-40 w-full"
+    style="top: calc(4rem + env(safe-area-inset-top, 0px));"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3">
       <div
@@ -551,7 +552,8 @@ const schemas = [
        ============================================= -->
   <div
     id="mat-modal"
-    class="mat-modal fixed inset-0 z-[100] hidden items-stretch md:items-center justify-center"
+    class="mat-modal fixed inset-0 z-[200] hidden items-stretch md:items-center justify-center"
+    style="height: 100dvh; min-height: 100vh;"
     role="dialog"
     aria-modal="true"
     aria-labelledby="mat-modal-title"
@@ -566,17 +568,18 @@ const schemas = [
 
     <!-- Container -->
     <div
-      class="mat-modal__container relative w-full md:w-[min(1180px,92vw)] h-full md:h-[min(880px,90vh)] bg-surface-base md:rounded-sm border-y md:border md:border-primary-container/15 flex flex-col overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)] opacity-0 translate-y-4 md:translate-y-0 md:scale-[0.98] transition-all duration-200"
+      class="mat-modal__container relative w-full md:w-[min(1180px,92vw)] h-[100dvh] md:h-[min(880px,90vh)] bg-surface-base md:rounded-sm border-0 md:border md:border-primary-container/15 flex flex-col overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)] opacity-0 translate-y-4 md:translate-y-0 md:scale-[0.98] transition-all duration-200"
     >
       <!-- Glow superior -->
       <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/60 to-transparent pointer-events-none" aria-hidden="true"></div>
 
       <!-- Header sticky -->
-      <header class="nav-glass-sub flex items-center justify-between gap-3 px-5 md:px-8 py-4 border-b border-white/8 shrink-0">
-        <div class="min-w-0 flex items-center gap-3 flex-wrap">
-          <span data-mat-cat-pill class="pill text-[10px] shrink-0">—</span>
-          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase truncate">
-            <span data-mat-position>1</span> / <span data-mat-total>{materials.length}</span>
+      <header class="nav-glass-sub flex items-center justify-between gap-4 px-4 md:px-8 h-14 md:h-16 border-b border-white/8 shrink-0">
+        <div class="min-w-0 flex items-center gap-2.5 flex-nowrap">
+          <span data-mat-cat-pill class="pill text-[10px] shrink-0 max-w-[140px] truncate">—</span>
+          <span class="w-px h-3 bg-white/15 shrink-0" aria-hidden="true"></span>
+          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase shrink-0 tabular-nums">
+            <span data-mat-position>1</span><span class="opacity-40 mx-0.5">/</span><span data-mat-total>{materials.length}</span>
           </span>
         </div>
 
@@ -594,7 +597,7 @@ const schemas = [
             class="w-9 h-9 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface hover:text-primary-container hover:border-primary-container/40 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Próximo material"
           ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">chevron_right</span></button>
-          <span class="w-px h-5 bg-white/10 mx-1.5" aria-hidden="true"></span>
+          <span class="w-px h-4 bg-white/10 mx-1.5" aria-hidden="true"></span>
           <button
             type="button"
             data-modal-close
@@ -607,13 +610,13 @@ const schemas = [
         <button
           type="button"
           data-modal-close
-          class="md:hidden w-10 h-10 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+          class="md:hidden shrink-0 -mr-1 w-11 h-11 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/12 text-on-surface active:bg-primary-container/10 active:text-primary-container active:border-primary-container/30 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
           aria-label="Fechar ficha técnica"
-        ><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">close</span></button>
+        ><span class="material-symbols-outlined text-[22px] leading-none" aria-hidden="true">close</span></button>
       </header>
 
       <!-- Conteúdo scrollável -->
-      <div data-mat-body class="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-24 md:pb-0">
+      <div data-mat-body class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain">
         <div class="grid grid-cols-1 lg:grid-cols-12 min-w-0">
           <!-- Coluna imagem -->
           <div class="lg:col-span-5 relative bg-surface-low border-b lg:border-b-0 lg:border-r border-white/8 min-h-[260px] lg:min-h-[420px]">
@@ -685,9 +688,9 @@ const schemas = [
         </div>
       </div>
 
-      <!-- Mobile bottom-bar — prev/next + CTA condensado, fixos no fundo -->
+      <!-- Mobile bottom-bar — prev/next + CTA condensado, parte natural do flex column -->
       <div
-        class="md:hidden fixed inset-x-0 bottom-0 z-10 nav-glass-bottom pb-[max(env(safe-area-inset-bottom),0.5rem)]"
+        class="md:hidden shrink-0 z-10 nav-glass-bottom border-t border-white/8 pb-[max(env(safe-area-inset-bottom),0.5rem)]"
         aria-label="Controles do material"
       >
         <div class="flex items-center gap-2 px-4 py-3">
@@ -931,6 +934,7 @@ const schemas = [
       modal!.classList.remove('hidden')
       modal!.classList.add('flex')
       modal!.setAttribute('aria-hidden', 'false')
+      document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
 
       // Anima entrada
@@ -963,6 +967,7 @@ const schemas = [
         modal!.classList.add('hidden')
         modal!.classList.remove('flex')
         modal!.setAttribute('aria-hidden', 'true')
+        document.documentElement.style.overflow = ''
         document.body.style.overflow = ''
         if (location.hash) history.replaceState(null, '', location.pathname + location.search)
         triggerEl?.focus()
