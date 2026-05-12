@@ -97,8 +97,16 @@ aumaf-3d-site/
 
 ## Integrações Previstas
 - **Botyo** — WhatsApp chatbot + captação de leads
-- **GA4 + Microsoft Clarity + Facebook Pixel + GTM**
+- **GA4 + Microsoft Clarity + Facebook Pixel + GTM** (em paralelo com o analytics próprio)
 - **IA para posts** — geração automática SEO/GEO (provedor a definir pela AUMAF)
+
+## Analytics próprio
+Pipeline 100% AUMAF rodando em paralelo com GA4/Clarity. Dashboard em `/analytics` no admin.
+- SDK: `packages/analytics-sdk/` — auto-tracking de `data-track`, scroll, form, time-on-page.
+- Backend: `POST /v1/analytics/collect` → BullMQ → PostgreSQL → cron roll-up.
+- Catálogo de eventos canônicos: `packages/shared/src/schemas/analytics.ts`.
+- ADR: `docs/decisions/ADR-003-analytics-proprio.md` · Runbook: `docs/runbooks/analytics.md`.
+- **Ao criar qualquer CTA/page/form novo, use a skill `analytics-tagging`.**
 
 ## URLs Locais
 

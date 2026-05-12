@@ -62,6 +62,8 @@ const socials = [
             <li>
               <a
                 href={s.href}
+                data-track="social_link"
+                data-track-network={s.label}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${s.label} (abre em nova aba)`}
@@ -82,7 +84,7 @@ const socials = [
         <ul role="list" class="space-y-3">
           {links.map((link) => (
             <li>
-              <a href={link.href} class="text-sm text-tertiary hover:text-white transition-colors duration-200 focus-visible:text-primary-container">
+              <a href={link.href} data-track="footer_link" data-track-target={link.label} class="text-sm text-tertiary hover:text-white transition-colors duration-200 focus-visible:text-primary-container">
                 {link.label}
               </a>
             </li>
@@ -104,6 +106,7 @@ const socials = [
             <span class="text-on-surface-variant text-label-caps uppercase block mb-1">WhatsApp</span>
             <a
               href={COMPANY.contact.whatsapp}
+              data-track="cta_whatsapp_footer"
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Falar pelo WhatsApp: ${COMPANY.contact.phoneDisplay} (abre em nova aba)`}

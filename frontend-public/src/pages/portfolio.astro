@@ -93,6 +93,9 @@ const schemas = [
             <a
               href={`/portfolio/${p.slug}`}
               data-cat={p.cat}
+              data-track="portfolio_card"
+              data-track-slug={p.slug}
+              data-track-category={p.cat}
               class="group relative overflow-hidden rounded-sm h-full block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
               aria-label={`${p.title} — ${p.cat} em ${p.mat}. Ver ficha completa.`}
             >

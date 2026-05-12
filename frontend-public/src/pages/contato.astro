@@ -130,7 +130,7 @@ const infoCards = [
             ><span class="material-symbols-outlined text-base leading-none" aria-hidden="true">close</span></button>
           </div>
 
-          <form id="contact-form" class="space-y-8" novalidate aria-describedby="form-help">
+          <form id="contact-form" data-track-form="contact_form" class="space-y-8" novalidate aria-describedby="form-help">
             <p id="form-help" class="sr-only">Campos marcados com asterisco são obrigatórios.</p>
             <input type="hidden" name="material" id="material-hidden" value="" />
             <input type="hidden" name="ref" id="ref-hidden" value="" />
@@ -627,6 +627,14 @@ const infoCards = [
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`)
       }
+
+      // Correlaciona a sessão de analytics com o lead criado (fecha funil lead_conversion).
+      try {
+        const body = (await res.clone().json()) as { data?: { id?: string } }
+        const leadId = body?.data?.id
+        const a = await import('@aumaf/analytics-sdk')
+        if (leadId) a.identify({ leadId })
+      } catch { /* falha silenciosa — não bloquear UX do form */ }
 
       form.style.display = 'none'
       if (successEl) {
