@@ -11,5 +11,6 @@ import './post-publish.worker'
 import './botyio-lead-sync.worker'
 import './analytics-ingest.worker'
 import './analytics-rollup.worker'
+import './data-retention.worker'
 
 export {}
