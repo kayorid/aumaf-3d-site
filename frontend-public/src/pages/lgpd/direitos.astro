@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro'
 import Navbar from '../../components/Navbar.astro'
 import Footer from '../../components/Footer.astro'
 import Breadcrumb from '../../components/Breadcrumb.astro'
+import SelectAumaf from '../../components/SelectAumaf.astro'
 
 const description = 'Exerça seus direitos LGPD na AUMAF 3D — acesso, correção, anonimização, eliminação, portabilidade, revogação de consentimento e mais. Resposta em até 15 dias úteis.'
 
@@ -99,16 +100,14 @@ const rights = [
               <p class="text-code-data text-on-surface-variant mt-1">Vamos enviar um link de verificação para este e-mail.</p>
             </div>
             <div>
-              <label for="dsr-type" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] block mb-2">Tipo de solicitação</label>
-              <select
+              <SelectAumaf
                 id="dsr-type"
                 name="requestType"
+                label="Tipo de solicitação"
                 required
-                class="w-full bg-transparent border-b border-white/15 px-0 py-2 text-on-surface focus:border-primary-container focus:outline-none transition-colors appearance-none"
-              >
-                <option value="" disabled selected>Selecione…</option>
-                {rights.map((r) => <option value={r.id}>{r.label}</option>)}
-              </select>
+                placeholder="Selecione…"
+                options={rights.map((r) => ({ value: r.id, label: r.label }))}
+              />
             </div>
             <div>
               <label for="dsr-desc" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] block mb-2">Detalhe sua solicitação (opcional)</label>
