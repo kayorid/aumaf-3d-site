@@ -30,6 +30,22 @@ interface MaterialDetail {
 
 const materials: MaterialDetail[] = [
   {
+    slug: 'mat-00-pla', cat: 'Termoplásticos', name: 'PLA', tempMax: '60°C', flex: 'Rígido', app: 'Protótipos e modelos', highlight: false,
+    description: 'O termoplástico mais utilizado em impressão 3D. Fácil de imprimir, sem empenamento, sem cheiro, biodegradável em condições industriais. Excelente para protótipos visuais, modelos didáticos, peças decorativas e validação de geometria antes de migrar para materiais técnicos.',
+    properties: [
+      { label: 'Resistência tração', value: '50–65 MPa' },
+      { label: 'Módulo elástico', value: '2,0–3,0 GPa' },
+      { label: 'Alongamento', value: '5–10%' },
+      { label: 'Densidade', value: '1,24 g/cm³' },
+      { label: 'Temp. máx. uso', value: '60°C' },
+      { label: 'Origem', value: 'Biodegradável (compostagem industrial)' },
+    ],
+    printing: [{ label: 'Bico', value: '195–220°C' }, { label: 'Mesa', value: '50–60°C' }, { label: 'Velocidade', value: '50–80 mm/s' }, { label: 'Câmara', value: 'Não necessária' }],
+    useCases: ['Protótipos visuais', 'Modelos didáticos', 'Peças decorativas', 'Validação de geometria'],
+    pros: ['Fácil impressão', 'Sem empenamento', 'Baixo custo', 'Ampla paleta de cores'],
+    cons: ['Baixa temperatura de uso', 'Frágil sob impacto', 'Não para uso externo prolongado'],
+  },
+  {
     slug: 'mat-01-nylon-pa', cat: 'Termoplásticos', name: 'Nylon (PA)', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false,
     description: 'Termoplástico técnico de engenharia com excelente combinação de resistência mecânica, tenacidade e resistência ao desgaste. Absorve umidade — armazenar em ambiente seco. Indicado para peças funcionais sujeitas a fricção, esforços cíclicos e impactos moderados.',
     properties: [
@@ -270,42 +286,42 @@ const materials: MaterialDetail[] = [
     cons: ['Custo médio-alto', 'Cura crítica para mecânica'],
   },
   {
-    slug: 'mat-16-resina-ceramica', cat: 'Resinas', name: 'Resina Cerâmica', tempMax: '+400°C', flex: 'Rígido', app: 'Temp. extrema, moldes', highlight: true,
-    description: 'Resina com partículas cerâmicas em suspensão. Após cura UV e sinterização, atinge propriedades cerâmicas — resistência a temperaturas extremas e isolamento térmico/elétrico.',
+    slug: 'mat-16-pa12-sls', cat: 'Pó (SLS/SLM)', name: 'PA12 em Pó (SLS)', tempMax: '170°C', flex: 'Semi-rígido', app: 'Peças funcionais SLS', highlight: true,
+    description: 'Poliamida 12 em pó para sinterização seletiva a laser (SLS). Permite peças funcionais com geometrias complexas, canais internos e estruturas em treliça — sem necessidade de suporte. Excelente combinação de resistência mecânica, leveza e estabilidade dimensional. Acabamento natural fosco com textura levemente porosa.',
     properties: [
-      { label: 'Temp. máx. uso', value: '+400°C' },
-      { label: 'Coef. expansão', value: 'Baixíssimo' },
-      { label: 'Isolamento', value: 'Térmico e elétrico' },
-      { label: 'Densidade', value: '~2,3 g/cm³ (sint.)' },
-      { label: 'Pós-processo', value: 'Sinterização' },
-      { label: 'Acabamento', value: 'Cerâmico mate' },
+      { label: 'Resistência tração', value: '48–55 MPa' },
+      { label: 'Módulo elástico', value: '1,6–1,8 GPa' },
+      { label: 'Alongamento', value: '15–25%' },
+      { label: 'Densidade', value: '1,01 g/cm³' },
+      { label: 'Temp. máx. uso', value: '170°C' },
+      { label: 'HDT', value: '~160°C' },
     ],
-    printing: [{ label: 'Tecnologia', value: 'SLA + sinterização' }, { label: 'Camada', value: '50–100 µm' }, { label: 'Cura UV', value: 'Pós' }, { label: 'Sinterização', value: 'Forno especializado' }],
-    useCases: ['Moldes para fundição', 'Componentes resistentes a fogo', 'Isoladores elétricos/térmicos', 'Protótipos refratários'],
-    pros: ['Temp. extrema', 'Isolante', 'Acabamento cerâmico'],
-    cons: ['Frágil sob impacto', 'Pós-processo longo', 'Requer forno especializado'],
+    printing: [{ label: 'Tecnologia', value: 'SLS — laser sintering' }, { label: 'Camada', value: '100–120 µm' }, { label: 'Volume máx.', value: '400 × 400 × 420 mm' }, { label: 'Pós-processo', value: 'Despoeiramento + jateamento' }],
+    useCases: ['Peças funcionais sem suporte', 'Dutos e canais internos', 'Estruturas em treliça', 'Pequenas séries', 'Carcaças leves'],
+    pros: ['Sem necessidade de suporte', 'Geometrias internas livres', 'Boa resistência mecânica', 'Estabilidade dimensional'],
+    cons: ['Acabamento poroso natural', 'Cor original cinza-bege', 'Pintura precisa de selante'],
   },
   {
-    slug: 'mat-17-ultrafuse-316l', cat: 'Metal', name: 'BASF Ultrafuse 316L', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true,
-    description: 'Filamento metálico com pó de aço inox 316L em matriz polimérica. Após impressão FDM convencional, a peça passa por debinding e sinterização em forno industrial — atinge >95% da densidade do aço maciço, certificada pela norma ASTM 316L.',
+    slug: 'mat-17-aco-inox-316l-slm', cat: 'Pó (SLS/SLM)', name: 'Aço Inox 316L (SLM)', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true,
+    description: 'Aço inoxidável 316L sinterizado por laser (SLM — Selective Laser Melting) a partir de pó metálico. Peças metálicas finais com densidade próxima ao maciço, prontas para aplicação industrial, alimentícia e marítima. Excelente resistência à corrosão e a temperaturas extremas.',
     properties: [
-      { label: 'Densidade pós-sinter.', value: '>95% do aço' },
-      { label: 'Resist. tração', value: '450–550 MPa' },
-      { label: 'Alongamento', value: '40–55%' },
+      { label: 'Densidade', value: '>99% do aço maciço' },
+      { label: 'Resist. tração', value: '500–650 MPa' },
+      { label: 'Alongamento', value: '40–50%' },
       { label: 'Norma', value: 'ASTM 316L' },
       { label: 'Temp. máx. uso', value: '800°C+' },
       { label: 'Resist. corrosão', value: 'Alimentícia / marinha' },
     ],
-    printing: [{ label: 'Bico', value: '230–250°C (hardened)' }, { label: 'Mesa', value: '90–105°C' }, { label: 'Velocidade', value: '20–40 mm/s' }, { label: 'Pós-processo', value: 'Debinding + sinterização' }],
-    useCases: ['Componentes metálicos finais', 'Indústria alimentícia', 'Aplicações marítimas', 'Peças sob alta temperatura'],
-    pros: ['Aço inox real', 'Geometrias impossíveis em usinagem', 'Certificação ASTM'],
-    cons: ['Prazo 15–20 dias', 'Encolhimento ~20% na sinter.', 'Custo elevado'],
+    printing: [{ label: 'Tecnologia', value: 'SLM — laser melting' }, { label: 'Camada', value: '20–50 µm' }, { label: 'Volume máx.', value: '470 × 270 × 300 mm' }, { label: 'Pós-processo', value: 'Tratamento térmico + acabamento' }],
+    useCases: ['Componentes metálicos finais', 'Indústria alimentícia', 'Aplicações marítimas', 'Peças sob alta temperatura', 'Substituição de usinagem complexa'],
+    pros: ['Aço inox real de alta densidade', 'Geometrias impossíveis em usinagem', 'Certificação ASTM 316L'],
+    cons: ['Prazo estendido', 'Pós-processo térmico obrigatório', 'Custo elevado'],
   },
 ]
 
-const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal']
+const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Pó (SLS/SLM)']
 
-const description = 'Catálogo de 17+ materiais para impressão 3D na AUMAF 3D: termoplásticos (PA, ABS, PC, PEEK), alta performance (PA CF15, Tritan), resinas e metal 316L. Especificações técnicas, temperatura, flexibilidade e aplicações.'
+const description = 'Catálogo de materiais para impressão 3D na AUMAF 3D: termoplásticos (PLA, PA, ABS, PETG, PC), alta performance (PA CF15, Tritan), resinas, PA12 em pó (SLS) e Aço Inox 316L sinterizado (SLM). Especificações técnicas, temperatura e aplicações.'
 
 const schemas = [
   itemListSchema(materials.map((m) => ({ name: m.name, description: `${m.cat}. Temperatura máxima: ${m.tempMax}. ${m.flex}. Aplicação: ${m.app}.` }))),
@@ -343,7 +359,7 @@ const schemas = [
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container" aria-hidden="true"></span> Termoplásticos</li>
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-on-surface" aria-hidden="true"></span> Alta Performance</li>
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary" aria-hidden="true"></span> Resinas</li>
-          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true"></span> Metal</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true"></span> Pó (SLS/SLM)</li>
         </ul>
       </div>
     </div>
@@ -426,7 +442,7 @@ const schemas = [
               <div class="flex justify-between items-start mb-4">
                 <span class:list={[
                   'pill text-[10px]',
-                  mat.cat === 'Metal' ? 'border-error/60 text-error' :
+                  mat.cat === 'Pó (SLS/SLM)' ? 'border-error/60 text-error' :
                   mat.cat === 'Alta Performance' ? 'pill-green' :
                   mat.cat === 'Flexíveis' ? 'border-tertiary/60 text-tertiary' :
                   mat.cat === 'Resinas' ? 'border-on-surface-variant text-on-surface-variant' :
@@ -485,16 +501,16 @@ const schemas = [
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Destaque // Metal</span>
-          <h2 id="dest-metal" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">BASF Ultrafuse 316L</h2>
+          <h2 id="dest-metal" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Aço Inox 316L — SLM</h2>
           <p class="text-body-lg text-tertiary leading-relaxed mb-6">
-            Aço inoxidável 316L impresso em camadas. O filamento metálico é depositado em FDM e, após processo de sinterização em forno industrial, atinge as propriedades mecânicas do metal sólido. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas — densidade superior a 95% do aço maciço, atendendo norma ASTM 316L.
+            Aço inoxidável 316L sinterizado por laser (SLM) a partir de pó metálico. Peças metálicas finais com densidade próxima ao maciço, prontas para aplicação industrial, alimentícia e marítima. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas — atendendo norma ASTM 316L.
           </p>
           <dl class="grid grid-cols-2 gap-4 mb-8">
             {[
               { label: 'Temperatura', value: '800°C+' },
-              { label: 'Densidade',   value: '>95% do aço' },
+              { label: 'Densidade',   value: '>99% do aço' },
               { label: 'Norma',       value: '316L ASTM' },
-              { label: 'Prazo',       value: '15–20 dias' },
+              { label: 'Tecnologia',  value: 'SLM' },
             ].map((d) => (
               <div class="glass-panel p-4 rounded-sm">
                 <dt class="text-label-caps text-on-surface-variant uppercase tracking-widest mb-1">{d.label}</dt>
@@ -509,7 +525,7 @@ const schemas = [
         <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/8 group/hero">
           <img
             src="/images/mat-17-ultrafuse-316l.webp"
-            alt="Peça impressa em aço inoxidável BASF Ultrafuse 316L sinterizado — vista aproximada"
+            alt="Peça impressa em aço inoxidável 316L sinterizado por SLM — vista aproximada"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/hero:scale-[1.03]"
             width="1376"
             height="768"
@@ -527,7 +543,7 @@ const schemas = [
             <span class="pill-green text-[10px]">Aço Inox · Sinterizado</span>
           </div>
           <div class="absolute bottom-4 left-4 right-4 text-code-data text-on-surface-variant text-[10px] flex justify-between bg-black/40 backdrop-blur-sm rounded-sm px-3 py-1.5">
-            <span>BASF ULTRAFUSE</span>
+            <span>SLM // METAL</span>
             <span>ASTM 316L</span>
           </div>
         </div>
@@ -860,7 +876,7 @@ const schemas = [
     }
 
     function categoryPillClass(cat: string): string {
-      if (cat === 'Metal') return 'pill border-error/60 text-error'
+      if (cat === 'Pó (SLS/SLM)') return 'pill border-error/60 text-error'
       if (cat === 'Alta Performance') return 'pill pill-green'
       if (cat === 'Flexíveis') return 'pill border-tertiary/60 text-tertiary'
       if (cat === 'Resinas') return 'pill border-on-surface-variant text-on-surface-variant'
