@@ -100,7 +100,7 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
     gallery: [
       { src: '/images/port-02-flange-316l.webp', alt: 'Flange em aço inox 316L sinterizada por SLM, finalizada' },
-      { src: '/images/mat-17-ultrafuse-316l.webp', alt: 'Peça em aço inox 316L sinterizada por SLM' },
+      { src: '/images/mat-17-aco-inox-316l-slm.webp', alt: 'Peça em aço inox 316L sinterizada por SLM' },
     ],
     tags: ['Engenharia reversa', 'Aço inox', 'Indústria alimentícia', 'Reposição crítica'],
   },
