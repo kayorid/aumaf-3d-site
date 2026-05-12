@@ -156,6 +156,11 @@ const {
       <slot />
     </main>
 
+    <!-- Analytics próprio (pipeline AUMAF) — em paralelo com GA4/Clarity já injetados acima. -->
+    <script>
+      import '../lib/analytics'
+    </script>
+
     <!-- prefers-reduced-motion: pausa vídeos com autoplay (mantém o frame visível). -->
     <script is:inline>
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -233,6 +238,8 @@ const {
         <!-- Botão WhatsApp -->
         <a
           id="fab-wa"
+          data-track="cta_whatsapp_fab"
+          data-track-location="floating"
           href="https://wa.me/5516992863412?text=Vim%20do%20site%20da%20AUMAF%203D%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento"
           target="_blank"
           rel="noopener noreferrer"

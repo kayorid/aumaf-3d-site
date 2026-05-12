@@ -68,6 +68,11 @@ const envSchema = z.object({
   // Integration secrets — encryption at rest
   MASTER_KEY_PATH: z.string().default('/etc/aumaf/master.key'),
   MASTER_ENCRYPTION_KEY: z.string().optional(), // base64 32 bytes — apenas dev/test
+
+  // Analytics
+  ANALYTICS_ENABLED: z.enum(['true', 'false']).default('true'),
+  ANALYTICS_IP_SALT: z.string().default('aumaf-analytics-default-salt-change-me'),
+  ANALYTICS_GEOIP_DB_PATH: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)

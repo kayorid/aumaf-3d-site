@@ -9,5 +9,7 @@
 import './lead-notification.worker'
 import './post-publish.worker'
 import './botyio-lead-sync.worker'
+import './analytics-ingest.worker'
+import './analytics-rollup.worker'
 
 export {}
