@@ -63,7 +63,7 @@ Construímos um pipeline próprio (coleta + storage + dashboard) que roda **em p
 | Queue | Trigger | Função |
 |---|---|---|
 | `analytics-ingest` | enfileirado por `/collect` | Parse UA, geo-IP, dedupe, INSERT raw + upsert session/realtime |
-| `analytics-rollup` (`hourly`) | cron `0 * * * *` | Recomputa agregados das últimas 48h (idempotente) |
+| `analytics-rollup` (`rollup`) | cron `*/30 * * * *` | Recomputa agregados das últimas 24h (idempotente) — cadência reduzida de 60→30min em 2026-05-12 |
 | `analytics-rollup` (`daily`) | cron `5 0 * * *` | Fecha agregados de ontem definitivamente |
 | `analytics-rollup` (`realtime-prune`) | cron `* * * * *` | DELETE `analytics_realtime WHERE lastSeenAt < now() - 5min` |
 

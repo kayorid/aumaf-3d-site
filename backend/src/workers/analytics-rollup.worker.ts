@@ -60,17 +60,38 @@ const worker = createWorker<AnalyticsRollupJobData>(ANALYTICS_ROLLUP_QUEUE, proc
 registerWorker({ name: ANALYTICS_ROLLUP_QUEUE, worker, queue: analyticsRollupQueue })
 
 const REPEAT_KEY = {
-  hourly: 'rollup-hourly',
+  rollup: 'rollup-30min',
   daily: 'rollup-daily',
   realtimePrune: 'realtime-prune',
 }
 
+// Cadências anteriores cujo repeat job pode existir em Redis de deploys antigos.
+// Removidos no boot para evitar agendamentos duplicados quando a cadência muda.
+const LEGACY_REPEATABLES: Array<{ name: string; pattern: string; jobId: string }> = [
+  { name: 'hourly', pattern: '0 * * * *', jobId: 'rollup-hourly' },
+]
+
 /** Registra schedules repetíveis. Chamado uma vez no boot. */
 export async function scheduleAnalyticsRollups() {
+  for (const legacy of LEGACY_REPEATABLES) {
+    try {
+      const removed = await analyticsRollupQueue.removeRepeatable(
+        legacy.name,
+        { pattern: legacy.pattern },
+        legacy.jobId,
+      )
+      if (removed) {
+        logger.info({ legacy }, 'Removed legacy analytics rollup repeatable')
+      }
+    } catch (err) {
+      logger.warn({ err, legacy }, 'Failed to remove legacy analytics rollup repeatable')
+    }
+  }
+
   await analyticsRollupQueue.add(
-    'hourly',
+    'rollup',
     { kind: 'hourly' },
-    { repeat: { pattern: '0 * * * *' }, jobId: REPEAT_KEY.hourly },
+    { repeat: { pattern: '*/30 * * * *' }, jobId: REPEAT_KEY.rollup },
   )
   await analyticsRollupQueue.add(
     'daily',
