@@ -10,6 +10,7 @@ COPY backend/package.json backend/package.json
 COPY frontend-public/package.json frontend-public/package.json
 COPY frontend-admin/package.json frontend-admin/package.json
 COPY packages/shared/package.json packages/shared/package.json
+COPY packages/analytics-sdk/package.json packages/analytics-sdk/package.json
 RUN npm ci
 
 FROM deps AS build
@@ -17,8 +18,10 @@ ARG PUBLIC_API_URL
 ENV PUBLIC_API_URL=${PUBLIC_API_URL}
 COPY turbo.json ./
 COPY packages/shared packages/shared
+COPY packages/analytics-sdk packages/analytics-sdk
 COPY frontend-public frontend-public
 RUN npm run build --workspace=@aumaf/shared
+RUN npm run build --workspace=@aumaf/analytics-sdk
 RUN cd frontend-public && npm run build
 
 FROM base AS runtime
@@ -31,6 +34,8 @@ COPY --from=build --chown=app:app /app/frontend-public/package.json frontend-pub
 COPY --from=build --chown=app:app /app/frontend-public/dist frontend-public/dist
 COPY --from=build --chown=app:app /app/packages/shared/dist packages/shared/dist
 COPY --from=build --chown=app:app /app/packages/shared/package.json packages/shared/package.json
+COPY --from=build --chown=app:app /app/packages/analytics-sdk/dist packages/analytics-sdk/dist
+COPY --from=build --chown=app:app /app/packages/analytics-sdk/package.json packages/analytics-sdk/package.json
 
 USER app
 WORKDIR /app/frontend-public
