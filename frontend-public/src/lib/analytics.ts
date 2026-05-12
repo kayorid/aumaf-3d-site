@@ -15,4 +15,9 @@ initAnalytics({
   endpoint,
   beaconEndpoint,
   debug: import.meta.env.DEV,
+  // LGPD — respeita o consentimento do banner (chave `aumaf_consent_v1`).
+  // Quando `analytics:false`, pageviews continuam (legítimo interesse +
+  // IP hasheado server-side) mas não persiste UID em localStorage nem
+  // captura clicks/scroll/forms/time-on-page.
+  respectConsent: true,
 })

@@ -27,6 +27,14 @@ export interface AnalyticsConfig {
     outbound?: boolean
     forms?: boolean
   }
+  /**
+   * LGPD — quando `analytics:false` no consentimento do usuário, o SDK opera
+   * em modo restrito: NÃO persiste visitorId em localStorage (UID gerado por
+   * sessão de aba, em memória) e DESLIGA auto-tracking de clicks/scroll/forms
+   * e time-on-page. Pageviews continuam sendo emitidos (legítimo interesse —
+   * IP é hasheado server-side).
+   */
+  respectConsent?: boolean
 }
 
 export interface CollectEvent {
@@ -57,6 +65,7 @@ const DEFAULT_CONFIG: Required<Omit<AnalyticsConfig, 'autoTrack'>> & { autoTrack
   debug: false,
   flushIntervalMs: 2000,
   maxBatchSize: 10,
+  respectConsent: true,
   autoTrack: {
     pageviews: true,
     clicks: true,
@@ -83,6 +92,9 @@ interface State {
   timeOnPageTimer: ReturnType<typeof setInterval> | null
   lastEngagementSeconds: number
   hasFocus: boolean
+  /** Categorias consentidas (LGPD). null = ainda não decidiu (assume modo restrito). */
+  consent: { analytics: boolean; functional: boolean; marketing: boolean } | null
+  respectConsent: boolean
 }
 
 let state: State | null = null
@@ -113,6 +125,33 @@ function getOrCreate(storage: Storage, key: string, factory: () => string): stri
   } catch {
     return factory()
   }
+}
+
+/**
+ * Lê o consentimento gravado pelo banner LGPD (chave `aumaf_consent_v1`).
+ * Retorna null se ausente — interpretado como "modo restrito" pelo SDK.
+ */
+function readConsent(): State['consent'] {
+  if (!isBrowser()) return null
+  try {
+    const raw = localStorage.getItem('aumaf_consent_v1')
+    if (!raw) return null
+    const p = JSON.parse(raw) as { analytics?: boolean; functional?: boolean; marketing?: boolean }
+    return {
+      analytics: !!p.analytics,
+      functional: !!p.functional,
+      marketing: !!p.marketing,
+    }
+  } catch {
+    return null
+  }
+}
+
+/** Retorna true se o SDK pode usar storage persistente e auto-tracking detalhado. */
+function hasAnalyticsConsent(): boolean {
+  if (!state) return false
+  if (!state.respectConsent) return true
+  return state.consent?.analytics === true
 }
 
 function parseUtm(url: URL): State['lastUtm'] {
@@ -230,6 +269,7 @@ export function identify(properties: { leadId?: string } & Record<string, unknow
 }
 
 function trackClicks(ev: MouseEvent) {
+  if (!hasAnalyticsConsent()) return
   const target = ev.target as Element | null
   if (!target) return
   const trackedEl = target.closest<HTMLElement>('[data-track]')
@@ -272,6 +312,7 @@ function trackOutbound(ev: MouseEvent) {
 
 function trackScroll() {
   if (!state) return
+  if (!hasAnalyticsConsent()) return
   const doc = document.documentElement
   const scrollTop = window.scrollY ?? doc.scrollTop
   const viewport = window.innerHeight
@@ -288,6 +329,7 @@ function trackScroll() {
 
 function tickTimeOnPage() {
   if (!state || !state.hasFocus) return
+  if (!hasAnalyticsConsent()) return
   const elapsed = Math.floor((Date.now() - state.pageStartTs) / 1000)
   // Reporta a cada 15s (15, 30, 60, 120, 300)
   const milestones = [15, 30, 60, 120, 300]
@@ -300,6 +342,7 @@ function tickTimeOnPage() {
 }
 
 function trackFormStart(ev: FocusEvent) {
+  if (!hasAnalyticsConsent()) return
   const target = ev.target as Element | null
   const form = target?.closest('form')
   if (!form) return
@@ -342,10 +385,19 @@ export function initAnalytics(config: AnalyticsConfig = {}): void {
     autoTrack: { ...DEFAULT_CONFIG.autoTrack, ...(config.autoTrack ?? {}) },
   }
 
+  const respectConsent = config.respectConsent ?? true
+  const consent = respectConsent ? readConsent() : { analytics: true, functional: true, marketing: true }
+
+  // Quando o usuário NÃO consentiu com analytics, NÃO persiste UID em
+  // localStorage — gera UID volátil por aba (sessionStorage).
+  const visitorId = consent?.analytics
+    ? getOrCreate(localStorage, LS_VISITOR, () => uuid())
+    : getOrCreate(sessionStorage, LS_VISITOR, () => uuid())
+
   state = {
     cfg: merged,
     sessionId: getOrCreate(sessionStorage, SS_SESSION, () => uuid()),
-    visitorId: getOrCreate(localStorage, LS_VISITOR, () => uuid()),
+    visitorId,
     buffer: [],
     flushTimer: null,
     lastUtm: {},
@@ -355,7 +407,31 @@ export function initAnalytics(config: AnalyticsConfig = {}): void {
     timeOnPageTimer: null,
     lastEngagementSeconds: 0,
     hasFocus: typeof document !== 'undefined' ? !document.hidden : true,
+    consent,
+    respectConsent,
   }
+
+  // Atualiza o consentimento em tempo real quando o banner emite o evento global.
+  window.addEventListener('aumaf:consent', (ev: Event) => {
+    if (!state) return
+    const detail = (ev as CustomEvent).detail as { analytics?: boolean; functional?: boolean; marketing?: boolean } | undefined
+    if (!detail) return
+    state.consent = {
+      analytics: !!detail.analytics,
+      functional: !!detail.functional,
+      marketing: !!detail.marketing,
+    }
+    // Se o usuário passou a consentir analytics e o UID estava em sessionStorage,
+    // promove para localStorage para manter persistência entre abas.
+    if (state.consent.analytics) {
+      try {
+        if (!localStorage.getItem(LS_VISITOR)) localStorage.setItem(LS_VISITOR, state.visitorId)
+      } catch {
+        /* ignore */
+      }
+    }
+    debug('consent updated', state.consent)
+  })
 
   try {
     state.lastUtm = parseUtm(new URL(window.location.href))
