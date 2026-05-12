@@ -8,13 +8,21 @@
 
 ---
 
-## Status (2026-05-12)
+## Status (2026-05-12 — após implementação)
 
-- ✅ **Documentos legais criados** — Política de Privacidade, Termos de Uso e Política de Cookies redigidos em `docs/legal/`. Documentos internos de compliance (ROPA, LIA, plano de resposta a incidente, checklist de DPA) em `docs/compliance/`.
-- ✅ **Identidade jurídica confirmada** — razão social, CNPJ, endereço, foro e representantes legais extraídos da Ficha Cadastral oficial da AUMAF 3D e aplicados em todos os documentos.
-- ✅ **DPO/Encarregado designado** — Luiz Felipe Lampa Risse (felipe@aumaf3d.com.br), backup Marcos Ninelli (marcos@aumaf3d.com.br). **Sujeito a confirmação interna formal**.
-- 🟡 **Implementação técnica pendente** — Fases B (banner de consentimento + ConsentLog), C (gating de terceiros), D (direitos do titular), E (retenção) e F (auditoria final) aguardam execução conforme roadmap §14.
-- ⚠️ **Revisão jurídica** — recomendado submeter Política/Termos/Cookies a advogado de privacidade antes de publicar em produção.
+- ✅ **Fases A–F entregues em `feat/lgpd-compliance`**, prontas para PR.
+  Commits:
+  - `88da267` docs (plano + Política/Termos/Cookies + ROPA/LIA/incident/DPA)
+  - `09266d8` Fase A — páginas legais públicas + footer + aviso no /contato
+  - `8e9bd88` Fase B — banner CookieConsent + ConsentLog + endpoint `/v1/consent` + DDL DSR
+  - `de62ad7` Fase C — Consent Mode v2 + third-party loader + opt-in no analytics SDK
+  - `9dc5d68` Fase D — DSR backend (service+routes+magic link) + admin UI `/lgpd/solicitacoes`
+  - `fec8971` Fase E — worker BullMQ `data-retention` diário (03:00 BRT)
+  - (Fase F) smoke `scripts/lgpd-smoke.sh` + runbook `lgpd-operations.md` + CLAUDE.md
+- ✅ **Documentos legais criados** — Política de Privacidade, Termos de Uso e Política de Cookies em `docs/legal/`. Compliance interna (ROPA, LIA, incident-response, DPA) em `docs/compliance/`.
+- ✅ **Identidade jurídica confirmada** — razão social, CNPJ, endereço, foro e representantes legais extraídos da Ficha Cadastral.
+- ✅ **DPO/Encarregado designado** — Luiz Felipe Lampa Risse (felipe@aumaf3d.com.br), backup Marcos Ninelli. **Sujeito a confirmação interna formal**.
+- ⚠️ **LGPD-DEFER (humano):** (1) revisão jurídica formal antes de mergear, (2) confirmação formal escrita do DPO, (3) gerar `LGPD_ANON_SALT` aleatório forte em prod + backup off-server (1Password), (4) adicionar captcha real (Cloudflare Turnstile) no `/lgpd/direitos` em sprint pós-deploy.
 - ✅ **Hospedagem do Botyio confirmada** — operador no Brasil (sem transferência internacional para este fluxo).
 
 ---
