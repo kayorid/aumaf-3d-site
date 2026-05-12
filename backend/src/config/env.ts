@@ -73,6 +73,12 @@ const envSchema = z.object({
   ANALYTICS_ENABLED: z.enum(['true', 'false']).default('true'),
   ANALYTICS_IP_SALT: z.string().default('aumaf-analytics-default-salt-change-me'),
   ANALYTICS_GEOIP_DB_PATH: z.string().optional(),
+
+  // LGPD — salt para hashing determinístico de PII em anonimizações e worker
+  // de retenção. EM PROD: gerar valor aleatório forte e fazer backup off-server.
+  LGPD_ANON_SALT: z.string().default('aumaf-lgpd-anon-default-salt-change-me'),
+  // Secret opcional para gate adicional do form público de DSR (anti-bot leve).
+  LGPD_FORM_SECRET: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
