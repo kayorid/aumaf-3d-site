@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import SEO from '../components/SEO.astro'
+import CookieConsent from '../components/CookieConsent.astro'
 import { fetchPublicSettings } from '../lib/api'
 
 // Em build estático, busca settings UMA vez por página renderizada (cache HTTP do backend evita overhead)
@@ -268,6 +269,9 @@ const {
         <span class="material-symbols-outlined text-lg" aria-hidden="true" style="font-variation-settings:'FILL' 1;">arrow_upward</span>
       </button>
     </div>
+
+    <!-- LGPD — banner de consentimento de cookies. -->
+    <CookieConsent />
 
     <style>
       /* WhatsApp FAB — pulse + bob */

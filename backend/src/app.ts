@@ -26,6 +26,7 @@ import { mediaRoutes } from './routes/media.routes'
 import { fileServeRoutes } from './routes/file-serve.routes'
 import { analyticsRoutes } from './routes/analytics.routes'
 import { analyticsReadRoutes } from './routes/analytics-read.routes'
+import { consentRoutes } from './routes/consent.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -92,6 +93,9 @@ export function createApp() {
   )
   app.use('/api/v1/analytics', analyticsRoutes)
   app.use('/api/v1/analytics', analyticsReadRoutes)
+
+  // LGPD — registro público de consentimento de cookies.
+  app.use('/api/v1/consent', consentRoutes)
 
   app.use((_req, res) => {
     res.status(404).json({ status: 'error', code: 'NOT_FOUND', message: 'Not found' })
