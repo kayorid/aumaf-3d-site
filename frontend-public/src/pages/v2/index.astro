@@ -42,7 +42,7 @@ import Footer from '../../components/Footer.astro'
           <p class="text-body-lg text-tertiary max-w-lg leading-relaxed mb-10 opacity-0 animate-fade-up" style="animation-delay:250ms;animation-fill-mode:forwards;">
             Manufatura aditiva industrial para aplicações críticas.
             Peças em metal, carbono e polímeros de alta performance —
-            tolerância <span class="text-on-surface font-medium">±0.05mm</span>, entregues onde você precisar.
+            entregues onde você precisar.
           </p>
 
           <div class="flex flex-wrap items-center gap-4 opacity-0 animate-fade-up" style="animation-delay:380ms;animation-fill-mode:forwards;">
@@ -60,7 +60,7 @@ import Footer from '../../components/Footer.astro'
             {[
               {value:'+500',label:'Projetos'},
               {value:'20+',label:'Materiais'},
-              {value:'±0.05mm',label:'Tolerância'},
+              {value:'4',label:'Tecnologias'},
             ].map(m => (
               <div class="flex flex-col gap-1">
                 <span class="text-2xl font-bold text-white tracking-tighter leading-none">{m.value}</span>
@@ -141,33 +141,6 @@ import Footer from '../../components/Footer.astro'
 
 
   <!-- =============================================
-       STATS STRIP
-       ============================================= -->
-  <div class="border-y border-primary-container/15 bg-surface-dim">
-    <div class="max-w-[1600px] mx-auto px-edge py-10">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0">
-        {[
-          {value:'+500',label:'Projetos Entregues',icon:'check_circle'},
-          {value:'20+',label:'Materiais Disponíveis',icon:'category'},
-          {value:'±0.05mm',label:'Tolerância Dimensional',icon:'precision_manufacturing'},
-          {value:'3',label:'Tecnologias de Impressão',icon:'settings_suggest'},
-        ].map((s, i) => (
-          <div class:list={[
-            'flex flex-col items-center md:items-start px-6 md:px-10 py-2 gap-2',
-            i < 3 ? 'md:border-r md:border-white/8' : '',
-            i % 2 === 0 && i < 2 ? 'border-r border-white/8 md:border-r-0' : '',
-          ]}>
-            <span class="material-symbols-outlined text-primary-container/40 text-lg" style="font-variation-settings:'FILL' 1;">{s.icon}</span>
-            <span class="text-[clamp(28px,4vw,48px)] font-bold tracking-tighter text-white leading-none">{s.value}</span>
-            <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.12em] text-[10px] text-center md:text-left">{s.label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-
-
-  <!-- =============================================
        [V2 NOVO] PROVA REAL — Contadores + Depoimento
        ============================================= -->
   <section class="bg-surface-dim py-section relative overflow-hidden" id="prova-real">
@@ -198,19 +171,18 @@ import Footer from '../../components/Footer.astro'
             {id:'cnt-projetos',   target:500,  suffix:'+', label:'Projetos Entregues',   sub:'desde 2022',           icon:'inventory_2'},
             {id:'cnt-prazo',      target:99,   suffix:'%', label:'Taxa de Aprovação',    sub:'no primeiro lote',     icon:'verified'},
             {id:'cnt-materiais',  target:20,   suffix:'+', label:'Materiais no Catálogo',sub:'termoplásticos + metal',icon:'science'},
-            {id:'cnt-tolerancia', target:0.05, suffix:'mm',label:'Tolerância Dimensional',sub:'±0.05mm garantida',   icon:'precision_manufacturing'},
+            {id:'cnt-tecnologias',target:4,    suffix:'',  label:'Tecnologias',          sub:'FDM · SLA · SLS · SLM', icon:'settings_suggest'},
           ].map(c => (
             <div class="glass-panel p-6 lg:p-8 rounded-sm border border-white/6 hover:border-primary-container/20 transition-all duration-300 group">
               <div class="w-9 h-9 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center mb-5 group-hover:bg-primary-container/15 transition-colors duration-300">
                 <span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
               </div>
               <div class="flex items-end gap-1 mb-1">
-                {c.id === 'cnt-tolerancia' && <span class="text-[clamp(20px,3vw,32px)] font-bold text-white tracking-tighter leading-none">±</span>}
                 <span
                   class="text-[clamp(28px,4vw,48px)] font-black text-white tracking-tighter leading-none tabular-nums"
                   data-counter
                   data-target={c.target}
-                  data-decimals={c.id === 'cnt-tolerancia' ? '2' : '0'}
+                  data-decimals="0"
                 >0</span>
                 <span class="text-[clamp(14px,2vw,22px)] font-bold text-primary-container leading-none mb-1">{c.suffix}</span>
               </div>
@@ -288,8 +260,8 @@ import Footer from '../../components/Footer.astro'
 
       <div class="divide-y divide-white/5">
         {[
-          {num:'01',title:'Prototipagem Rápida',body:'Valide conceitos em horas, não semanas. Processos FDM e SLA entregam protótipos funcionais com geometrias complexas e tolerância dimensional rigorosa para ciclos de iteração acelerados.',specs:['FDM / SLA / SLS','Entrega 24–72h','Geometria Complexa'],href:'/servicos',videoId:'VIDEO_CAP_01',videoLabel:'Prototipagem em ação',videoFile:'prototipagem.mp4',image:'/images/cap-prototipagem.webp',reverse:false},
-          {num:'02',title:'Peças Funcionais & Metal',body:'Do projeto à peça final em materiais de engenharia: carbono, nylon de alta temperatura, PEEK e aço inoxidável via BASF Ultrafuse 316L. Componentes para ambientes industriais severos.',specs:['Metal 316L','PA CF15 / PEEK','Alta Temperatura'],href:'/servicos',videoId:'VIDEO_CAP_02',videoLabel:'Peça metálica finalizada',videoFile:'metal-parts.mp4',image:'/images/cap-metal-parts.webp',reverse:true},
+          {num:'01',title:'Prototipagem Rápida',body:'Valide conceitos em horas, não semanas. Processos FDM e SLA entregam protótipos funcionais com geometrias complexas e alta precisão dimensional para ciclos de iteração acelerados.',specs:['FDM / SLA / SLS','Entrega 24–72h','Geometria Complexa'],href:'/servicos',videoId:'VIDEO_CAP_01',videoLabel:'Prototipagem em ação',videoFile:'prototipagem.mp4',image:'/images/cap-prototipagem.webp',reverse:false},
+          {num:'02',title:'Peças Funcionais & Metal',body:'Do projeto à peça final em materiais de engenharia: carbono, nylon de alta temperatura e Aço Inox 316L sinterizado por SLM. Componentes para ambientes industriais severos.',specs:['Aço Inox 316L (SLM)','PA CF15','Alta Temperatura'],href:'/servicos',videoId:'VIDEO_CAP_02',videoLabel:'Peça metálica finalizada',videoFile:'metal-parts.mp4',image:'/images/cap-metal-parts.webp',reverse:true},
           {num:'03',title:'Modelagem & Engenharia Reversa',body:'Transformamos desenhos, esboços e peças físicas em modelos digitais precisos. Scanner 3D para captura de geometrias complexas e otimização DfAM para manufatura aditiva.',specs:['CAD Profissional','Scanner 3D','DfAM'],href:'/servicos',videoId:'VIDEO_CAP_03',videoLabel:'Scanner 3D em operação',videoFile:'reverse-engineering.mp4',image:'/images/cap-reverse-engineering.webp',reverse:false},
           {num:'04',title:'Peças de Reposição Sob Demanda',body:'Pare de esperar por peças descontinuadas. Fabricamos substitutas em plástico técnico ou metal em prazo reduzido, sem mínimo de quantidade.',specs:['Sem Mínimo','Sob Medida','Entrega Ágil'],href:'/servicos',videoId:'VIDEO_CAP_04',videoLabel:'Linha de produção customizada',videoFile:'on-demand.mp4',image:'/images/cap-on-demand.webp',reverse:true},
         ].map((item) => (
@@ -361,8 +333,8 @@ import Footer from '../../components/Footer.astro'
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {[
-          {icon:'precision_manufacturing',num:'01',title:'Precisão Certificada',body:'±0.05mm em FDM industrial. Peças dimensionalmente consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE'},
-          {icon:'category',num:'02',title:'Portfólio de Materiais',body:'20+ materiais: PA CF15, PEEK, TPU, ABS, Policarbonato, Resina e BASF Ultrafuse 316L (aço inoxidável).',tag:'MATERIAIS'},
+          {icon:'precision_manufacturing',num:'01',title:'Precisão Industrial',body:'FDM industrial calibrado, com inspeção dimensional por paquímetro e micrômetro. Peças consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE'},
+          {icon:'category',num:'02',title:'Portfólio de Materiais',body:'Termoplásticos (PLA, PA CF15, TPU, ABS, Policarbonato), resinas, PA12 (SLS) e Aço Inox 316L sinterizado por SLM.',tag:'MATERIAIS'},
           {icon:'tune',num:'03',title:'Feito Sob Medida',body:'Personalização total de geometria, material e acabamento. Sem mínimo de produção para projetos unitários.',tag:'FLEXIBILIDADE'},
           {icon:'support_agent',num:'04',title:'Consultoria Técnica',body:'Equipe especializada indica tecnologia, material e processo ideal. Suporte do arquivo à entrega final.',tag:'SUPORTE'},
           {icon:'location_on',num:'05',title:'Hub de Inovação',body:'Parque Tecnológico Damha II, São Carlos – SP. Polo tecnológico próximo à USP e UFSCar.',tag:'SÃO CARLOS'},
@@ -443,8 +415,8 @@ import Footer from '../../components/Footer.astro'
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
         {[
-          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina ABS/Cerâmica','Resolução 25μm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
-          {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono, metal e flexíveis. Melhor custo-benefício para séries.',specs:['20+ Materiais','Metal Disponível','Maior Portfólio'],accent:'rgba(97,197,79,0.03)'},
+          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina Standard / ABS-like','Resolução 25μm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
+          {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono e flexíveis. Melhor custo-benefício para séries.',specs:['20+ Materiais','Maior Portfólio','Séries Pequenas'],accent:'rgba(97,197,79,0.03)'},
         ].map(t => (
           <div class="glass-panel p-8 lg:p-10 rounded-sm hover:border-primary-container/15 transition-all duration-300 group" style={`background:linear-gradient(135deg,${t.accent},transparent);`}>
             <div class="flex items-end gap-4 mb-4">
@@ -603,7 +575,7 @@ import Footer from '../../components/Footer.astro'
               <h3 class="text-headline-md font-bold text-white uppercase tracking-[-0.01em] leading-tight mb-4 group-hover:text-primary-container transition-colors duration-200">
                 FDM, SLA ou SLS? O guia definitivo para escolher o processo certo
               </h3>
-              <p class="text-body-md text-tertiary leading-relaxed">Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, tolerância, materiais e casos de uso reais de cada processo.</p>
+              <p class="text-body-md text-tertiary leading-relaxed">Qual tecnologia entrega melhor resultado para o seu projeto? Comparamos custo, precisão, materiais e casos de uso reais de cada processo.</p>
             </div>
             <div class="flex items-center justify-between mt-8 pt-6 border-t border-white/8">
               <span class="text-[11px] text-tertiary">Mai 2026 · Equipe AUMAF 3D</span>
@@ -618,7 +590,7 @@ import Footer from '../../components/Footer.astro'
       <!-- Grid 3 posts menores -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
         {[
-          {slug:'guia-materiais-impressao-3d',   cat:'Materiais',   time:'6 min', title:'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação', excerpt:'PA CF15, PEEK, TPU, 316L — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.'},
+          {slug:'guia-materiais-impressao-3d',   cat:'Materiais',   time:'6 min', title:'Guia Completo de Materiais: Como Escolher o Filamento Certo para Cada Aplicação', excerpt:'PA CF15, TPU, PA12 (SLS), 316L (SLM) — cada material tem seu nicho. Descubra qual é o ideal para carga, temperatura e acabamento do seu projeto.'},
           {slug:'formula-sae-case-study-completo',cat:'Case Study',  time:'5 min', title:'Case Completo: Fórmula SAE USP São Carlos 2024 — Do Arquivo à Pista', excerpt:'Como fabricamos 7 componentes estruturais e aerodinâmicos em 5 dias úteis para a competição mais exigente da engenharia estudantil.'},
           {slug:'engenharia-reversa-passo-a-passo',cat:'Engenharia', time:'7 min', title:'Engenharia Reversa Passo a Passo: Como Replicar uma Peça Sem o Projeto Original', excerpt:'Scanner 3D, nuvem de pontos, reconstrução paramétrica e impressão final. O processo completo de replicação de peças descontinuadas.'},
         ].map(p => (

@@ -18,7 +18,7 @@ const services = [
     details: [
       { label: 'Prazo típico', value: '24–72h' },
       { label: 'Materiais', value: 'PLA, ABS, PETG, Resina' },
-      { label: 'Tolerância', value: '±0.1mm (FDM) / ±0.05mm (SLA)' },
+      { label: 'Processos', value: 'FDM / SLA' },
       { label: 'Aplicação', value: 'Validação de conceito' },
     ],
     reverse: false,
@@ -27,12 +27,12 @@ const services = [
     id: 'funcionais',
     num: '02',
     title: 'Peças Funcionais & Metal',
-    body: 'Peças de reposição para máquinas, componentes para robôs e equipamentos industriais. Fabricadas sob demanda em plásticos de alta performance ou aço inoxidável via sinterização BASF Ultrafuse 316L. Sem molde, sem mínimo de quantidade.',
-    specs: ['Metal 316L', 'PA CF15 / PEEK / Ultem', 'Alta Temperatura', '+260°C'],
+    body: 'Peças de reposição para máquinas, componentes para robôs e equipamentos industriais. Fabricadas sob demanda em plásticos de alta performance ou Aço Inox 316L sinterizado por SLM. Sem molde, sem mínimo de quantidade.',
+    specs: ['Aço Inox 316L (SLM)', 'PA CF15 / Ultem', 'Alta Temperatura', '+260°C'],
     details: [
       { label: 'Prazo típico', value: '3–7 dias úteis' },
-      { label: 'Metal prazo', value: '15–20 dias (sinterização)' },
-      { label: 'Tolerância', value: '±0.05mm' },
+      { label: 'Metal prazo', value: 'Sob consulta (SLM)' },
+      { label: 'Processo', value: 'FDM / SLS / SLM' },
       { label: 'Aplicação', value: 'Uso final industrial' },
     ],
     reverse: true,
@@ -59,7 +59,7 @@ const services = [
     specs: ['Scanner 3D', 'Engenharia Reversa', 'Nuvem de Pontos', 'Réplica Exata'],
     details: [
       { label: 'Tecnologia', value: 'Scanner portátil HD' },
-      { label: 'Precisão', value: '±0.02mm na captura' },
+      { label: 'Precisão', value: 'Scanner óptico estruturado' },
       { label: 'Entregável', value: 'Modelo 3D + arquivo pronto' },
       { label: 'Aplicação', value: 'Peças descontinuadas / orgânicas' },
     ],
@@ -76,7 +76,7 @@ const processSteps = [
   { n: '06', title: 'Entrega & Suporte', body: 'Envio nacional + suporte técnico pós-entrega.' },
 ]
 
-const description = 'Serviços de impressão 3D industrial AUMAF 3D: prototipagem rápida (24–72h), peças funcionais em metal 316L e polímeros (PEEK, PA CF15), modelagem 3D, engenharia reversa. Tolerância ±0.05mm. São Carlos – SP.'
+const description = 'Serviços de impressão 3D industrial AUMAF 3D: prototipagem rápida (24–72h), peças funcionais em Aço Inox 316L (SLM) e polímeros técnicos (PA CF15, Tritan HT), modelagem 3D e engenharia reversa. São Carlos – SP.'
 
 const schemas = [
   ...services.map((s) =>
@@ -130,7 +130,7 @@ const schemas = [
         </div>
         <div class="md:pb-2">
           <p class="text-body-lg text-tertiary leading-relaxed max-w-md">
-            Engenharia aditiva completa: do arquivo digital à peça funcional. <strong class="text-on-surface">Quatro serviços integrados</strong> para cada fase do desenvolvimento de produto, com tolerância de até <strong class="text-on-surface">±0.05mm</strong>.
+            Engenharia aditiva completa: do arquivo digital à peça funcional. <strong class="text-on-surface">Quatro serviços integrados</strong> para cada fase do desenvolvimento de produto, com <strong class="text-on-surface">precisão industrial</strong>.
           </p>
           <div class="flex items-center gap-3 mt-8">
             <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect" aria-hidden="true"></span>

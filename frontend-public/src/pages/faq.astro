@@ -42,11 +42,11 @@ const faqs = [
       },
       {
         q: 'Vocês trabalham com impressão em metal?',
-        a: 'Sim. Utilizamos o material BASF Ultrafuse 316L para impressão de peças em aço inoxidável 316L. O processo envolve impressão FDM com filamento metálico seguido de processo de sinterização para atingir as propriedades mecânicas finais.',
+        a: 'Sim. Produzimos peças em Aço Inox 316L por SLM (Selective Laser Melting) — sinterização por laser direto sobre pó metálico, gerando peças com densidade próxima ao maciço, prontas para aplicação industrial, alimentícia e marítima.',
       },
       {
         q: 'Quais são os materiais disponíveis?',
-        a: 'Trabalhamos com mais de 20 materiais: termoplásticos convencionais (PLA, ABS, PETG, Nylon, PC, PP, TPU), materiais de alta performance (PA CF15, PEEK, Ultem, Tritan HT), resinas (ABS, cerâmica) e metal (BASF Ultrafuse 316L).',
+        a: 'Trabalhamos com termoplásticos convencionais (PLA, ABS, PETG, Nylon, PC, PP, TPU), materiais de alta performance (PA CF15, Tritan HT), resinas (Standard, ABS-like), pó PA12 para SLS e Aço Inox 316L sinterizado por SLM.',
       },
     ],
   },
@@ -54,8 +54,8 @@ const faqs = [
     cat: 'Processos',
     items: [
       {
-        q: 'Qual a tolerância dimensional das peças?',
-        a: 'Em FDM industrial atingimos tolerância de ±0.05mm. Em SLA (resina), resolução de camada de 25–100 microns. SLS entrega peças sem necessidade de suporte com alta precisão e densidade.',
+        q: 'Como funcionam os principais processos de impressão 3D?',
+        a: 'FDM trabalha com termoplásticos depositados em camadas — versátil, com o maior portfólio de materiais. SLA usa resina fotopolimerizável curada por luz UV, com camadas de 25–100 microns e excelente resolução visual. SLS sinteriza pó de poliamida (PA12) por laser, entregando peças funcionais sem necessidade de suporte. SLM sinteriza pó metálico (Aço Inox 316L) por laser, para peças metálicas finais. Cada processo é indicado conforme geometria, material e finalidade da peça.',
       },
       {
         q: 'Como envio meu arquivo para orçamento?',
@@ -76,7 +76,7 @@ const faqs = [
     items: [
       {
         q: 'Qual o prazo de entrega?',
-        a: 'Varia conforme material e quantidade. Protótipos simples em FDM: 24–72 horas. Peças funcionais em FDM: 3–7 dias úteis. Peças em metal (sinterização BASF): 15–20 dias. SLS e SLA variam conforme complexidade.',
+        a: 'Varia conforme material, processo e quantidade. Protótipos simples em FDM: 24–72 horas. Peças funcionais em FDM: 3–7 dias úteis. Peças em SLS e SLA variam conforme complexidade. Peças metálicas em SLM (316L): prazo estendido sob consulta.',
       },
       {
         q: 'Qual o prazo para receber um orçamento?',
@@ -105,7 +105,7 @@ const faqs = [
     items: [
       {
         q: 'É possível pintar e ter acabamento liso nas peças?',
-        a: 'Sim. Oferecemos lixamento progressivo (320 a 2000 grit), preenchimento com massa epóxi, primer e pintura automotiva. Para ABS é possível alisamento por vapor de acetona. Em resina SLA, o acabamento já sai liso e aceita pintura sem preparação adicional.',
+        a: 'Sim. Oferecemos lixamento progressivo (320 a 2000 grit), preenchimento com massa epóxi, primer e pintura. Para ABS é possível alisamento por vapor de acetona. Em resina SLA, o acabamento já sai liso e aceita pintura sem preparação adicional.',
       },
       {
         q: 'Qual a diferença entre FDM, SLA e SLS no acabamento final?',
@@ -113,7 +113,7 @@ const faqs = [
       },
       {
         q: 'Vocês fazem usinagem CNC complementar quando preciso?',
-        a: 'Para furos roscados de precisão, planificação de superfícies de vedação ou tolerâncias críticas (<±0.02mm), encaminhamos para parceiros de usinagem CNC após a impressão. Acabamento misto (impressão + usinagem) é comum em peças funcionais.',
+        a: 'Para furos roscados de precisão, planificação de superfícies de vedação ou peças com exigências dimensionais que vão além do que a impressão 3D entrega, encaminhamos para parceiros de usinagem CNC após a impressão. Acabamento misto (impressão + usinagem) é comum em peças funcionais.',
       },
       {
         q: 'É possível galvanizar ou revestir metalicamente uma peça impressa?',
@@ -130,7 +130,7 @@ const faqs = [
     items: [
       {
         q: 'Qual a faixa de preço típica de um protótipo simples?',
-        a: 'Protótipos simples em PLA ou PETG (ex.: case eletrônico de 100×60×30mm) ficam entre R$80 e R$250 dependendo de tempo de impressão e infill. Peças funcionais em PA CF15 ou Policarbonato partem de R$250–600. Peças metálicas em 316L: orçamento sob medida (mínimo ~R$1.200 por sinterização).',
+        a: 'Protótipos simples em PLA ou PETG (ex.: case eletrônico de 100×60×30mm) ficam entre R$80 e R$250 dependendo de tempo de impressão e infill. Peças funcionais em PA CF15 ou Policarbonato partem de R$250–600. Peças metálicas em 316L (SLM) e peças em SLS/SLA têm orçamento sob medida.',
       },
       {
         q: 'Vocês cobram pelo arquivo digital ou pela peça impressa?',
@@ -138,7 +138,7 @@ const faqs = [
       },
       {
         q: 'Quais formas de pagamento aceitam?',
-        a: 'PIX (5% de desconto à vista), boleto bancário, cartão de crédito (até 6× sem juros via link de pagamento), e faturamento 30/60/90 dias para empresas com cadastro aprovado. Emitimos NF-e em todos os casos.',
+        a: 'PIX e boleto bancário. Emitimos NF-e em todos os casos.',
       },
       {
         q: 'Há descontos para volume ou pequenas séries?',
@@ -150,8 +150,8 @@ const faqs = [
     cat: 'Comparativos técnicos',
     items: [
       {
-        q: 'Quando usar FDM vs SLA vs SLS?',
-        a: 'FDM: peças funcionais robustas em termoplásticos técnicos (PA CF15, ABS, PETG, PC), volumes grandes, prazo curto. SLA: alta resolução visual, miniaturas, joalheria, modelos médicos, peças com superfície lisa. SLS: protótipos funcionais sem suporte, geometrias internas complexas, pequenas séries em Nylon. Decisão depende de geometria, material e finalidade.',
+        q: 'Quando usar FDM vs SLA vs SLS vs SLM?',
+        a: 'FDM: peças funcionais robustas em termoplásticos técnicos (PA CF15, ABS, PETG, PC), volumes grandes, prazo curto. SLA: alta resolução visual, miniaturas, joalheria, modelos médicos, peças com superfície lisa. SLS: protótipos funcionais sem suporte, geometrias internas complexas, pequenas séries em PA12. SLM: peças metálicas finais em Aço Inox 316L. A decisão depende de geometria, material e finalidade.',
       },
       {
         q: 'Impressão 3D substitui injeção plástica?',
@@ -159,11 +159,11 @@ const faqs = [
       },
       {
         q: 'Peça impressa em 3D substitui peça usinada em alumínio?',
-        a: 'Em muitos casos sim, especialmente quando o requisito é funcional (não cosmético) e o volume é baixo. PA CF15 e Policarbonato chegam a 70–80% da resistência específica do alumínio 6061 com massa muito menor. Para esforços extremos, mantemos usinagem ou indicamos peça em metal 316L impresso.',
+        a: 'Em muitos casos sim, especialmente quando o requisito é funcional (não cosmético) e o volume é baixo. PA CF15 e Policarbonato chegam a 70–80% da resistência específica do alumínio 6061 com massa muito menor. Para esforços extremos, mantemos usinagem ou indicamos peça em Aço Inox 316L sinterizado por SLM.',
       },
       {
-        q: 'Qual a diferença entre PEEK e PA CF15?',
-        a: 'PEEK opera até 250°C continuamente, é biocompatível e quimicamente inerte — ideal para implantes médicos e aeroespacial. PA CF15 chega a 180°C, com rigidez e leveza superiores ao alumínio em algumas dimensões. PEEK custa 5–10× mais que PA CF15. Use PEEK só quando os requisitos extremos justificam.',
+        q: 'Qual a diferença entre PA12 (SLS) e PA CF15 (FDM)?',
+        a: 'PA12 em pó (SLS) gera peças funcionais sem necessidade de suporte, com geometrias internas livres e bom acabamento natural fosco. PA CF15 (FDM com fibra de carbono) entrega rigidez extra e estabilidade dimensional para peças que substituem metal. Use PA12 quando geometria complexa e densidade homogênea importam; use PA CF15 quando rigidez e leveza dirigem o projeto.',
       },
     ],
   },
@@ -188,7 +188,7 @@ const faqs = [
       },
       {
         q: 'Atendem a indústria de petróleo & gás?',
-        a: 'Sim, em peças não-pressurizadas: gabaritos de inspeção, suportes de instrumentação, modelos de treinamento, cases de equipamentos de campo. Materiais comuns: PA CF15 e Policarbonato. Para ambientes corrosivos ou alta temperatura, indicamos peças em metal 316L impresso.',
+        a: 'Sim, em peças não-pressurizadas: gabaritos de inspeção, suportes de instrumentação, modelos de treinamento, cases de equipamentos de campo. Materiais comuns: PA CF15 e Policarbonato. Para ambientes corrosivos ou alta temperatura, indicamos peças em Aço Inox 316L sinterizado por SLM.',
       },
     ],
   },
@@ -197,11 +197,11 @@ const faqs = [
     items: [
       {
         q: 'Qual o tamanho máximo de peça que vocês imprimem?',
-        a: 'FDM: 600×600×800 mm em peça única (limite do nosso parque de máquinas). SLA: 290×165×400 mm. SLS: 380×380×450 mm. Peças maiores podem ser fracionadas e coladas/parafusadas — fazemos o particionamento DfAM como parte do projeto.',
+        a: 'FDM: 600×600×600 mm em peça única. SLA: 600×600×400 mm. SLS: 400×400×420 mm. SLM (metal): 470×270×300 mm. Peças maiores podem ser fracionadas e coladas/parafusadas — fazemos o particionamento DfAM como parte do projeto.',
       },
       {
         q: 'Qual o menor detalhe (resolução) que conseguem imprimir?',
-        a: 'FDM industrial: parede mínima 0.4mm, detalhe XY ~0.2mm. SLA: detalhe XY ~50 microns, camada Z 25 microns — visíveis apenas com lupa. SLS: paredes mínimas de 0.7mm, detalhe XY ~0.3mm. Para detalhes extremos (joalheria, miniaturas), SLA é a tecnologia indicada.',
+        a: 'FDM industrial: parede mínima 0.4mm, detalhe XY ~0.2mm. SLA: detalhe XY ~50 microns, camada Z 25 microns — visíveis apenas com lupa. SLS: paredes mínimas de 0.7mm, detalhe XY ~0.3mm. SLM: paredes mínimas de 0.5mm em geometrias controladas. Para detalhes extremos (joalheria, miniaturas), SLA é a tecnologia indicada.',
       },
       {
         q: 'Têm limite de complexidade geométrica?',
@@ -235,11 +235,11 @@ const faqs = [
     items: [
       {
         q: 'O que acontece se a peça vier com defeito?',
-        a: 'Se houver defeito de impressão (delaminação, falha geométrica, dimensional fora da tolerância contratada), refazemos sem custo adicional e sem questionamento. Garantia padrão: 30 dias após entrega, contra defeitos de manufatura. Peças com falha por uso indevido ou material errado especificado pelo cliente não são cobertas.',
+        a: 'Se houver defeito de impressão (delaminação, falha geométrica, peça fora das especificações contratadas), refazemos sem custo adicional e sem questionamento. Garantia padrão: 30 dias após entrega, contra defeitos de manufatura. Peças com falha por uso indevido ou material errado especificado pelo cliente não são cobertas.',
       },
       {
         q: 'Como vocês validam dimensionalmente as peças?',
-        a: 'Peças críticas passam por inspeção com paquímetro digital, micrômetro e gabarito. Para tolerâncias <±0.05mm, usamos máquina de medir tridimensional (CMM) externa por demanda. Cada peça crítica recebe relatório dimensional resumido junto com a entrega.',
+        a: 'Peças críticas passam por inspeção com paquímetro digital, micrômetro e gabarito. Cada peça crítica recebe um resumo do controle dimensional junto com a entrega.',
       },
       {
         q: 'Fazem ensaios mecânicos das peças impressas?',
@@ -256,11 +256,11 @@ const faqs = [
       },
       {
         q: 'Qual a precisão do scanner 3D que vocês usam?',
-        a: 'Scanner óptico estruturado com precisão ±0.05mm em peças até ~500mm. Para peças muito pequenas (<30mm) ou com superfícies brilhantes/transparentes, usamos pó matificante temporário e calibração específica. Resultado entregue em STL ou STEP paramétrico conforme demanda.',
+        a: 'Scanner óptico estruturado com alta precisão para peças até ~500mm. Para peças muito pequenas (<30mm) ou com superfícies brilhantes/transparentes, usamos pó matificante temporário e calibração específica. Resultado entregue em STL ou STEP paramétrico conforme demanda.',
       },
       {
         q: 'Engenharia reversa funciona para qualquer peça?',
-        a: 'Para a maioria. Limitações: superfícies muito espelhadas (precisam de pó), peças com cavidades internas inacessíveis (CT scan necessário), e peças com tolerâncias inferiores a ±0.05mm — nesses casos, complementamos com medição manual e CAD a partir de desenho técnico.',
+        a: 'Para a maioria. Limitações: superfícies muito espelhadas (precisam de pó) e peças com cavidades internas inacessíveis (CT scan necessário). Para peças com exigências dimensionais muito apertadas, complementamos com medição manual e CAD a partir de desenho técnico.',
       },
     ],
   },
@@ -280,7 +280,7 @@ const faqs = [
 ]
 
 const flatFaqs = faqs.flatMap((g) => g.items)
-const description = 'Perguntas frequentes sobre impressão 3D na AUMAF 3D: tolerância, materiais, prazo, metal 316L, engenharia reversa, cobertura geográfica e orçamento. Respostas técnicas de quem fabrica.'
+const description = 'Perguntas frequentes sobre impressão 3D na AUMAF 3D: materiais, prazo, processos (FDM/SLA/SLS/SLM), Aço Inox 316L sinterizado, engenharia reversa, cobertura geográfica e orçamento. Respostas técnicas de quem fabrica.'
 
 const schemas = [faqPageSchema(flatFaqs)]
 ---

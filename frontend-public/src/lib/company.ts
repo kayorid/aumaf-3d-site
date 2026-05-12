@@ -13,8 +13,8 @@ export const COMPANY = {
   ogImageDefault: '/og/og-default.png',
   founded: '2022',
   description:
-    'Manufatura aditiva industrial de alta precisão. Peças em metal, carbono e polímeros com tolerância ±0.05mm. São Carlos – SP.',
-  shortPitch: 'Impressão 3D industrial em São Carlos, SP — peças com tolerância ±0.05mm.',
+    'Manufatura aditiva industrial de alta precisão. Peças em metal, carbono e polímeros para aplicações industriais críticas. São Carlos – SP.',
+  shortPitch: 'Impressão 3D industrial em São Carlos, SP — manufatura aditiva para aplicações críticas.',
   address: {
     streetAddress: 'Alameda Sinlioku Tanaka, 202',
     neighborhood: 'Parque Tecnológico Damha II',
