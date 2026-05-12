@@ -97,7 +97,7 @@ await analyticsRollupQueue.add('backfill', {
 
 ### Reiniciar agregados de um dia (idempotente)
 
-O roll-up faz DELETE+INSERT por dia, então re-rodar `hourly` cobre 48h:
+O roll-up faz DELETE+INSERT por dia, então re-rodar `hourly` cobre 24h:
 
 ```ts
 await analyticsRollupQueue.add('manual', { kind: 'hourly' })
@@ -143,7 +143,7 @@ INSERT INTO analytics_events SELECT * FROM analytics_events_legacy;
 |---|---|---|
 | Dashboard mostra zeros | Worker `analytics-ingest` parado | `GET /health` no backend; reiniciar processo |
 | Pageview chega no `/collect` mas não aparece no DB | Worker está rodando mas erro silencioso | `docker logs aumaf_backend \| grep analytics` |
-| Agregados desatualizados (>1h) | Cron `analytics-rollup` parado | Verificar `scheduleAnalyticsRollups()` no boot do `server.ts` |
+| Agregados desatualizados (>30min) | Cron `analytics-rollup` parado | Verificar `scheduleAnalyticsRollups()` no boot do `server.ts` (cadência: `*/30 * * * *`) |
 | Realtime sempre vazio | Cron prune deletou tudo | Verificar timestamp em `analytics_realtime.lastSeenAt` |
 | Erro `country: unknown` em todos eventos | `ANALYTICS_GEOIP_DB_PATH` não configurado ou DB faltando | Baixar GeoLite2-Country.mmdb da MaxMind |
 | SDK não dispara em `<a target="_blank">` | Browser navegou antes do flush | OK — `pagehide` event garante flush via beacon |
