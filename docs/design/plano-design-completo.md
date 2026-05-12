@@ -276,8 +276,8 @@ CTA 2:       Ver Portfolio
      consistentes entre lotes, rastreáveis por projeto.
 
 [02] PORTFÓLIO DE MATERIAIS
-     20+ materiais: PA CF15, PEEK, Ultem, TPU, ABS,
-     Policarbonato, Resina ABS/Cerâmica e BASF Ultrafuse 316L (aço).
+     20+ materiais: PA CF15, Nylon, TPU, ABS, ASA,
+     Policarbonato, Resina ABS-like e Aço Inox 316L (SLM).
 
 [03] FEITO SOB MEDIDA
      Personalização total — geometria, material, acabamento.
@@ -645,8 +645,9 @@ Cada card:
 
 | Categoria | Material | Destaques |
 |---|---|---|
-| Termoplásticos | Nylon (PA) | Resistência mecânica, flexível |
+| Termoplásticos | Nylon | Resistência mecânica, flexível |
 | Termoplásticos | ABS | Alta durabilidade, pós-processável |
+| Termoplásticos | ASA | Resistência a UV e intempéries |
 | Termoplásticos | Policarbonato (PC) | Transparente, alta temperatura |
 | Termoplásticos | PET-G | Alimentício seguro, durável |
 | Termoplásticos | PET-G CF15 | CF15 reforçado, rigidez |

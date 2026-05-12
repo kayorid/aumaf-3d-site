@@ -865,6 +865,8 @@
 }
 .animate-scan-line {
   animation: scanLinePulse 3.2s ease-in-out infinite;
+  top: 0;
+  will-change: transform;
 }
 
 /* Marquee shimmer em wordmarks de clientes ao scroll para a seção */

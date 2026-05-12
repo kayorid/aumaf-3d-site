@@ -378,9 +378,9 @@ import Footer from '../../components/Footer.astro'
             </div>
             <p class="text-body-md text-tertiary leading-relaxed mb-6">Peças com densidade máxima e geometrias internas complexas impossíveis por outros métodos. Ideal para protótipos funcionais de alta precisão e pequenas séries técnicas.</p>
             <div class="flex flex-wrap gap-2 mb-6">
-              <span class="pill-green">Resolução 100μm</span>
+              <span class="pill-green">Altura de Camada 100μm</span>
               <span class="pill-green">Sem Suporte</span>
-              <span class="pill-green">Nylon / PA / TPU</span>
+              <span class="pill-green">Nylon / TPU</span>
             </div>
             <a href="/servicos" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
               Saber mais sobre SLS
@@ -413,10 +413,11 @@ import Footer from '../../components/Footer.astro'
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
         {[
-          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina Standard / ABS-like','Resolução 25μm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
+          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina Standard / ABS-like','Precisão Dimensional 0,1mm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
           {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono e flexíveis. Melhor custo-benefício para séries.',specs:['20+ Materiais','Maior Portfólio','Séries Pequenas'],accent:'rgba(97,197,79,0.03)'},
+          {code:'SLM',title:'Fusão Seletiva a Laser',body:'Sinterização de pó metálico (Aço Inox 316L) por laser de alta potência. Peças funcionais em metal com geometria complexa, sob demanda e sem molde.',specs:['Aço Inox 316L','Densidade ≥99%','Alta Temperatura'],accent:'rgba(97,197,79,0.04)'},
         ].map(t => (
           <div class="glass-panel p-8 lg:p-10 rounded-sm hover:border-primary-container/15 transition-all duration-300 group" style={`background:linear-gradient(135deg,${t.accent},transparent);`}>
             <div class="flex items-end gap-4 mb-4">
