@@ -1,0 +1,211 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+import Breadcrumb from '../components/Breadcrumb.astro'
+
+const description = 'Gerencie suas preferências de cookies na AUMAF 3D — escolha quais categorias deseja autorizar e revogue seu consentimento a qualquer momento.'
+
+const categories = [
+  {
+    id: 'necessary',
+    name: 'Necessários',
+    locked: true,
+    description:
+      'Indispensáveis para o funcionamento do site (autenticação, segurança, balanceamento de carga, lembrar suas preferências de consentimento). Não podem ser desativados.',
+  },
+  {
+    id: 'functional',
+    name: 'Funcionais',
+    locked: false,
+    description:
+      'Recursos opcionais que melhoram a experiência: lembrar campos do formulário, embeds de Instagram (Behold.so) e Google Reviews (Featurable).',
+  },
+  {
+    id: 'analytics',
+    name: 'Analíticos',
+    locked: false,
+    description:
+      'Estatísticas agregadas e anônimas de uso do site (Google Analytics 4, Microsoft Clarity, pipeline próprio AUMAF). IP pseudonimizado.',
+  },
+  {
+    id: 'marketing',
+    name: 'Marketing',
+    locked: false,
+    description:
+      'Mensuração de campanhas e remarketing (Facebook Pixel, GTM). Não vendemos seus dados a terceiros.',
+  },
+]
+---
+
+<Base
+  title="Preferências de Cookies — AUMAF 3D"
+  description={description}
+  pageType="WebPage"
+  breadcrumb={[{ name: 'Preferências de Cookies', url: '/preferencias-de-cookies' }]}
+>
+  <Navbar currentPath="/preferencias-de-cookies" />
+
+  <article class="bg-background relative overflow-hidden">
+    <header class="pt-28 pb-12 relative" aria-labelledby="prefs-title">
+      <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 50% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+      <div class="max-w-[820px] mx-auto px-edge relative z-10">
+        <Breadcrumb items={[{ name: 'Preferências de Cookies' }]} compact />
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-5 mt-4">Privacidade</span>
+        <h1 id="prefs-title" class="text-display-md md:text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[1.05] mb-6">
+          Preferências de Cookies
+        </h1>
+        <p class="text-body-lg text-tertiary leading-relaxed max-w-[640px]">
+          Escolha quais categorias de cookies deseja autorizar. Você pode alterar a sua decisão a qualquer momento — basta voltar a esta página ou abrir novamente o banner pelo botão abaixo. Saiba mais na nossa
+          <a href="/politica-de-cookies" class="text-primary-container hover:underline">Política de Cookies</a>.
+        </p>
+      </div>
+    </header>
+
+    <section class="pb-20">
+      <div class="max-w-[820px] mx-auto px-edge space-y-4" id="prefs-list">
+        {categories.map((cat) => (
+          <div class="glass-panel rounded-sm p-6 border border-white/8 flex items-start justify-between gap-6">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h2 class="text-headline-sm font-bold uppercase text-white tracking-[-0.02em]">{cat.name}</h2>
+                {cat.locked && (
+                  <span class="text-[10px] uppercase tracking-[0.2em] text-primary-container border border-primary-container/40 px-2 py-0.5 rounded-sm">Sempre ativo</span>
+                )}
+              </div>
+              <p class="text-sm text-tertiary leading-relaxed">{cat.description}</p>
+            </div>
+            <label class="flex items-center gap-3 shrink-0">
+              <span class="sr-only">{cat.name}</span>
+              <input
+                type="checkbox"
+                data-pref={cat.id}
+                disabled={cat.locked}
+                checked={cat.locked}
+                class="pref-toggle w-10 h-6 appearance-none rounded-full bg-white/15 relative cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-60 checked:bg-primary-container/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+              />
+            </label>
+          </div>
+        ))}
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-6">
+          <button
+            type="button"
+            id="prefs-reset"
+            data-track="cookie_prefs_reset"
+            class="text-sm text-on-surface-variant hover:text-white uppercase tracking-[0.15em] font-medium focus-visible:text-primary-container"
+          >
+            Reabrir banner para todos
+          </button>
+          <button
+            type="button"
+            id="prefs-save"
+            data-track="cookie_prefs_save"
+            class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all"
+          >
+            Salvar Preferências
+          </button>
+        </div>
+        <p id="prefs-feedback" class="text-code-data text-primary-container text-right hidden" aria-live="polite">Preferências salvas.</p>
+      </div>
+    </section>
+  </article>
+
+  <Footer />
+</Base>
+
+<style>
+  .pref-toggle::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: #fff;
+    transition: transform 0.18s ease;
+  }
+  .pref-toggle:checked::before {
+    transform: translateX(16px);
+    background: #61c54f;
+  }
+</style>
+
+<script>
+  // Carrega estado atual do localStorage e reflete nos toggles.
+  const STORAGE_KEY = 'aumaf_consent_v1'
+  type Categories = { necessary: true; functional: boolean; analytics: boolean; marketing: boolean }
+
+  function readState(): Categories {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return { necessary: true, functional: false, analytics: false, marketing: false }
+      const parsed = JSON.parse(raw)
+      return {
+        necessary: true,
+        functional: !!parsed.functional,
+        analytics: !!parsed.analytics,
+        marketing: !!parsed.marketing,
+      }
+    } catch {
+      return { necessary: true, functional: false, analytics: false, marketing: false }
+    }
+  }
+
+  function applyToToggles(state: Categories) {
+    document.querySelectorAll<HTMLInputElement>('.pref-toggle').forEach((input) => {
+      const key = input.dataset.pref as keyof Categories
+      if (key === 'necessary') { input.checked = true; return }
+      input.checked = !!state[key]
+    })
+  }
+
+  applyToToggles(readState())
+
+  const saveBtn = document.getElementById('prefs-save')
+  const resetBtn = document.getElementById('prefs-reset')
+  const feedback = document.getElementById('prefs-feedback')
+
+  saveBtn?.addEventListener('click', async () => {
+    const state: Categories = { necessary: true, functional: false, analytics: false, marketing: false }
+    document.querySelectorAll<HTMLInputElement>('.pref-toggle').forEach((input) => {
+      const key = input.dataset.pref as keyof Categories
+      if (key === 'necessary') return
+      ;(state as Record<string, boolean | true>)[key] = input.checked
+    })
+    const payload = { ...state, version: '1.0', timestamp: new Date().toISOString() }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    window.dispatchEvent(new CustomEvent('aumaf:consent', { detail: state }))
+
+    // Envia para o backend (best-effort).
+    try {
+      const apiUrl = (import.meta as unknown as { env: Record<string, string> }).env.PUBLIC_API_URL
+      if (apiUrl && /^https?:\/\//.test(apiUrl)) {
+        await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/consent`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            categories: state,
+            policyVersion: '1.0',
+            source: 'preferences_page',
+          }),
+        })
+      }
+    } catch {
+      /* best-effort — localStorage já está persistido */
+    }
+
+    if (feedback) {
+      feedback.classList.remove('hidden')
+      window.setTimeout(() => feedback.classList.add('hidden'), 3500)
+    }
+  })
+
+  resetBtn?.addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY)
+    window.location.reload()
+  })
+</script>
