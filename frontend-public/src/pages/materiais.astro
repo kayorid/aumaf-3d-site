@@ -46,7 +46,7 @@ const materials: MaterialDetail[] = [
     cons: ['Baixa temperatura de uso', 'Frágil sob impacto', 'Não para uso externo prolongado'],
   },
   {
-    slug: 'mat-01-nylon-pa', cat: 'Termoplásticos', name: 'Nylon (PA)', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false,
+    slug: 'mat-01-nylon-pa', cat: 'Termoplásticos', name: 'Nylon', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false,
     description: 'Termoplástico técnico de engenharia com excelente combinação de resistência mecânica, tenacidade e resistência ao desgaste. Absorve umidade — armazenar em ambiente seco. Indicado para peças funcionais sujeitas a fricção, esforços cíclicos e impactos moderados.',
     properties: [
       { label: 'Resistência tração', value: '60–70 MPa' },
@@ -76,6 +76,22 @@ const materials: MaterialDetail[] = [
     useCases: ['Protótipos funcionais', 'Carcaças e gabinetes', 'Peças automotivas internas', 'Modelos de feira'],
     pros: ['Ótima usinabilidade', 'Liso com acetona', 'Bom custo-benefício'],
     cons: ['Empena com facilidade', 'Cheiro forte', 'Sensível a UV sem pintura'],
+  },
+  {
+    slug: 'mat-18-asa', cat: 'Termoplásticos', name: 'ASA', tempMax: '100°C', flex: 'Rígido', app: 'Uso externo / resistência UV', highlight: false,
+    description: 'Termoplástico amorfo da família do ABS, formulado para resistência prolongada a UV e intempéries sem perda de cor ou propriedades mecânicas. Substituto direto do ABS quando a peça é exposta ao sol e à chuva, mantendo boa resistência ao impacto e estabilidade dimensional.',
+    properties: [
+      { label: 'Resistência tração', value: '40–48 MPa' },
+      { label: 'Módulo elástico', value: '1,9–2,4 GPa' },
+      { label: 'Alongamento', value: '15–25%' },
+      { label: 'Densidade', value: '1,07 g/cm³' },
+      { label: 'Temp. máx. uso', value: '100°C' },
+      { label: 'Resistência UV', value: 'Excelente' },
+    ],
+    printing: [{ label: 'Bico', value: '240–260°C' }, { label: 'Mesa', value: '95–110°C' }, { label: 'Velocidade', value: '40–60 mm/s' }, { label: 'Câmara', value: 'Recomendada' }],
+    useCases: ['Peças de uso externo', 'Componentes automotivos externos', 'Carcaças expostas ao sol', 'Sinalização e mobiliário urbano'],
+    pros: ['Alta resistência UV', 'Estabilidade de cor ao tempo', 'Boa resistência ao impacto'],
+    cons: ['Cheiro forte na impressão', 'Empena se sem câmara', 'Custo acima do ABS'],
   },
   {
     slug: 'mat-03-pc', cat: 'Termoplásticos', name: 'Policarbonato (PC)', tempMax: '130°C', flex: 'Rígido', app: 'Alta resistência ao impacto', highlight: false,
