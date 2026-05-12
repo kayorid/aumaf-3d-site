@@ -1,0 +1,245 @@
+---
+/**
+ * Banner de consentimento de cookies — LGPD compliant.
+ *
+ * Princípios:
+ * - 3 ações de peso visual equivalente ("Aceitar todos" / "Recusar não essenciais"
+ *   / "Personalizar") — ANPD veta dark patterns que dificultam recusa.
+ * - Persistência: localStorage chave `aumaf_consent_v1`.
+ * - Backend: POST /api/v1/consent (best-effort; UX nunca trava).
+ * - Categorias necessárias sempre on (cookies estritamente necessários).
+ * - Evento global `aumaf:consent` dispara para o loader de scripts terceiros
+ *   (Fase C) re-avaliar GA4 / Clarity / Pixel.
+ */
+const POLICY_VERSION = '1.0'
+---
+
+<aside
+  id="cookie-consent"
+  class="hidden fixed inset-x-0 bottom-0 z-[80] pointer-events-none"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="cookie-banner-title"
+  aria-describedby="cookie-banner-desc"
+  data-policy-version={POLICY_VERSION}
+>
+  <div
+    id="cookie-banner"
+    class="pointer-events-auto mx-auto max-w-[1180px] m-3 md:m-6 glass-panel border border-primary-container/25 rounded-sm p-5 md:p-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+    style="box-shadow:0 24px 48px rgba(0,0,0,0.55),0 0 32px rgba(97,197,79,0.10);"
+  >
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary-container dot-glow animate-pulse-dot" aria-hidden="true"></span>
+        <span id="cookie-banner-title" class="text-label-caps text-primary-container uppercase tracking-[0.2em] font-bold">Sua privacidade importa</span>
+      </div>
+      <p id="cookie-banner-desc" class="text-sm text-tertiary leading-relaxed max-w-[820px]">
+        Usamos cookies para fazer o site funcionar, lembrar suas preferências, medir o uso e personalizar comunicações. Você pode aceitar todos, recusar os opcionais ou escolher categoria por categoria. Saiba mais na nossa
+        <a href="/politica-de-cookies" class="text-primary-container hover:underline">Política de Cookies</a>.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+      <button type="button" id="cookie-reject" data-track="cookie_banner_reject" class="inline-flex items-center justify-center gap-2 border border-white/30 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-sm hover:border-white/60 hover:text-white transition-all">Recusar não essenciais</button>
+      <button type="button" id="cookie-customize" data-track="cookie_banner_customize" class="inline-flex items-center justify-center gap-2 border border-white/30 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-sm hover:border-white/60 hover:text-white transition-all">Personalizar</button>
+      <button type="button" id="cookie-accept" data-track="cookie_banner_accept_all" class="inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all">Aceitar todos</button>
+    </div>
+  </div>
+
+  <div
+    id="cookie-modal"
+    class="hidden fixed inset-0 z-[90] flex items-end md:items-center justify-center p-0 md:p-6"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookie-modal-title"
+  >
+    <div id="cookie-modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="relative z-10 w-full md:max-w-[560px] glass-panel border border-white/12 rounded-sm p-6 md:p-7 max-h-[88vh] overflow-y-auto" style="box-shadow:0 32px 64px rgba(0,0,0,0.65);">
+      <header class="flex items-center justify-between mb-5 pb-4 border-b border-white/8">
+        <div>
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-1">Preferências de Cookies</span>
+          <h2 id="cookie-modal-title" class="text-headline-sm font-bold uppercase text-white tracking-[-0.02em]">Personalizar consentimento</h2>
+        </div>
+        <button type="button" id="cookie-modal-close" aria-label="Fechar personalização" class="w-9 h-9 border border-white/20 rounded-sm flex items-center justify-center text-on-surface-variant hover:text-white hover:border-white/40 transition-colors">
+          <span class="material-symbols-outlined text-lg" aria-hidden="true">close</span>
+        </button>
+      </header>
+
+      <div class="space-y-4">
+        {[
+          { id: 'necessary', name: 'Necessários', locked: true, desc: 'Indispensáveis para autenticação, segurança e lembrar suas escolhas de consentimento.' },
+          { id: 'functional', name: 'Funcionais', locked: false, desc: 'Embeds (Instagram, Google Reviews) e melhorias opcionais de experiência.' },
+          { id: 'analytics', name: 'Analíticos', locked: false, desc: 'Métricas agregadas e anônimas de uso (GA4, Clarity, pipeline próprio).' },
+          { id: 'marketing', name: 'Marketing', locked: false, desc: 'Mensuração de campanhas e remarketing (Facebook Pixel, GTM).' },
+        ].map((cat) => (
+          <label class="flex items-start gap-4 p-4 rounded-sm border border-white/8 hover:border-white/16 transition-colors cursor-pointer">
+            <input
+              type="checkbox"
+              data-cat={cat.id}
+              disabled={cat.locked}
+              checked={cat.locked}
+              class="cookie-toggle mt-1 w-10 h-6 appearance-none rounded-full bg-white/15 relative cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-60 checked:bg-primary-container/70 shrink-0"
+            />
+            <span class="min-w-0">
+              <span class="flex items-center gap-2 mb-1">
+                <span class="text-body-md text-white font-semibold">{cat.name}</span>
+                {cat.locked && <span class="text-[10px] uppercase tracking-[0.2em] text-primary-container border border-primary-container/40 px-1.5 py-0.5 rounded-sm">Sempre ativo</span>}
+              </span>
+              <span class="text-sm text-tertiary leading-relaxed block">{cat.desc}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <footer class="flex flex-col sm:flex-row gap-2 justify-end mt-6 pt-5 border-t border-white/8">
+        <button type="button" id="cookie-modal-reject" data-track="cookie_modal_reject" class="inline-flex items-center justify-center gap-2 border border-white/30 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-4 py-3 rounded-sm hover:border-white/60 hover:text-white transition-all">Recusar não essenciais</button>
+        <button type="button" id="cookie-modal-save" data-track="cookie_modal_save" class="inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-4 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all">Salvar escolhas</button>
+      </footer>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .cookie-toggle::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: #fff;
+    transition: transform 0.18s ease;
+  }
+  .cookie-toggle:checked::before {
+    transform: translateX(16px);
+    background: #61c54f;
+  }
+</style>
+
+<script>
+  type Categories = {
+    necessary: true
+    functional: boolean
+    analytics: boolean
+    marketing: boolean
+  }
+
+  const STORAGE_KEY = 'aumaf_consent_v1'
+  const POLICY_VERSION = '1.0'
+
+  function readStored(): { state: Categories; version: string } | null {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return null
+      const parsed = JSON.parse(raw) as { necessary: true; functional?: boolean; analytics?: boolean; marketing?: boolean; version?: string }
+      return {
+        state: { necessary: true, functional: !!parsed.functional, analytics: !!parsed.analytics, marketing: !!parsed.marketing },
+        version: parsed.version ?? '0',
+      }
+    } catch { return null }
+  }
+
+  function persist(state: Categories) {
+    try {
+      const payload = { ...state, version: POLICY_VERSION, timestamp: new Date().toISOString() }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    } catch { /* storage indisponível — ainda dispatchamos o evento */ }
+    window.dispatchEvent(new CustomEvent('aumaf:consent', { detail: state }))
+  }
+
+  async function sendToBackend(state: Categories, source: 'banner_accept_all' | 'banner_reject_optional' | 'banner_custom') {
+    try {
+      const apiUrl = (import.meta as unknown as { env: Record<string, string> }).env.PUBLIC_API_URL
+      if (!apiUrl || !/^https?:\/\//.test(apiUrl)) return
+      await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/consent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categories: state, policyVersion: POLICY_VERSION, source }),
+        keepalive: true,
+      })
+    } catch { /* best-effort */ }
+  }
+
+  function close(persistedState: Categories | null) {
+    const wrap = document.getElementById('cookie-consent')
+    const modal = document.getElementById('cookie-modal')
+    modal?.classList.add('hidden')
+    wrap?.classList.add('hidden')
+    if (persistedState) {
+      window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('aumaf:consent', { detail: persistedState }))
+      }, 50)
+    }
+  }
+
+  function shouldShow(): boolean {
+    const stored = readStored()
+    if (!stored) return true
+    if (stored.version !== POLICY_VERSION) return true
+    return false
+  }
+
+  function openBanner() {
+    document.getElementById('cookie-consent')?.classList.remove('hidden')
+  }
+
+  function openModal() {
+    const modal = document.getElementById('cookie-modal')
+    if (!modal) return
+    modal.classList.remove('hidden')
+    const stored = readStored()
+    if (stored) {
+      modal.querySelectorAll<HTMLInputElement>('.cookie-toggle').forEach((input) => {
+        const key = input.dataset.cat as keyof Categories
+        if (key === 'necessary') return
+        input.checked = !!stored.state[key]
+      })
+    }
+    const firstFocus = modal.querySelector<HTMLElement>('button, [tabindex]:not([tabindex="-1"])')
+    firstFocus?.focus()
+  }
+
+  function readModalState(): Categories {
+    const modal = document.getElementById('cookie-modal')
+    const state: Categories = { necessary: true, functional: false, analytics: false, marketing: false }
+    modal?.querySelectorAll<HTMLInputElement>('.cookie-toggle').forEach((input) => {
+      const key = input.dataset.cat as keyof Categories
+      if (key === 'necessary') return
+      ;(state as Record<string, boolean | true>)[key] = input.checked
+    })
+    return state
+  }
+
+  function acceptAll() {
+    const state: Categories = { necessary: true, functional: true, analytics: true, marketing: true }
+    persist(state); void sendToBackend(state, 'banner_accept_all'); close(state)
+  }
+  function rejectOptional() {
+    const state: Categories = { necessary: true, functional: false, analytics: false, marketing: false }
+    persist(state); void sendToBackend(state, 'banner_reject_optional'); close(state)
+  }
+  function saveCustom() {
+    const state = readModalState()
+    persist(state); void sendToBackend(state, 'banner_custom'); close(state)
+  }
+
+  if (shouldShow()) openBanner()
+
+  document.getElementById('cookie-accept')?.addEventListener('click', acceptAll)
+  document.getElementById('cookie-reject')?.addEventListener('click', rejectOptional)
+  document.getElementById('cookie-customize')?.addEventListener('click', openModal)
+  document.getElementById('cookie-modal-close')?.addEventListener('click', () => document.getElementById('cookie-modal')?.classList.add('hidden'))
+  document.getElementById('cookie-modal-overlay')?.addEventListener('click', () => document.getElementById('cookie-modal')?.classList.add('hidden'))
+  document.getElementById('cookie-modal-save')?.addEventListener('click', saveCustom)
+  document.getElementById('cookie-modal-reject')?.addEventListener('click', rejectOptional)
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.getElementById('cookie-modal')?.classList.add('hidden')
+  })
+
+  ;(window as unknown as { aumafReopenConsent?: () => void }).aumafReopenConsent = () => {
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
+    openBanner()
+  }
+</script>

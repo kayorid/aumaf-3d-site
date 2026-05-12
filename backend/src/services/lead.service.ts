@@ -59,6 +59,7 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
       utmContent: input.utmContent ?? null,
       referrer: input.referrer ?? null,
       landingPage: input.landingPage ?? null,
+      marketingConsent: input.marketingConsent ?? false,
     },
   })
   logger.info({ leadId: lead.id, source: lead.source }, 'Lead created')

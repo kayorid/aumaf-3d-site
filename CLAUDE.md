@@ -108,6 +108,19 @@ Pipeline 100% AUMAF rodando em paralelo com GA4/Clarity. Dashboard em `/analytic
 - ADR: `docs/decisions/ADR-003-analytics-proprio.md` · Runbook: `docs/runbooks/analytics.md`.
 - **Ao criar qualquer CTA/page/form novo, use a skill `analytics-tagging`.**
 
+## LGPD / Privacidade
+- Plano: `docs/plans/2026-05-12-lgpd-compliance-plan.md`
+- Politicas publicas: `docs/legal/` → publicadas em `/politica-de-privacidade`, `/termos-de-uso`, `/politica-de-cookies`
+- Operacao interna: `docs/compliance/` (ROPA, LIA, incident-response, DPA)
+- Encarregado: Luiz Felipe Lampa Risse — felipe@aumaf3d.com.br
+- Banner consent: `frontend-public/src/components/CookieConsent.astro` (versao 1.0)
+- Loader consent-aware (GA4/Clarity/Pixel/GTM): `frontend-public/src/scripts/third-party-loader.ts` (Consent Mode v2 default denied)
+- Endpoint consent: `POST /api/v1/consent` → `consent_logs`
+- DSR (direitos do titular, art. 18): `POST /api/v1/dsr/request` → magic link 24h → admin `/lgpd/solicitacoes`
+- Worker retencao: `backend/src/workers/data-retention.worker.ts` (diario 03:00 BRT — analytics 12m / leads anon 5a / consents 5a / DSR completed 5a)
+- Smoke test: `./scripts/lgpd-smoke.sh` (BASE_URL + API_URL)
+- Runbook operacional: `docs/runbooks/lgpd-operations.md`
+
 ## URLs Locais
 
 | Serviço | URL |

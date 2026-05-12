@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro'
+import Navbar from './Navbar.astro'
+import Footer from './Footer.astro'
+import Breadcrumb from './Breadcrumb.astro'
+import { COMPANY } from '../lib/company'
+import { loadLegalDoc } from '../lib/legal'
+
+export interface Props {
+  /** Slug do arquivo markdown em `src/content/legal/`. */
+  slug: 'politica-de-privacidade' | 'termos-de-uso' | 'politica-de-cookies'
+  /** Caminho público da página (usado no breadcrumb + SEO). */
+  path: string
+  /** Title meta + breadcrumb. */
+  title: string
+  /** Meta description. */
+  description: string
+  /** Rótulo curto para o eyebrow no hero. */
+  eyebrow: string
+}
+
+const { slug, path, title, description, eyebrow } = Astro.props
+const doc = loadLegalDoc(slug)
+---
+
+<Base
+  title={`${title} — AUMAF 3D`}
+  description={description}
+  pageType="WebPage"
+  breadcrumb={[{ name: title, url: path }]}
+>
+  <Navbar currentPath={path} />
+
+  <article class="bg-background relative overflow-hidden">
+    <!-- Hero discreto -->
+    <header class="pt-28 pb-12 relative" aria-labelledby="legal-title">
+      <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 50% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+
+      <div class="max-w-[820px] mx-auto px-edge relative z-10">
+        <Breadcrumb items={[{ name: title }]} compact />
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-5 mt-4">{eyebrow}</span>
+        <h1
+          id="legal-title"
+          class="text-display-md md:text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[1.05] mb-6"
+        >
+          {doc.title || title}
+        </h1>
+        <div class="flex flex-wrap items-center gap-4 text-code-data text-on-surface-variant uppercase tracking-[0.18em]">
+          {doc.version && (
+            <span class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary-container dot-glow" aria-hidden="true"></span>
+              Versão {doc.version}
+            </span>
+          )}
+          {doc.effectiveDate && (
+            <span>Vigente desde {doc.effectiveDate}</span>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <!-- Corpo -->
+    <section class="pb-20">
+      <div class="max-w-[820px] mx-auto px-edge">
+        <div class="prose-aumaf" set:html={doc.html}></div>
+      </div>
+    </section>
+
+    <!-- Rodapé institucional -->
+    <section class="border-t border-white/8 bg-surface-low/40">
+      <div class="max-w-[820px] mx-auto px-edge py-10">
+        <p class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-4">Controlador dos dados</p>
+        <div class="text-sm text-tertiary leading-relaxed space-y-1">
+          <p class="text-on-surface font-semibold">AUMAF 3D PRINTING A NEW WORLD LTDA</p>
+          <p>CNPJ: 46.357.355/0001-33</p>
+          <p>{COMPANY.address.streetAddress} — {COMPANY.address.neighborhood}</p>
+          <p>{COMPANY.address.addressLocality} – {COMPANY.address.addressRegion} — CEP {COMPANY.address.postalCode}</p>
+          <p class="pt-3">
+            <span class="text-on-surface-variant uppercase text-[10px] tracking-[0.2em] block mb-1">Encarregado (DPO)</span>
+            Luiz Felipe Lampa Risse —
+            <a
+              href="mailto:felipe@aumaf3d.com.br"
+              data-track="legal_dpo_email"
+              data-track-target={slug}
+              class="text-primary-container hover:underline focus-visible:text-primary-container"
+            >felipe@aumaf3d.com.br</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <Footer />
+</Base>

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook, ShieldCheck, BarChart3 } from 'lucide-react'
+import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook, ShieldCheck, BarChart3, Scale } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { usePermissions } from '@/features/users/hooks/usePermissions'
 
@@ -22,6 +22,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '07', feature: 'botyio' },
   { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '08', feature: 'media' },
   { to: '/usuarios',  label: 'Usuários',   icon: ShieldCheck,     number: '09', feature: 'users' },
+  { to: '/lgpd/solicitacoes', label: 'LGPD', icon: Scale,         number: '10', feature: 'lgpd' },
 ]
 
 export function Sidebar() {

@@ -12,6 +12,7 @@ import { ensurePubSubSubscribed } from './services/integration-config.service'
 import { closePubSub } from './lib/redis-pubsub'
 import './workers/register'
 import { scheduleAnalyticsRollups } from './workers/analytics-rollup.worker'
+import { scheduleDataRetentionSweep } from './workers/data-retention.worker'
 
 async function main() {
   // Cripto: derruba o processo se a master key estiver indisponível em produção
@@ -58,6 +59,7 @@ async function main() {
     try {
       await bootWorkers()
       await scheduleAnalyticsRollups()
+      await scheduleDataRetentionSweep()
     } catch (err) {
       logger.error({ err }, 'Worker boot failed')
     }

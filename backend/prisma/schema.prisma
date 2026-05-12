@@ -119,6 +119,9 @@ model Lead {
   referrer    String?
   landingPage String?
 
+  // LGPD — consentimento explícito (art. 7º, I) para marketing.
+  marketingConsent Boolean @default(false)
+
   // Botyio sync
   botyoLeadId     String?
   botyoStatus     String?   @default("pending")
@@ -339,6 +342,48 @@ model AnalyticsFunnel {
   @@unique([date, name, step])
   @@index([date, name])
   @@map("analytics_funnels")
+}
+
+// ============================================================
+// LGPD — registros de consentimento e direitos do titular.
+// docs/plans/2026-05-12-lgpd-compliance-plan.md
+// ============================================================
+
+model ConsentLog {
+  id            String   @id @default(cuid())
+  userIdHash    String?
+  ipHash        String
+  userAgent     String?
+  categories    Json
+  policyVersion String
+  source        String
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([userIdHash])
+  @@map("consent_logs")
+}
+
+model DataSubjectRequest {
+  id                String    @id @default(cuid())
+  email             String
+  fullName          String?
+  requestType       String
+  description       String?   @db.Text
+  status            String    @default("pending_verification")
+  verificationToken String?   @unique
+  verifiedAt        DateTime?
+  resolvedAt        DateTime?
+  resolutionNote    String?   @db.Text
+  ipHash            String?
+  userAgent         String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@map("data_subject_requests")
 }
 
 model AnalyticsRealtime {

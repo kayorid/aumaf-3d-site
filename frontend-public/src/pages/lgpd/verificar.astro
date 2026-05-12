@@ -1,0 +1,63 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+
+const description = 'Confirmação de identidade para solicitações LGPD na AUMAF 3D.'
+---
+
+<Base
+  title="Verificação de solicitação LGPD — AUMAF 3D"
+  description={description}
+  pageType="WebPage"
+  noindex
+>
+  <Navbar currentPath="/lgpd/verificar" />
+
+  <section class="min-h-[60vh] bg-background pt-28 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+    <div class="max-w-[640px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'LGPD', url: '/lgpd/direitos' }, { name: 'Verificação' }]} compact />
+      <div id="verify-state" class="glass-panel rounded-sm p-8 border border-white/8 mt-6 text-center">
+        <div class="w-14 h-14 rounded-full bg-primary-container/15 border border-primary-container/30 flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-primary-container text-3xl" aria-hidden="true" style="font-variation-settings:'FILL' 1;">hourglass_top</span>
+        </div>
+        <h1 class="text-headline-md font-bold uppercase text-white mb-3 tracking-[-0.02em]">Verificando solicitação…</h1>
+        <p class="text-sm text-tertiary leading-relaxed">Aguarde um instante.</p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<script>
+  async function run() {
+    const params = new URLSearchParams(location.search)
+    const token = params.get('token')
+    const stateEl = document.getElementById('verify-state')
+    if (!stateEl) return
+    if (!token) {
+      stateEl.innerHTML = '<h1 class="text-headline-md font-bold uppercase text-white mb-3 tracking-[-0.02em]">Link inválido</h1><p class="text-sm text-tertiary">Token ausente. Solicite um novo link em <a href="/lgpd/direitos" class="text-primary-container hover:underline">/lgpd/direitos</a>.</p>'
+      return
+    }
+    try {
+      const apiUrl = (import.meta as unknown as { env: Record<string, string> }).env.PUBLIC_API_URL
+      if (!apiUrl) throw new Error('no api')
+      const res = await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/dsr/verify?token=${encodeURIComponent(token)}`)
+      if (!res.ok) throw new Error('verify failed')
+      stateEl.innerHTML = `
+        <div class="w-14 h-14 rounded-full bg-primary-container/15 border border-primary-container/30 flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-primary-container text-3xl" aria-hidden="true" style="font-variation-settings:'FILL' 1;">verified</span>
+        </div>
+        <h1 class="text-headline-md font-bold uppercase text-white mb-3 tracking-[-0.02em]">Identidade verificada</h1>
+        <p class="text-sm text-tertiary leading-relaxed">Sua solicitação entrou em nossa fila. Você receberá a resposta em até 15 dias úteis no e-mail informado.</p>
+      `
+    } catch {
+      stateEl.innerHTML = '<h1 class="text-headline-md font-bold uppercase text-white mb-3 tracking-[-0.02em]">Token inválido ou expirado</h1><p class="text-sm text-tertiary">Solicite um novo link em <a href="/lgpd/direitos" class="text-primary-container hover:underline">/lgpd/direitos</a>.</p>'
+    }
+  }
+  run()
+</script>

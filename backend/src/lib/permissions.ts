@@ -13,6 +13,7 @@ export const FEATURES = [
   'settings',
   'botyio',
   'users',
+  'lgpd',
 ] as const
 
 export const ACTIONS = ['view', 'edit'] as const
@@ -100,6 +101,7 @@ function featureLabel(f: Feature): string {
     settings: 'Configurações',
     botyio: 'Botyio',
     users: 'Usuários',
+    lgpd: 'LGPD',
   }
   return map[f]
 }
