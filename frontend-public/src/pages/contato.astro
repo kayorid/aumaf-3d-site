@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
 import { COMPANY } from '../lib/company'
 
-const description = 'Solicite orçamento de impressão 3D na AUMAF 3D. Envie seu arquivo .STL, .STEP ou descreva o projeto e receba retorno em até 24 horas. São Carlos – SP.'
+const description = 'Solicite orçamento de impressão 3D na AUMAF 3D. Envie seu arquivo .STL, .X_T, .STEP ou .3MF e receba retorno em até 24 horas. São Carlos – SP.'
 
 const projectTypes = [
   'Prototipagem',
@@ -289,12 +289,12 @@ const infoCards = [
                 >
                   <span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary-container transition-colors block mb-3" aria-hidden="true">upload_file</span>
                   <p class="text-body-md text-on-surface mb-1">Arraste ou clique para fazer upload</p>
-                  <p class="text-code-data text-tertiary">.STL .OBJ .STEP .PDF .DXF — máx. 15MB</p>
+                  <p class="text-code-data text-tertiary">3D: .STL .X_T .STEP .3MF · Complementares: .PDF .JPG .PNG — máx. 15MB</p>
                   <input
                     id="file-input"
                     type="file"
                     name="arquivo"
-                    accept=".stl,.obj,.step,.stp,.pdf,.dxf"
+                    accept=".stl,.x_t,.step,.stp,.3mf,.pdf,.jpg,.jpeg,.png,.webp"
                     aria-describedby="file-name"
                     class="absolute inset-0 opacity-0 cursor-pointer"
                   />
