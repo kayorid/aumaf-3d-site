@@ -1,15 +1,19 @@
 /**
  * Renderer Markdown → HTML para posts dinâmicos.
  *
- * Estratégia: marked com html:true. Blocos HTML inline (com classes Tailwind do
- * design system) são preservados as-is. Texto narrativo, headings, listas,
- * tabelas GFM e blockquotes são convertidos do Markdown.
+ * Estratégia: marked com html:true + sanitize-html allowlist conservadora.
+ * Blocos HTML inline (com classes Tailwind do design system) são preservados.
+ * Texto narrativo, headings, listas, tabelas GFM e blockquotes são convertidos do MD.
+ *
+ * Por que sanitize-html e não isomorphic-dompurify? DOMPurify puxa
+ * html-encoding-sniffer → @exodus/bytes (ESM puro) que quebra o build do Astro
+ * no Docker com ERR_REQUIRE_ESM. sanitize-html é CJS-compatible.
  *
  * As classes Tailwind usadas precisam estar safelisted em tailwind.config.ts
  * (já configurado em P2-A11).
  */
 import { Marked } from 'marked'
-import DOMPurify from 'isomorphic-dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 const marked = new Marked({
   gfm: true,
@@ -19,8 +23,8 @@ const marked = new Marked({
 
 // Allowlist conservadora: cobre todo HTML produzido por Marked GFM + classes Tailwind do DS.
 // onerror/onclick/javascript: URIs e <script>/<iframe>/<object> são bloqueados por design.
-const SANITIZE_CONFIG = {
-  ALLOWED_TAGS: [
+const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'p', 'a', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'u', 's', 'del', 'ins',
     'code', 'pre', 'blockquote', 'q', 'cite',
@@ -28,23 +32,30 @@ const SANITIZE_CONFIG = {
     'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption',
     'br', 'hr', 'span', 'div', 'small', 'sub', 'sup', 'mark',
   ],
-  ALLOWED_ATTR: [
-    'href', 'target', 'rel', 'src', 'srcset', 'sizes', 'alt', 'title',
-    'class', 'id', 'loading', 'decoding', 'width', 'height',
-    'colspan', 'rowspan', 'scope', 'lang', 'dir', 'aria-label', 'aria-hidden', 'role',
-    'data-track', 'data-track-source', 'data-track-page',
-  ],
-  ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[/#?])/i,
-  ADD_ATTR: ['target'], // permite target="_blank" em <a>
-  FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'style', 'form', 'input', 'button'],
-  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'style'],
-  KEEP_CONTENT: true,
+  allowedAttributes: {
+    a: ['href', 'name', 'target', 'rel', 'title', 'class', 'id'],
+    img: ['src', 'srcset', 'sizes', 'alt', 'title', 'loading', 'decoding', 'width', 'height', 'class'],
+    '*': [
+      'class', 'id', 'lang', 'dir', 'role',
+      'aria-label', 'aria-hidden', 'aria-describedby',
+      'colspan', 'rowspan', 'scope',
+      'data-track', 'data-track-source', 'data-track-page',
+    ],
+  },
+  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+  allowedSchemesByTag: {
+    img: ['http', 'https', 'data'],
+  },
+  // Mata HTML perigoso por design: <script>/<iframe>/<style>/<form>/inputs/<object>.
+  // sanitize-html já remove tudo fora de allowedTags; explícito como guard de regressão.
+  disallowedTagsMode: 'discard',
+  // Atributos on* (onerror, onclick etc.) NÃO estão em allowedAttributes — removidos.
 }
 
 export function renderPostContent(markdown: string): string {
   if (!markdown) return ''
   const html = marked.parse(markdown, { async: false }) as string
-  return DOMPurify.sanitize(html, SANITIZE_CONFIG) as unknown as string
+  return sanitizeHtml(html, SANITIZE_OPTIONS)
 }
 
 /**
