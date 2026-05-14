@@ -43,11 +43,22 @@ export const ANALYTICS_EVENT_NAMES = [
   // Engajamento
   'depth',
   'time_on_page',
+  'web_vital',
   // Formulário
   'contact_form',
   // Modais
   'material_modal',
   'portfolio_modal',
+  // Consent banner LGPD
+  'cookie_modal_accept',
+  'cookie_modal_reject',
+  'cookie_modal_save',
+  // Footer/legais
+  'contato_legal_link',
+  // Server-side (emitidos pelo backend após mutação)
+  'lead_created_server',
+  'post_published_server',
+  'dsr_completed_server',
 ] as const
 export type AnalyticsEventName = (typeof ANALYTICS_EVENT_NAMES)[number]
 

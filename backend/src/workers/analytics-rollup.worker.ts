@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq'
 import { logger } from '../config/logger'
 import { createQueue, createWorker } from '../lib/queue'
-import { rollupRange, pruneRealtime } from '../services/analytics-rollup.service'
+import { rollupRange, pruneRealtime, pruneOldEvents } from '../services/analytics-rollup.service'
 import { registerWorker } from './index'
 
 export const ANALYTICS_ROLLUP_QUEUE = 'analytics-rollup'
@@ -11,6 +11,7 @@ export type AnalyticsRollupJobData =
   | { kind: 'daily' }
   | { kind: 'realtime-prune' }
   | { kind: 'backfill'; fromIso: string; toIso: string }
+  | { kind: 'prune-old-events' }
 
 export const analyticsRollupQueue = createQueue<AnalyticsRollupJobData>(ANALYTICS_ROLLUP_QUEUE, {
   defaultJobOptions: {
@@ -49,6 +50,13 @@ export async function processAnalyticsRollup(job: Job<AnalyticsRollupJobData>) {
       logger.info({ jobId: job.id, ...r }, 'Backfill roll-up done')
       return r
     }
+    case 'prune-old-events': {
+      // LGPD: retenção máxima de 12 meses para eventos brutos.
+      // Agregadas em analytics_daily_* permanecem (anônimas por design).
+      const r = await pruneOldEvents()
+      logger.info({ jobId: job.id, ...r }, 'Old analytics events pruned (LGPD retention)')
+      return r
+    }
   }
 }
 
@@ -63,6 +71,7 @@ const REPEAT_KEY = {
   rollup: 'rollup-30min',
   daily: 'rollup-daily',
   realtimePrune: 'realtime-prune',
+  pruneOldEvents: 'prune-old-events',
 }
 
 // Cadências anteriores cujo repeat job pode existir em Redis de deploys antigos.
@@ -102,6 +111,12 @@ export async function scheduleAnalyticsRollups() {
     'realtime-prune',
     { kind: 'realtime-prune' },
     { repeat: { pattern: '* * * * *' }, jobId: REPEAT_KEY.realtimePrune },
+  )
+  // LGPD retention — diário 03:00 BRT (06:00 UTC), apaga eventos brutos > 12 meses.
+  await analyticsRollupQueue.add(
+    'prune-old-events',
+    { kind: 'prune-old-events' },
+    { repeat: { pattern: '0 6 * * *' }, jobId: REPEAT_KEY.pruneOldEvents },
   )
   logger.info('Analytics rollup schedules registered')
 }
