@@ -49,3 +49,8 @@ docs/assets/**/*.DS_Store
 docs/assets/**/*.kra
 docs/assets/**/*~
 docs/assets/**/*-autosave.*
+
+
+# Claude Code scheduled tasks lock
+.claude/scheduled_tasks.lock
+.claude/scheduled_tasks/
