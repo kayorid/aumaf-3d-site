@@ -14,10 +14,12 @@
     "@astrojs/node": "^9.5.5",
     "@astrojs/sitemap": "^3.0.0",
     "@astrojs/tailwind": "^6.0.0",
-    "@aumaf/shared": "*",
     "@aumaf/analytics-sdk": "*",
+    "@aumaf/shared": "*",
     "astro": "^5.0.0",
-    "marked": "^18.0.3"
+    "isomorphic-dompurify": "^3.12.0",
+    "marked": "^18.0.3",
+    "web-vitals": "^5.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

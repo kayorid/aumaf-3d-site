@@ -103,21 +103,45 @@ export async function listMedia(query: MediaListQuery): Promise<MediaListRespons
   }
 }
 
-export async function updateMedia(id: string, input: UpdateMediaInput): Promise<MediaAssetDto> {
-  const exists = await prisma.mediaAsset.findUnique({ where: { id } })
-  if (!exists) throw httpErrors.notFound('Mídia não encontrada')
+// Roles autorizados a manipular mídia de qualquer dono (não só a própria).
+const MEDIA_PRIVILEGED_ROLES = new Set(['ADMIN'])
+
+async function assertCanMutateMedia(assetId: string, userId: string | null) {
+  if (!userId) throw httpErrors.unauthorized()
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, role: true },
+  })
+  if (!user) throw httpErrors.unauthorized()
+  const asset = await prisma.mediaAsset.findUnique({ where: { id: assetId } })
+  if (!asset) throw httpErrors.notFound('Mídia não encontrada')
+  const isOwner = asset.createdById && asset.createdById === user.id
+  const isPrivileged = MEDIA_PRIVILEGED_ROLES.has(user.role)
+  if (!isOwner && !isPrivileged) {
+    logger.warn({ tag: 'audit:media', action: 'FORBIDDEN', id: assetId, userId, role: user.role }, 'tentativa de mutação de mídia sem permissão')
+    throw httpErrors.forbidden('Sem permissão para alterar esta mídia')
+  }
+  return asset
+}
+
+export async function updateMedia(
+  id: string,
+  input: UpdateMediaInput,
+  userId: string | null,
+): Promise<MediaAssetDto> {
+  await assertCanMutateMedia(id, userId)
 
   const updated = await prisma.mediaAsset.update({
     where: { id },
     data: { alt: input.alt ?? null },
     include: { createdBy: { select: { id: true, name: true } } },
   })
+  logger.info({ tag: 'audit:media', action: 'UPDATE', id, userId }, 'media updated')
   return toDto(updated)
 }
 
 export async function deleteMedia(id: string, userId: string | null): Promise<void> {
-  const exists = await prisma.mediaAsset.findUnique({ where: { id } })
-  if (!exists) throw httpErrors.notFound('Mídia não encontrada')
+  const exists = await assertCanMutateMedia(id, userId)
 
   // best-effort delete no S3/MinIO; não falha se objeto sumiu
   try {

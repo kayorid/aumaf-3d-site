@@ -5,7 +5,11 @@
  */
 export const COMPANY = {
   name: 'AUMAF 3D',
-  legalName: 'AUMAF 3D — Manufatura Aditiva',
+  // Razão social registrada na Receita Federal (uso jurídico/footer).
+  legalName: 'AUMAF 3D PRINTING A NEW WORLD LTDA',
+  brandName: 'AUMAF 3D — Manufatura Aditiva',
+  // CNPJ válido para schema.org/taxID. Sem mascaramento adicional.
+  taxId: '46.357.355/0001-33',
   // Domínio canônico atual (homologação). Pós-migração: trocar para https://aumaf3d.com.br
   // e também alterar `site` em frontend-public/astro.config.ts.
   url: 'https://aumaf.kayoridolfi.ai',

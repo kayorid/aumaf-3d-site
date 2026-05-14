@@ -207,3 +207,19 @@ export async function pruneRealtime(): Promise<{ deleted: number }> {
   const r = await prisma.analyticsRealtime.deleteMany({ where: { lastSeenAt: { lt: cutoff } } })
   return { deleted: r.count }
 }
+
+/**
+ * LGPD: retenção máxima de 12 meses para eventos brutos (analytics_events).
+ * Tabelas agregadas (analytics_daily_*) permanecem — são anônimas por design
+ * e não vinculam visitante ou IP.
+ * Sessões com lastSeenAt > 12 meses também são apagadas (não-anônimas via
+ * visitorId, ainda que o IP nunca tenha sido persistido).
+ */
+export async function pruneOldEvents(): Promise<{ events: number; sessions: number }> {
+  const cutoff = new Date(Date.now() - 365 * 24 * 60 * 60_000)
+  const [events, sessions] = await Promise.all([
+    prisma.analyticsEvent.deleteMany({ where: { occurredAt: { lt: cutoff } } }),
+    prisma.analyticsSession.deleteMany({ where: { lastSeenAt: { lt: cutoff } } }),
+  ])
+  return { events: events.count, sessions: sessions.count }
+}

@@ -59,6 +59,38 @@ interface EnrichedEvent extends CollectEventInput {
   ipHash: string | null
 }
 
+// Lista de crawlers de LLMs (ChatGPT, Claude, Perplexity, Google AI, Apple AI etc.).
+// Detecção via substring no User-Agent — case-insensitive.
+// Persistido em properties.isLlmBot/llmVendor para filtragem no dashboard
+// (sem migration custosa — promover a coluna no futuro se virar gargalo).
+const LLM_BOT_SIGNATURES: ReadonlyArray<readonly [string, string]> = [
+  ['GPTBot', 'openai'],
+  ['ChatGPT-User', 'openai'],
+  ['OAI-SearchBot', 'openai'],
+  ['ClaudeBot', 'anthropic'],
+  ['Claude-Web', 'anthropic'],
+  ['anthropic-ai', 'anthropic'],
+  ['PerplexityBot', 'perplexity'],
+  ['Perplexity-User', 'perplexity'],
+  ['Google-Extended', 'google'],
+  ['Googlebot-Extended', 'google'],
+  ['CCBot', 'commoncrawl'],
+  ['Applebot-Extended', 'apple'],
+  ['cohere-ai', 'cohere'],
+  ['Bytespider', 'bytedance'],
+  ['DuckAssistBot', 'duckduckgo'],
+  ['Meta-ExternalAgent', 'meta'],
+]
+
+export function detectLlmBot(userAgent: string | null): { isLlmBot: boolean; llmVendor: string | null } {
+  if (!userAgent) return { isLlmBot: false, llmVendor: null }
+  const ua = userAgent.toLowerCase()
+  for (const [sig, vendor] of LLM_BOT_SIGNATURES) {
+    if (ua.includes(sig.toLowerCase())) return { isLlmBot: true, llmVendor: vendor }
+  }
+  return { isLlmBot: false, llmVendor: null }
+}
+
 async function enrichEvent(ev: CollectEventInput, ctx: IngestContext): Promise<EnrichedEvent> {
   // 1) Parse UA — só se cliente não enviou device explícito
   let deviceType = ev.properties && typeof ev.properties.deviceType === 'string' ? (ev.properties.deviceType as string) : null
@@ -97,7 +129,24 @@ async function enrichEvent(ev: CollectEventInput, ctx: IngestContext): Promise<E
   // 3) Hash IP (nunca persistir IP em texto)
   const ipHash = ctx.ip ? hashIp(ctx.ip) : null
 
-  return { ...ev, deviceType, os, browser, country, ipHash }
+  // 4) Detecção de LLM bot — marca em properties para que o dashboard
+  // possa filtrar/segmentar sem schema migration. Crawlers de LLM
+  // distorcem bounce rate e tempo na página (acessos curtos sem
+  // interação), então isolar é importante para métricas de conversão.
+  const { isLlmBot, llmVendor } = detectLlmBot(ctx.userAgent)
+  const enrichedProperties = isLlmBot
+    ? { ...(ev.properties ?? {}), isLlmBot: true, llmVendor }
+    : ev.properties
+
+  return {
+    ...ev,
+    properties: enrichedProperties,
+    deviceType: isLlmBot ? 'bot' : deviceType,
+    os,
+    browser,
+    country,
+    ipHash,
+  }
 }
 
 /**

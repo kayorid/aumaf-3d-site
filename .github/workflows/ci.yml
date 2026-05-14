@@ -95,3 +95,38 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Security & quality guardrails (non-blocking inicial — promover a blocking
+      # após estabilizar contagem de findings. Ver docs/plans/2026-05-13-prevention.md).
+      - name: Security audit (high+)
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: XSS lint — bloqueia set:html sem sanitize
+        # Detecta uso de `set:html=` com expressão direta a partir de campo do
+        # tipo content/markdown/html sem passar por renderPostContent ou
+        # DOMPurify. False positive aceitável; vale a pena auditar.
+        run: |
+          set -e
+          MATCHES=$(grep -RInE 'set:html=\{[^}]*\.(content|markdown|html|description)[^}]*\}' frontend-public/src --include='*.astro' || true)
+          if [ -n "$MATCHES" ]; then
+            echo "::warning::set:html com campo conteúdo sem sanitização explícita encontrado:"
+            echo "$MATCHES"
+            echo ""
+            echo "Use renderPostContent() (DOMPurify) ou sanitize explicitamente."
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: PII lint — bloqueia logger sem redact paths novos
+        run: |
+          set -e
+          # Garante que logs novos não passem PII direto. Detecta padrões comuns:
+          # logger.info({email: x}) ou ({password: x}) sem nested em objeto seguro.
+          MATCHES=$(grep -RInE 'logger\.(info|warn|error|debug)\([^)]*\b(email|cpf|cnpj|password|passwordHash|token|refreshToken)\s*:' backend/src --include='*.ts' || true)
+          if [ -n "$MATCHES" ]; then
+            echo "::warning::logger emitindo PII direto. Use redact em logger.ts ou retire o campo:"
+            echo "$MATCHES"
+            exit 1
+          fi
+        continue-on-error: true

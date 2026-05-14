@@ -1,0 +1,80 @@
+---
+export const prerender = true
+import Base from '../layouts/Base.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+import { COMPANY } from '../lib/company'
+
+const description = 'Algo deu errado do nosso lado. Já estamos investigando. Enquanto isso, você pode tentar novamente ou navegar para outra área do site.'
+
+const popularLinks = [
+  { href: '/servicos', title: 'Serviços', desc: 'Prototipagem, peças funcionais, metal e modelagem 3D' },
+  { href: '/portfolio', title: 'Portfolio', desc: 'Mais de 500 projetos entregues em diversas indústrias' },
+  { href: '/materiais', title: 'Materiais', desc: 'Catálogo de 17+ materiais técnicos' },
+  { href: '/blog', title: 'Blog', desc: 'Guias técnicos sobre manufatura aditiva' },
+  { href: '/faq', title: 'FAQ', desc: 'Perguntas frequentes sobre impressão 3D' },
+  { href: '/contato', title: 'Contato', desc: 'Solicite orçamento em até 24h' },
+]
+---
+
+<Base title="Erro interno (500)" description={description} noindex>
+  <Navbar currentPath="/" />
+
+  <section class="min-h-[80vh] bg-background pt-28 pb-section relative overflow-hidden flex items-center" aria-labelledby="hero-500">
+    <div class="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 60% at 50% 30%,rgba(220,80,80,0.06) 0%,transparent 60%);"></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge w-full relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="text-label-caps text-error uppercase tracking-[0.2em] block mb-6">Erro 500 // Falha no servidor</span>
+          <h1 id="hero-500" class="text-display-xl font-bold uppercase text-white tracking-[-0.04em] leading-none mb-6">
+            Algo deu<br/><span class="text-gradient-glow">errado.</span>
+          </h1>
+          <p class="text-body-lg text-tertiary leading-relaxed max-w-md mb-10">
+            Tivemos um problema temporário do nosso lado. Já estamos investigando. Você pode tentar novamente em alguns instantes ou explorar outras áreas do site.
+          </p>
+          <div class="flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onclick="window.location.reload()"
+              class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300"
+            >
+              <span class="material-symbols-outlined text-base" aria-hidden="true">refresh</span>
+              Tentar novamente
+            </button>
+            <a
+              href={COMPANY.contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Falar pelo WhatsApp: ${COMPANY.contact.phoneDisplay} (abre em nova aba)`}
+              class="inline-flex items-center gap-2 border border-white/30 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container hover:text-primary-container transition-all duration-300"
+            >
+              Falar com a equipe
+              <span class="material-symbols-outlined text-base" aria-hidden="true">open_in_new</span>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-6">Caminhos populares</p>
+          <ul role="list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {popularLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="block glass-panel p-5 rounded-sm border border-white/8 hover:border-primary-container/40 transition-all duration-200 group focus-visible:border-primary-container"
+                >
+                  <p class="text-body-md font-semibold text-white group-hover:text-primary-container transition-colors mb-1">{link.title}</p>
+                  <p class="text-code-data text-tertiary leading-relaxed">{link.desc}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
