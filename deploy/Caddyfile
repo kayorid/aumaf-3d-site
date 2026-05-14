@@ -26,7 +26,7 @@
 
 aumaf.kayoridolfi.ai {
 	import security_headers
-	encode br gzip
+	encode zstd br gzip
 
 	# Same-origin proxy para o backend — viabiliza o SDK de analytics
 	# (POST /api/v1/analytics/collect e /collect/beacon) sem CORS/preflight.
@@ -35,6 +35,18 @@ aumaf.kayoridolfi.ai {
 
 	@hashed_assets path_regexp hashed ^/_astro/.+\.[a-f0-9]{8,}\..+$
 	header @hashed_assets Cache-Control "public, max-age=31536000, immutable"
+
+	# Cache longo + immutable para mídia estática (webp/avif/mp4/woff2 não mudam de URL)
+	@static_media path_regexp static_media ^/(images|videos|fonts|assets)/.+\.(webp|avif|png|jpg|jpeg|svg|mp4|webm|woff2|woff|ico)$
+	header @static_media Cache-Control "public, max-age=2592000, stale-while-revalidate=86400"
+
+	# Endpoints públicos de leitura — cache curto compartilhado, SWR generoso
+	@public_api path /api/v1/posts/public* /api/v1/portfolio/public* /api/v1/settings/public
+	header @public_api Cache-Control "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
+
+	# Robots/sitemap/llms — cache de 1h (raramente mudam)
+	@robots_seo path /robots.txt /sitemap*.xml /llms.txt /llms-full.txt
+	header @robots_seo Cache-Control "public, max-age=3600"
 
 	reverse_proxy 127.0.0.1:4321 {
 		health_uri /
@@ -52,7 +64,7 @@ aumaf.kayoridolfi.ai {
 
 admin-aumaf.kayoridolfi.ai {
 	import security_headers
-	encode br gzip
+	encode zstd br gzip
 
 	@hashed_assets path_regexp hashed ^/assets/.+\.[a-f0-9]{8,}\..+$
 	header @hashed_assets Cache-Control "public, max-age=31536000, immutable"
@@ -73,7 +85,7 @@ admin-aumaf.kayoridolfi.ai {
 
 api-aumaf.kayoridolfi.ai {
 	import security_headers
-	encode gzip
+	encode zstd br gzip
 
 	reverse_proxy 127.0.0.1:3000 {
 		health_uri /health

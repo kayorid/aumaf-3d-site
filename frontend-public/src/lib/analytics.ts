@@ -5,7 +5,7 @@
  * Endpoint apontado para a mesma origem em prod (proxy/Caddy expõe /api/v1/analytics)
  * e localhost:3000 em dev (via PUBLIC_ANALYTICS_ENDPOINT).
  */
-import { initAnalytics } from '@aumaf/analytics-sdk'
+import { initAnalytics, track } from '@aumaf/analytics-sdk'
 
 const endpoint =
   (import.meta.env.PUBLIC_ANALYTICS_ENDPOINT as string | undefined) ?? '/api/v1/analytics/collect'
@@ -21,3 +21,34 @@ initAnalytics({
   // captura clicks/scroll/forms/time-on-page.
   respectConsent: true,
 })
+
+// Web Vitals — chunk separado, dispara cada métrica no momento final
+// (LCP no idle, CLS no pagehide, INP em interação etc.). Reportado como
+// evento `custom` com name=`web_vital` para o pipeline próprio.
+import('web-vitals')
+  .then(({ onCLS, onLCP, onINP, onFCP, onTTFB }) => {
+    const report = (metric: {
+      name: string
+      value: number
+      rating: string
+      id: string
+      navigationType?: string
+    }) => {
+      track('custom', 'web_vital', {
+        metric: metric.name,
+        value: Math.round(metric.value * 1000) / 1000,
+        rating: metric.rating,
+        metricId: metric.id,
+        navigationType: metric.navigationType ?? null,
+        path: window.location.pathname,
+      })
+    }
+    onCLS(report)
+    onLCP(report)
+    onINP(report)
+    onFCP(report)
+    onTTFB(report)
+  })
+  .catch(() => {
+    // Silencioso: web-vitals falhou ao carregar; métricas perdidas para esta sessão.
+  })
