@@ -1,3 +1,9 @@
+# AVISO: este Caddyfile é REFERÊNCIA — em produção a VPS roda Caddy 2.11.2
+# nativo (Hostinger Ubuntu 22.04) que NÃO inclui módulo brotli (zstd está
+# no core 2.8+). Antes de aplicar este arquivo na VPS, instale brotli via
+# xcaddy ou substitua `encode zstd br gzip` por `encode gzip` em cada vhost.
+# Ver memory/reference_caddy_vps.md (procedimento canônico de mudança).
+
 {
 	email kayocdi@gmail.com
 	acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
