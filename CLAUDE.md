@@ -77,6 +77,13 @@ aumaf-3d-site/
 - **Storybook obrigatório** — nunca remover mesmo sob pressão de prazo
 - **Playwright obrigatório** — E2E no frontend-admin
 - **MinIO obrigatório** — upload de imagens do blog
+- **Defesa em profundidade** — toda nova superfície DEVE seguir `docs/decisions/ADR-004-security-defense-in-depth.md`:
+  - HTML de banco/usuário → `renderPostContent()` (DOMPurify)
+  - PATCH/DELETE em recurso de usuário → `assertCan*()` com ownership check
+  - Logs com PII/secrets → registrar path em `backend/src/config/logger.ts:REDACT_PATHS`
+  - Eventos analytics novos → adicionar a `ANALYTICS_EVENT_NAMES` antes de disparar
+  - PII em `analytics_events.properties` → proibido (usar `leadId`/`postId`)
+  - `npm audit --audit-level=high` deve passar antes do merge para master
 - JWT **sempre** em cookie httpOnly, nunca em localStorage
 - Imports do `@aumaf/shared` devem vir de `packages/shared/src`
 
