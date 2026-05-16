@@ -3,6 +3,8 @@ import { slugify } from '../lib/slug'
 import { httpErrors } from '../lib/http-error'
 import { logger } from '../config/logger'
 import { enqueuePostPublishWarmup } from '../workers/post-publish.worker'
+import { pingIndexNow } from './indexnow.service'
+import { env } from '../config/env'
 import type { CreatePostInput, UpdatePostInput, PostListQuery, PostDto } from '@aumaf/shared'
 
 async function safeEnqueueWarmup(postId: string, slug: string): Promise<void> {
@@ -11,6 +13,17 @@ async function safeEnqueueWarmup(postId: string, slug: string): Promise<void> {
   } catch (err) {
     logger.error({ err, postId, slug }, 'Failed to enqueue post-publish warmup — post saved anyway')
   }
+}
+
+/** Best-effort: avisa Bing/Yandex via IndexNow. Não bloqueia o publish. */
+function safePingIndexNow(slug: string): void {
+  const base = env.PUBLIC_BLOG_BASE_URL
+  if (!base) return
+  const postUrl = `${base.replace(/\/$/, '')}/blog/${slug}`
+  const blogUrl = `${base.replace(/\/$/, '')}/blog`
+  void pingIndexNow([postUrl, blogUrl]).catch((err) => {
+    logger.warn({ err, slug }, 'IndexNow ping unexpected throw — ignored')
+  })
 }
 
 function toDto(post: Awaited<ReturnType<typeof prisma.post.findUnique>>): PostDto {
@@ -213,6 +226,7 @@ export async function publishPost(id: string) {
   })
   logger.info({ postId: id }, 'Post published')
   await safeEnqueueWarmup(post.id, post.slug)
+  safePingIndexNow(post.slug)
   return toDto(post)
 }
 

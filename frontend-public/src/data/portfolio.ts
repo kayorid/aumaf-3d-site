@@ -26,7 +26,7 @@ export interface PortfolioProject {
   /** Setor/indústria atendido (para o detalhe). */
   industry: string
   /** Tecnologia de manufatura aditiva utilizada. */
-  process: 'FDM' | 'SLA' | 'SLS' | 'Metal Sinterizado' | 'Misto'
+  process: 'FDM' | 'SLA' | 'SLS' | 'SLM — Metal Sinterizado' | 'Metal Sinterizado' | 'Misto'
   /** Briefing técnico — qual era a dor / contexto. */
   briefing: string
   /** O que foi entregue. */
@@ -58,7 +58,6 @@ export const portfolioProjects: PortfolioProject[] = [
       { label: 'Processo', value: 'FDM industrial — bico hardened 0.5mm' },
       { label: 'Dimensões', value: '180 × 95 × 60 mm' },
       { label: 'Massa', value: '142 g (vs. 240 g em alumínio)' },
-      { label: 'Tolerância', value: '±0,1 mm em furos' },
       { label: 'Acabamento', value: 'Bruto + lixamento spot em furos' },
     ],
     results: [
@@ -78,30 +77,30 @@ export const portfolioProjects: PortfolioProject[] = [
     slug: 'port-02-flange-316l',
     cat: 'Metal',
     title: 'Flange em Aço Inox 316L',
-    mat: 'BASF Ultrafuse 316L',
+    mat: 'Aço Inox 316L (SLM)',
     accent: false,
-    excerpt: 'Flange descontinuada para equipamento alimentício, replicada em aço inox 316L grau alimentar com norma ASTM.',
+    excerpt: 'Flange descontinuada para equipamento alimentício, replicada em Aço Inox 316L sinterizado por SLM, norma ASTM.',
     industry: 'Alimentícia',
-    process: 'Metal Sinterizado',
+    process: 'SLM — Metal Sinterizado',
     briefing: 'Equipamento de envase com 18 anos de operação teve a flange original perdida. Fornecedor europeu não fabricava mais a peça e indicava substituição completa do equipamento (~R$ 80.000). A peça precisava certificação 316L para contato com alimento.',
-    delivery: 'Flange impressa em filamento BASF Ultrafuse 316L, debinding químico e sinterização em forno industrial parceiro. Densidade pós-sinterização >95% do aço maciço, certificada conforme ASTM 316L. Acabamento por jateamento + polimento sanitário.',
+    delivery: 'Flange impressa em Aço Inox 316L por SLM (Selective Laser Melting) com tratamento térmico pós-processo. Densidade próxima ao aço maciço, certificada conforme ASTM 316L. Acabamento por jateamento + polimento sanitário.',
     specs: [
-      { label: 'Material', value: 'BASF Ultrafuse 316L (aço inox grade alimentar)' },
-      { label: 'Processo', value: 'FDM + debinding + sinterização' },
+      { label: 'Material', value: 'Aço Inox 316L (grade alimentar)' },
+      { label: 'Processo', value: 'SLM + tratamento térmico' },
       { label: 'Dimensões', value: 'Ø 120 × 18 mm — 6 furos M8' },
       { label: 'Massa final', value: '420 g' },
-      { label: 'Densidade', value: '>95% do aço sólido' },
+      { label: 'Densidade', value: '>99% do aço sólido' },
       { label: 'Acabamento', value: 'Polimento sanitário Ra <1.6μm' },
     ],
     results: [
       { label: 'Custo total', value: 'R$ 2.400', hint: 'Vs. R$ 80k de equipamento novo' },
-      { label: 'Prazo', value: '18 dias', hint: 'Inclui sinterização' },
+      { label: 'Prazo', value: '18 dias', hint: 'Inclui pós-processo' },
       { label: 'Norma', value: 'ASTM 316L', hint: 'Contato alimentar' },
       { label: 'Vida útil', value: '15+ anos', hint: 'Equiparada à original' },
     ],
     gallery: [
-      { src: '/images/port-02-flange-316l.webp', alt: 'Flange em aço inox 316L sinterizada, finalizada' },
-      { src: '/images/mat-17-ultrafuse-316l.webp', alt: 'Filamento Ultrafuse 316L em rolo' },
+      { src: '/images/port-02-flange-316l.webp', alt: 'Flange em aço inox 316L sinterizada por SLM, finalizada' },
+      { src: '/images/mat-17-aco-inox-316l-slm.webp', alt: 'Peça em aço inox 316L sinterizada por SLM' },
     ],
     tags: ['Engenharia reversa', 'Aço inox', 'Indústria alimentícia', 'Reposição crítica'],
   },
@@ -109,19 +108,18 @@ export const portfolioProjects: PortfolioProject[] = [
     slug: 'port-03-encaixe-sae',
     cat: 'Prototipagem',
     title: 'Encaixe para Fórmula SAE USP',
-    mat: 'Nylon PA',
+    mat: 'Nylon',
     accent: false,
     excerpt: 'Componente estrutural de cabine para protótipo Fórmula SAE da USP São Carlos — competição 2024.',
     industry: 'Engenharia Estudantil',
     process: 'FDM',
     briefing: 'Equipe Fórmula SAE da USP São Carlos precisava de encaixe customizado para fixar painel de instrumentos da cabine ao chassi tubular. Geometria precisava absorver vibração e tinha 5 dias úteis até a homologação técnica do veículo.',
-    delivery: 'Encaixe impresso em Nylon PA com infill 60% e parede sólida nos pontos de fixação. Validado em pista durante a competição sem falhas estruturais. Peça padronizada e replicada para 4 unidades em estoque de campeonato.',
+    delivery: 'Encaixe impresso em Nylon com infill 60% e parede sólida nos pontos de fixação. Validado em pista durante a competição sem falhas estruturais. Peça padronizada e replicada para 4 unidades em estoque de campeonato.',
     specs: [
-      { label: 'Material', value: 'Nylon (PA) — secado < 0.2% umidade' },
+      { label: 'Material', value: 'Nylon — secado < 0.2% umidade' },
       { label: 'Processo', value: 'FDM com câmara fechada' },
       { label: 'Dimensões', value: '95 × 60 × 40 mm' },
       { label: 'Infill', value: '60% gyroid' },
-      { label: 'Tolerância', value: '±0,15 mm' },
       { label: 'Quantidade', value: '4 unidades para a competição' },
     ],
     results: [
@@ -130,7 +128,7 @@ export const portfolioProjects: PortfolioProject[] = [
       { label: 'Custo total', value: 'R$ 380', hint: '4 peças prontas para uso' },
     ],
     gallery: [
-      { src: '/images/port-03-encaixe-sae.webp', alt: 'Encaixe estrutural Fórmula SAE em Nylon PA' },
+      { src: '/images/port-03-encaixe-sae.webp', alt: 'Encaixe estrutural Fórmula SAE em Nylon' },
     ],
     tags: ['Fórmula SAE', 'Pequena série', 'Validação em pista', 'Nylon'],
   },
@@ -196,16 +194,16 @@ export const portfolioProjects: PortfolioProject[] = [
     slug: 'port-06-conector-aeronautico',
     cat: 'Metal',
     title: 'Conector Estrutural Aeronáutico',
-    mat: 'Ultrafuse 316L',
+    mat: 'Aço Inox 316L (SLM)',
     accent: false,
     excerpt: 'Conector estrutural não-crítico para drone industrial — substituição de peça importada com prazo de 90 dias.',
     industry: 'Drones / UAV',
-    process: 'Metal Sinterizado',
+    process: 'SLM — Metal Sinterizado',
     briefing: 'Empresa de inspeção por drones tinha conector estrutural quebrado — peça vinha da Alemanha com prazo de 90 dias. Operação parada custava R$ 12.000/dia. Solução temporária em alumínio usinado não tinha rigidez torcional suficiente.',
-    delivery: 'Conector replicado em aço inox 316L impresso e sinterizado, com geometria otimizada topologicamente para resistir torção. Operacional desde a entrega há 14 meses, sem falhas.',
+    delivery: 'Conector replicado em Aço Inox 316L sinterizado por SLM, com geometria otimizada topologicamente para resistir torção. Operacional desde a entrega há 14 meses, sem falhas.',
     specs: [
-      { label: 'Material', value: 'BASF Ultrafuse 316L' },
-      { label: 'Processo', value: 'FDM + sinterização' },
+      { label: 'Material', value: 'Aço Inox 316L (SLM)' },
+      { label: 'Processo', value: 'SLM + tratamento térmico' },
       { label: 'Dimensões', value: '85 × 45 × 35 mm' },
       { label: 'Massa', value: '88 g' },
       { label: 'Resist. torção', value: '+22% vs. original' },
@@ -236,7 +234,6 @@ export const portfolioProjects: PortfolioProject[] = [
       { label: 'Material', value: 'ABS industrial (alta tenacidade)' },
       { label: 'Processo', value: 'FDM + alisamento por acetona' },
       { label: 'Dimensões', value: 'Ø 95 × 28 mm' },
-      { label: 'Tolerância', value: '±0,08 mm na pista' },
       { label: 'Ciclos validados', value: '200.000 em bancada' },
     ],
     results: [
@@ -321,7 +318,6 @@ export const portfolioProjects: PortfolioProject[] = [
       { label: 'Material', value: 'PA CF15 (Nylon + 15% fibra carbono)' },
       { label: 'Processo', value: 'FDM + roscamento M16 + canaleta lubrificada' },
       { label: 'Dimensões', value: 'Ø 38 × 60 mm — rosca M16×1.5' },
-      { label: 'Tolerância', value: '±0,08 mm no Ø externo' },
       { label: 'Quantidade', value: '6 unidades' },
     ],
     results: [
@@ -364,16 +360,16 @@ export const portfolioProjects: PortfolioProject[] = [
     slug: 'port-12-implante-medico',
     cat: 'Resina',
     title: 'Implante Educacional Médico',
-    mat: 'Resina Cerâmica',
+    mat: 'Resina ABS-like',
     accent: false,
     excerpt: 'Modelo anatômico em escala real de implante ortopédico para treinamento médico — não para uso clínico.',
     industry: 'Educação Médica',
     process: 'SLA',
     briefing: 'Faculdade de medicina precisava de modelo anatômico de implante de quadril em escala real para aulas práticas. Material precisava ter aparência e comportamento próximos do titânio cirúrgico, mas com custo viável para descarte após cada turma.',
-    delivery: 'Modelo em resina cerâmica com pós-processo de queima leve para acabamento mate metálico. Geometria fiel ao implante real, com possibilidade de simular fixação em modelo ósseo sintético acoplado.',
+    delivery: 'Modelo em resina ABS-like com pintura mate metálica para acabamento. Geometria fiel ao implante real, com possibilidade de simular fixação em modelo ósseo sintético acoplado.',
     specs: [
-      { label: 'Material', value: 'Resina cerâmica + queima leve' },
-      { label: 'Processo', value: 'SLA + sinterização parcial' },
+      { label: 'Material', value: 'Resina ABS-like + pintura mate' },
+      { label: 'Processo', value: 'SLA' },
       { label: 'Dimensões', value: '160 × 35 × 35 mm (escala 1:1)' },
       { label: 'Camada', value: '50 µm' },
       { label: 'Uso', value: 'Educação — não clínico' },
@@ -384,9 +380,9 @@ export const portfolioProjects: PortfolioProject[] = [
       { label: 'Reuso aulas', value: '12 turmas/un', hint: 'Antes de descarte' },
     ],
     gallery: [
-      { src: '/images/port-12-implante-medico.webp', alt: 'Modelo anatômico de implante em resina cerâmica' },
+      { src: '/images/port-12-implante-medico.webp', alt: 'Modelo anatômico de implante em resina ABS-like com pintura mate metálica' },
     ],
-    tags: ['Educação', 'Modelo anatômico', 'Resina cerâmica'],
+    tags: ['Educação', 'Modelo anatômico', 'Resina ABS-like'],
   },
 ]
 

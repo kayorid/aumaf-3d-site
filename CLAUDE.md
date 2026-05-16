@@ -77,6 +77,13 @@ aumaf-3d-site/
 - **Storybook obrigatório** — nunca remover mesmo sob pressão de prazo
 - **Playwright obrigatório** — E2E no frontend-admin
 - **MinIO obrigatório** — upload de imagens do blog
+- **Defesa em profundidade** — toda nova superfície DEVE seguir `docs/decisions/ADR-004-security-defense-in-depth.md`:
+  - HTML de banco/usuário → `renderPostContent()` (DOMPurify)
+  - PATCH/DELETE em recurso de usuário → `assertCan*()` com ownership check
+  - Logs com PII/secrets → registrar path em `backend/src/config/logger.ts:REDACT_PATHS`
+  - Eventos analytics novos → adicionar a `ANALYTICS_EVENT_NAMES` antes de disparar
+  - PII em `analytics_events.properties` → proibido (usar `leadId`/`postId`)
+  - `npm audit --audit-level=high` deve passar antes do merge para master
 - JWT **sempre** em cookie httpOnly, nunca em localStorage
 - Imports do `@aumaf/shared` devem vir de `packages/shared/src`
 
@@ -97,8 +104,29 @@ aumaf-3d-site/
 
 ## Integrações Previstas
 - **Botyo** — WhatsApp chatbot + captação de leads
-- **GA4 + Microsoft Clarity + Facebook Pixel + GTM**
+- **GA4 + Microsoft Clarity + Facebook Pixel + GTM** (em paralelo com o analytics próprio)
 - **IA para posts** — geração automática SEO/GEO (provedor a definir pela AUMAF)
+
+## Analytics próprio
+Pipeline 100% AUMAF rodando em paralelo com GA4/Clarity. Dashboard em `/analytics` no admin.
+- SDK: `packages/analytics-sdk/` — auto-tracking de `data-track`, scroll, form, time-on-page.
+- Backend: `POST /v1/analytics/collect` → BullMQ → PostgreSQL → cron roll-up.
+- Catálogo de eventos canônicos: `packages/shared/src/schemas/analytics.ts`.
+- ADR: `docs/decisions/ADR-003-analytics-proprio.md` · Runbook: `docs/runbooks/analytics.md`.
+- **Ao criar qualquer CTA/page/form novo, use a skill `analytics-tagging`.**
+
+## LGPD / Privacidade
+- Plano: `docs/plans/2026-05-12-lgpd-compliance-plan.md`
+- Politicas publicas: `docs/legal/` → publicadas em `/politica-de-privacidade`, `/termos-de-uso`, `/politica-de-cookies`
+- Operacao interna: `docs/compliance/` (ROPA, LIA, incident-response, DPA)
+- Encarregado: Luiz Felipe Lampa Risse — felipe@aumaf3d.com.br
+- Banner consent: `frontend-public/src/components/CookieConsent.astro` (versao 1.0)
+- Loader consent-aware (GA4/Clarity/Pixel/GTM): `frontend-public/src/scripts/third-party-loader.ts` (Consent Mode v2 default denied)
+- Endpoint consent: `POST /api/v1/consent` → `consent_logs`
+- DSR (direitos do titular, art. 18): `POST /api/v1/dsr/request` → magic link 24h → admin `/lgpd/solicitacoes`
+- Worker retencao: `backend/src/workers/data-retention.worker.ts` (diario 03:00 BRT — analytics 12m / leads anon 5a / consents 5a / DSR completed 5a)
+- Smoke test: `./scripts/lgpd-smoke.sh` (BASE_URL + API_URL)
+- Runbook operacional: `docs/runbooks/lgpd-operations.md`
 
 ## URLs Locais
 

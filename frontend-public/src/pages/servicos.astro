@@ -7,76 +7,11 @@ import Breadcrumb from '../components/Breadcrumb.astro'
 import SectionSeparator from '../components/SectionSeparator.astro'
 import { COMPANY } from '../lib/company'
 import { serviceSchema, howToSchema, itemListSchema } from '../lib/schemas'
+import { services, processSteps } from '../data/servicos'
 
-const services = [
-  {
-    id: 'prototipagem',
-    num: '01',
-    title: 'Prototipagem Rápida',
-    body: 'Reduza o ciclo de desenvolvimento com protótipos funcionais entregues em dias. Ideal para validação de forma, encaixe e montagem antes da produção em série. Tecnologias FDM, SLA e SLS disponíveis conforme o nível de detalhe e material necessário.',
-    specs: ['FDM / SLA / SLS', 'Entrega 24–72h', 'Geometria Complexa', 'Sem Molde'],
-    details: [
-      { label: 'Prazo típico', value: '24–72h' },
-      { label: 'Materiais', value: 'PLA, ABS, PETG, Resina' },
-      { label: 'Tolerância', value: '±0.1mm (FDM) / ±0.05mm (SLA)' },
-      { label: 'Aplicação', value: 'Validação de conceito' },
-    ],
-    reverse: false,
-  },
-  {
-    id: 'funcionais',
-    num: '02',
-    title: 'Peças Funcionais & Metal',
-    body: 'Peças de reposição para máquinas, componentes para robôs e equipamentos industriais. Fabricadas sob demanda em plásticos de alta performance ou aço inoxidável via sinterização BASF Ultrafuse 316L. Sem molde, sem mínimo de quantidade.',
-    specs: ['Metal 316L', 'PA CF15 / PEEK / Ultem', 'Alta Temperatura', '+260°C'],
-    details: [
-      { label: 'Prazo típico', value: '3–7 dias úteis' },
-      { label: 'Metal prazo', value: '15–20 dias (sinterização)' },
-      { label: 'Tolerância', value: '±0.05mm' },
-      { label: 'Aplicação', value: 'Uso final industrial' },
-    ],
-    reverse: true,
-  },
-  {
-    id: 'modelagem',
-    num: '03',
-    title: 'Modelagem 3D & Otimização DfAM',
-    body: 'Nossa equipe converte desenhos técnicos, esboços ou especificações verbais em modelos 3D prontos para impressão, com otimização para manufatura aditiva (DfAM). Entregamos arquivos .STL, .STEP e .OBJ validados e prontos para produção.',
-    specs: ['CAD Profissional', 'DfAM', 'Análise de Topologia', 'STEP / STL / OBJ'],
-    details: [
-      { label: 'Entregável', value: '.STL / .STEP / .OBJ' },
-      { label: 'Prazo', value: 'Sob consulta' },
-      { label: 'Inclui', value: 'Análise de impressibilidade' },
-      { label: 'Aplicação', value: 'Projeto do zero ou conversão' },
-    ],
-    reverse: false,
-  },
-  {
-    id: 'reposicao',
-    num: '04',
-    title: 'Engenharia Reversa (Scanner 3D)',
-    body: 'Capturamos peças físicas existentes com scanner 3D de alta resolução e geramos o modelo digital para replicação exata ou modificação de design. Ideal para peças descontinuadas pelo fabricante original ou componentes orgânicos complexos.',
-    specs: ['Scanner 3D', 'Engenharia Reversa', 'Nuvem de Pontos', 'Réplica Exata'],
-    details: [
-      { label: 'Tecnologia', value: 'Scanner portátil HD' },
-      { label: 'Precisão', value: '±0.02mm na captura' },
-      { label: 'Entregável', value: 'Modelo 3D + arquivo pronto' },
-      { label: 'Aplicação', value: 'Peças descontinuadas / orgânicas' },
-    ],
-    reverse: true,
-  },
-]
 
-const processSteps = [
-  { n: '01', title: 'Envio do Arquivo', body: 'Envie .STL, .OBJ, .STEP ou descreva o projeto.' },
-  { n: '02', title: 'Análise Técnica', body: 'Revisamos viabilidade, material e processo.' },
-  { n: '03', title: 'Orçamento', body: 'Retornamos em até 24h com valor e prazo.' },
-  { n: '04', title: 'Produção', body: 'Impressão com monitoramento em tempo real.' },
-  { n: '05', title: 'Controle de Qualidade', body: 'Verificação dimensional antes do envio.' },
-  { n: '06', title: 'Entrega & Suporte', body: 'Envio nacional + suporte técnico pós-entrega.' },
-]
 
-const description = 'Serviços de impressão 3D industrial AUMAF 3D: prototipagem rápida (24–72h), peças funcionais em metal 316L e polímeros (PEEK, PA CF15), modelagem 3D, engenharia reversa. Tolerância ±0.05mm. São Carlos – SP.'
+const description = 'Serviços de impressão 3D industrial AUMAF 3D: prototipagem rápida (24–72h), peças funcionais em Aço Inox 316L (SLM) e polímeros técnicos (PA CF15, Tritan HT), modelagem 3D e engenharia reversa. São Carlos – SP.'
 
 const schemas = [
   ...services.map((s) =>
@@ -101,6 +36,7 @@ const schemas = [
   description={description}
   breadcrumb={[{ name: 'Serviços', url: '/servicos' }]}
   schemas={schemas}
+  preloadImage="/images/bg-blueprint.webp"
 >
   <Navbar currentPath="/servicos" />
 
@@ -130,7 +66,7 @@ const schemas = [
         </div>
         <div class="md:pb-2">
           <p class="text-body-lg text-tertiary leading-relaxed max-w-md">
-            Engenharia aditiva completa: do arquivo digital à peça funcional. <strong class="text-on-surface">Quatro serviços integrados</strong> para cada fase do desenvolvimento de produto, com tolerância de até <strong class="text-on-surface">±0.05mm</strong>.
+            Engenharia aditiva completa: do arquivo digital à peça funcional. <strong class="text-on-surface">Quatro serviços integrados</strong> para cada fase do desenvolvimento de produto, com <strong class="text-on-surface">precisão industrial</strong>.
           </p>
           <div class="flex items-center gap-3 mt-8">
             <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect" aria-hidden="true"></span>
@@ -288,7 +224,7 @@ const schemas = [
     <div class="max-w-[1600px] mx-auto px-edge text-center relative z-10">
       <h2 id="cta-servicos" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Inicie seu Projeto Agora</h2>
       <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Envie seu arquivo ou descreva o projeto. Orçamento em até 24 horas.</p>
-      <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-effect-lg hover:bg-primary-dim transition-all duration-300">
+      <a href="/contato" data-track="cta_quote_hero" data-track-location="page-footer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-sm glow-effect-lg hover:bg-primary-dim transition-all duration-300">
         <span class="material-symbols-outlined text-base" aria-hidden="true" style="font-variation-settings:'FILL' 1;">upload_file</span>
         Solicitar orçamento
       </a>

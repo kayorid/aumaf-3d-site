@@ -1,0 +1,71 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import { itemListSchema, webPageSchema } from '../../lib/schemas'
+import { COMPANY } from '../../lib/company'
+import { industrias } from '../../data/industrias'
+
+const url = `${COMPANY.url}/industrias`
+const description = `Soluções de impressão 3D AUMAF 3D por setor — ${industrias.map((i) => i.heading.toLowerCase()).join(', ')}. Materiais, processos e cases por indústria.`
+
+const schemas = [
+  webPageSchema({ url, name: 'Indústrias atendidas', description, type: 'CollectionPage' }),
+  itemListSchema(industrias.map((i) => ({
+    name: i.hero,
+    url: `${COMPANY.url}/industrias/${i.slug}`,
+    description: i.pitch,
+  }))),
+]
+---
+
+<Base
+  title="Indústrias atendidas — Impressão 3D por setor | AUMAF 3D"
+  description={description}
+  pageType="CollectionPage"
+  breadcrumb={[{ name: 'Indústrias', url: '/industrias' }]}
+  schemas={schemas}
+>
+  <Navbar currentPath="/industrias" />
+
+  <main class="bg-background pt-28 pb-section relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.10] pointer-events-none" aria-hidden="true"></div>
+
+    <section class="max-w-[1200px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'Indústrias' }]} compact />
+
+      <header class="mt-6 mb-12">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Setores // Atendimento</span>
+        <h1 class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[0.95] mb-6">
+          Indústrias<br/><span class="text-gradient-glow">atendidas.</span>
+        </h1>
+        <p class="text-body-lg text-tertiary leading-relaxed max-w-3xl">
+          Cada setor tem suas dores específicas. Selecionamos materiais e processos para resolver problemas reais — desde gabaritos automotivos até modelos anatômicos pré-cirúrgicos.
+        </p>
+      </header>
+
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {industrias.map((i) => (
+          <li>
+            <a
+              href={`/industrias/${i.slug}`}
+              class="block glass-panel card-hover-glow rounded-sm p-7 border border-white/8 hover:border-primary-container/60 transition-all duration-300 h-full"
+            >
+              <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-3">{i.heading}</span>
+              <h2 class="text-headline-sm font-bold uppercase text-white tracking-[-0.02em] mb-3">{i.hero}</h2>
+              <p class="text-body-md text-tertiary leading-relaxed mb-4">{i.pitch}</p>
+              <p class="text-label-caps text-primary-container uppercase tracking-widest inline-flex items-center gap-1">
+                Ver soluções
+                <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

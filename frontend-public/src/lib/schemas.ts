@@ -10,6 +10,7 @@ export function organizationSchema() {
     '@id': ORG_ID,
     name: COMPANY.name,
     legalName: COMPANY.legalName,
+    taxID: COMPANY.taxId,
     url: COMPANY.url,
     logo: {
       '@type': 'ImageObject',
@@ -29,11 +30,12 @@ export function organizationSchema() {
       'FDM',
       'SLA',
       'SLS',
+      'SLM',
       'Sinterização de metal',
       'Engenharia reversa',
-      'BASF Ultrafuse 316L',
+      'Aço Inox 316L',
+      'PA12',
       'PA CF15',
-      'PEEK',
       'DfAM',
     ],
     sameAs: [
@@ -231,6 +233,107 @@ export function itemListSchema(items: { name: string; url?: string; description?
       ...(it.description ? { description: it.description } : {}),
     })),
   }
+}
+
+/**
+ * Schema.org Product — usado em /materiais para que LLMs e Google citem cada
+ * material como produto vendável com material/processo/aplicações.
+ */
+export function productSchema(args: {
+  name: string
+  slug: string
+  description: string
+  image: string
+  material: string // 'PLA', 'Nylon (PA12)', 'Aço Inox 316L' etc.
+  process: string // 'FDM', 'SLA', 'SLS', 'SLM', 'DLP'
+  category?: string // 'Pó (SLS/SLM)', 'Alta Performance' etc.
+  applications?: string[] // setores/usos típicos
+  url?: string
+}) {
+  const url = args.url ?? `${COMPANY.url}/materiais#${args.slug}`
+  return {
+    '@type': 'Product',
+    '@id': `${url}#product`,
+    name: args.name,
+    description: args.description,
+    image: args.image,
+    url,
+    material: args.material,
+    category: args.category,
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'additiveManufacturingProcess',
+        value: args.process,
+      },
+      ...(args.applications ?? []).map((a) => ({
+        '@type': 'PropertyValue',
+        name: 'application',
+        value: a,
+      })),
+    ],
+    brand: { '@type': 'Brand', name: COMPANY.name },
+    manufacturer: { '@id': ORG_ID },
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      priceCurrency: 'BRL',
+      seller: { '@id': ORG_ID },
+      url: `${COMPANY.url}/contato?material=${encodeURIComponent(args.slug)}`,
+    },
+  }
+}
+
+/**
+ * Schema.org DefinedTermSet — usado em /glossario para que LLMs citem
+ * definições técnicas com autoridade nominal (AUMAF 3D como fonte).
+ */
+export function definedTermSetSchema(args: {
+  name: string
+  url: string
+  terms: Array<{ term: string; definition: string; id?: string }>
+}) {
+  return {
+    '@type': 'DefinedTermSet',
+    '@id': `${args.url}#glossary`,
+    name: args.name,
+    url: args.url,
+    inLanguage: 'pt-BR',
+    publisher: { '@id': ORG_ID },
+    hasDefinedTerm: args.terms.map((t) => ({
+      '@type': 'DefinedTerm',
+      '@id': `${args.url}#${t.id ?? t.term.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+      name: t.term,
+      description: t.definition,
+      inDefinedTermSet: `${args.url}#glossary`,
+    })),
+  }
+}
+
+/**
+ * Schema.org Person + employee em Organization — autoridade pessoal para GEO.
+ * Cada membro deve ter ao menos nome + cargo; LinkedIn é opcional mas
+ * fortalece o sinal de identidade (sameAs).
+ */
+export function teamMembersSchema(
+  members: Array<{
+    name: string
+    jobTitle: string
+    image?: string
+    linkedin?: string
+    description?: string
+  }>,
+) {
+  return members.map((m) => ({
+    '@type': 'Person',
+    '@id': `${COMPANY.url}/sobre#${m.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+    name: m.name,
+    jobTitle: m.jobTitle,
+    ...(m.description ? { description: m.description } : {}),
+    ...(m.image ? { image: m.image } : {}),
+    ...(m.linkedin ? { sameAs: [m.linkedin] } : {}),
+    worksFor: { '@id': ORG_ID },
+  }))
 }
 
 /** Wrap multiple schemas in a single @graph payload. */

@@ -17,7 +17,8 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
 
 <header
   id="navbar"
-  class="fixed top-0 w-full z-50 nav-glass border-b border-white/8"
+  class="fixed top-0 inset-x-0 z-[60] nav-glass border-b border-white/8"
+  style="padding-top: env(safe-area-inset-top, 0px); transform: translateZ(0); will-change: transform;"
 >
   <nav aria-label="Principal" class="flex justify-between items-center px-edge h-16 max-w-[1600px] mx-auto">
     <!-- Logo -->
@@ -40,6 +41,9 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
           <li>
             <a
               href={link.href}
+              data-track="nav_link"
+              data-track-target={link.label}
+              data-track-location="desktop"
               aria-current={isActive ? 'page' : undefined}
               class:list={[
                 'text-[13px] font-light uppercase tracking-[0.2em] transition-all duration-200 pb-0.5',
@@ -72,6 +76,8 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
       </a>
       <a
         href="/contato"
+        data-track="cta_quote_hero"
+        data-track-location="navbar"
         class="hidden lg:inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-2.5 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-200"
       >
         Solicitar Orçamento
@@ -120,6 +126,9 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
         <li>
           <a
             href={link.href}
+            data-track="nav_link"
+            data-track-target={link.label}
+            data-track-location="mobile"
             aria-current={isActive ? 'page' : undefined}
             class:list={[
               'flex items-center min-h-14 py-4 text-headline-md font-bold uppercase tracking-[-0.02em] border-b border-white/8 transition-colors focus-visible:text-primary-container',
@@ -137,6 +146,8 @@ const helpLink = { href: '/faq', label: 'Perguntas Frequentes' }
   <div class="pt-8 pb-[max(env(safe-area-inset-bottom),2rem)]">
     <a
       href="/contato"
+      data-track="cta_quote_hero"
+      data-track-location="mobile-drawer"
       class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect"
     >
       Solicitar Orçamento

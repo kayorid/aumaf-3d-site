@@ -39,7 +39,7 @@ mediaRoutes.post('/', async (req, res, next) => {
 mediaRoutes.patch('/:id', async (req, res, next) => {
   try {
     const input = UpdateMediaInputSchema.parse(req.body)
-    const result = await updateMedia(req.params.id, input)
+    const result = await updateMedia(req.params.id, input, req.user?.id ?? null)
     res.json({ status: 'ok', data: result })
   } catch (err) {
     next(err)

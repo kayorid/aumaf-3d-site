@@ -1,0 +1,220 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import SelectAumaf from '../../components/SelectAumaf.astro'
+
+const description = 'Exerça seus direitos LGPD na AUMAF 3D — acesso, correção, anonimização, eliminação, portabilidade, revogação de consentimento e mais. Resposta em até 15 dias úteis.'
+
+const rights = [
+  { id: 'access', label: 'Confirmação e acesso aos dados', help: 'Saber se tratamos seus dados e receber uma cópia.' },
+  { id: 'correction', label: 'Correção de dados', help: 'Corrigir dados incompletos, inexatos ou desatualizados.' },
+  { id: 'anonymization', label: 'Anonimização, bloqueio ou eliminação', help: 'Anonimizar, bloquear ou eliminar dados desnecessários, excessivos ou tratados em desconformidade com a LGPD.' },
+  { id: 'portability', label: 'Portabilidade de dados', help: 'Receber seus dados em formato estruturado e interoperável (JSON/CSV).' },
+  { id: 'deletion', label: 'Eliminação de dados tratados com consentimento', help: 'Eliminar dados que tratamos com base no seu consentimento.' },
+  { id: 'info_share', label: 'Informação sobre compartilhamento', help: 'Saber com quais entidades públicas e privadas compartilhamos seus dados.' },
+  { id: 'info_no_consent', label: 'Informação sobre não fornecer consentimento', help: 'Conhecer as consequências de não fornecer consentimento.' },
+  { id: 'revocation', label: 'Revogação de consentimento', help: 'Revogar consentimentos antes concedidos, a qualquer momento.' },
+  { id: 'review_automated', label: 'Revisão de decisões automatizadas', help: 'Solicitar revisão de decisões tomadas unicamente com base em tratamento automatizado de dados.' },
+]
+---
+
+<Base
+  title="Direitos do Titular — LGPD — AUMAF 3D"
+  description={description}
+  pageType="WebPage"
+  breadcrumb={[
+    { name: 'LGPD', url: '/lgpd/direitos' },
+    { name: 'Direitos do Titular', url: '/lgpd/direitos' },
+  ]}
+>
+  <Navbar currentPath="/lgpd/direitos" />
+
+  <article class="bg-background relative overflow-hidden">
+    <header class="pt-28 pb-12 relative" aria-labelledby="rights-title">
+      <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 50% 50% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 60%);"></div>
+      <div class="max-w-[920px] mx-auto px-edge relative z-10">
+        <Breadcrumb items={[{ name: 'LGPD', url: '/lgpd/direitos' }, { name: 'Direitos do Titular' }]} compact />
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-5 mt-4">Lei nº 13.709/2018</span>
+        <h1 id="rights-title" class="text-display-md md:text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[1.05] mb-6">
+          Seus direitos como titular
+        </h1>
+        <p class="text-body-lg text-tertiary leading-relaxed max-w-[680px]">
+          A LGPD garante a você nove direitos sobre seus dados pessoais. Use o formulário abaixo para exercê-los — responderemos em até 15 dias úteis pelo e-mail informado, após verificação da sua identidade.
+        </p>
+      </div>
+    </header>
+
+    <section class="pb-20">
+      <div class="max-w-[920px] mx-auto px-edge grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12">
+        <!-- Lista dos direitos -->
+        <div>
+          <h2 class="text-headline-sm font-bold uppercase text-white mb-6 tracking-[-0.02em]">O que você pode pedir</h2>
+          <ol class="space-y-4">
+            {rights.map((r, i) => (
+              <li class="glass-panel rounded-sm p-5 border border-white/8">
+                <div class="flex items-start gap-4">
+                  <span class="text-code-data text-primary-container font-mono mt-1">{String(i + 1).padStart(2, '0')}</span>
+                  <div class="min-w-0">
+                    <p class="text-body-md text-white font-semibold mb-1">{r.label}</p>
+                    <p class="text-sm text-tertiary leading-relaxed">{r.help}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <!-- Formulário -->
+        <aside class="glass-panel rounded-sm p-7 border border-white/8 h-fit sticky top-24">
+          <div class="flex items-center gap-3 mb-6 pb-5 border-b border-white/8">
+            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse-dot glow-effect" aria-hidden="true"></span>
+            <span class="text-label-caps text-primary-container uppercase tracking-[0.2em]">Solicitar Direito</span>
+          </div>
+
+          <form id="dsr-form" class="space-y-5" novalidate>
+            <div>
+              <label for="dsr-name" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] block mb-2">Nome completo</label>
+              <input
+                id="dsr-name"
+                name="fullName"
+                type="text"
+                required
+                autocomplete="name"
+                class="w-full bg-transparent border-b border-white/15 px-0 py-2 text-on-surface focus:border-primary-container focus:outline-none transition-colors"
+              />
+            </div>
+            <div>
+              <label for="dsr-email" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] block mb-2">E-mail</label>
+              <input
+                id="dsr-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                class="w-full bg-transparent border-b border-white/15 px-0 py-2 text-on-surface focus:border-primary-container focus:outline-none transition-colors"
+              />
+              <p class="text-code-data text-on-surface-variant mt-1">Vamos enviar um link de verificação para este e-mail.</p>
+            </div>
+            <div>
+              <SelectAumaf
+                id="dsr-type"
+                name="requestType"
+                label="Tipo de solicitação"
+                required
+                placeholder="Selecione…"
+                options={rights.map((r) => ({ value: r.id, label: r.label }))}
+              />
+            </div>
+            <div>
+              <label for="dsr-desc" class="text-label-caps text-on-surface-variant uppercase tracking-[0.18em] block mb-2">Detalhe sua solicitação (opcional)</label>
+              <textarea
+                id="dsr-desc"
+                name="description"
+                rows="4"
+                maxlength="2000"
+                class="w-full bg-transparent border border-white/15 rounded-sm px-3 py-2 text-on-surface focus:border-primary-container focus:outline-none transition-colors"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              id="dsr-submit"
+              data-track="lgpd_dsr_submit"
+              class="w-full inline-flex items-center justify-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <span class="material-symbols-outlined text-base" aria-hidden="true" style="font-variation-settings:'FILL' 1;">verified</span>
+              <span>Enviar solicitação</span>
+            </button>
+            <p class="text-code-data text-tertiary text-center">
+              Atendemos em até 15 dias úteis após a verificação da identidade.
+            </p>
+          </form>
+
+          <div id="dsr-success" class="hidden text-center py-8" role="status" aria-live="polite">
+            <div class="w-14 h-14 rounded-full bg-primary-container/15 border border-primary-container/30 flex items-center justify-center mx-auto mb-5">
+              <span class="material-symbols-outlined text-primary-container text-3xl" aria-hidden="true" style="font-variation-settings:'FILL' 1;">mark_email_read</span>
+            </div>
+            <h3 class="text-headline-sm font-bold uppercase text-white mb-2">Verifique seu e-mail</h3>
+            <p class="text-sm text-tertiary leading-relaxed">Enviamos um link de verificação. Após confirmar, sua solicitação entra na fila de atendimento e será respondida em até 15 dias úteis.</p>
+          </div>
+          <p id="dsr-error" class="hidden text-sm text-red-400 mt-4" role="alert"></p>
+        </aside>
+      </div>
+
+      <!-- Canal direto -->
+      <div class="max-w-[920px] mx-auto px-edge mt-16">
+        <div class="glass-panel rounded-sm p-7 border border-white/8 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+          <div class="min-w-0">
+            <p class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-2">Prefere falar direto com o Encarregado?</p>
+            <p class="text-body-md text-on-surface">
+              Luiz Felipe Lampa Risse —
+              <a href="mailto:felipe@aumaf3d.com.br" data-track="lgpd_dpo_direct" class="text-primary-container hover:underline">felipe@aumaf3d.com.br</a>
+            </p>
+          </div>
+          <a
+            href="/politica-de-privacidade"
+            data-track="lgpd_link_privacy"
+            class="inline-flex items-center gap-2 border border-primary-container/40 text-primary-container text-label-caps font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-sm hover:bg-primary-container/10 transition-all"
+          >
+            Política de Privacidade
+            <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_outward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <Footer />
+</Base>
+
+<script>
+  const form = document.getElementById('dsr-form') as HTMLFormElement | null
+  const successEl = document.getElementById('dsr-success')
+  const errorEl = document.getElementById('dsr-error')
+  const submitBtn = document.getElementById('dsr-submit') as HTMLButtonElement | null
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    if (!form || !submitBtn) return
+    errorEl?.classList.add('hidden')
+    submitBtn.disabled = true
+    submitBtn.setAttribute('aria-busy', 'true')
+
+    const data = new FormData(form)
+    const payload = {
+      fullName: String(data.get('fullName') ?? '').trim(),
+      email: String(data.get('email') ?? '').trim(),
+      requestType: String(data.get('requestType') ?? '').trim(),
+      description: String(data.get('description') ?? '').trim() || undefined,
+    }
+    if (!payload.fullName || !payload.email || !payload.requestType) {
+      if (errorEl) { errorEl.textContent = 'Preencha nome, e-mail e tipo de solicitação.'; errorEl.classList.remove('hidden') }
+      submitBtn.disabled = false
+      submitBtn.setAttribute('aria-busy', 'false')
+      return
+    }
+
+    try {
+      const apiUrl = (import.meta as unknown as { env: Record<string, string> }).env.PUBLIC_API_URL
+      if (!apiUrl || !/^https?:\/\//.test(apiUrl)) throw new Error('PUBLIC_API_URL ausente')
+      const res = await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/dsr/request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      form.style.display = 'none'
+      successEl?.classList.remove('hidden')
+    } catch {
+      if (errorEl) {
+        errorEl.textContent = 'Não foi possível enviar agora. Tente novamente em alguns instantes ou envie um e-mail para felipe@aumaf3d.com.br.'
+        errorEl.classList.remove('hidden')
+      }
+      submitBtn.disabled = false
+      submitBtn.setAttribute('aria-busy', 'false')
+    }
+  })
+</script>

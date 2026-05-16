@@ -11,8 +11,12 @@ interface Props {
   onChange: (next: Partial<PostListQuery>) => void
 }
 
-const STATUS_OPTIONS: Array<{ value: '' | PostStatus; label: string }> = [
-  { value: '', label: 'Todos os status' },
+// Radix UI Select proíbe SelectItem com value="" — usamos sentinel '__all__' para
+// representar "sem filtro" e mapeamos para undefined no onChange.
+const ALL = '__all__'
+
+const STATUS_OPTIONS: Array<{ value: typeof ALL | PostStatus; label: string }> = [
+  { value: ALL, label: 'Todos os status' },
   { value: 'DRAFT', label: 'Rascunho' },
   { value: 'PUBLISHED', label: 'Publicado' },
   { value: 'PENDING_REVIEW', label: 'Em revisão' },
@@ -61,7 +65,7 @@ export function PostFilters({ value, onChange }: Props) {
 
   const categoryOptions = useMemo(
     () => [
-      { value: '', label: 'Todas as categorias' },
+      { value: ALL, label: 'Todas as categorias' },
       ...(categories.data?.map((c) => ({ value: c.id, label: c.name })) ?? []),
     ],
     [categories.data],
@@ -108,9 +112,13 @@ export function PostFilters({ value, onChange }: Props) {
 
         <div className="md:col-span-3">
           <SelectStyled
-            value={value.status ?? ''}
+            value={value.status ?? ALL}
             onValueChange={(v) =>
-              onChange({ ...value, status: (v || undefined) as PostStatus | undefined, page: 1 })
+              onChange({
+                ...value,
+                status: (v === ALL ? undefined : (v as PostStatus)),
+                page: 1,
+              })
             }
             options={STATUS_OPTIONS}
             ariaLabel="Filtrar por status"
@@ -119,8 +127,10 @@ export function PostFilters({ value, onChange }: Props) {
 
         <div className="md:col-span-3">
           <SelectStyled
-            value={value.categoryId ?? ''}
-            onValueChange={(v) => onChange({ ...value, categoryId: v || undefined, page: 1 })}
+            value={value.categoryId ?? ALL}
+            onValueChange={(v) =>
+              onChange({ ...value, categoryId: v === ALL ? undefined : v, page: 1 })
+            }
             options={categoryOptions}
             ariaLabel="Filtrar por categoria"
           />

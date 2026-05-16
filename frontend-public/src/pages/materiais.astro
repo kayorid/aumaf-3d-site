@@ -4,7 +4,8 @@ import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
-import { itemListSchema } from '../lib/schemas'
+import { itemListSchema, productSchema } from '../lib/schemas'
+import { COMPANY } from '../lib/company'
 
 interface MaterialDetail {
   slug: string
@@ -30,7 +31,23 @@ interface MaterialDetail {
 
 const materials: MaterialDetail[] = [
   {
-    slug: 'mat-01-nylon-pa', cat: 'Termoplásticos', name: 'Nylon (PA)', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false,
+    slug: 'mat-00-pla', cat: 'Termoplásticos', name: 'PLA', tempMax: '60°C', flex: 'Rígido', app: 'Protótipos e modelos', highlight: false,
+    description: 'O termoplástico mais utilizado em impressão 3D. Fácil de imprimir, sem empenamento, sem cheiro, biodegradável em condições industriais. Excelente para protótipos visuais, modelos didáticos, peças decorativas e validação de geometria antes de migrar para materiais técnicos.',
+    properties: [
+      { label: 'Resistência tração', value: '50–65 MPa' },
+      { label: 'Módulo elástico', value: '2,0–3,0 GPa' },
+      { label: 'Alongamento', value: '5–10%' },
+      { label: 'Densidade', value: '1,24 g/cm³' },
+      { label: 'Temp. máx. uso', value: '60°C' },
+      { label: 'Origem', value: 'Biodegradável (compostagem industrial)' },
+    ],
+    printing: [{ label: 'Bico', value: '195–220°C' }, { label: 'Mesa', value: '50–60°C' }, { label: 'Velocidade', value: '50–80 mm/s' }, { label: 'Câmara', value: 'Não necessária' }],
+    useCases: ['Protótipos visuais', 'Modelos didáticos', 'Peças decorativas', 'Validação de geometria'],
+    pros: ['Fácil impressão', 'Sem empenamento', 'Baixo custo', 'Ampla paleta de cores'],
+    cons: ['Baixa temperatura de uso', 'Frágil sob impacto', 'Não para uso externo prolongado'],
+  },
+  {
+    slug: 'mat-01-nylon-pa', cat: 'Termoplásticos', name: 'Nylon', tempMax: '120°C', flex: 'Semi-rígido', app: 'Mecânica geral', highlight: false,
     description: 'Termoplástico técnico de engenharia com excelente combinação de resistência mecânica, tenacidade e resistência ao desgaste. Absorve umidade — armazenar em ambiente seco. Indicado para peças funcionais sujeitas a fricção, esforços cíclicos e impactos moderados.',
     properties: [
       { label: 'Resistência tração', value: '60–70 MPa' },
@@ -60,6 +77,22 @@ const materials: MaterialDetail[] = [
     useCases: ['Protótipos funcionais', 'Carcaças e gabinetes', 'Peças automotivas internas', 'Modelos de feira'],
     pros: ['Ótima usinabilidade', 'Liso com acetona', 'Bom custo-benefício'],
     cons: ['Empena com facilidade', 'Cheiro forte', 'Sensível a UV sem pintura'],
+  },
+  {
+    slug: 'mat-18-asa', cat: 'Termoplásticos', name: 'ASA', tempMax: '100°C', flex: 'Rígido', app: 'Uso externo / resistência UV', highlight: false,
+    description: 'Termoplástico amorfo da família do ABS, formulado para resistência prolongada a UV e intempéries sem perda de cor ou propriedades mecânicas. Substituto direto do ABS quando a peça é exposta ao sol e à chuva, mantendo boa resistência ao impacto e estabilidade dimensional.',
+    properties: [
+      { label: 'Resistência tração', value: '40–48 MPa' },
+      { label: 'Módulo elástico', value: '1,9–2,4 GPa' },
+      { label: 'Alongamento', value: '15–25%' },
+      { label: 'Densidade', value: '1,07 g/cm³' },
+      { label: 'Temp. máx. uso', value: '100°C' },
+      { label: 'Resistência UV', value: 'Excelente' },
+    ],
+    printing: [{ label: 'Bico', value: '240–260°C' }, { label: 'Mesa', value: '95–110°C' }, { label: 'Velocidade', value: '40–60 mm/s' }, { label: 'Câmara', value: 'Recomendada' }],
+    useCases: ['Peças de uso externo', 'Componentes automotivos externos', 'Carcaças expostas ao sol', 'Sinalização e mobiliário urbano'],
+    pros: ['Alta resistência UV', 'Estabilidade de cor ao tempo', 'Boa resistência ao impacto'],
+    cons: ['Cheiro forte na impressão', 'Empena se sem câmara', 'Custo acima do ABS'],
   },
   {
     slug: 'mat-03-pc', cat: 'Termoplásticos', name: 'Policarbonato (PC)', tempMax: '130°C', flex: 'Rígido', app: 'Alta resistência ao impacto', highlight: false,
@@ -270,45 +303,64 @@ const materials: MaterialDetail[] = [
     cons: ['Custo médio-alto', 'Cura crítica para mecânica'],
   },
   {
-    slug: 'mat-16-resina-ceramica', cat: 'Resinas', name: 'Resina Cerâmica', tempMax: '+400°C', flex: 'Rígido', app: 'Temp. extrema, moldes', highlight: true,
-    description: 'Resina com partículas cerâmicas em suspensão. Após cura UV e sinterização, atinge propriedades cerâmicas — resistência a temperaturas extremas e isolamento térmico/elétrico.',
+    slug: 'mat-16-pa12-sls', cat: 'Pó (SLS/SLM)', name: 'PA12 em Pó (SLS)', tempMax: '170°C', flex: 'Semi-rígido', app: 'Peças funcionais SLS', highlight: true,
+    description: 'Poliamida 12 em pó para sinterização seletiva a laser (SLS). Permite peças funcionais com geometrias complexas, canais internos e estruturas em treliça — sem necessidade de suporte. Excelente combinação de resistência mecânica, leveza e estabilidade dimensional. Acabamento natural fosco com textura levemente porosa.',
     properties: [
-      { label: 'Temp. máx. uso', value: '+400°C' },
-      { label: 'Coef. expansão', value: 'Baixíssimo' },
-      { label: 'Isolamento', value: 'Térmico e elétrico' },
-      { label: 'Densidade', value: '~2,3 g/cm³ (sint.)' },
-      { label: 'Pós-processo', value: 'Sinterização' },
-      { label: 'Acabamento', value: 'Cerâmico mate' },
+      { label: 'Resistência tração', value: '48–55 MPa' },
+      { label: 'Módulo elástico', value: '1,6–1,8 GPa' },
+      { label: 'Alongamento', value: '15–25%' },
+      { label: 'Densidade', value: '1,01 g/cm³' },
+      { label: 'Temp. máx. uso', value: '170°C' },
+      { label: 'HDT', value: '~160°C' },
     ],
-    printing: [{ label: 'Tecnologia', value: 'SLA + sinterização' }, { label: 'Camada', value: '50–100 µm' }, { label: 'Cura UV', value: 'Pós' }, { label: 'Sinterização', value: 'Forno especializado' }],
-    useCases: ['Moldes para fundição', 'Componentes resistentes a fogo', 'Isoladores elétricos/térmicos', 'Protótipos refratários'],
-    pros: ['Temp. extrema', 'Isolante', 'Acabamento cerâmico'],
-    cons: ['Frágil sob impacto', 'Pós-processo longo', 'Requer forno especializado'],
+    printing: [{ label: 'Tecnologia', value: 'SLS — laser sintering' }, { label: 'Camada', value: '100–120 µm' }, { label: 'Volume máx.', value: '400 × 400 × 420 mm' }, { label: 'Pós-processo', value: 'Despoeiramento + jateamento' }],
+    useCases: ['Peças funcionais sem suporte', 'Dutos e canais internos', 'Estruturas em treliça', 'Pequenas séries', 'Carcaças leves'],
+    pros: ['Sem necessidade de suporte', 'Geometrias internas livres', 'Boa resistência mecânica', 'Estabilidade dimensional'],
+    cons: ['Acabamento poroso natural', 'Cor original cinza-bege', 'Pintura precisa de selante'],
   },
   {
-    slug: 'mat-17-ultrafuse-316l', cat: 'Metal', name: 'BASF Ultrafuse 316L', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true,
-    description: 'Filamento metálico com pó de aço inox 316L em matriz polimérica. Após impressão FDM convencional, a peça passa por debinding e sinterização em forno industrial — atinge >95% da densidade do aço maciço, certificada pela norma ASTM 316L.',
+    slug: 'mat-17-aco-inox-316l-slm', cat: 'Pó (SLS/SLM)', name: 'Aço Inox 316L (SLM)', tempMax: '800°C+', flex: 'Aço Inox', app: 'Componentes metálicos finais', highlight: true,
+    description: 'Aço inoxidável 316L sinterizado por laser (SLM — Selective Laser Melting) a partir de pó metálico. Peças metálicas finais com densidade próxima ao maciço, prontas para aplicação industrial, alimentícia e marítima. Excelente resistência à corrosão e a temperaturas extremas.',
     properties: [
-      { label: 'Densidade pós-sinter.', value: '>95% do aço' },
-      { label: 'Resist. tração', value: '450–550 MPa' },
-      { label: 'Alongamento', value: '40–55%' },
+      { label: 'Densidade', value: '>99% do aço maciço' },
+      { label: 'Resist. tração', value: '500–650 MPa' },
+      { label: 'Alongamento', value: '40–50%' },
       { label: 'Norma', value: 'ASTM 316L' },
       { label: 'Temp. máx. uso', value: '800°C+' },
       { label: 'Resist. corrosão', value: 'Alimentícia / marinha' },
     ],
-    printing: [{ label: 'Bico', value: '230–250°C (hardened)' }, { label: 'Mesa', value: '90–105°C' }, { label: 'Velocidade', value: '20–40 mm/s' }, { label: 'Pós-processo', value: 'Debinding + sinterização' }],
-    useCases: ['Componentes metálicos finais', 'Indústria alimentícia', 'Aplicações marítimas', 'Peças sob alta temperatura'],
-    pros: ['Aço inox real', 'Geometrias impossíveis em usinagem', 'Certificação ASTM'],
-    cons: ['Prazo 15–20 dias', 'Encolhimento ~20% na sinter.', 'Custo elevado'],
+    printing: [{ label: 'Tecnologia', value: 'SLM — laser melting' }, { label: 'Camada', value: '20–50 µm' }, { label: 'Volume máx.', value: '470 × 270 × 300 mm' }, { label: 'Pós-processo', value: 'Tratamento térmico + acabamento' }],
+    useCases: ['Componentes metálicos finais', 'Indústria alimentícia', 'Aplicações marítimas', 'Peças sob alta temperatura', 'Substituição de usinagem complexa'],
+    pros: ['Aço inox real de alta densidade', 'Geometrias impossíveis em usinagem', 'Certificação ASTM 316L'],
+    cons: ['Prazo estendido', 'Pós-processo térmico obrigatório', 'Custo elevado'],
   },
 ]
 
-const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Metal']
+const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis', 'Resinas', 'Pó (SLS/SLM)']
 
-const description = 'Catálogo de 17+ materiais para impressão 3D na AUMAF 3D: termoplásticos (PA, ABS, PC, PEEK), alta performance (PA CF15, Tritan), resinas e metal 316L. Especificações técnicas, temperatura, flexibilidade e aplicações.'
+const description = 'Catálogo de materiais para impressão 3D na AUMAF 3D: termoplásticos (PLA, PA, ABS, PETG, PC), alta performance (PA CF15, Tritan), resinas, PA12 em pó (SLS) e Aço Inox 316L sinterizado (SLM). Especificações técnicas, temperatura e aplicações.'
+
+// Mapeia material → processo de manufatura aditiva a partir da categoria.
+function processFor(m: MaterialDetail): string {
+  if (m.cat === 'Resinas') return 'SLA'
+  if (m.cat === 'Pó (SLS/SLM)') return m.slug.includes('316l') ? 'SLM' : 'SLS'
+  return 'FDM'
+}
 
 const schemas = [
   itemListSchema(materials.map((m) => ({ name: m.name, description: `${m.cat}. Temperatura máxima: ${m.tempMax}. ${m.flex}. Aplicação: ${m.app}.` }))),
+  ...materials.map((m) =>
+    productSchema({
+      name: m.name,
+      slug: m.slug,
+      description: m.description,
+      image: `${COMPANY.url}/images/${m.slug}.webp`,
+      material: m.name,
+      process: processFor(m),
+      category: m.cat,
+      applications: m.useCases.slice(0, 4),
+    }),
+  ),
 ]
 ---
 
@@ -318,6 +370,7 @@ const schemas = [
   pageType="CollectionPage"
   breadcrumb={[{ name: 'Materiais', url: '/materiais' }]}
   schemas={schemas}
+  preloadImage="/images/bg-hex.webp"
 >
   <Navbar currentPath="/materiais" />
 
@@ -343,7 +396,7 @@ const schemas = [
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container" aria-hidden="true"></span> Termoplásticos</li>
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-on-surface" aria-hidden="true"></span> Alta Performance</li>
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-tertiary" aria-hidden="true"></span> Resinas</li>
-          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true"></span> Metal</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-error" aria-hidden="true"></span> Pó (SLS/SLM)</li>
         </ul>
       </div>
     </div>
@@ -352,7 +405,8 @@ const schemas = [
   <!-- Filter pills — wrap multi-linha em mobile (sem scroll horizontal) -->
   <div
     id="materiais-filter"
-    class="nav-glass-sub sticky top-16 z-40 w-full"
+    class="nav-glass-sub sticky z-40 w-full"
+    style="top: calc(4rem + env(safe-area-inset-top, 0px));"
   >
     <div class="max-w-[1600px] mx-auto px-edge py-3">
       <div
@@ -425,7 +479,7 @@ const schemas = [
               <div class="flex justify-between items-start mb-4">
                 <span class:list={[
                   'pill text-[10px]',
-                  mat.cat === 'Metal' ? 'border-error/60 text-error' :
+                  mat.cat === 'Pó (SLS/SLM)' ? 'border-error/60 text-error' :
                   mat.cat === 'Alta Performance' ? 'pill-green' :
                   mat.cat === 'Flexíveis' ? 'border-tertiary/60 text-tertiary' :
                   mat.cat === 'Resinas' ? 'border-on-surface-variant text-on-surface-variant' :
@@ -470,7 +524,7 @@ const schemas = [
         <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-4 inline-block" aria-hidden="true">science</span>
         <p class="text-body-lg text-on-surface mb-2">Nenhum material encontrado nesta categoria</p>
         <p class="text-body-md text-tertiary mb-6">Trabalhamos sob demanda — consulte se podemos importar ou processar o material que você precisa.</p>
-        <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+        <a href="/contato" data-track="cta_quote_hero" data-track-location="page-footer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
           Consultar material específico
           <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
         </a>
@@ -484,16 +538,16 @@ const schemas = [
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-4">Destaque // Metal</span>
-          <h2 id="dest-metal" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">BASF Ultrafuse 316L</h2>
+          <h2 id="dest-metal" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Aço Inox 316L — SLM</h2>
           <p class="text-body-lg text-tertiary leading-relaxed mb-6">
-            Aço inoxidável 316L impresso em camadas. O filamento metálico é depositado em FDM e, após processo de sinterização em forno industrial, atinge as propriedades mecânicas do metal sólido. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas — densidade superior a 95% do aço maciço, atendendo norma ASTM 316L.
+            Aço inoxidável 316L sinterizado por laser (SLM) a partir de pó metálico. Peças metálicas finais com densidade próxima ao maciço, prontas para aplicação industrial, alimentícia e marítima. Resistência à corrosão, temperaturas extremas e cargas mecânicas elevadas — atendendo norma ASTM 316L.
           </p>
           <dl class="grid grid-cols-2 gap-4 mb-8">
             {[
               { label: 'Temperatura', value: '800°C+' },
-              { label: 'Densidade',   value: '>95% do aço' },
+              { label: 'Densidade',   value: '>99% do aço' },
               { label: 'Norma',       value: '316L ASTM' },
-              { label: 'Prazo',       value: '15–20 dias' },
+              { label: 'Tecnologia',  value: 'SLM' },
             ].map((d) => (
               <div class="glass-panel p-4 rounded-sm">
                 <dt class="text-label-caps text-on-surface-variant uppercase tracking-widest mb-1">{d.label}</dt>
@@ -501,14 +555,14 @@ const schemas = [
               </div>
             ))}
           </dl>
-          <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+          <a href="/contato" data-track="cta_quote_hero" data-track-location="page-footer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
             Solicitar orçamento de peça em metal 316L
           </a>
         </div>
         <div class="relative h-72 lg:h-full min-h-[300px] rounded-sm overflow-hidden bg-surface-base border border-white/8 group/hero">
           <img
-            src="/images/mat-17-ultrafuse-316l.webp"
-            alt="Peça impressa em aço inoxidável BASF Ultrafuse 316L sinterizado — vista aproximada"
+            src="/images/mat-17-aco-inox-316l-slm.webp"
+            alt="Peça impressa em aço inoxidável 316L sinterizado por SLM — vista aproximada"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/hero:scale-[1.03]"
             width="1376"
             height="768"
@@ -526,7 +580,7 @@ const schemas = [
             <span class="pill-green text-[10px]">Aço Inox · Sinterizado</span>
           </div>
           <div class="absolute bottom-4 left-4 right-4 text-code-data text-on-surface-variant text-[10px] flex justify-between bg-black/40 backdrop-blur-sm rounded-sm px-3 py-1.5">
-            <span>BASF ULTRAFUSE</span>
+            <span>SLM // METAL</span>
             <span>ASTM 316L</span>
           </div>
         </div>
@@ -539,7 +593,7 @@ const schemas = [
     <div class="max-w-[1600px] mx-auto px-edge text-center">
       <h2 id="cta-mat" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Não sabe qual material usar?</h2>
       <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Nossa equipe técnica indica o material ideal para cada aplicação, temperatura, carga e custo.</p>
-      <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+      <a href="/contato" data-track="cta_quote_hero" data-track-location="page-footer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
         Falar com especialista em materiais
         <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
       </a>
@@ -551,7 +605,8 @@ const schemas = [
        ============================================= -->
   <div
     id="mat-modal"
-    class="mat-modal fixed inset-0 z-[100] hidden items-stretch md:items-center justify-center"
+    class="mat-modal fixed inset-0 z-[200] hidden items-stretch md:items-center justify-center"
+    style="height: 100dvh; min-height: 100vh;"
     role="dialog"
     aria-modal="true"
     aria-labelledby="mat-modal-title"
@@ -566,17 +621,18 @@ const schemas = [
 
     <!-- Container -->
     <div
-      class="mat-modal__container relative w-full md:w-[min(1180px,92vw)] h-full md:h-[min(880px,90vh)] bg-surface-base md:rounded-sm border-y md:border md:border-primary-container/15 flex flex-col overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)] opacity-0 translate-y-4 md:translate-y-0 md:scale-[0.98] transition-all duration-200"
+      class="mat-modal__container relative w-full md:w-[min(1180px,92vw)] h-[100dvh] md:h-[min(880px,90vh)] bg-surface-base md:rounded-sm border-0 md:border md:border-primary-container/15 flex flex-col overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)] opacity-0 translate-y-4 md:translate-y-0 md:scale-[0.98] transition-all duration-200"
     >
       <!-- Glow superior -->
       <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/60 to-transparent pointer-events-none" aria-hidden="true"></div>
 
       <!-- Header sticky -->
-      <header class="nav-glass-sub flex items-center justify-between gap-3 px-5 md:px-8 py-4 border-b border-white/8 shrink-0">
-        <div class="min-w-0 flex items-center gap-3 flex-wrap">
-          <span data-mat-cat-pill class="pill text-[10px] shrink-0">—</span>
-          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase truncate">
-            <span data-mat-position>1</span> / <span data-mat-total>{materials.length}</span>
+      <header class="nav-glass-sub flex items-center justify-between gap-4 px-4 md:px-8 h-14 md:h-16 border-b border-white/8 shrink-0">
+        <div class="min-w-0 flex items-center gap-2.5 flex-nowrap">
+          <span data-mat-cat-pill class="pill text-[10px] shrink-0 max-w-[140px] truncate">—</span>
+          <span class="w-px h-3 bg-white/15 shrink-0" aria-hidden="true"></span>
+          <span class="font-mono text-[10px] text-on-surface-variant tracking-widest uppercase shrink-0 tabular-nums">
+            <span data-mat-position>1</span><span class="opacity-40 mx-0.5">/</span><span data-mat-total>{materials.length}</span>
           </span>
         </div>
 
@@ -594,7 +650,7 @@ const schemas = [
             class="w-9 h-9 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface hover:text-primary-container hover:border-primary-container/40 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Próximo material"
           ><span class="material-symbols-outlined text-lg leading-none" aria-hidden="true">chevron_right</span></button>
-          <span class="w-px h-5 bg-white/10 mx-1.5" aria-hidden="true"></span>
+          <span class="w-px h-4 bg-white/10 mx-1.5" aria-hidden="true"></span>
           <button
             type="button"
             data-modal-close
@@ -607,13 +663,13 @@ const schemas = [
         <button
           type="button"
           data-modal-close
-          class="md:hidden w-10 h-10 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/10 text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
+          class="md:hidden shrink-0 -mr-1 w-11 h-11 inline-flex items-center justify-center rounded-full bg-surface-low border border-white/12 text-on-surface active:bg-primary-container/10 active:text-primary-container active:border-primary-container/30 transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container"
           aria-label="Fechar ficha técnica"
-        ><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">close</span></button>
+        ><span class="material-symbols-outlined text-[22px] leading-none" aria-hidden="true">close</span></button>
       </header>
 
       <!-- Conteúdo scrollável -->
-      <div data-mat-body class="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-24 md:pb-0">
+      <div data-mat-body class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain">
         <div class="grid grid-cols-1 lg:grid-cols-12 min-w-0">
           <!-- Coluna imagem -->
           <div class="lg:col-span-5 relative bg-surface-low border-b lg:border-b-0 lg:border-r border-white/8 min-h-[260px] lg:min-h-[420px]">
@@ -685,9 +741,9 @@ const schemas = [
         </div>
       </div>
 
-      <!-- Mobile bottom-bar — prev/next + CTA condensado, fixos no fundo -->
+      <!-- Mobile bottom-bar — prev/next + CTA condensado, parte natural do flex column -->
       <div
-        class="md:hidden fixed inset-x-0 bottom-0 z-10 nav-glass-bottom pb-[max(env(safe-area-inset-bottom),0.5rem)]"
+        class="md:hidden shrink-0 z-10 nav-glass-bottom border-t border-white/8 pb-[max(env(safe-area-inset-bottom),0.5rem)]"
         aria-label="Controles do material"
       >
         <div class="flex items-center gap-2 px-4 py-3">
@@ -857,7 +913,7 @@ const schemas = [
     }
 
     function categoryPillClass(cat: string): string {
-      if (cat === 'Metal') return 'pill border-error/60 text-error'
+      if (cat === 'Pó (SLS/SLM)') return 'pill border-error/60 text-error'
       if (cat === 'Alta Performance') return 'pill pill-green'
       if (cat === 'Flexíveis') return 'pill border-tertiary/60 text-tertiary'
       if (cat === 'Resinas') return 'pill border-on-surface-variant text-on-surface-variant'
@@ -931,6 +987,7 @@ const schemas = [
       modal!.classList.remove('hidden')
       modal!.classList.add('flex')
       modal!.setAttribute('aria-hidden', 'false')
+      document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
 
       // Anima entrada
@@ -963,6 +1020,7 @@ const schemas = [
         modal!.classList.add('hidden')
         modal!.classList.remove('flex')
         modal!.setAttribute('aria-hidden', 'true')
+        document.documentElement.style.overflow = ''
         document.body.style.overflow = ''
         if (location.hash) history.replaceState(null, '', location.pathname + location.search)
         triggerEl?.focus()

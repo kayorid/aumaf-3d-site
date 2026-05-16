@@ -21,23 +21,23 @@ enum PostStatus {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      UserRole @default(EDITOR)
-  active    Boolean  @default(true)
-  phone     String?
-  avatarUrl String?
-  mustChangePassword Boolean @default(false)
-  lastLoginAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String    @id @default(cuid())
+  name               String
+  email              String    @unique
+  password           String
+  role               UserRole  @default(EDITOR)
+  active             Boolean   @default(true)
+  phone              String?
+  avatarUrl          String?
+  mustChangePassword Boolean   @default(false)
+  lastLoginAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
-  posts        Post[]           @relation("AuthorPosts")
-  leadNotes    LeadNote[]       @relation("LeadNotesAuthor")
-  permissions  UserPermission[]
-  mediaAssets  MediaAsset[]     @relation("MediaCreator")
+  posts       Post[]           @relation("AuthorPosts")
+  leadNotes   LeadNote[]       @relation("LeadNotesAuthor")
+  permissions UserPermission[]
+  mediaAssets MediaAsset[]     @relation("MediaCreator")
 
   @@map("users")
 }
@@ -70,22 +70,22 @@ model Category {
 }
 
 model Post {
-  id               String     @id @default(cuid())
-  title            String
-  slug             String     @unique
-  excerpt          String?
-  content          String
-  coverImageUrl    String?
-  status           PostStatus @default(DRAFT)
-  metaTitle        String?
-  metaDescription  String?
-  generatedByAi    Boolean    @default(false)
-  publishedAt      DateTime?
-  readingTimeMin   Int?
-  featured         Boolean    @default(false)
-  tags             String[]   @default([])
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  id              String     @id @default(cuid())
+  title           String
+  slug            String     @unique
+  excerpt         String?
+  content         String
+  coverImageUrl   String?
+  status          PostStatus @default(DRAFT)
+  metaTitle       String?
+  metaDescription String?
+  generatedByAi   Boolean    @default(false)
+  publishedAt     DateTime?
+  readingTimeMin  Int?
+  featured        Boolean    @default(false)
+  tags            String[]   @default([])
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 
   author     User?     @relation("AuthorPosts", fields: [authorId], references: [id])
   authorId   String?
@@ -98,17 +98,17 @@ model Post {
 }
 
 model Lead {
-  id          String   @id @default(cuid())
-  name        String
-  email       String
-  phone       String?
-  message     String?
-  source      String?
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String?
+  source    String?
+  createdAt DateTime @default(now())
 
   // Soft delete
-  deletedAt   DateTime?
-  deletedBy   String?
+  deletedAt DateTime?
+  deletedBy String?
 
   // UTM tracking
   utmSource   String?
@@ -118,6 +118,9 @@ model Lead {
   utmContent  String?
   referrer    String?
   landingPage String?
+
+  // LGPD — consentimento explícito (art. 7º, I) para marketing.
+  marketingConsent Boolean @default(false)
 
   // Botyio sync
   botyoLeadId     String?
@@ -199,20 +202,199 @@ model MediaAsset {
 }
 
 model Setting {
-  id                  String   @id @default(cuid())
-  siteName            String   @default("AUMAF 3D")
-  siteDescription     String?
-  contactEmail        String?
-  contactPhone        String?
-  whatsappNumber      String?
-  botyoWebhookUrl     String?
-  ga4MeasurementId    String?
-  clarityProjectId    String?
-  facebookPixelId     String?
-  gtmContainerId      String?
-  customHeadScripts   String?
-  customBodyScripts   String?
-  updatedAt           DateTime @updatedAt
+  id                String   @id @default(cuid())
+  siteName          String   @default("AUMAF 3D")
+  siteDescription   String?
+  contactEmail      String?
+  contactPhone      String?
+  whatsappNumber    String?
+  botyoWebhookUrl   String?
+  ga4MeasurementId  String?
+  clarityProjectId  String?
+  facebookPixelId   String?
+  gtmContainerId    String?
+  customHeadScripts String?
+  customBodyScripts String?
+  updatedAt         DateTime @updatedAt
 
   @@map("settings")
+}
+
+// ============================================================
+// ANALYTICS — pipeline próprio (raw + agregados pré-computados)
+// docs/plans/2026-05-12-analytics-layer-design.md
+// ============================================================
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  eventId     String   @unique
+  occurredAt  DateTime
+  receivedAt  DateTime @default(now())
+  sessionId   String
+  visitorId   String
+  type        String
+  name        String?
+  url         String   @db.Text
+  path        String
+  referrer    String?  @db.Text
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  utmTerm     String?
+  deviceType  String?
+  os          String?
+  browser     String?
+  country     String?
+  region      String?
+  city        String?
+  ipHash      String?
+  properties  Json?
+  leadId      String?
+
+  @@index([occurredAt])
+  @@index([sessionId])
+  @@index([visitorId])
+  @@index([type, occurredAt])
+  @@index([path, occurredAt])
+  @@index([leadId])
+  @@map("analytics_events")
+}
+
+model AnalyticsSession {
+  id              String   @id
+  visitorId       String
+  startedAt       DateTime
+  lastSeenAt      DateTime
+  pageviews       Int      @default(0)
+  events          Int      @default(0)
+  durationSeconds Int      @default(0)
+  bounced         Boolean  @default(true)
+  entryPath       String?
+  exitPath        String?
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  utmContent      String?
+  utmTerm         String?
+  referrer        String?  @db.Text
+  country         String?
+  deviceType      String?
+  os              String?
+  browser         String?
+  converted       Boolean  @default(false)
+  leadId          String?
+
+  @@index([startedAt])
+  @@index([visitorId])
+  @@index([leadId])
+  @@map("analytics_sessions")
+}
+
+model AnalyticsDailyPageview {
+  id                 String   @id @default(cuid())
+  date               DateTime @db.Date
+  path               String
+  pageviews          Int      @default(0)
+  uniqueVisitors     Int      @default(0)
+  avgDurationSeconds Int      @default(0)
+  bounceRate         Float    @default(0)
+
+  @@unique([date, path])
+  @@index([date])
+  @@map("analytics_daily_pageviews")
+}
+
+model AnalyticsDailyEvent {
+  id             String   @id @default(cuid())
+  date           DateTime @db.Date
+  type           String
+  name           String?
+  count          Int      @default(0)
+  uniqueVisitors Int      @default(0)
+
+  @@unique([date, type, name])
+  @@index([date])
+  @@map("analytics_daily_events")
+}
+
+model AnalyticsDailyDevice {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+  dimension String
+  value     String
+  sessions  Int      @default(0)
+  pageviews Int      @default(0)
+
+  @@unique([date, dimension, value])
+  @@index([date, dimension])
+  @@map("analytics_daily_devices")
+}
+
+model AnalyticsFunnel {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+  name      String
+  step      String
+  stepOrder Int
+  visitors  Int      @default(0)
+
+  @@unique([date, name, step])
+  @@index([date, name])
+  @@map("analytics_funnels")
+}
+
+// ============================================================
+// LGPD — registros de consentimento e direitos do titular.
+// docs/plans/2026-05-12-lgpd-compliance-plan.md
+// ============================================================
+
+model ConsentLog {
+  id            String   @id @default(cuid())
+  userIdHash    String?
+  ipHash        String
+  userAgent     String?
+  categories    Json
+  policyVersion String
+  source        String
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([userIdHash])
+  @@map("consent_logs")
+}
+
+model DataSubjectRequest {
+  id                String    @id @default(cuid())
+  email             String
+  fullName          String?
+  requestType       String
+  description       String?   @db.Text
+  status            String    @default("pending_verification")
+  verificationToken String?   @unique
+  verifiedAt        DateTime?
+  resolvedAt        DateTime?
+  resolutionNote    String?   @db.Text
+  ipHash            String?
+  userAgent         String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@map("data_subject_requests")
+}
+
+model AnalyticsRealtime {
+  id         String   @id @default(cuid())
+  visitorId  String   @unique
+  sessionId  String
+  path       String
+  country    String?
+  deviceType String?
+  lastSeenAt DateTime @default(now())
+
+  @@index([lastSeenAt])
+  @@map("analytics_realtime")
 }

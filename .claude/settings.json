@@ -15,6 +15,7 @@
       "Bash(docker-compose*)",
       "Bash(python3 docs/specs/scripts/*)",
       "Bash(bash docs/specs/scripts/*)",
+      "Bash(bash scripts/analytics-*)",
       "Bash(ls*)",
       "Bash(find*)",
       "Bash(grep*)",
@@ -38,6 +39,29 @@
       "Bash(git reset --hard*)",
       "Bash(npx prisma migrate reset*)",
       "Bash(docker system prune*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c 'import sys,json,subprocess,os; d=json.load(sys.stdin); fp=d.get(\"tool_input\",{}).get(\"file_path\",\"\"); root=os.environ.get(\"CLAUDE_PROJECT_DIR\",\".\"); fp and subprocess.run([\"bash\", f\"{root}/scripts/analytics-tagging-check.sh\", fp], check=False)'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/analytics-audit.sh\" 2>&1 | tail -20"
+          }
+        ]
+      }
     ]
   }
 }

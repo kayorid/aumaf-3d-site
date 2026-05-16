@@ -1,0 +1,201 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import { webPageSchema, serviceSchema, faqPageSchema, breadcrumbSchema } from '../../lib/schemas'
+import { COMPANY } from '../../lib/company'
+import { industrias } from '../../data/industrias'
+
+export function getStaticPaths() {
+  return industrias.map((ind) => ({ params: { slug: ind.slug }, props: { ind } }))
+}
+
+const { ind } = Astro.props
+const url = `${COMPANY.url}/industrias/${ind.slug}`
+
+const schemas = [
+  webPageSchema({ url, name: ind.hero, description: ind.metaDescription, type: 'CollectionPage' }),
+  breadcrumbSchema([
+    { name: 'Indústrias', url: `${COMPANY.url}/industrias` },
+    { name: ind.heading, url },
+  ]),
+  serviceSchema({
+    name: ind.serviceType,
+    description: ind.metaDescription,
+    url,
+    serviceType: ind.serviceType,
+    category: ind.heading,
+  }),
+  faqPageSchema(ind.faqs.map((f) => ({ q: f.q, a: f.a }))),
+]
+---
+
+<Base
+  title={ind.metaTitle}
+  description={ind.metaDescription}
+  pageType="CollectionPage"
+  breadcrumb={[
+    { name: 'Indústrias', url: '/industrias' },
+    { name: ind.heading, url: `/industrias/${ind.slug}` },
+  ]}
+  schemas={schemas}
+  preloadImage={ind.bg}
+>
+  <Navbar currentPath={`/industrias/${ind.slug}`} />
+
+  <main class="bg-background relative overflow-hidden">
+    <!-- Hero -->
+    <section class="pt-28 pb-16 relative overflow-hidden" aria-labelledby="hero-ind">
+      {ind.bg && (
+        <div class="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-[0.28]" aria-hidden="true" style={`background-image:url('${ind.bg}');`}></div>
+      )}
+      <div class="absolute inset-0 bg-tech-grid opacity-[0.10] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,rgba(0,0,0,0.45) 0%,transparent 40%,rgba(0,0,0,0.65) 100%);"></div>
+
+      <div class="max-w-[1100px] mx-auto px-edge relative z-10">
+        <Breadcrumb items={[{ name: 'Indústrias', url: '/industrias' }, { name: ind.heading }]} compact />
+        <header class="mt-6">
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Setor // {ind.heading}</span>
+          <h1 id="hero-ind" class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[0.95] mb-6">{ind.hero}</h1>
+          <p class="text-body-lg text-tertiary leading-relaxed max-w-3xl">{ind.pitch}</p>
+        </header>
+      </div>
+    </section>
+
+    <!-- Dores -->
+    <section class="py-section bg-surface-low border-t border-white/8" aria-labelledby="dores-h">
+      <div class="max-w-[1100px] mx-auto px-edge">
+        <h2 id="dores-h" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Por que vale a pena trazer manufatura aditiva para {ind.heading.toLowerCase()}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {ind.dores.map((d) => (
+            <article class="glass-panel rounded-sm p-6 border border-white/8">
+              <h3 class="text-body-lg font-bold uppercase text-white tracking-[-0.01em] mb-2">{d.title}</h3>
+              <p class="text-body-md text-tertiary leading-relaxed">{d.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Abordagem AUMAF -->
+    <section class="py-section" aria-labelledby="abordagem-h">
+      <div class="max-w-[1100px] mx-auto px-edge">
+        <h2 id="abordagem-h" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Como a AUMAF 3D resolve</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {ind.abordagem.map((a) => (
+            <article class="glass-panel rounded-sm p-6 border border-white/8 h-full">
+              <h3 class="text-body-lg font-bold uppercase text-primary-container tracking-[-0.01em] mb-2">{a.title}</h3>
+              <p class="text-body-md text-tertiary leading-relaxed">{a.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Casos -->
+    <section class="py-section bg-surface-low border-y border-white/8" aria-labelledby="cases-h">
+      <div class="max-w-[1100px] mx-auto px-edge">
+        <h2 id="cases-h" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Casos típicos</h2>
+        <ol class="space-y-4">
+          {ind.cases.map((c, i) => (
+            <li class="glass-panel rounded-sm p-6 border border-white/8 flex gap-4">
+              <span class="text-display-md font-bold text-primary-container tabular-nums leading-none shrink-0" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="text-body-lg font-bold uppercase text-white tracking-[-0.01em] mb-2">{c.title}</h3>
+                <p class="text-body-md text-tertiary leading-relaxed">{c.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Materiais -->
+    <section class="py-section" aria-labelledby="mat-h">
+      <div class="max-w-[1100px] mx-auto px-edge">
+        <h2 id="mat-h" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Materiais recomendados</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {ind.materiais.map((m) => (
+            <li>
+              <a
+                href={`/materiais#${m.slug}`}
+                class="block glass-panel card-hover-glow rounded-sm p-5 border border-white/8 hover:border-primary-container/60 transition-all duration-300"
+              >
+                <p class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-1">Material</p>
+                <p class="text-body-lg font-bold text-white mb-2">{m.name}</p>
+                <p class="text-body-md text-tertiary leading-relaxed">{m.why}</p>
+                <p class="text-label-caps text-primary-container uppercase tracking-widest mt-3 inline-flex items-center gap-1">
+                  Ver especificações
+                  <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
+                </p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Processos -->
+    <section class="py-section bg-surface-low border-t border-white/8" aria-labelledby="proc-h">
+      <div class="max-w-[1100px] mx-auto px-edge">
+        <h2 id="proc-h" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Processos AUMAF aplicados</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {ind.processos.map((p) => (
+            <li>
+              <a href={p.url} class="block glass-panel rounded-sm p-5 border border-white/8 hover:border-primary-container/60 transition-all duration-300 h-full">
+                <p class="text-body-lg font-bold text-white mb-2">{p.name}</p>
+                <p class="text-body-md text-tertiary leading-relaxed">{p.why}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="py-section" aria-labelledby="faq-h">
+      <div class="max-w-[900px] mx-auto px-edge">
+        <h2 id="faq-h" class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-8">Perguntas frequentes — {ind.heading}</h2>
+        <div class="space-y-0">
+          {ind.faqs.map((f, i) => (
+            <details class="border-b border-white/12 py-5 group">
+              <summary class="cursor-pointer text-body-lg font-medium text-on-surface group-open:text-white flex justify-between items-center gap-4">
+                <span>{f.q}</span>
+                <span class="material-symbols-outlined text-base text-primary-container group-open:rotate-45 transition-transform" aria-hidden="true">add</span>
+              </summary>
+              <p class="text-body-md text-tertiary leading-relaxed mt-3 pr-12">{f.a}</p>
+            </details>
+          ))}
+        </div>
+        {ind.disclaimer && (
+          <aside class="mt-10 glass-panel rounded-sm p-5 border border-white/12 text-body-sm text-on-surface-variant">
+            <p><strong class="text-on-surface">Importante:</strong> {ind.disclaimer}</p>
+          </aside>
+        )}
+      </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="py-section bg-surface-low border-t border-white/8" aria-labelledby="cta-h">
+      <div class="max-w-[900px] mx-auto px-edge">
+        <div class="glass-panel rounded-sm p-8 border border-white/12 text-center">
+          <h2 id="cta-h" class="text-headline-sm font-bold uppercase text-white mb-4">Pronto para começar?</h2>
+          <p class="text-body-md text-tertiary mb-6">Envie o arquivo ou descreva o projeto — orçamento técnico em até 24h úteis.</p>
+          <a
+            href={`/contato?ref=industria-${ind.slug}`}
+            data-track="cta_quote_hero"
+            data-track-location={`industria-${ind.slug}`}
+            class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300"
+          >
+            {ind.ctaText ?? 'Solicitar orçamento'}
+            <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

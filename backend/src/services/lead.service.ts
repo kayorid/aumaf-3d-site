@@ -3,6 +3,7 @@ import { logger } from '../config/logger'
 import { httpErrors } from '../lib/http-error'
 import { maskEmail, maskPhone } from '../lib/mask'
 import { enqueueLeadNotification } from '../workers/lead-notification.worker'
+import { serverTrack } from './analytics-track.service'
 import { enqueueBotyioLeadSync } from '../workers/botyio-lead-sync.worker'
 import type {
   CreateLeadInput,
@@ -59,6 +60,7 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
       utmContent: input.utmContent ?? null,
       referrer: input.referrer ?? null,
       landingPage: input.landingPage ?? null,
+      marketingConsent: input.marketingConsent ?? false,
     },
   })
   logger.info({ leadId: lead.id, source: lead.source }, 'Lead created')
@@ -74,6 +76,22 @@ export async function createLead(input: CreateLeadInput): Promise<LeadDto> {
   } catch (err) {
     logger.error({ err, leadId: lead.id }, 'Failed to enqueue Botyio sync — lead persisted anyway')
   }
+
+  // Server-side analytics: fecha o funil sem depender do cliente confirmar
+  // o submit (aba fechada, Botyio inbound etc.). PII fica fora — só refs.
+  await serverTrack(
+    'identify',
+    'lead_created_server',
+    {
+      source: lead.source,
+      utmSource: lead.utmSource,
+      utmMedium: lead.utmMedium,
+      utmCampaign: lead.utmCampaign,
+      hasPhone: !!lead.phone,
+      marketingConsent: lead.marketingConsent,
+    },
+    { leadId: lead.id },
+  )
 
   return toDto(lead)
 }

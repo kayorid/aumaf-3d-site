@@ -21,7 +21,7 @@ try {
 const featuredPost = allPosts.find((p) => p.featured) ?? allPosts[0] ?? null
 const otherPosts = allPosts.filter((p) => p.slug !== featuredPost?.slug).slice(0, 3)
 
-const description = 'AUMAF 3D — manufatura aditiva industrial em São Carlos, SP. Impressão 3D em metal 316L, polímeros (PEEK, PA, PET-G CF15) e resina, com tolerância ±0.05mm. +500 projetos entregues, orçamento em até 24h.'
+const description = 'AUMAF 3D — manufatura aditiva industrial em São Carlos, SP. Impressão 3D em Aço Inox 316L (SLM), polímeros técnicos (PA CF15, PA, PET-G CF15) e resina. +500 projetos entregues, orçamento em até 24h.'
 
 const homeSchemas = [
   itemListSchema([
@@ -93,14 +93,14 @@ const homeSchemas = [
           </div>
 
           <h1 class="text-display-xl font-bold text-white text-glow-white uppercase leading-none tracking-[-0.04em] mb-6 opacity-0 animate-fade-up" style="animation-delay:100ms;animation-fill-mode:forwards;">
-            Tolerância Zero.<br/>
-            <span class="text-gradient-glow">Precisão Total.</span>
+            Manufatura Aditiva.<br/>
+            <span class="text-gradient-glow">Precisão Industrial.</span>
           </h1>
 
           <p class="text-body-lg text-tertiary max-w-lg leading-relaxed mb-10 opacity-0 animate-fade-up" style="animation-delay:250ms;animation-fill-mode:forwards;">
             Manufatura aditiva industrial para aplicações críticas.
             Peças em metal, carbono e polímeros de alta performance —
-            tolerância <span class="text-on-surface font-medium">±0.05mm</span>, entregues onde você precisar.
+            entregues onde você precisar.
           </p>
 
           <div class="flex flex-wrap items-center gap-4 opacity-0 animate-fade-up" style="animation-delay:380ms;animation-fill-mode:forwards;">
@@ -126,7 +126,7 @@ const homeSchemas = [
             {[
               {value:'+500',label:'Projetos'},
               {value:'20+',label:'Materiais'},
-              {value:'±0.05mm',label:'Tolerância'},
+              {value:'4',label:'Tecnologias'},
             ].map(m => (
               <div class="flex flex-col gap-1">
                 <span class="text-2xl font-bold text-white tracking-tighter leading-none">{m.value}</span>
@@ -374,43 +374,16 @@ const homeSchemas = [
     <div class="absolute inset-y-0 right-0 w-16 z-10 pointer-events-none" style="background:linear-gradient(-90deg,#0e0e0e,transparent);"></div>
     <div class="flex animate-marquee whitespace-nowrap gap-0">
       {[
-        'PA CF15','PEEK','TPU','Metal 316L','FDM','SLA','SLS',
-        '±0.05mm','+500 Projetos','24h Orçamento','São Carlos – SP',
-        'PA CF15','PEEK','TPU','Metal 316L','FDM','SLA','SLS',
-        '±0.05mm','+500 Projetos','24h Orçamento','São Carlos – SP',
+        'PA CF15','PA12 SLS','TPU','Aço Inox 316L SLM','FDM','SLA','SLS','SLM',
+        '+500 Projetos','24h Orçamento','São Carlos – SP',
+        'PA CF15','PA12 SLS','TPU','Aço Inox 316L SLM','FDM','SLA','SLS','SLM',
+        '+500 Projetos','24h Orçamento','São Carlos – SP',
       ].map((item) => (
         <span class="inline-flex items-center gap-3 px-6 text-label-caps text-on-surface-variant uppercase tracking-[0.15em] text-[10px]">
           <span class="w-1 h-1 rounded-full bg-primary-container/50 flex-shrink-0" aria-hidden="true"></span>
           {item}
         </span>
       ))}
-    </div>
-  </div>
-
-
-  <!-- =============================================
-       STATS STRIP
-       ============================================= -->
-  <div class="border-y border-primary-container/15 bg-surface-dim">
-    <div class="max-w-[1600px] mx-auto px-edge py-10">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0">
-        {[
-          {value:'+500',label:'Projetos Entregues',icon:'check_circle'},
-          {value:'20+',label:'Materiais Disponíveis',icon:'category'},
-          {value:'±0.05mm',label:'Tolerância Dimensional',icon:'precision_manufacturing'},
-          {value:'3',label:'Tecnologias de Impressão',icon:'settings_suggest'},
-        ].map((s, i) => (
-          <div class:list={[
-            'flex flex-col items-center md:items-start px-6 md:px-10 py-2 gap-2',
-            i < 3 ? 'md:border-r md:border-white/8' : '',
-            i % 2 === 0 ? 'border-r border-white/8 md:border-r-0' : '',
-          ]}>
-            <span class="material-symbols-outlined text-primary-container/40 text-lg" style="font-variation-settings:'FILL' 1;">{s.icon}</span>
-            <span class="text-[clamp(28px,4vw,48px)] font-bold tracking-tighter text-white leading-none">{s.value}</span>
-            <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.12em] text-[10px] text-center md:text-left">{s.label}</span>
-          </div>
-        ))}
-      </div>
     </div>
   </div>
 
@@ -442,19 +415,18 @@ const homeSchemas = [
             {id:'cnt-projetos',   target:500,  suffix:'+', label:'Projetos Entregues',    sub:'desde 2022',            icon:'inventory_2'},
             {id:'cnt-prazo',      target:99,   suffix:'%', label:'Taxa de Aprovação',     sub:'no primeiro lote',      icon:'verified'},
             {id:'cnt-materiais',  target:20,   suffix:'+', label:'Materiais no Catálogo', sub:'termoplásticos + metal', icon:'science'},
-            {id:'cnt-tolerancia', target:0.05, suffix:'mm',label:'Tolerância Dimensional',sub:'±0.05mm garantida',     icon:'precision_manufacturing'},
+            {id:'cnt-tecnologias',target:4,    suffix:'',  label:'Tecnologias',           sub:'FDM · SLA · SLS · SLM',  icon:'settings_suggest'},
           ].map(c => (
             <div class="glass-panel p-6 lg:p-8 rounded-sm border border-white/6 hover:border-primary-container/20 transition-all duration-300 group">
               <div class="w-9 h-9 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center mb-5 group-hover:bg-primary-container/15 transition-colors duration-300">
                 <span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
               </div>
               <div class="flex items-end gap-1 mb-1">
-                {c.id === 'cnt-tolerancia' && <span class="text-[clamp(20px,3vw,32px)] font-bold text-white tracking-tighter leading-none">±</span>}
                 <span
                   class="text-[clamp(28px,4vw,48px)] font-black text-white tracking-tighter leading-none tabular-nums"
                   data-counter
                   data-target={c.target}
-                  data-decimals={c.id === 'cnt-tolerancia' ? '2' : '0'}
+                  data-decimals="0"
                 >0</span>
                 <span class="text-[clamp(14px,2vw,22px)] font-bold text-primary-container leading-none mb-1">{c.suffix}</span>
               </div>
@@ -496,7 +468,7 @@ const homeSchemas = [
             </div>
           </div>
 
-          <a href="/blog/formula-sae-case-study-completo" class="glass-panel p-6 rounded-sm flex items-start gap-5 hover:border-primary-container/20 transition-all duration-300 group border border-white/6">
+          <a href="/blog/formula-sae-case-study-completo" data-track="blog_post_card" data-track-slug="formula-sae-case-study-completo" data-track-location="home-prova-real" class="glass-panel p-6 rounded-sm flex items-start gap-5 hover:border-primary-container/20 transition-all duration-300 group border border-white/6">
             <div class="w-12 h-12 rounded-sm bg-primary-container/10 border border-primary-container/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container/20 transition-colors duration-300">
               <span class="material-symbols-outlined text-primary-container text-2xl" style="font-variation-settings:'FILL' 1;">sports_score</span>
             </div>
@@ -527,7 +499,7 @@ const homeSchemas = [
           <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">01 // Módulos</span>
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Capacidades Core</h2>
         </div>
-        <a href="/servicos" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
+        <a href="/servicos" data-track="nav_link" data-track-target="servicos" data-track-location="home-inline" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
           Todos os Serviços
           <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </a>
@@ -538,7 +510,7 @@ const homeSchemas = [
           {
             num:'01',
             title:'Prototipagem Rápida',
-            body:'Valide conceitos em horas, não semanas. Processos FDM e SLA entregam protótipos funcionais com geometrias complexas e tolerância dimensional rigorosa para ciclos de iteração acelerados.',
+            body:'Valide conceitos em horas, não semanas. Processos FDM e SLA entregam protótipos funcionais com geometrias complexas e alta precisão dimensional para ciclos de iteração acelerados.',
             specs:['FDM / SLA / SLS','Entrega 24–72h','Geometria Complexa'],
             href:'/servicos',
             videoId:'VIDEO_CAP_01',
@@ -550,8 +522,8 @@ const homeSchemas = [
           {
             num:'02',
             title:'Peças Funcionais & Metal',
-            body:'Do projeto à peça final em materiais de engenharia: carbono, nylon de alta temperatura, PEEK e aço inoxidável via BASF Ultrafuse 316L. Componentes para ambientes industriais severos.',
-            specs:['Metal 316L','PA CF15 / PEEK','Alta Temperatura'],
+            body:'Do projeto à peça final em materiais de engenharia: carbono, nylon de alta temperatura e Aço Inox 316L sinterizado por SLM. Componentes para ambientes industriais severos.',
+            specs:['Aço Inox 316L (SLM)','PA CF15','Alta Temperatura'],
             href:'/servicos',
             videoId:'VIDEO_CAP_02',
             videoLabel:'Peça metálica finalizada',
@@ -595,7 +567,7 @@ const homeSchemas = [
                   <span class="inline-flex items-center px-3 py-1 rounded-full border border-primary-container/40 text-primary-container text-label-caps uppercase tracking-widest">{s}</span>
                 ))}
               </div>
-              <a href={item.href} class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
+              <a href={item.href} data-track="nav_link" data-track-target={item.href} data-track-location="home-service-card" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
                 Saiba mais
                 <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </a>
@@ -671,8 +643,8 @@ const homeSchemas = [
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {[
-          {icon:'precision_manufacturing',num:'01',title:'Precisão Certificada',body:'±0.05mm em FDM industrial. Peças dimensionalmente consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE',stagger:'stagger-1'},
-          {icon:'category',num:'02',title:'Portfólio de Materiais',body:'20+ materiais: PA CF15, PEEK, TPU, ABS, Policarbonato, Resina e BASF Ultrafuse 316L (aço inoxidável).',tag:'MATERIAIS',stagger:'stagger-2'},
+          {icon:'precision_manufacturing',num:'01',title:'Precisão Industrial',body:'FDM industrial calibrado, com inspeção dimensional por paquímetro e micrômetro. Peças consistentes entre lotes, rastreáveis por projeto.',tag:'QUALIDADE',stagger:'stagger-1'},
+          {icon:'category',num:'02',title:'Portfólio de Materiais',body:'Termoplásticos (PLA, PA CF15, TPU, ABS, Policarbonato), resinas, PA12 (SLS) e Aço Inox 316L sinterizado por SLM.',tag:'MATERIAIS',stagger:'stagger-2'},
           {icon:'tune',num:'03',title:'Feito Sob Medida',body:'Personalização total de geometria, material e acabamento. Sem mínimo de produção para projetos unitários.',tag:'FLEXIBILIDADE',stagger:'stagger-3'},
           {icon:'support_agent',num:'04',title:'Consultoria Técnica',body:'Equipe especializada indica tecnologia, material e processo ideal. Suporte do arquivo à entrega final.',tag:'SUPORTE',stagger:'stagger-4'},
           {icon:'location_on',num:'05',title:'Hub de Inovação',body:'Parque Tecnológico Damha II, São Carlos – SP. Polo tecnológico próximo à USP e UFSCar.',tag:'SÃO CARLOS',stagger:'stagger-5'},
@@ -864,9 +836,9 @@ const homeSchemas = [
               Ideal para protótipos funcionais de alta precisão e pequenas séries técnicas.
             </p>
             <div class="flex flex-wrap gap-2 mb-6">
-              <span class="pill-green">Resolução 100μm</span>
+              <span class="pill-green">Altura de Camada 100μm</span>
               <span class="pill-green">Sem Suporte</span>
-              <span class="pill-green">Nylon / PA / TPU</span>
+              <span class="pill-green">Nylon / TPU</span>
             </div>
             <a href="/servicos" class="inline-flex items-center gap-2 text-label-caps text-primary-container uppercase tracking-[0.15em] hover:gap-4 transition-all duration-200 group">
               Saber mais sobre SLS
@@ -899,11 +871,12 @@ const homeSchemas = [
         </div>
       </div>
 
-      <!-- SLA + FDM grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+      <!-- SLA + FDM + SLM grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
         {[
-          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina ABS/Cerâmica','Resolução 25μm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
-          {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono, metal e flexíveis. Melhor custo-benefício para séries.',specs:['20+ Materiais','Metal Disponível','Maior Portfólio'],accent:'rgba(97,197,79,0.03)'},
+          {code:'SLA',title:'Estereolitografia',body:'Alta resolução com resinas fotopoliméricas. Superfícies lisas, detalhes finos e transparência óptica para componentes visuais exigentes.',specs:['Resina Standard / ABS-like','Precisão Dimensional 0,1mm','Acabamento Premium'],accent:'rgba(97,197,79,0.05)'},
+          {code:'FDM',title:'Deposição de Material Fundido',body:'Tecnologia versátil com o maior portfólio de materiais: termoplásticos, carbono e flexíveis. Melhor custo-benefício para séries.',specs:['20+ Materiais','Maior Portfólio','Séries Pequenas'],accent:'rgba(97,197,79,0.03)'},
+          {code:'SLM',title:'Fusão Seletiva a Laser',body:'Sinterização de pó metálico (Aço Inox 316L) por laser de alta potência. Peças funcionais em metal com geometria complexa, sob demanda e sem molde.',specs:['Aço Inox 316L','Densidade ≥99%','Alta Temperatura'],accent:'rgba(97,197,79,0.04)'},
         ].map(t => (
           <div class="glass-panel p-8 lg:p-10 rounded-sm hover:border-primary-container/15 transition-all duration-300 group" style={`background:linear-gradient(135deg,${t.accent},transparent);`}>
             <div class="flex items-end gap-4 mb-4">
@@ -921,7 +894,7 @@ const homeSchemas = [
       </div>
 
       <div class="mt-10 text-center">
-        <a href="/materiais" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
+        <a href="/materiais" data-track="nav_link" data-track-target="materiais" data-track-location="home-cta" class="inline-flex items-center gap-2 border border-white/15 text-on-surface-variant text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300">
           Ver Catálogo Completo de Materiais
           <span class="material-symbols-outlined text-base">arrow_forward</span>
         </a>
@@ -1133,7 +1106,7 @@ const homeSchemas = [
           <h2 class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">Engenharia em Palavras</h2>
           <p class="text-body-md text-tertiary mt-3 max-w-lg leading-relaxed">Conteúdo técnico de quem fabrica peças, não de quem escreve sobre elas.</p>
         </div>
-        <a href="/blog" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
+        <a href="/blog" data-track="nav_link" data-track-target="blog" data-track-location="home-blog-section" class="text-label-caps text-primary-container uppercase tracking-[0.15em] flex items-center gap-2 hover:gap-4 transition-all duration-200 group">
           Ver todos os artigos
           <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </a>
@@ -1141,7 +1114,7 @@ const homeSchemas = [
 
       {featuredPost && (
         <!-- Post em destaque (full-width) — capa real do post -->
-        <a href={`/blog/${featuredPost.slug}`} class="group block mb-gutter">
+        <a href={`/blog/${featuredPost.slug}`} data-track="blog_post_card" data-track-slug={featuredPost.slug} data-track-location="home-featured" class="group block mb-gutter">
           <div class="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-sm overflow-hidden border border-white/8 hover:border-primary-container/20 transition-all duration-300">
             <!-- Visual destaque com cover real -->
             <div class="lg:col-span-3 relative h-64 lg:h-auto min-h-[320px] overflow-hidden bg-surface-high">
@@ -1196,7 +1169,7 @@ const homeSchemas = [
         <!-- Grid posts menores — capas reais -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
           {otherPosts.map((p, i) => (
-            <a href={`/blog/${p.slug}`} class:list={["group cursor-pointer block reveal-hidden", `stagger-${i+1}`]} data-animate>
+            <a href={`/blog/${p.slug}`} data-track="blog_post_card" data-track-slug={p.slug} data-track-location="home-grid" class:list={["group cursor-pointer block reveal-hidden", `stagger-${i+1}`]} data-animate>
               <div class="relative h-48 rounded-sm overflow-hidden mb-5 border border-white/5 hover:border-primary-container/25 transition-all duration-300 bg-surface-high">
                 <img
                   src={resolveCoverImage(p.coverImageUrl, p.category)}

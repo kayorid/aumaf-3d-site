@@ -27,12 +27,14 @@ export async function bootWorkers(): Promise<void> {
     logger.warn('No workers registered — boot is a no-op')
     return
   }
-  await Promise.all(
-    registry.map(async ({ name, worker }) => {
-      if (!worker.isRunning()) await worker.run()
-      logger.info({ queue: name }, 'Worker booted')
-    }),
-  )
+  for (const { name, worker } of registry) {
+    if (!worker.isRunning()) {
+      void worker.run().catch((err) => {
+        logger.error({ queue: name, err }, 'Worker run loop crashed')
+      })
+    }
+    logger.info({ queue: name }, 'Worker booted')
+  }
   logger.info({ workers: registry.map((r) => r.name) }, `Booted ${registry.length} worker(s)`)
 }
 

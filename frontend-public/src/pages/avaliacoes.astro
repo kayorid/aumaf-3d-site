@@ -51,6 +51,7 @@ const steps = [
   pageType="WebPage"
   breadcrumb={[{ name: 'Avaliações', url: '/avaliacoes' }]}
   schemas={schemas}
+  preloadImage="/images/bg-stars.webp"
 >
   <Navbar currentPath="/avaliacoes" />
 
@@ -115,10 +116,10 @@ const steps = [
       </div>
 
       {data && data.reviews.length > 0 ? (
-        <ul role="list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        <ul role="list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 auto-rows-fr items-stretch">
           {data.reviews.map((r) => (
-            <li class="flex">
-              <ReviewCard review={r} placeUrl={data.placeUrl} maxChars={400} />
+            <li class="flex h-full">
+              <ReviewCard review={r} placeUrl={data.placeUrl} maxChars={280} />
             </li>
           ))}
         </ul>

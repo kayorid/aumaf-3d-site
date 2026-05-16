@@ -1,0 +1,112 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+
+const description = 'Confirmação de identidade para solicitações LGPD na AUMAF 3D.'
+---
+
+<Base
+  title="Verificação de solicitação LGPD — AUMAF 3D"
+  description={description}
+  pageType="WebPage"
+  noindex
+>
+  <Navbar currentPath="/lgpd/verificar" />
+
+  <section class="min-h-[60vh] bg-background pt-28 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.12] pointer-events-none" aria-hidden="true"></div>
+    <div class="max-w-[640px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'LGPD', url: '/lgpd/direitos' }, { name: 'Verificação' }]} compact />
+      <div id="verify-state" class="glass-panel rounded-sm p-8 border border-white/8 mt-6 text-center">
+        <div class="w-14 h-14 rounded-full bg-primary-container/15 border border-primary-container/30 flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-primary-container text-3xl" aria-hidden="true" style="font-variation-settings:'FILL' 1;">hourglass_top</span>
+        </div>
+        <h1 class="text-headline-md font-bold uppercase text-white mb-3 tracking-[-0.02em]">Verificando solicitação…</h1>
+        <p class="text-sm text-tertiary leading-relaxed">Aguarde um instante.</p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<script>
+  async function run() {
+    const params = new URLSearchParams(location.search)
+    const token = params.get('token')
+    const stateEl = document.getElementById('verify-state')
+    if (!stateEl) return
+    // Helper: renderiza um estado fixo sem interpolar entrada do usuário.
+    // Usa templates estáticos pré-definidos para impedir XSS via query param.
+    function setState(kind: 'invalid' | 'success' | 'failed') {
+      const states = {
+        invalid: {
+          icon: 'error',
+          iconClasses: 'bg-red-500/15 border-red-500/30 text-red-400',
+          title: 'Link inválido',
+          body: 'Token ausente. Solicite um novo link em',
+        },
+        success: {
+          icon: 'verified',
+          iconClasses: 'bg-primary-container/15 border-primary-container/30 text-primary-container',
+          title: 'Identidade verificada',
+          body: 'Sua solicitação entrou em nossa fila. Você receberá a resposta em até 15 dias úteis no e-mail informado.',
+        },
+        failed: {
+          icon: 'error',
+          iconClasses: 'bg-red-500/15 border-red-500/30 text-red-400',
+          title: 'Token inválido ou expirado',
+          body: 'Solicite um novo link em',
+        },
+      } as const
+      const s = states[kind]
+      // Limpa filhos sem innerHTML.
+      while (stateEl!.firstChild) stateEl!.removeChild(stateEl!.firstChild)
+
+      const iconWrap = document.createElement('div')
+      iconWrap.className = `w-14 h-14 rounded-full border flex items-center justify-center mx-auto mb-5 ${s.iconClasses}`
+      const icon = document.createElement('span')
+      icon.className = 'material-symbols-outlined text-3xl'
+      icon.setAttribute('aria-hidden', 'true')
+      icon.setAttribute('style', "font-variation-settings:'FILL' 1;")
+      icon.textContent = s.icon
+      iconWrap.appendChild(icon)
+      stateEl!.appendChild(iconWrap)
+
+      const h1 = document.createElement('h1')
+      h1.className = 'text-headline-md font-bold uppercase text-white mb-3 tracking-[-0.02em]'
+      h1.textContent = s.title
+      stateEl!.appendChild(h1)
+
+      const p = document.createElement('p')
+      p.className = 'text-sm text-tertiary leading-relaxed'
+      p.textContent = s.body + ' '
+      if (kind !== 'success') {
+        const a = document.createElement('a')
+        a.href = '/lgpd/direitos'
+        a.className = 'text-primary-container hover:underline'
+        a.textContent = '/lgpd/direitos'
+        p.appendChild(a)
+      }
+      stateEl!.appendChild(p)
+    }
+
+    if (!token) {
+      setState('invalid')
+      return
+    }
+    try {
+      const apiUrl = (import.meta as unknown as { env: Record<string, string> }).env.PUBLIC_API_URL
+      if (!apiUrl) throw new Error('no api')
+      const res = await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/dsr/verify?token=${encodeURIComponent(token)}`)
+      if (!res.ok) throw new Error('verify failed')
+      setState('success')
+    } catch {
+      setState('failed')
+    }
+  }
+  run()
+</script>

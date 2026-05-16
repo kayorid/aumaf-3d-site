@@ -13,6 +13,9 @@ const links = [
   { href: '/blog', label: 'Blog' },
   { href: '/contato', label: 'Contato' },
   { href: '/faq', label: 'Perguntas Frequentes' },
+  { href: '/guias', label: 'Guias' },
+  { href: '/glossario', label: 'Glossário' },
+  { href: '/industrias', label: 'Indústrias atendidas' },
 ]
 
 const socials = [
@@ -62,6 +65,8 @@ const socials = [
             <li>
               <a
                 href={s.href}
+                data-track="social_link"
+                data-track-network={s.label}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${s.label} (abre em nova aba)`}
@@ -82,7 +87,7 @@ const socials = [
         <ul role="list" class="space-y-3">
           {links.map((link) => (
             <li>
-              <a href={link.href} class="text-sm text-tertiary hover:text-white transition-colors duration-200 focus-visible:text-primary-container">
+              <a href={link.href} data-track="footer_link" data-track-target={link.label} class="text-sm text-tertiary hover:text-white transition-colors duration-200 focus-visible:text-primary-container">
                 {link.label}
               </a>
             </li>
@@ -104,6 +109,7 @@ const socials = [
             <span class="text-on-surface-variant text-label-caps uppercase block mb-1">WhatsApp</span>
             <a
               href={COMPANY.contact.whatsapp}
+              data-track="cta_whatsapp_footer"
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Falar pelo WhatsApp: ${COMPANY.contact.phoneDisplay} (abre em nova aba)`}
@@ -130,11 +136,61 @@ const socials = [
   <!-- Reviews widget -->
   <ReviewsFooterWidget />
 
+  <!-- Legal bar — LGPD links -->
+  <div class="border-t border-white/8">
+    <div class="max-w-[1600px] mx-auto px-edge py-5">
+      <nav aria-label="Documentos legais e privacidade">
+        <ul role="list" class="flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 text-xs text-on-surface-variant">
+          <li>
+            <a
+              href="/politica-de-privacidade"
+              data-track="footer_legal"
+              data-track-target="politica-privacidade"
+              class="hover:text-primary-container transition-colors focus-visible:text-primary-container"
+            >Política de Privacidade</a>
+          </li>
+          <li>
+            <a
+              href="/termos-de-uso"
+              data-track="footer_legal"
+              data-track-target="termos-uso"
+              class="hover:text-primary-container transition-colors focus-visible:text-primary-container"
+            >Termos de Uso</a>
+          </li>
+          <li>
+            <a
+              href="/politica-de-cookies"
+              data-track="footer_legal"
+              data-track-target="politica-cookies"
+              class="hover:text-primary-container transition-colors focus-visible:text-primary-container"
+            >Política de Cookies</a>
+          </li>
+          <li>
+            <a
+              href="/preferencias-de-cookies"
+              data-track="footer_legal"
+              data-track-target="preferencias-cookies"
+              class="hover:text-primary-container transition-colors focus-visible:text-primary-container"
+            >Preferências de Cookies</a>
+          </li>
+          <li>
+            <a
+              href="/lgpd/direitos"
+              data-track="footer_legal"
+              data-track-target="direitos-lgpd"
+              class="hover:text-primary-container transition-colors focus-visible:text-primary-container"
+            >Seus Direitos LGPD</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
   <!-- Bottom bar -->
   <div class="border-t border-white/8">
     <div class="max-w-[1600px] mx-auto px-edge py-5 flex flex-col md:flex-row justify-between items-center gap-3">
       <p class="text-xs text-on-surface-variant">
-        © {year} {COMPANY.name}. Todos os direitos reservados.
+        © {year} <span class="font-medium text-tertiary">{COMPANY.legalName}</span> · CNPJ {COMPANY.taxId}. Todos os direitos reservados.
       </p>
       <a
         href="https://kayoridolfi.ai"

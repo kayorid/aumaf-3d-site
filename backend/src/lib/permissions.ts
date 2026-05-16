@@ -8,10 +8,12 @@ export const FEATURES = [
   'posts',
   'categories',
   'leads',
+  'analytics',
   'media',
   'settings',
   'botyio',
   'users',
+  'lgpd',
 ] as const
 
 export const ACTIONS = ['view', 'edit'] as const
@@ -41,6 +43,7 @@ export const ROLE_PRESETS: Record<UserRole, Permission[]> = {
     'posts:view',
     'categories:view',
     'leads:edit',
+    'analytics:view',
     'media:view',
     'botyio:view',
   ],
@@ -93,10 +96,12 @@ function featureLabel(f: Feature): string {
     posts: 'Posts',
     categories: 'Categorias',
     leads: 'Leads',
+    analytics: 'Analytics',
     media: 'Mídia',
     settings: 'Configurações',
     botyio: 'Botyio',
     users: 'Usuários',
+    lgpd: 'LGPD',
   }
   return map[f]
 }

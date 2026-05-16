@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook, ShieldCheck } from 'lucide-react'
+import { LayoutDashboard, FileText, Image as ImageIcon, Users, Settings, Tags, Webhook, ShieldCheck, BarChart3, Scale } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { usePermissions } from '@/features/users/hooks/usePermissions'
 
@@ -17,10 +17,12 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/posts',     label: 'Posts',      icon: FileText,        number: '02', feature: 'posts' },
   { to: '/categories',label: 'Categorias', icon: Tags,            number: '03', feature: 'categories' },
   { to: '/leads',     label: 'Leads',      icon: Users,           number: '04', feature: 'leads' },
-  { to: '/settings',  label: 'Settings',   icon: Settings,        number: '05', feature: 'settings' },
-  { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '06', feature: 'botyio' },
-  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '07', feature: 'media' },
-  { to: '/usuarios',  label: 'Usuários',   icon: ShieldCheck,     number: '08', feature: 'users' },
+  { to: '/analytics', label: 'Analytics',  icon: BarChart3,       number: '05', feature: 'analytics' },
+  { to: '/settings',  label: 'Settings',   icon: Settings,        number: '06', feature: 'settings' },
+  { to: '/integrations/botyio', label: 'Botyio', icon: Webhook,   number: '07', feature: 'botyio' },
+  { to: '/media',     label: 'Mídia',      icon: ImageIcon,       number: '08', feature: 'media' },
+  { to: '/usuarios',  label: 'Usuários',   icon: ShieldCheck,     number: '09', feature: 'users' },
+  { to: '/lgpd/solicitacoes', label: 'LGPD', icon: Scale,         number: '10', feature: 'lgpd' },
 ]
 
 export function Sidebar() {

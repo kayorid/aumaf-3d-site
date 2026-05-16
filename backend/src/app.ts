@@ -24,6 +24,10 @@ import { botyioWebhookRoutes } from './routes/botyio-webhook.routes'
 import { adminIntegrationRoutes } from './routes/admin-integration.routes'
 import { mediaRoutes } from './routes/media.routes'
 import { fileServeRoutes } from './routes/file-serve.routes'
+import { analyticsRoutes } from './routes/analytics.routes'
+import { analyticsReadRoutes } from './routes/analytics-read.routes'
+import { consentRoutes } from './routes/consent.routes'
+import { dsrRoutes } from './routes/dsr.routes'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -81,6 +85,22 @@ export function createApp() {
   app.use('/api/v1/metrics', metricsRoutes)
   app.use('/api/v1/settings', settingsRoutes)
   app.use('/api/v1/admin/integrations', adminIntegrationRoutes)
+
+  // Analytics — coleta pública (POST /collect, /collect/beacon) + leitura JWT (/overview, etc.)
+  // text/plain aceito em /collect/beacon porque navigator.sendBeacon usa esse content-type.
+  app.use(
+    '/api/v1/analytics/collect/beacon',
+    express.text({ type: ['application/json', 'text/plain'], limit: '256kb' }),
+  )
+  app.use('/api/v1/analytics', analyticsRoutes)
+  app.use('/api/v1/analytics', analyticsReadRoutes)
+
+  // LGPD — registro público de consentimento de cookies.
+  app.use('/api/v1/consent', consentRoutes)
+
+  // LGPD — Data Subject Requests (direitos do titular, art. 18).
+  app.use('/api/v1/dsr', dsrRoutes)
+
 
   app.use((_req, res) => {
     res.status(404).json({ status: 'error', code: 'NOT_FOUND', message: 'Not found' })

@@ -5,9 +5,18 @@ import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
 import { COMPANY } from '../lib/company'
-import { itemListSchema } from '../lib/schemas'
+import { itemListSchema, teamMembersSchema } from '../lib/schemas'
 
 const description = 'Conheça a AUMAF 3D — manufatura aditiva industrial em São Carlos, SP, desde 2022. Missão, visão, valores, parceria com Fórmula SAE USP e localização no Parque Tecnológico Damha II.'
+
+const team = [
+  { slug: 'marcos-ninelli',    name: 'Marcos Vinicius Ninelli Martins', jobTitle: 'Diretor de Operações',         description: 'Sócio-fundador. Lidera operações e estratégia técnica da AUMAF 3D.' },
+  { slug: 'luiz-felipe-risse', name: 'Luiz Felipe Lampa Risse',         jobTitle: 'Administrador',                description: 'Administração, financeiro e encarregado de proteção de dados (DPO/LGPD).' },
+  { slug: 'nieldson-martins',  name: 'Nieldson Martins',                jobTitle: 'Representante Comercial',      description: 'Atendimento comercial, orçamentos e relacionamento com clientes.' },
+  { slug: 'hian-zambulin',     name: 'Hian Zambulin',                   jobTitle: 'Modelador 3D',                 description: 'Modelagem CAD, engenharia reversa e preparação de arquivos para impressão.' },
+  { slug: 'tiago-frasson',     name: 'Tiago Frasson',                   jobTitle: 'Técnico em Impressão 3D',      description: 'Operação de impressoras FDM/SLA/SLS, pós-processamento e controle de qualidade.' },
+  { slug: 'felipe-gonsales',   name: 'Felipe Gonsales',                 jobTitle: 'Estagiário de Impressão 3D',   description: 'Apoio em operação, pós-processamento e logística de peças.' },
+]
 
 const schemas = [
   itemListSchema([
@@ -15,6 +24,14 @@ const schemas = [
     { name: 'Visão', description: 'Ser o parceiro de engenharia aditiva de referência no interior de São Paulo.' },
     { name: 'Valores', description: 'Inovação contínua, qualidade comprovada, transparência e parceria.' },
   ]),
+  ...teamMembersSchema(
+    team.map((m) => ({
+      name: m.name,
+      jobTitle: m.jobTitle,
+      description: m.description,
+      image: `${COMPANY.url}/images/team/${m.slug}.webp`,
+    })),
+  ),
 ]
 ---
 
@@ -169,7 +186,7 @@ const schemas = [
               Parceria Universitária · <time datetime="2024-06">Jun 2024</time>
             </span>
             <p class="text-body-lg text-tertiary leading-relaxed">
-              A AUMAF 3D forneceu peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos na Fórmula SAE 2024. Componentes em <strong class="text-on-surface">Nylon PA</strong> e <strong class="text-on-surface">PET-G CF15</strong> para suportes de suspensão, guias de cabo e elementos aerodinâmicos — com exigência de tolerância mínima e peso reduzido.
+              A AUMAF 3D forneceu peças estruturais e aerodinâmicas para o carro de competição da equipe de Engenharia Mecânica da USP São Carlos na Fórmula SAE 2024. Componentes em <strong class="text-on-surface">Nylon</strong> e <strong class="text-on-surface">PET-G CF15</strong> para suportes de suspensão, guias de cabo e elementos aerodinâmicos — com exigência de alta precisão dimensional e peso reduzido.
             </p>
           </div>
           <dl class="glass-panel rounded-sm p-6 space-y-4">
@@ -259,12 +276,71 @@ const schemas = [
     </div>
   </section>
 
+  <!-- =============================================
+       EQUIPE AUMAF 3D
+       ============================================= -->
+  <section class="bg-background border-t border-white/5 py-section relative overflow-hidden" aria-labelledby="equipe-sobre">
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:radial-gradient(ellipse 60% 45% at 50% 0%,rgba(97,197,79,0.06) 0%,transparent 65%);"></div>
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.05] pointer-events-none" aria-hidden="true"></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <div class="mb-12 md:mb-16 border-b border-white/8 pb-8 md:pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-label-caps text-primary-container text-glow-sm uppercase tracking-[0.2em] block mb-3">04 // Equipe</span>
+          <h2 id="equipe-sobre" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em]">
+            Equipe AUMAF 3D.<br/>
+            <span class="text-on-surface-variant font-light">Quem fabrica suas peças.</span>
+          </h2>
+        </div>
+        <p class="text-body-md text-tertiary max-w-sm leading-relaxed">Engenharia, operação e atendimento sob o mesmo teto em São Carlos — SP. Pessoas reais por trás de cada peça entregue.</p>
+      </div>
+
+      <ul role="list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        {[
+          { slug: 'marcos-ninelli',     name: 'Marcos Vinicius Ninelli Martins', role: 'Diretor de Operações' },
+          { slug: 'luiz-felipe-risse',  name: 'Luiz Felipe Lampa Risse',         role: 'Administrador' },
+          { slug: 'nieldson-martins',   name: 'Nieldson Martins',                role: 'Representante Comercial' },
+          { slug: 'hian-zambulin',      name: 'Hian Zambulin',                   role: 'Modelador 3D' },
+          { slug: 'tiago-frasson',      name: 'Tiago Frasson',                   role: 'Técnico em Impressão 3D' },
+          { slug: 'felipe-gonsales',    name: 'Felipe Gonsales',                 role: 'Estagiário de Impressão 3D' },
+        ].map((m) => (
+          <li>
+            <article class="glass-panel card-hover-glow rounded-sm overflow-hidden group h-full flex flex-col border border-white/8 hover:border-primary-container/30 transition-all duration-300">
+              <div class="relative aspect-[3/4] overflow-hidden bg-surface-base">
+                <img
+                  src={`/images/team/${m.slug}.webp`}
+                  alt={`Foto de ${m.name} — ${m.role} na AUMAF 3D`}
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  width="900"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none" aria-hidden="true"></div>
+                <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.75) 100%);"></div>
+                <div class="absolute top-3 left-3 w-3 h-3 border-t border-l border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute top-3 right-3 w-3 h-3 border-t border-r border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-primary-container/40" aria-hidden="true"></div>
+                <div class="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-primary-container/40" aria-hidden="true"></div>
+              </div>
+              <div class="p-4 md:p-5 flex flex-col gap-1.5 border-t border-white/5">
+                <h3 class="text-body-md font-bold text-on-surface tracking-tight leading-tight">{m.name}</h3>
+                <p class="text-code-data text-primary-container uppercase tracking-[0.12em] text-[10px] md:text-[11px]">{m.role}</p>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+
   <!-- CTA -->
   <section class="bg-surface-low border-t border-white/5 py-16" aria-labelledby="cta-sobre">
     <div class="max-w-[1600px] mx-auto px-edge text-center">
       <h2 id="cta-sobre" class="text-headline-lg font-bold uppercase text-white tracking-[-0.02em] mb-4">Vamos Trabalhar Juntos?</h2>
       <p class="text-body-lg text-tertiary mb-8 max-w-md mx-auto">Conte-nos sobre seu projeto. Respondemos em até 24 horas.</p>
-      <a href="/contato" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
+      <a href="/contato" data-track="cta_quote_hero" data-track-location="page-footer" class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-8 py-4 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300">
         Solicitar orçamento <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
       </a>
     </div>

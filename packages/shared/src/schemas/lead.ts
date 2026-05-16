@@ -13,6 +13,8 @@ export const CreateLeadSchema = z.object({
   utmContent: z.string().max(200).optional(),
   referrer: z.string().max(500).optional(),
   landingPage: z.string().max(500).optional(),
+  /** Consentimento explícito (LGPD art. 7º, I) para receber comunicações comerciais. Default false. */
+  marketingConsent: z.boolean().optional().default(false),
 })
 export type CreateLeadInput = z.infer<typeof CreateLeadSchema>
 

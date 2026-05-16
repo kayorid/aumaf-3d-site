@@ -13,6 +13,8 @@ import { SettingsPage } from '@/features/settings/pages/SettingsPage'
 import { BotyioConfigPage } from '@/features/integrations/pages/BotyioConfigPage'
 import { MediaLibraryPage } from '@/features/media/pages/MediaLibraryPage'
 import { CategoriesPage } from '@/features/categories/pages/CategoriesPage'
+import { AnalyticsPage } from '@/features/analytics/pages/AnalyticsPage'
+import { LgpdRequestsPage } from '@/features/lgpd/pages/LgpdRequestsPage'
 import { NotFoundPage } from '@/components/layout/NotFoundPage'
 
 export const router = createBrowserRouter([
@@ -30,12 +32,14 @@ export const router = createBrowserRouter([
           { path: '/posts/:id', element: <PostEditorPage /> },
           { path: '/categories', element: <CategoriesPage /> },
           { path: '/leads', element: <LeadsListPage /> },
+          { path: '/analytics', element: <AnalyticsPage /> },
           { path: '/perfil', element: <ProfilePage /> },
           { path: '/usuarios', element: <UsersListPage /> },
           { path: '/usuarios/:id', element: <UserDetailPage /> },
           { path: '/settings', element: <SettingsPage /> },
           { path: '/integrations/botyio', element: <BotyioConfigPage /> },
           { path: '/media', element: <MediaLibraryPage /> },
+          { path: '/lgpd/solicitacoes', element: <LgpdRequestsPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },
