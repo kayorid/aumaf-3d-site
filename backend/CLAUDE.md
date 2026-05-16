@@ -36,7 +36,8 @@ backend/src/
 ├── services/
 │   ├── email.service.ts               # transports: console/smtp/stub
 │   ├── lead.service.ts                # createLead enfileira notificação
-│   ├── post.service.ts                # publish enfileira warmup
+│   ├── post.service.ts                # publish enfileira warmup + IndexNow ping
+│   ├── indexnow.service.ts            # push para Bing/Yandex/Seznam/Naver (best-effort)
 │   └── ...
 └── controllers/...
 ```
@@ -50,6 +51,11 @@ backend/src/
 
 ## Variáveis de Ambiente
 Ver `backend/.env.example`. Obrigatórias: `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET`, `MINIO_*`.
+
+Opcionais úteis:
+- `INDEXNOW_KEY` (32 chars hex) — ativa o ping IndexNow no `publishPost`. Sem ela, o serviço loga `debug` e segue. Mesma chave precisa estar em `PUBLIC_INDEXNOW_KEY` do frontend-public para expor `/<KEY>.txt`.
+- `INDEXNOW_HOST` — opcional; default deriva de `PUBLIC_BLOG_BASE_URL`.
+- `LGPD_ANON_SALT` — 32+ chars aleatórios para hash determinístico de PII (worker de retenção).
 
 ## Padrões
 - Rotas em `src/routes/`, controllers em `src/controllers/`, serviços em `src/services/`
