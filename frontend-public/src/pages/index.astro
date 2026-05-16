@@ -202,8 +202,8 @@ const homeSchemas = [
               </div>
               <div>
                 <div class="flex justify-between text-[11px] text-tertiary mb-1.5">
-                  <span class="uppercase tracking-wider">Temperatura</span>
-                  <span class="text-error font-semibold font-mono" data-temp-pct>0°C</span>
+                  <span class="uppercase tracking-wider">Potência</span>
+                  <span class="text-error font-semibold font-mono" data-temp-pct>0 W</span>
                 </div>
                 <div class="h-[3px] bg-surface-high rounded overflow-hidden relative">
                   <div
@@ -218,7 +218,7 @@ const homeSchemas = [
             <div class="mt-3 flex items-center justify-between gap-2">
               <div class="flex items-center gap-2 min-w-0">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse-dot flex-shrink-0"></span>
-                <span class="text-[11px] text-tertiary tracking-wide font-mono truncate">PA CF15 · Nozzle 0.4mm</span>
+                <span class="text-[11px] text-tertiary tracking-wide font-mono truncate">Aço Inox 316L · SLM</span>
               </div>
               <span class="text-[10px] text-on-surface-variant tracking-wider font-mono">
                 <span class="text-primary-container/70" data-layer-current>—</span>
@@ -279,7 +279,7 @@ const homeSchemas = [
 
               if (reduced) {
                 bar.style.width = '80%'; pct.textContent = '80%'
-                tBar.style.width = '95%'; tPct.textContent = '265°C'
+                tBar.style.width = '95%'; tPct.textContent = '1 kW'
                 if (layerCurrent) layerCurrent.textContent = String(TARGET)
                 return
               }
@@ -303,9 +303,14 @@ const homeSchemas = [
                 const startT = performance.now()
                 const tickT = (now) => {
                   const k = Math.min(1, (now - startT) / 1800)
-                  const v = Math.round(265 * easeOutCubic(k))
-                  tPct.textContent = v + '°C'
-                  if (k < 1) requestAnimationFrame(tickT)
+                  const e = easeOutCubic(k)
+                  if (k < 1) {
+                    const v = Math.round(1000 * e)
+                    tPct.textContent = v + ' W'
+                    requestAnimationFrame(tickT)
+                  } else {
+                    tPct.textContent = '1 kW'
+                  }
                 }
                 requestAnimationFrame(tickT)
               }
@@ -597,7 +602,6 @@ const homeSchemas = [
                 <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-primary-container/25 to-transparent animate-scan-line"></div>
 
                 <!-- Labels -->
-                <div class="absolute top-4 right-4 text-label-caps text-primary-container/30 text-[10px] tracking-widest uppercase font-mono">{item.videoId}</div>
                 <div class="absolute bottom-4 left-4">
                   <span class="pill-green text-[10px]">{item.specs[0]}</span>
                 </div>
@@ -860,7 +864,6 @@ const homeSchemas = [
             <div class="absolute inset-0 bg-tech-grid opacity-15 mix-blend-overlay pointer-events-none"></div>
             <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(circle at 50% 40%,rgba(97,197,79,0.06) 0%,transparent 60%),linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.5) 100%);"></div>
 
-            <div class="absolute top-3 right-3 text-label-caps text-primary-container/30 text-[9px] tracking-widest uppercase font-mono">VIDEO_SLS</div>
             <div class="absolute bottom-3 left-3"><span class="pill-green text-[9px]">Laser Head Active</span></div>
 
             <!-- Corner brackets -->

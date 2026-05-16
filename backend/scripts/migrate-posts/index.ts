@@ -26,8 +26,12 @@ import { post as p8 } from './posts/08-slm-sls-sla-fdm-qual-tecnologia-escolher'
 import { post as p9 } from './posts/09-engenharia-reversa-pecas-sem-projeto-original'
 import { post as p10 } from './posts/10-impressao-3d-metalica-quando-slm-melhor-escolha'
 import { post as p11 } from './posts/11-processo-impressao-3d-slm-passo-a-passo'
+import { post as p12 } from './posts/12-visita-biofabris-sls-biomedica'
+import { post as p13 } from './posts/13-impressao-3d-na-ciencia'
+import { post as p14 } from './posts/14-5-filamentos-impressao-3d'
+import { post as p15 } from './posts/15-pa-cf15-levanta-tanque-12-toneladas'
 
-const POSTS: LegacyPost[] = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11]
+const POSTS: LegacyPost[] = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15]
 
 const prisma = new PrismaClient()
 

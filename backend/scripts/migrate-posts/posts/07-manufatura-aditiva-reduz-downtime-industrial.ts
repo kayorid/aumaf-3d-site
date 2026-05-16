@@ -11,7 +11,7 @@ export const post: LegacyPost = {
   category: 'Manutenção Industrial',
   publishedAt: new Date('2026-05-16T12:00:00Z'),
   readingTimeMin: 10,
-  featured: true,
+  featured: false,
   tags: ['downtime', 'manutencao-industrial', 'peca-de-reposicao', 'engenharia-reversa', 'manufatura-aditiva'],
   coverImage: {
     localPath: 'frontend-public/public/images/blog-cover-downtime-industrial.webp',
