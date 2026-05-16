@@ -4,6 +4,10 @@ import sitemap from '@astrojs/sitemap'
 import node from '@astrojs/node'
 import { EnumChangefreq } from 'sitemap'
 import { fetchPublicSlugs } from './src/lib/api'
+import { visualizer } from 'rollup-plugin-visualizer'
+
+// Liga o bundle visualizer só com BUNDLE_AUDIT=1 (não roda em CI/Docker padrão).
+const BUNDLE_AUDIT = process.env.BUNDLE_AUDIT === '1'
 
 // Em build time, busca slugs publicados para incluir no sitemap.
 // Falha silenciosa se o backend não estiver disponível.
@@ -76,5 +80,15 @@ export default defineConfig({
     build: {
       cssMinify: 'lightningcss',
     },
+    plugins: BUNDLE_AUDIT
+      ? [
+          visualizer({
+            filename: 'dist/stats.html',
+            template: 'treemap',
+            gzipSize: true,
+            brotliSize: true,
+          }) as never,
+        ]
+      : [],
   },
 })
