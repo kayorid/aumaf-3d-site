@@ -21,8 +21,13 @@ import { post as p3 } from './posts/03-formula-sae-case-study-completo'
 import { post as p4 } from './posts/04-engenharia-reversa-passo-a-passo'
 import { post as p5 } from './posts/05-formula-sae-usp-sao-carlos'
 import { post as p6 } from './posts/06-construtora-arabe-edificio-mais-alto'
+import { post as p7 } from './posts/07-manufatura-aditiva-reduz-downtime-industrial'
+import { post as p8 } from './posts/08-slm-sls-sla-fdm-qual-tecnologia-escolher'
+import { post as p9 } from './posts/09-engenharia-reversa-pecas-sem-projeto-original'
+import { post as p10 } from './posts/10-impressao-3d-metalica-quando-slm-melhor-escolha'
+import { post as p11 } from './posts/11-processo-impressao-3d-slm-passo-a-passo'
 
-const POSTS: LegacyPost[] = [p1, p2, p3, p4, p5, p6]
+const POSTS: LegacyPost[] = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11]
 
 const prisma = new PrismaClient()
 
