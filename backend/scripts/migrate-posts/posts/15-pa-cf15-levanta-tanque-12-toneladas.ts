@@ -9,7 +9,7 @@ export const post: LegacyPost = {
   metaDescription:
     'Como uma peça impressa em 3D de Nylon com fibra de carbono (PA-CF15) conseguiu sustentar um tanque de guerra de 12 toneladas. Engenharia de materiais, design e processo.',
   category: 'Inovação',
-  publishedAt: new Date('2026-05-16T16:30:00Z'),
+  publishedAt: new Date('2026-05-16T15:30:00Z'),
   readingTimeMin: 6,
   featured: false,
   tags: ['pa-cf15', 'fibra-de-carbono', 'nylon', 'alta-performance', 'inovacao', 'demonstracao'],
