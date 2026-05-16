@@ -98,6 +98,12 @@ Versões em markdown cru — preferidas por LLMs para citação direta sem ruíd
 - [Engenharia reversa industrial: como reproduzir peças sem projeto original](https://aumaf.kayoridolfi.ai/blog/engenharia-reversa-pecas-sem-projeto-original) — escaneamento 3D, reconstrução CAD paramétrica, validação dimensional.
 - [Impressão 3D metálica: quando a tecnologia SLM é a melhor escolha](https://aumaf.kayoridolfi.ai/blog/impressao-3d-metalica-quando-slm-melhor-escolha) — geometrias impossíveis, topologia otimizada, consolidação de assemblies, canais conformais.
 - [Como funciona o processo de impressão 3D SLM passo a passo](https://aumaf.kayoridolfi.ai/blog/processo-impressao-3d-slm-passo-a-passo) — fluxo completo do CAD à inspeção dimensional, materiais e parâmetros.
+- [Visita ao BIOFABRIS: SLS na biofabricação](https://aumaf.kayoridolfi.ai/blog/visita-biofabris-sls-biomedica) — instituto da UNICAMP, aplicações biomédicas do SLS, scaffolds e dispositivos personalizados.
+- [Impressão 3D na ciência: USP, UNICAMP e materiais personalizados](https://aumaf.kayoridolfi.ai/blog/impressao-3d-na-ciencia) — colaboração CEMEC-USP + LASB-UNICAMP + Ultimaker para estruturas moleculares.
+- [5 filamentos essenciais para impressão 3D](https://aumaf.kayoridolfi.ai/blog/5-filamentos-impressao-3d) — guia comparativo entre PLA, ABS, PET, Nylon e TPU com propriedades e aplicações.
+- [PA-CF15 sustenta 12 toneladas: precisa levantar um tanque?](https://aumaf.kayoridolfi.ai/blog/pa-cf15-levanta-tanque-12-toneladas) — demonstração de alta performance de Nylon com fibra de carbono.
+- [Parceria de Sucesso: AUMAF 3D × Fórmula SAE USP São Carlos](https://aumaf.kayoridolfi.ai/blog/formula-sae-usp-sao-carlos) — colaboração com equipe universitária de engenharia automotiva.
+- [Construtora árabe lança edifício 3D mais alto do mundo](https://aumaf.kayoridolfi.ai/blog/construtora-arabe-edificio-mais-alto) — vila de 9,9 m em Riyadh impressa em 26 dias.
 
 ## Indústrias atendidas (landings por setor)
 

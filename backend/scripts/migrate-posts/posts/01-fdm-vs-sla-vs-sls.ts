@@ -11,7 +11,7 @@ export const post: LegacyPost = {
   category: 'Guia Técnico',
   publishedAt: new Date('2026-05-01T12:00:00Z'),
   readingTimeMin: 8,
-  featured: true,
+  featured: false,
   tags: ['fdm', 'sla', 'sls', 'comparativo', 'impressao-3d-industrial'],
   coverImage: null,
   content: `Escolher o processo errado de impressão 3D pode custar caro — não apenas no orçamento da peça, mas em retrabalho, atrasos de projeto e frustração com resultados que não atendem à funcionalidade esperada. FDM, SLA e SLS são tecnologias radicalmente diferentes, cada uma com uma proposta de valor específica para aplicações industriais.
