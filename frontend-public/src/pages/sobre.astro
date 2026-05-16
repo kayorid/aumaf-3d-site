@@ -5,9 +5,18 @@ import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
 import { COMPANY } from '../lib/company'
-import { itemListSchema } from '../lib/schemas'
+import { itemListSchema, teamMembersSchema } from '../lib/schemas'
 
 const description = 'Conheça a AUMAF 3D — manufatura aditiva industrial em São Carlos, SP, desde 2022. Missão, visão, valores, parceria com Fórmula SAE USP e localização no Parque Tecnológico Damha II.'
+
+const team = [
+  { slug: 'marcos-ninelli',    name: 'Marcos Vinicius Ninelli Martins', jobTitle: 'Diretor de Operações',         description: 'Sócio-fundador. Lidera operações e estratégia técnica da AUMAF 3D.' },
+  { slug: 'luiz-felipe-risse', name: 'Luiz Felipe Lampa Risse',         jobTitle: 'Administrador',                description: 'Administração, financeiro e encarregado de proteção de dados (DPO/LGPD).' },
+  { slug: 'nieldson-martins',  name: 'Nieldson Martins',                jobTitle: 'Representante Comercial',      description: 'Atendimento comercial, orçamentos e relacionamento com clientes.' },
+  { slug: 'hian-zambulin',     name: 'Hian Zambulin',                   jobTitle: 'Modelador 3D',                 description: 'Modelagem CAD, engenharia reversa e preparação de arquivos para impressão.' },
+  { slug: 'tiago-frasson',     name: 'Tiago Frasson',                   jobTitle: 'Técnico em Impressão 3D',      description: 'Operação de impressoras FDM/SLA/SLS, pós-processamento e controle de qualidade.' },
+  { slug: 'felipe-gonsales',   name: 'Felipe Gonsales',                 jobTitle: 'Estagiário de Impressão 3D',   description: 'Apoio em operação, pós-processamento e logística de peças.' },
+]
 
 const schemas = [
   itemListSchema([
@@ -15,6 +24,14 @@ const schemas = [
     { name: 'Visão', description: 'Ser o parceiro de engenharia aditiva de referência no interior de São Paulo.' },
     { name: 'Valores', description: 'Inovação contínua, qualidade comprovada, transparência e parceria.' },
   ]),
+  ...teamMembersSchema(
+    team.map((m) => ({
+      name: m.name,
+      jobTitle: m.jobTitle,
+      description: m.description,
+      image: `${COMPANY.url}/images/team/${m.slug}.webp`,
+    })),
+  ),
 ]
 ---
 
