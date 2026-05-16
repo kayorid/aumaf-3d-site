@@ -13,7 +13,7 @@ export const post: LegacyPost = {
   readingTimeMin: 5,
   featured: false,
   tags: ['formula-sae', 'usp', 'motorsport', 'nylon-pa', 'pet-g-cf15', 'dfam'],
-  coverImage: { localPath: 'frontend-public/public/images/SAE-formula.avif', filename: 'SAE-formula.avif' },
+  coverImage: { localPath: 'frontend-public/public/images/SAE-formula.webp', filename: 'SAE-formula.webp' },
   content: `## O Que é Fórmula SAE
 
 A Fórmula SAE é a principal competição de engenharia automotiva para estudantes universitários no mundo. Equipes projetam, constroem e competem com um carro de formula de corrida desde o zero, sendo avaliadas em quesitos de performance dinâmica, design de engenharia, análise de negócios e eficiência de custo. A USP São Carlos, reconhecida como uma das melhores escolas de engenharia do Brasil, participa regularmente com times de Engenharia Mecânica e Elétrica.
