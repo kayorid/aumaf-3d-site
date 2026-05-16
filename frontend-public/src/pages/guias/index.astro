@@ -1,0 +1,70 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import { itemListSchema } from '../../lib/schemas'
+import { COMPANY } from '../../lib/company'
+import { guias } from '../../data/guias'
+
+const description = `Guias HowTo de impressão 3D — ${guias.length} tutoriais passo-a-passo: solicitar orçamento, enviar arquivo 3D, escolher material, acompanhar pedido.`
+const schemas = [
+  itemListSchema(
+    guias.map((g) => ({
+      name: g.hero,
+      url: `${COMPANY.url}/guias/${g.slug}`,
+      description: g.description,
+    })),
+  ),
+]
+---
+
+<Base
+  title="Guias HowTo — Impressão 3D"
+  description={description}
+  pageType="CollectionPage"
+  breadcrumb={[{ name: 'Guias', url: '/guias' }]}
+  schemas={schemas}
+>
+  <Navbar currentPath="/guias" />
+
+  <main class="bg-background pt-28 pb-section relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.10] pointer-events-none" aria-hidden="true"></div>
+
+    <section class="max-w-[1100px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'Guias' }]} compact />
+
+      <header class="mt-6 mb-12">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Tutorial // HowTo</span>
+        <h1 class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[0.95] mb-6">
+          Guias<br/><span class="text-gradient-glow">passo-a-passo.</span>
+        </h1>
+        <p class="text-body-lg text-tertiary leading-relaxed max-w-3xl">
+          {guias.length} guias práticos para tirar seu projeto do papel — do primeiro orçamento ao acompanhamento da peça em produção.
+        </p>
+      </header>
+
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {guias.map((g) => (
+          <li>
+            <a
+              href={`/guias/${g.slug}`}
+              class="block glass-panel card-hover-glow rounded-sm p-8 border border-white/8 hover:border-primary-container/60 transition-all duration-300 h-full"
+            >
+              <span class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] block mb-3">{g.steps.length} passos</span>
+              <h2 class="text-headline-sm font-bold uppercase text-white tracking-[-0.02em] mb-3">{g.hero}</h2>
+              <p class="text-body-md text-tertiary leading-relaxed">{g.description}</p>
+              <p class="text-label-caps text-primary-container uppercase tracking-widest mt-4 inline-flex items-center gap-1">
+                Ler guia
+                <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

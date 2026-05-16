@@ -1,0 +1,113 @@
+---
+export const prerender = true
+import Base from '../../layouts/Base.astro'
+import Navbar from '../../components/Navbar.astro'
+import Footer from '../../components/Footer.astro'
+import Breadcrumb from '../../components/Breadcrumb.astro'
+import { howToSchema, webPageSchema } from '../../lib/schemas'
+import { COMPANY } from '../../lib/company'
+import { guias } from '../../data/guias'
+
+export function getStaticPaths() {
+  return guias.map((g) => ({ params: { slug: g.slug }, props: { guia: g } }))
+}
+
+const { guia } = Astro.props
+const url = `${COMPANY.url}/guias/${guia.slug}`
+
+const schemas = [
+  webPageSchema({ url, name: guia.hero, description: guia.description, type: 'WebPage' }),
+  howToSchema({
+    name: guia.question,
+    description: guia.description,
+    steps: guia.steps.map((s) => ({ name: s.title, text: s.text })),
+  }),
+]
+---
+
+<Base
+  title={guia.hero}
+  description={guia.description}
+  pageType="WebPage"
+  breadcrumb={[{ name: 'Guias', url: '/guias' }, { name: guia.hero, url: `/guias/${guia.slug}` }]}
+  schemas={schemas}
+>
+  <Navbar currentPath={`/guias/${guia.slug}`} />
+
+  <main class="bg-background pt-28 pb-section relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-[0.10] pointer-events-none" aria-hidden="true"></div>
+
+    <article class="max-w-[900px] mx-auto px-edge relative z-10">
+      <Breadcrumb items={[{ name: 'Guias', url: '/guias' }, { name: guia.hero }]} compact />
+
+      <header class="mt-6 mb-10">
+        <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">Guia // HowTo</span>
+        <h1 class="text-display-lg font-bold uppercase text-white tracking-[-0.03em] leading-[0.95] mb-6">
+          {guia.hero}
+        </h1>
+        <p class="text-body-lg text-tertiary leading-relaxed">{guia.intro}</p>
+      </header>
+
+      {guia.tools && guia.tools.length > 0 && (
+        <aside class="glass-panel rounded-sm p-5 mb-12 border border-white/8" aria-label="Itens necessários">
+          <p class="text-label-caps text-on-surface-variant uppercase tracking-[0.2em] mb-3">Você vai precisar de</p>
+          <ul class="space-y-1.5">
+            {guia.tools.map((t) => (
+              <li class="text-body-md text-on-surface flex items-start gap-2">
+                <span class="text-primary-container mt-0.5" aria-hidden="true">›</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
+      <ol class="space-y-10 mb-16" aria-label="Passos do guia">
+        {guia.steps.map((s, i) => (
+          <li class="grid grid-cols-[auto_1fr] gap-6 items-start">
+            <span class="text-display-md font-bold text-primary-container tabular-nums leading-none" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h2 class="text-headline-md font-bold uppercase text-white tracking-[-0.02em] mb-3">{s.title}</h2>
+              <p class="text-body-md text-tertiary leading-relaxed">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <section class="glass-panel rounded-sm p-8 mb-12 border border-white/8 text-center" aria-labelledby="cta-guia">
+        <p id="cta-guia" class="text-headline-sm font-bold uppercase text-white mb-4">Pronto para começar?</p>
+        <a
+          href="/contato"
+          data-track="cta_quote_hero"
+          data-track-location={`guia-${guia.slug}`}
+          class="inline-flex items-center gap-2 bg-primary-container text-on-primary text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm glow-effect hover:bg-primary-dim transition-all duration-300"
+        >
+          {guia.ctaText ?? 'Solicitar orçamento'}
+          <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+        </a>
+      </section>
+
+      {guia.related.length > 0 && (
+        <section aria-labelledby="related-heading">
+          <h2 id="related-heading" class="text-label-caps text-primary-container uppercase tracking-[0.2em] mb-4 border-b border-white/12 pb-3">
+            Veja também
+          </h2>
+          <ul class="space-y-2">
+            {guia.related.map((r) => (
+              <li>
+                <a href={r.url} class="text-body-md text-on-surface hover:text-primary-container transition-colors duration-200 flex items-start gap-2">
+                  <span class="text-primary-container mt-0.5" aria-hidden="true">→</span>
+                  <span>{r.name}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </article>
+  </main>
+
+  <Footer />
+</Base>
