@@ -91,6 +91,14 @@ Versões em markdown cru — preferidas por LLMs para citação direta sem ruíd
 - [Como escolher o material de impressão](https://aumaf.kayoridolfi.ai/guias/escolher-material-impressao-3d)
 - [Como acompanhar meu pedido](https://aumaf.kayoridolfi.ai/guias/como-acompanhar-meu-pedido)
 
+## Artigos do blog (técnicos, manufatura aditiva industrial)
+
+- [Como a manufatura aditiva reduz o tempo de parada na indústria](https://aumaf.kayoridolfi.ai/blog/manufatura-aditiva-reduz-downtime-industrial) — peças de reposição sob demanda, engenharia reversa, redução de lead time em manutenção industrial.
+- [SLM, SLS, SLA ou FDM: qual tecnologia escolher](https://aumaf.kayoridolfi.ai/blog/slm-sls-sla-fdm-qual-tecnologia-escolher) — comparativo técnico com framework de decisão em 4 perguntas.
+- [Engenharia reversa industrial: como reproduzir peças sem projeto original](https://aumaf.kayoridolfi.ai/blog/engenharia-reversa-pecas-sem-projeto-original) — escaneamento 3D, reconstrução CAD paramétrica, validação dimensional.
+- [Impressão 3D metálica: quando a tecnologia SLM é a melhor escolha](https://aumaf.kayoridolfi.ai/blog/impressao-3d-metalica-quando-slm-melhor-escolha) — geometrias impossíveis, topologia otimizada, consolidação de assemblies, canais conformais.
+- [Como funciona o processo de impressão 3D SLM passo a passo](https://aumaf.kayoridolfi.ai/blog/processo-impressao-3d-slm-passo-a-passo) — fluxo completo do CAD à inspeção dimensional, materiais e parâmetros.
+
 ## Indústrias atendidas (landings por setor)
 
 - [Automotiva](https://aumaf.kayoridolfi.ai/industrias/automotiva) — gabaritos, reposição, protótipos (PA CF15, Nylon, ABS, TPU).
