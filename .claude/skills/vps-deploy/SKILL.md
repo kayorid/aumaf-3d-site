@@ -123,6 +123,37 @@ EOF
 
 ⚠️ **Vars em Zod schema do backend NÃO podem ficar vazias se forem `email()` ou `url()`** — Zod rejeita `''` (não considera optional). Solução: REMOVER a linha em vez de deixar `VAR=`.
 
+### 5a. Setup IndexNow (push de URLs para Bing/Yandex/Seznam/Naver)
+
+A partir do PR #55 (2026-05-16) o backend dispara `pingIndexNow()` em todo `publishPost`. Para ativar em prod, gerar uma chave e setar nos dois pontos (backend + frontend):
+
+```bash
+ssh deploy@2.24.72.8 'sudo -n bash -s' <<'EOF'
+KEY=$(openssl rand -hex 16)
+echo "Chave gerada: $KEY  (guardar — vai precisar registrar no Bing Webmaster)"
+
+# Backend usa para enviar o ping; frontend usa para expor /<KEY>.txt
+sudo bash -c "cat >> /srv/aumaf/env/.env.production <<EOL
+INDEXNOW_KEY=$KEY
+PUBLIC_INDEXNOW_KEY=$KEY
+EOL"
+
+cd /srv/aumaf/compose
+sudo docker compose -f docker-compose.production.yml --env-file /srv/aumaf/env/.env.production \
+  up -d --force-recreate --no-deps backend frontend-public
+EOF
+
+# Validação (deve devolver 200 + a chave em texto plano):
+curl -sf -o /dev/null -w "%{http_code}\n" "https://aumaf.kayoridolfi.ai/$KEY.txt"
+
+# Próximo post publicado deve gerar log no backend:
+ssh deploy@2.24.72.8 'sudo docker logs --since 5m $(sudo docker ps --filter name=backend -q) | grep -i indexnow'
+```
+
+⚠️ `PUBLIC_INDEXNOW_KEY` é lida no **build** do frontend-public (prefixo `PUBLIC_` do Astro). Mudança exige `--force-recreate` no `frontend-public` também, não só backend.
+
+Depois de validar /<KEY>.txt, registrar o domínio em [Bing Webmaster Tools](https://www.bing.com/webmasters) e [Yandex Webmaster](https://webmaster.yandex.com/) — só então o ping vira indexação real.
+
 ### 5b. Provisionar / verificar master key de integration secrets
 
 A partir de 2026-05-06 (ADR-002), o backend exige `/etc/aumaf/master.key` para decifrar `integration_secrets` (Botyio API key, webhook secret, etc.). Sem o arquivo, **o backend recusa subir em produção**.

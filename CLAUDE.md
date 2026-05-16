@@ -77,6 +77,7 @@ aumaf-3d-site/
 - **Storybook obrigatório** — nunca remover mesmo sob pressão de prazo
 - **Playwright obrigatório** — E2E no frontend-admin
 - **MinIO obrigatório** — upload de imagens do blog
+- **SEO/GEO obrigatório em conteúdo público** — toda nova página/seção do frontend-public DEVE usar a skill `seo-geo-content` (schemas JSON-LD + `src/data/*.ts` + `.md` source quando aplicável + entrada em `llms.txt`). Sem essa disciplina, conteúdo bom fica invisível para Google + LLMs.
 - **Defesa em profundidade** — toda nova superfície DEVE seguir `docs/decisions/ADR-004-security-defense-in-depth.md`:
   - HTML de banco/usuário → `renderPostContent()` (DOMPurify)
   - PATCH/DELETE em recurso de usuário → `assertCan*()` com ownership check
@@ -115,6 +116,16 @@ Pipeline 100% AUMAF rodando em paralelo com GA4/Clarity. Dashboard em `/analytic
 - ADR: `docs/decisions/ADR-003-analytics-proprio.md` · Runbook: `docs/runbooks/analytics.md`.
 - **Ao criar qualquer CTA/page/form novo, use a skill `analytics-tagging`.**
 
+## SEO + GEO (Maximize Organic Presence)
+Camadas técnica + conteúdo para Google + LLMs. Plano-mestre: `docs/plans/2026-05-14-maximize-organic-presence.md`.
+- **Schemas JSON-LD**: factories em `frontend-public/src/lib/schemas.ts` (organization, localBusiness, product, person, howTo, service, faqPage, breadcrumb, definedTermSet, blogPosting, itemList). Cada página chama via `schemas={[...]}` prop do Base.
+- **Conteúdo como dados**: arrays canônicos vivem em `frontend-public/src/data/*.ts` (faqs, glossario, servicos, materiais, guias, industrias). Pages importam; isso permite reuso por scripts de geração e evita drift entre `.astro` e `.md`.
+- **Markdown sources para LLMs**: `frontend-public/scripts/generate-llm-sources.ts` (tsx) gera `public/{faq,glossario,servicos,materiais}.md` no build. Rodado por `npm run build` (frontend-public) antes do `astro build`.
+- **IndexNow**: `backend/src/services/indexnow.service.ts` faz ping push para Bing/Yandex no `publishPost`. Requer `INDEXNOW_KEY` (backend) + `PUBLIC_INDEXNOW_KEY` (frontend) em prod.
+- **`llms.txt`**: índice canônico que LLMs consultam (`frontend-public/public/llms.txt`). Atualizar ao adicionar conteúdo novo.
+- **Performance LCP**: páginas com bg hero em CSS devem passar `preloadImage="/images/bg-X.webp"` para `Base.astro`.
+- **Ao adicionar página/seção pública nova, use a skill `seo-geo-content`.**
+
 ## LGPD / Privacidade
 - Plano: `docs/plans/2026-05-12-lgpd-compliance-plan.md`
 - Politicas publicas: `docs/legal/` → publicadas em `/politica-de-privacidade`, `/termos-de-uso`, `/politica-de-cookies`
@@ -138,6 +149,14 @@ Pipeline 100% AUMAF rodando em paralelo com GA4/Clarity. Dashboard em `/analytic
 | MinIO Console | http://localhost:9000 |
 | Prisma Studio | http://localhost:5555 |
 | Storybook | http://localhost:6006 |
+
+## Rotas públicas (frontend-public)
+
+Institucionais: `/`, `/servicos`, `/sobre`, `/contato`, `/avaliacoes`, `/portfolio`, `/blog`, `/blog/[slug]`.
+Catálogo & referência: `/materiais` (19 materiais com productSchema), `/glossario` (32 termos com DefinedTermSet).
+Conversão & funil: `/faq` (54 perguntas), `/guias` + `/guias/[slug]` (4 HowTos), `/industrias` + `/industrias/[slug]` (5 setores com Service+FAQPage).
+LGPD: `/politica-de-privacidade`, `/termos-de-uso`, `/politica-de-cookies`, `/preferencias-de-cookies`.
+LLM sources: `/llms.txt`, `/llms-full.txt`, `/faq.md`, `/glossario.md`, `/servicos.md`, `/materiais.md`, `/<INDEXNOW_KEY>.txt`.
 
 ## Docs do Projeto
 - `docs/research/site-atual-conteudo.md` — scraping completo do site Wix atual
