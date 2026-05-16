@@ -53,6 +53,7 @@ jobs:
           push: true
           build-args: |
             PUBLIC_API_URL=https://api-aumaf.kayoridolfi.ai
+            PUBLIC_BEHOLD_FEED_ID=${{ secrets.PUBLIC_BEHOLD_FEED_ID }}
           tags: |
             ${{ env.IMAGE_BASE }}/frontend-public:${{ github.sha }}
             ${{ env.IMAGE_BASE }}/frontend-public:latest

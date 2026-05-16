@@ -1,0 +1,251 @@
+---
+import { getInstagramFeed, truncateCaption, formatPostDate } from '../../lib/instagram'
+
+interface Props {
+  variant?: 'home' | 'contato'
+  eyebrow?: string
+  title?: string
+  description?: string
+}
+
+const {
+  variant = 'home',
+  eyebrow = 'Bastidores // Instagram',
+  title = variant === 'home' ? 'Nosso dia a dia em impressão 3D' : 'Acompanhe nossos projetos',
+  description = variant === 'home'
+    ? 'Peças saindo do parque, processos reais e bastidores publicados diariamente em @aumaf3d.'
+    : 'Antes de enviar, dá um pulo no nosso Instagram e veja o que a AUMAF anda imprimindo.',
+} = Astro.props
+
+const data = await getInstagramFeed()
+const posts = data?.posts.slice(0, 8) ?? []
+const profileUrl = data?.profileUrl ?? 'https://www.instagram.com/aumaf3d/'
+---
+
+{posts.length > 0 && (
+  <section
+    class={`ig-feed bg-${variant === 'home' ? 'background' : 'surface-low'} py-section relative overflow-hidden`}
+    aria-labelledby={`ig-feed-${variant}-title`}
+  >
+    {/* Halo sutil — alinhado ao DS Cinematic */}
+    <div
+      class="absolute inset-0 pointer-events-none opacity-[0.04]"
+      aria-hidden="true"
+      style="background:radial-gradient(ellipse 60% 40% at 50% 0%, rgba(97,197,79,0.7) 0%, transparent 65%);"
+    ></div>
+
+    <div class="max-w-[1600px] mx-auto px-edge relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-10">
+        <header class="lg:col-span-8">
+          <span class="text-label-caps text-primary-container uppercase tracking-[0.2em] block mb-4">{eyebrow}</span>
+          <h2
+            id={`ig-feed-${variant}-title`}
+            class="text-headline-lg md:text-display-md font-bold uppercase text-white tracking-[-0.03em] leading-[0.95]"
+          >
+            {title}
+          </h2>
+          <p class="mt-4 text-body-md text-tertiary max-w-xl leading-relaxed">{description}</p>
+        </header>
+
+        <aside class="lg:col-span-4 flex flex-col items-start lg:items-end gap-3">
+          <a
+            href={profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 border border-white/15 text-on-surface text-label-caps font-bold uppercase tracking-[0.15em] px-6 py-3 rounded-sm hover:border-primary-container/50 hover:text-primary-container transition-all duration-300"
+            aria-label="Abrir perfil @aumaf3d no Instagram (abre em nova aba)"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.266.069 1.645.069 4.85s-.012 3.584-.069 4.85c-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.266.058-1.645.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311-.975-.975-1.249-2.242-1.311-3.608C2.175 15.747 2.163 15.368 2.163 12s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608.975-.975 2.242-1.249 3.608-1.311C8.416 2.175 8.796 2.163 12 2.163zM12 0C8.741 0 8.332.014 7.052.072 5.775.13 4.904.333 4.14.63a5.92 5.92 0 00-2.14 1.395A5.92 5.92 0 00.63 4.14C.333 4.904.131 5.775.072 7.052.014 8.332 0 8.741 0 12s.014 3.668.072 4.948c.059 1.277.261 2.148.558 2.913.306.788.717 1.459 1.395 2.14a5.92 5.92 0 002.14 1.395c.765.297 1.636.499 2.913.558C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.277-.059 2.148-.261 2.913-.558a5.92 5.92 0 002.14-1.395 5.92 5.92 0 001.395-2.14c.297-.765.499-1.636.558-2.913.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.059-1.277-.261-2.148-.558-2.913a5.92 5.92 0 00-1.395-2.14A5.92 5.92 0 0019.86.63c-.765-.297-1.636-.5-2.913-.558C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+            </svg>
+            Seguir @aumaf3d
+          </a>
+          {data?.fetchedAt && (
+            <span class="text-xs text-on-surface-variant lg:text-right">
+              Atualizado automaticamente a cada hora
+            </span>
+          )}
+        </aside>
+      </div>
+
+      <ul class="ig-grid" role="list" data-variant={variant}>
+        {posts.map((p, i) => {
+          const caption = truncateCaption(p.caption, 100)
+          const altFallback = `Publicação @aumaf3d no Instagram${p.timestamp ? ` em ${formatPostDate(p.timestamp)}` : ''}`
+          return (
+            <li class="ig-grid__item">
+              <a
+                href={p.permalink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={caption ? `${caption} (abrir no Instagram)` : `${altFallback} (abrir no Instagram)`}
+              >
+                <img
+                  src={p.thumbnailUrl}
+                  alt={caption || altFallback}
+                  loading={i < 4 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width="600"
+                  height="600"
+                />
+                {p.mediaType === 'CAROUSEL_ALBUM' && (
+                  <span class="ig-grid__badge" aria-hidden="true">
+                    <span class="material-symbols-outlined" style="font-size:18px;">collections</span>
+                  </span>
+                )}
+                <span class="ig-grid__overlay" aria-hidden="true">
+                  {caption && <span class="ig-grid__caption">{truncateCaption(p.caption, 80)}</span>}
+                  <span class="ig-grid__hint">
+                    <span class="material-symbols-outlined" style="font-size:16px;">open_in_new</span>
+                    <span>Ver no Instagram</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .ig-feed { isolation: isolate; }
+
+  .ig-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ig-grid__item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #0a0a0a;
+  }
+
+  .ig-grid__item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ig-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ig-grid__item:hover img,
+  .ig-grid__item:focus-within img {
+    transform: scale(1.06);
+  }
+
+  .ig-grid__badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+  }
+
+  .ig-grid__overlay {
+    position: absolute;
+    inset: 0;
+    padding: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.88) 100%);
+    opacity: 0;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  .ig-grid__item:hover .ig-grid__overlay,
+  .ig-grid__item:focus-within .ig-grid__overlay {
+    opacity: 1;
+  }
+
+  .ig-grid__caption {
+    color: #fff;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ig-grid__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgb(97, 197, 79);
+  }
+
+  /* Focus visible — mantém pattern global do projeto */
+  .ig-grid__item a:focus-visible {
+    outline: 2px solid rgb(97, 197, 79);
+    outline-offset: 2px;
+    border-radius: 12px;
+  }
+
+  /* Mobile: scroll horizontal com snap, ~2.5 cards visíveis */
+  @media (max-width: 768px) {
+    .ig-grid {
+      grid-template-columns: repeat(8, 40vw);
+      grid-auto-flow: column;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
+      gap: 0.625rem;
+    }
+    .ig-grid::-webkit-scrollbar { display: none; }
+    .ig-grid__item { scroll-snap-align: start; }
+    /* Em mobile o overlay fica sempre visível com gradiente leve para legibilidade */
+    .ig-grid__overlay {
+      opacity: 1;
+      background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.7) 100%);
+    }
+    .ig-grid__caption { display: none; }
+  }
+
+  /* Reduced motion: corta as animações */
+  @media (prefers-reduced-motion: reduce) {
+    .ig-grid__item img,
+    .ig-grid__overlay {
+      transition: none;
+    }
+    .ig-grid__item:hover img,
+    .ig-grid__item:focus-within img {
+      transform: none;
+    }
+  }
+</style>

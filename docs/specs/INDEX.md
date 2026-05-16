@@ -2,13 +2,15 @@
 
 > Visão de portfólio das specs deste projeto. Regenerado por `scripts/update_index.py`.
 
-**Última atualização**: 2026-05-06
+**Última atualização**: 2026-05-10
 
 ---
 
 ## Em andamento
 
-_Nenhuma spec ativa._
+| Feature | Iniciada em | Status |
+|---------|-------------|--------|
+| **instagram-feed** | 2026-05-10 | `implementation-complete` — código + wiring CI/Docker prontos e validados em build local. Bloqueado por setup externo: Kayo criar conta Behold.so, colher `FEED_ID` e cadastrar secret `PUBLIC_BEHOLD_FEED_ID` no GitHub. Ver `_active/2026-05-10-instagram-feed/status.md`. |
 
 ## Recém concluídas
 
@@ -27,9 +29,10 @@ _Nenhuma spec ativa._
 
 | Feature | Por que aguarda |
 |---------|-----------------|
-| botyio-ativação | Código + UI dinâmica mergeados (PR #7 e botyio-config-ui). Falta: provisionar `/etc/aumaf/master.key` na VPS, cadastrar credenciais via `/admin/integrations/botyio` e Botyio trocar callback_url para `api.aumaf.kayoridolfi.ai/api/v1/leads/botyio-status` |
 | domínio-AUMAF (migração de homologação para prod) | AUMAF confirmar/comprar domínio; envolve DNS swap + Cloudflare Origin Cert + ajustes de URL em `.env.production` (1 PR) |
 | sentry-uptime (observability v2) | Deferido pela escolha em homologação; ativar quando AUMAF pedir alertas proativos |
+
+> ℹ️ `botyio-ativação` saiu do backlog em 2026-05-10 — integração ativa em produção (ver `project_botyio_active.md`).
 
 ## Constituição
 
