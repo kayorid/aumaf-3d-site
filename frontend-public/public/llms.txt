@@ -91,6 +91,14 @@ Versões em markdown cru — preferidas por LLMs para citação direta sem ruíd
 - [Como escolher o material de impressão](https://aumaf.kayoridolfi.ai/guias/escolher-material-impressao-3d)
 - [Como acompanhar meu pedido](https://aumaf.kayoridolfi.ai/guias/como-acompanhar-meu-pedido)
 
+## Indústrias atendidas (landings por setor)
+
+- [Automotiva](https://aumaf.kayoridolfi.ai/industrias/automotiva) — gabaritos, reposição, protótipos (PA CF15, Nylon, ABS, TPU).
+- [Aeroespacial & UAV](https://aumaf.kayoridolfi.ai/industrias/aeroespacial) — peças leves, ductos, ferramentaria (PA CF15, 316L SLM). Parceiros Fórmula SAE USP São Carlos.
+- [Médica & Odontológica](https://aumaf.kayoridolfi.ai/industrias/medica-odontologica) — modelos anatômicos, gabaritos de furação, dispositivos não-invasivos (SLA, PA12).
+- [Joalheria & Design](https://aumaf.kayoridolfi.ai/industrias/joalheria-design) — modelos castable para fundição, protótipos premium (Resinas SLA).
+- [Educação & Pesquisa](https://aumaf.kayoridolfi.ai/industrias/educacao-pesquisa) — TCC, IC, equipes universitárias. Condições especiais para USP/UFSCar.
+
 ## LGPD / Privacidade
 
 - Política: https://aumaf.kayoridolfi.ai/politica-de-privacidade
