@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --port 4321",
-    "build": "astro build",
+    "build": "tsx scripts/generate-llm-sources.ts && astro build",
+    "build:llm-sources": "tsx scripts/generate-llm-sources.ts",
     "preview": "astro preview",
     "typecheck": "astro check",
     "lint": "echo 'lint not configured yet'"

@@ -79,6 +79,12 @@ const envSchema = z.object({
   LGPD_ANON_SALT: z.string().default('aumaf-lgpd-anon-default-salt-change-me'),
   // Secret opcional para gate adicional do form público de DSR (anti-bot leve).
   LGPD_FORM_SECRET: z.string().optional(),
+
+  // IndexNow — push de URLs publicadas para Bing/Yandex/Seznam/Naver.
+  // Gerar com `openssl rand -hex 16` e expor o arquivo <key>.txt em /public.
+  INDEXNOW_KEY: z.string().regex(/^[a-zA-Z0-9-]{8,128}$/).optional(),
+  // Host canônico usado no payload (sem protocolo). Default usa PUBLIC_BLOG_BASE_URL.
+  INDEXNOW_HOST: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
