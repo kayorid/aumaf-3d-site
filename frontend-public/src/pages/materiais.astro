@@ -4,7 +4,8 @@ import Base from '../layouts/Base.astro'
 import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
-import { itemListSchema } from '../lib/schemas'
+import { itemListSchema, productSchema } from '../lib/schemas'
+import { COMPANY } from '../lib/company'
 
 interface MaterialDetail {
   slug: string
@@ -339,8 +340,27 @@ const categories = ['Todos', 'Termoplásticos', 'Alta Performance', 'Flexíveis'
 
 const description = 'Catálogo de materiais para impressão 3D na AUMAF 3D: termoplásticos (PLA, PA, ABS, PETG, PC), alta performance (PA CF15, Tritan), resinas, PA12 em pó (SLS) e Aço Inox 316L sinterizado (SLM). Especificações técnicas, temperatura e aplicações.'
 
+// Mapeia material → processo de manufatura aditiva a partir da categoria.
+function processFor(m: MaterialDetail): string {
+  if (m.cat === 'Resinas') return 'SLA'
+  if (m.cat === 'Pó (SLS/SLM)') return m.slug.includes('316l') ? 'SLM' : 'SLS'
+  return 'FDM'
+}
+
 const schemas = [
   itemListSchema(materials.map((m) => ({ name: m.name, description: `${m.cat}. Temperatura máxima: ${m.tempMax}. ${m.flex}. Aplicação: ${m.app}.` }))),
+  ...materials.map((m) =>
+    productSchema({
+      name: m.name,
+      slug: m.slug,
+      description: m.description,
+      image: `${COMPANY.url}/images/${m.slug}.webp`,
+      material: m.name,
+      process: processFor(m),
+      category: m.cat,
+      applications: m.useCases.slice(0, 4),
+    }),
+  ),
 ]
 ---
 
